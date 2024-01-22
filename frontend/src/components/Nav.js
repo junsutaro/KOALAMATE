@@ -18,6 +18,9 @@ const Nav = () => {
 					<Button color="inherit" component={NavLink} to="/contact">
 						Contact
 					</Button>
+					<Button color="inherit" component={NavLink} to="/signup">
+						SignUp
+					</Button>
 				</Toolbar>
 			</AppBar>
 	);
