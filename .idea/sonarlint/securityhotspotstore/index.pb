@@ -19,3 +19,19 @@ m
 =backend/src/main/java/com/ssafy/koala/BackendApplication.java,2\c\2c2391d6ee489e0ff8c1b40c41f4641c0beb9330
 i
 9backend/src/main/java/com/ssafy/koala/TestController.java,d\1\d11aef822cb5feeb97033e856449f1332fb3848d
+E
+frontend/src/index.js,0\9\09a4e53ab0e5e7637fd01136f19a9bb570e1ef2d
+O
+frontend/src/components/Home.js,c\2\c23dfaabb62c02b805da3b84f0445ea973b14a22
+K
+frontend/src/pages/About.js,9\c\9c860bf36a54d156e0d481074d69dd40ae8f4c80
+N
+frontend/src/components/Nav.js,e\0\e0bd50e0b2fdfe7c5ae0a0fe5f57e92743a3d697
+<
+package.json,7\0\7030d0b2f71b999ff89a343de08c414af32fc93a
+J
+frontend/src/pages/Home.js,6\d\6d69fb10eaae9b9c3ab35dc11a291465f02da4fe
+D
+backend/build.gradle,2\1\21d4b1ec4e3be89735ba8533a58eee07a372667a
+F
+frontend/jsconfig.json,a\c\ac675aaf5de0609824f67f03328e4e3cd72ad502
