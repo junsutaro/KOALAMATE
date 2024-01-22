@@ -15,6 +15,9 @@ const Nav = () => {
 					<Button color="inherit" component={NavLink} to="/about">
 						About
 					</Button>
+					<Button color="inherit" component={NavLink} to="/recipe">
+						Recipe
+					</Button>
 					<Button color="inherit" component={NavLink} to="/contact">
 						Contact
 					</Button>
