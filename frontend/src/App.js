@@ -1,35 +1,21 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import Home from './pages/Home';
+import About from './pages/About';
+// 다른 페이지 컴포넌트들을 임포트
 
 function App() {
-	const [message, setMessage] = useState('');
-
-	useEffect(() => {
-		axios.get('/test').then(response => {
-			setMessage(response.data);
-		}).catch(error => {
-			console.error('There was an error!', error);
-		});
-	}, []);
-
-	const [message2, setMessage2] = useState('');
-
-	useEffect(() => {
-		axios.get('/test2').then(response => {
-			setMessage2(response.data);
-		}).catch(error => {
-			console.error('There was an error!', error);
-		});
-	}, []);
-
 	return (
-
-			<div className="App">
-				<header className="App-header">
-					<p>Server says: {message}</p>
-					<p>Server2 says: {message2}</p>
-				</header>
-			</div>
+			<Router>
+				<div className="App">
+					<Routes>
+						<Route path="/" element={<Home />} />
+						<Route path="/about" element={<About />} />
+						{/* 다른 라우트들 */}
+					</Routes>
+				</div>
+			</Router>
 	);
 }
 
