@@ -1,4 +1,4 @@
-package com.ssafy.koala;
+package com.ssafy.koala.controller;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
