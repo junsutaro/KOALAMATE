@@ -17,7 +17,6 @@ public class BoardService {
 		this.boardRepository = boardRepository;
 	}
 
-
 	public List<BoardDto> getAllEntities() {
 		List<BoardModel> entities = boardRepository.findAll();
 		return entities.stream()
@@ -26,21 +25,21 @@ public class BoardService {
 	}
 
 	public BoardDto getBoardById(Long id) {
-		BoardModel Board = boardRepository.findById(id).orElse(null);
-		return (Board != null) ? convertToDto(Board) : null;
+		BoardModel board = boardRepository.findById(id).orElse(null);
+		return (board != null) ? convertToDto(board) : null;
 	}
 
-	public BoardDto createBoard(BoardDto BoardDto) {
-		BoardModel Board = convertToBoard(BoardDto);
-		BoardModel savedBoard = boardRepository.save(Board);
+	public BoardDto createBoard(BoardDto boardDto) {
+		BoardModel board = convertToBoard(boardDto);
+		BoardModel savedBoard = boardRepository.save(board);
 		return convertToDto(savedBoard);
 	}
 
-	public BoardDto updateBoard(Long id, BoardDto BoardDto) {
+	public BoardDto updateBoard(Long id, BoardDto boardDto) {
 		BoardModel existingBoard = boardRepository.findById(id).orElse(null);
 
 		if (existingBoard != null) {
-			BeanUtils.copyProperties(BoardDto, existingBoard, "id");
+			BeanUtils.copyProperties(boardDto, existingBoard, "id");
 			BoardModel updatedBoard = boardRepository.save(existingBoard);
 			return convertToDto(updatedBoard);
 		}
@@ -52,15 +51,15 @@ public class BoardService {
 		boardRepository.deleteById(id);
 	}
 
-	private BoardDto convertToDto(BoardModel Board) {
+	private BoardDto convertToDto(BoardModel board) {
 		BoardDto boardDto = new BoardDto();
-		BeanUtils.copyProperties(Board, boardDto);
+		BeanUtils.copyProperties(board, boardDto);
 		return boardDto;
 	}
 
-	private BoardModel convertToBoard(BoardDto BoardDto) {
+	private BoardModel convertToBoard(BoardDto boardDto) {
 		BoardModel board = new BoardModel();
-		BeanUtils.copyProperties(BoardDto, board);
+		BeanUtils.copyProperties(boardDto, board);
 		return board;
 	}
 }
