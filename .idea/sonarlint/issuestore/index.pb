@@ -35,3 +35,5 @@ D
 backend/build.gradle,2\1\21d4b1ec4e3be89735ba8533a58eee07a372667a
 F
 frontend/jsconfig.json,a\c\ac675aaf5de0609824f67f03328e4e3cd72ad502
+K
+frontend/src/pages/Login.js,2\e\2e9110e7b88aabee1a4eae0506b1ffd5ef49936a
