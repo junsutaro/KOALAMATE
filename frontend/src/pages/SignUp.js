@@ -1,5 +1,5 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import Nav from 'components/Nav';
 import {useForm, SubmitHandler} from 'react-hook-form';
@@ -23,6 +23,16 @@ import {
 
 const SignUp = () => {
 	const navigate = useNavigate();
+	// 이메일 닉네임 중복검사
+	const [isEmailAvailable, setIsEmailAvailable] = useState(true);
+	const [isNicknameAvailable, setIsNicknameAvailable] = useState(true);
+
+	// 이메일 닉네임 중복검사 여부 확인
+	const [isEmailChecked, setIsEmailChecked] = useState(false);
+	const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+
+	// 중복 확인 여부 기반으로 회원가입 버튼 활성화 여부 확인
+	const isSubmitEnabled = isEmailChecked && isNicknameChecked;
 
 	// Yup 스키마 정의
 	const schema = yup.object().shape({
@@ -50,38 +60,77 @@ const SignUp = () => {
 		},
 	});
 
+	const checkEmailAvailability = async (email) => {
+		try {
+			const response = await axios.post('https://백엔드URL/api/check-email',
+					{email});
+			setIsEmailAvailable(response.data.available);
+		} catch (error) {
+			console.error('이메일 가용성 확인 중 오류 발생', error);
+		}
+	};
+
+	const checkNicknameAvailability = async (nickname) => {
+		try {
+			const response = await axios.post('https://백엔드URL/api/check-nickname',
+					{nickname});
+			setIsNicknameAvailable(response.data.available);
+		} catch (error) {
+			console.error('닉네임 가용성 확인 중 오류 발생', error);
+		}
+	};
+
+	const handleEmailCheck = () => {
+		const email = register('email').value;
+		if (email) {
+			checkEmailAvailability(email);
+			setIsEmailChecked(true);
+		}
+	};
+
+	const handleNicknameCheck = () => {
+		const nickname = register('nickname').value;
+		if (nickname) {
+			checkNicknameAvailability(nickname);
+			setIsNicknameChecked(true);
+		}
+	};
+
 	// 폼 제출 처리 함수
 	const onSubmit: SubmitHandler = (data) => {
 		const {email, password, nickname, birthRange, gender} = data;
 		console.log('회원가입 데이터:', data);
 
-		axios.post('https://백엔드URL/api/signup', { email, password, nickname, birthRange, gender })
-		.then(response => {
-			console.log('회원가입 성공', response.data);
-			// 성공했을 때의 처리를 여기에 추가
-			navigate('/'); // 회원가입이 성공하면 '/'로 이동
-		})
-		.catch(error => {
-			console.log('회원가입 실패 ', error);
-			// 실패했을 때의 처리를 여기에 추가
-		});
+// 중복 확인 여부를 검사하여 회원가입 처리
+		if (isSubmitEnabled) {
+			axios.post('https://백엔드URL/api/signup',
+					{email, password, nickname, birthRange, gender}).then(response => {
+				console.log('회원가입 성공', response.data);
+				navigate('/'); // 회원가입이 성공하면 '/'로 이동
+			}).catch(error => {
+				console.log('회원가입 실패 ', error);
+				// 실패했을 때의 처리를 여기에 추가
+			});
+		} else {
+			console.log('이메일 또는 닉네임 중복 확인을 해주세요.');
+		}
 	};
 
 	return (
 			<>
 				<Nav/>
-				<Container component="main" maxWidth="xs">
+				<Container component="main" maxWidth="sm">
 					<Grid
 							container
-							spacing={2}
+							spacing={1}
 							direction="column"
 							justifyContent="center"
 							alignItems="center"
-							style={{minHeight: '100vh'}}
 					>
+
 						<Avatar sx={{bgcolor: '#1a237e'}}/>
 						<Grid item>
-							<Typography variant="h4">Sign Up</Typography>
+							<Typography variant="h3">Sign Up</Typography>
 						</Grid>
 
 						<Grid item>
@@ -90,11 +139,24 @@ const SignUp = () => {
 										label="이메일"
 										variant="outlined"
 										{...register('email')}
-										error={!!errors.email}
-										helperText={errors.email?.message}
+										error={!!errors.email || !isEmailAvailable}
+										helperText={isEmailAvailable
+												? errors.email?.message
+												: '이미 사용 중인 이메일입니다.'}
 										fullWidth
 										margin="normal"
 								/>
+								<Button variant="outlined" onClick={handleEmailCheck}>중복
+									확인</Button>
+								{isNicknameChecked && isNicknameAvailable && (
+										<Typography
+												variant="caption"
+												sx={{color: 'green'}}
+										>
+											사용 가능한 닉네임입니다.
+										</Typography>
+								)}
+
 
 								<TextField
 										type="password"
@@ -122,11 +184,15 @@ const SignUp = () => {
 										label="닉네임"
 										variant="outlined"
 										{...register('nickname')}
-										error={!!errors.nickname}
-										helperText={errors.nickname?.message}
+										error={!!errors.nickname || !isNicknameAvailable}
+										helperText={isNicknameAvailable
+												? errors.nickname?.message
+												: '이미 사용 중인 닉네임입니다.'}
 										fullWidth
 										margin="normal"
 								/>
+								<Button variant="outlined" onClick={handleNicknameCheck}>중복
+									확인</Button>
 
 								<FormControl variant="outlined" fullWidth margin="normal">
 									<InputLabel>연령대</InputLabel>
@@ -139,10 +205,10 @@ const SignUp = () => {
 										<MenuItem value="" disabled>
 											연령대를 선택하세요
 										</MenuItem>
-										<MenuItem value="20">20대</MenuItem>
-										<MenuItem value="30">30대</MenuItem>
-										<MenuItem value="40">40대</MenuItem>
-										<MenuItem value="50">50대</MenuItem>
+										<MenuItem value="20대">20대</MenuItem>
+										<MenuItem value="30대">30대</MenuItem>
+										<MenuItem value="40대">40대</MenuItem>
+										<MenuItem value="50대">50대</MenuItem>
 									</Select>
 									{errors.birthRange && (
 											<Typography variant="caption" color="error">
@@ -174,7 +240,10 @@ const SignUp = () => {
 										variant="contained"
 										sx={{mt: 3, mb: 2}}
 										size="large"
-								> 회원가입</Button>
+										// disabled={!isSubmitEnabled} // 중복확인이 완료되지 않으면 버튼 비활성화
+								>
+									회원가입
+								</Button>
 							</form>
 						</Grid>
 					</Grid>
