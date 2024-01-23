@@ -16,4 +16,5 @@ public class BoardModel {
 	private Date date;
 	private int views;
 	private String nickname;
+	
 }

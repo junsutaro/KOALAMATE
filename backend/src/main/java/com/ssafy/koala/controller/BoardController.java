@@ -21,9 +21,9 @@ public class BoardController {
 	}
 
 	@GetMapping("/list")
-	public Object listBoard(@RequestParam int page, @PageableDefault(sort="id", direction = Sort.Direction.DESC) Pageable pageAble) {
+	public Object listBoard(@RequestParam int page, @PageableDefault(sort="id", direction = Sort.Direction.DESC) Pageable pageable) {
 		ResponseEntity response = null;
-		response = new ResponseEntity<>(boardService.getPageEntities(pageAble),HttpStatus.OK);
+		response = new ResponseEntity<>(boardService.getPageEntities(pageable),HttpStatus.OK);
 		return response;
 	}
 
