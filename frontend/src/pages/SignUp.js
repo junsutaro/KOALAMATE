@@ -122,13 +122,14 @@ const SignUp = () => {
 				<Container component="main" maxWidth="sm">
 					<Grid
 							container
-							spacing={1}
+							spacing={2}
 							direction="column"
 							justifyContent="center"
 							alignItems="center"
 					>
-
-						<Avatar sx={{bgcolor: '#1a237e'}}/>
+						<Grid item>
+							<Avatar sx={{bgcolor: '#1a237e', mt: 3}}/>
+						</Grid>
 						<Grid item>
 							<Typography variant="h3">Sign Up</Typography>
 						</Grid>
@@ -146,8 +147,10 @@ const SignUp = () => {
 										fullWidth
 										margin="normal"
 								/>
-								<Button variant="outlined" onClick={handleEmailCheck}>중복
-									확인</Button>
+								<Grid container justifyContent="flex-end">
+									<Button variant="outlined" onClick={handleEmailCheck}>중복
+										확인</Button>
+								</Grid>
 								{isNicknameChecked && isNicknameAvailable && (
 										<Typography
 												variant="caption"
@@ -191,8 +194,10 @@ const SignUp = () => {
 										fullWidth
 										margin="normal"
 								/>
-								<Button variant="outlined" onClick={handleNicknameCheck}>중복
-									확인</Button>
+								<Grid container justifyContent="flex-end">
+									<Button variant="outlined" onClick={handleNicknameCheck}>중복
+										확인</Button>
+								</Grid>
 
 								<FormControl variant="outlined" fullWidth margin="normal">
 									<InputLabel>연령대</InputLabel>
