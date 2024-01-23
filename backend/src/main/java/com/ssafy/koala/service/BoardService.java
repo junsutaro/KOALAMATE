@@ -38,6 +38,9 @@ public class BoardService {
 
 	public BoardDto createBoard(BoardDto boardDto) {
 		BoardModel board = convertToBoard(boardDto);
+
+		//모자란 부분 추가
+
 		BoardModel savedBoard = boardRepository.save(board);
 		return convertToDto(savedBoard);
 	}
