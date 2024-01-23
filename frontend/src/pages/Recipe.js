@@ -1,5 +1,8 @@
 import React from 'react';
 import Nav from 'components/Nav';
+import RecipeFilter from 'components/RecipeFilter';
+import RecipeList from 'components/RecipeList';
+import RecipeItem from 'components/RecipeItem';
 import { Button, ButtonGroup, TextField } from '@mui/material';
 const Recipe = () => {
 	return (
@@ -12,9 +15,9 @@ const Recipe = () => {
 					<Button> 레시피 백과 </Button>
 					<Button> 유저 레시피 </Button>
 				</ButtonGroup>
-
-				<TextField id="outlined-basic" label="Outlined" variant="outlined" />
 				<hr/>
+				<RecipeFilter/>
+				<RecipeList />
 			</div>
 	);
 }
