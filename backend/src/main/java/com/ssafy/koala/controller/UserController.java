@@ -2,7 +2,6 @@ package com.ssafy.koala.controller;
 
 //import com.ssafy.koala.config.jwt.JwtUtil;
 import com.ssafy.koala.dto.UserDto;
-import com.ssafy.koala.model.user.SignupRequest;
 import com.ssafy.koala.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -45,7 +44,7 @@ public class UserController {
 
 	@PostMapping("/signup")
 //	@ApiOperation(value = "가입하기") // swagger api 명세내용
-	public Object signup(@Valid @RequestBody SignupRequest request) {
+	public Object signup(@Valid @RequestBody UserDto request) {
 		ResponseEntity response = null;
 
 		Optional<UserDto> userOpt = userService.findUserByNicknameAndEmail(request.getNickname(), request.getEmail());
