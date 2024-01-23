@@ -20,6 +20,7 @@ const Nav = () => {
 					</Button>
 					<Button color="inherit" component={NavLink} to="/login">
 						Login
+					</Button>
 					<Button color="inherit" component={NavLink} to="/signup">
 						SignUp
 					</Button>
