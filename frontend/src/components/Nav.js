@@ -9,7 +9,7 @@ const Nav = () => {
 					<Typography variant="h6" style={{flexGrow: 1}}>
 						My App
 					</Typography>
-					<Button color="inherit" component={NavLink} to="/" exact>
+					<Button color="inherit" component={NavLink} to="/">
 						Home
 					</Button>
 					<Button color="inherit" component={NavLink} to="/about">

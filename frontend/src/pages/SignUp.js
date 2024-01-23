@@ -53,7 +53,7 @@ const SignUp = () => {
 	});
 
 	// React Hook Form 사용
-	const {register, handleSubmit, formState: {errors}} = useForm({
+	const {register, handleSubmit, getValues, formState: {errors}} = useForm({
 		resolver: yupResolver(schema),
 		defaultValues: {
 			email: '@gmail.com',
@@ -61,6 +61,7 @@ const SignUp = () => {
 	});
 
 	const checkEmailAvailability = async (email) => {
+		console.log("checkEmail: ", email);
 		try {
 			const response = await axios.post('https://백엔드URL/api/check-email',
 					{email});
@@ -71,6 +72,7 @@ const SignUp = () => {
 	};
 
 	const checkNicknameAvailability = async (nickname) => {
+		console.log("checkNickname: ", nickname);
 		try {
 			const response = await axios.post('https://백엔드URL/api/check-nickname',
 					{nickname});
@@ -80,24 +82,24 @@ const SignUp = () => {
 		}
 	};
 
-	const handleEmailCheck = () => {
-		const email = register('email').value;
+	const handleEmailCheck = (email) => {
+		console.log(email);
 		if (email) {
-			checkEmailAvailability(email);
+			checkEmailAvailability(email).then(r => console.log(r));
 			setIsEmailChecked(true);
 		}
 	};
 
-	const handleNicknameCheck = () => {
-		const nickname = register('nickname').value;
+	const handleNicknameCheck = (nickname) => {
+		console.log(nickname)
 		if (nickname) {
-			checkNicknameAvailability(nickname);
+			checkNicknameAvailability(nickname).then(r => console.log(r));
 			setIsNicknameChecked(true);
 		}
 	};
 
 	// 폼 제출 처리 함수
-	const onSubmit: SubmitHandler = (data) => {
+	const onSubmit = (data) => {
 		const {email, password, nickname, birthRange, gender} = data;
 		console.log('회원가입 데이터:', data);
 
@@ -148,7 +150,7 @@ const SignUp = () => {
 										margin="normal"
 								/>
 								<Grid container justifyContent="flex-end">
-									<Button variant="outlined" onClick={handleEmailCheck}>중복
+									<Button variant="outlined" onClick={() => handleEmailCheck(getValues('email'))}>중복
 										확인</Button>
 								</Grid>
 								{isNicknameChecked && isNicknameAvailable && (
@@ -195,7 +197,7 @@ const SignUp = () => {
 										margin="normal"
 								/>
 								<Grid container justifyContent="flex-end">
-									<Button variant="outlined" onClick={handleNicknameCheck}>중복
+									<Button variant="outlined" onClick={() => handleNicknameCheck('nickname')}>중복
 										확인</Button>
 								</Grid>
 
