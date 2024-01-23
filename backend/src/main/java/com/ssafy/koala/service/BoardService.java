@@ -4,6 +4,8 @@ import com.ssafy.koala.dto.BoardDto;
 import com.ssafy.koala.model.BoardModel;
 import com.ssafy.koala.repository.BoardRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +24,11 @@ public class BoardService {
 		return entities.stream()
 				.map(this::convertToDto)
 				.collect(Collectors.toList());
+	}
+
+	public List<BoardDto> getPageEntities(Pageable pageable) {
+		Page<BoardModel> entities = boardRepository.findAll(pageable);
+		return entities.stream().map(this::convertToDto).collect(Collectors.toList());
 	}
 
 	public BoardDto getBoardById(Long id) {
