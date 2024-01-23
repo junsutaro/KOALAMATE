@@ -5,19 +5,20 @@ import jakarta.validation.constraints.Pattern;
 
 public class SignupRequest {
 	//	@ApiModelProperty(required = true)
+	@Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
 	@NotNull
-	String email;
+	String email; // 이메일 주소 형식 검증
 	//	@ApiModelProperty(required = true)
 	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d$@$!%*#?&]{8,}$")
 	@NotNull
-	String password;
+	String password; // 적어도 하나의 알파벳,숫자,특수문자가 포함되며 8자리 이상
 	//	@ApiModelProperty(required = true)
 	@Pattern(regexp = "^[a-zA-Z]{0,19}$")
 	@NotNull
 	String nickname; // 영문 대소문자 20자 미만
 
-	String birthRange;
-	String phone;
+	int birthRange;
+	int gender;
 
 	public String getEmail() {
 		return email;
@@ -43,19 +44,19 @@ public class SignupRequest {
 		this.nickname = nickname;
 	}
 
-	public String getBirthRange() {
+	public int getBirthRange() {
 		return birthRange;
 	}
 
-	public void setBirthRange(String birthRange) {
+	public void setBirthRange(int birthRange) {
 		this.birthRange = birthRange;
 	}
 
-	public String getPhone() {
-		return phone;
+	public int getGender() {
+		return gender;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setGender(int gender) {
+		this.gender = gender;
 	}
 }
