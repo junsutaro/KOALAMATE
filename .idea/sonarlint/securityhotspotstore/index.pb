@@ -17,18 +17,12 @@ C
 frontend/src/App.js,d\6\d63b8ace488b6134c279ccc0cc109223d4d79c20
 m
 =backend/src/main/java/com/ssafy/koala/BackendApplication.java,2\c\2c2391d6ee489e0ff8c1b40c41f4641c0beb9330
-i
-9backend/src/main/java/com/ssafy/koala/TestController.java,d\1\d11aef822cb5feeb97033e856449f1332fb3848d
 E
 frontend/src/index.js,0\9\09a4e53ab0e5e7637fd01136f19a9bb570e1ef2d
-O
-frontend/src/components/Home.js,c\2\c23dfaabb62c02b805da3b84f0445ea973b14a22
 K
 frontend/src/pages/About.js,9\c\9c860bf36a54d156e0d481074d69dd40ae8f4c80
 N
 frontend/src/components/Nav.js,e\0\e0bd50e0b2fdfe7c5ae0a0fe5f57e92743a3d697
-<
-package.json,7\0\7030d0b2f71b999ff89a343de08c414af32fc93a
 J
 frontend/src/pages/Home.js,6\d\6d69fb10eaae9b9c3ab35dc11a291465f02da4fe
 D
@@ -37,3 +31,10 @@ F
 frontend/jsconfig.json,a\c\ac675aaf5de0609824f67f03328e4e3cd72ad502
 K
 frontend/src/pages/Login.js,2\e\2e9110e7b88aabee1a4eae0506b1ffd5ef49936a
+:
+
+.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
+t
+Dbackend/src/main/java/com/ssafy/koala/controller/TestController.java,1\d\1da75f91251fea92898e9b7fda83ba821171cc76
+u
+Ebackend/src/main/java/com/ssafy/koala/controller/BoardController.java,3\9\396df76bbdde846d05ff71b8963534de6d3c36e7
