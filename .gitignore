@@ -1,6 +1,6 @@
-.idea
+.idea/
 
-!.idea/codeStyles
-!.idea/inspectionProfiles
-!.idea/modules
+!.idea/codeStyles/
+!.idea/inspectionProfile/
+!.idea/modules/
 !.idea/modules.xml
