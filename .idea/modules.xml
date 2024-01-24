@@ -4,7 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.ssafy.koala.iml" filepath="$PROJECT_DIR$/.idea/modules/com.ssafy.koala.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.ssafy.koala.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.ssafy.koala.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.ssafy.koala.main~1.iml" filepath="$PROJECT_DIR$/.idea/modules/com.ssafy.koala.main~1.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.ssafy.koala.test.iml" filepath="$PROJECT_DIR$/.idea/modules/com.ssafy.koala.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.ssafy.koala.test~1.iml" filepath="$PROJECT_DIR$/.idea/modules/com.ssafy.koala.test~1.iml" />
       <module fileurl="file://$PROJECT_DIR$/frontend.iml" filepath="$PROJECT_DIR$/frontend.iml" />
       <module fileurl="file://$PROJECT_DIR$/koala.iml" filepath="$PROJECT_DIR$/koala.iml" />
     </modules>

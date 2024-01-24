@@ -1,8 +1,8 @@
 package com.ssafy.koala.controller;
 
 //import com.ssafy.koala.config.jwt.JwtUtil;
-import com.ssafy.koala.dto.UserDto;
-import com.ssafy.koala.service.UserService;
+import com.ssafy.koala.dto.user.UserDto;
+import com.ssafy.koala.service.user.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -23,23 +23,23 @@ public class UserController {
 
 	@PostMapping("/login")
 	public Object login(@RequestBody UserDto user) {
-		ResponseEntity response = null;
+//		ResponseEntity response = null;
+//
+//		Optional<UserDto> userOpt = userService.findUserByEmailAndPassword(user.getEmail(), user.getPassword());
+//
+//		System.out.println(user.getEmail() + " " + user.getPassword());
+//
+//		if(userOpt.isPresent()) {
+//			response = new ResponseEntity<>(userOpt.get(), HttpStatus.OK);
+//		}
+//		else {
+//			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+//		}
+//
+//		return response;
 
-		Optional<UserDto> userOpt = userService.findUserByEmailAndPassword(user.getEmail(), user.getPassword());
-
-		System.out.println(user.getEmail() + " " + user.getPassword());
-
-		if(userOpt.isPresent()) {
-			response = new ResponseEntity<>(userOpt.get(), HttpStatus.OK);
-		}
-		else {
-			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-
-		return response;
-
-//		String token = this.userService.auth(user);
-//		return ResponseEntity.status(HttpStatus.OK).body(token);
+		String token = this.userService.auth(user);
+		return ResponseEntity.status(HttpStatus.OK).body(token);
 	}
 
 	@PostMapping("/signup")
@@ -47,10 +47,12 @@ public class UserController {
 	public Object signup(@Valid @RequestBody UserDto request) {
 		ResponseEntity response = null;
 
-		Optional<UserDto> userOpt = userService.findUserByNicknameAndEmail(request.getNickname(), request.getEmail());
+		Optional<UserDto> userOpt = Optional.empty();
+
+		userOpt = userService.findUserByNicknameOrEmail(request.getNickname(), request.getEmail());
 		System.out.println(request.getEmail() + " " + request.getNickname());
 
-		if (!userOpt.isPresent()) {
+		if (userOpt.isEmpty()) {
 
 			UserDto newUser = new UserDto();
 			newUser.setEmail(request.getEmail());
@@ -61,7 +63,7 @@ public class UserController {
 
 			userService.save(newUser);
 
-			response = new ResponseEntity<>(userOpt.get(), HttpStatus.OK);
+			response = new ResponseEntity<>(newUser, HttpStatus.OK);
 		} else {
 			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
