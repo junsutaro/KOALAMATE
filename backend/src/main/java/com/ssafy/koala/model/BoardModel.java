@@ -26,6 +26,6 @@ public class BoardModel {
 	@OneToMany
 	private List<UserModel> users = new ArrayList<>();
 
-	@OneToMany(mappedBy = "board")
+	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
 	private List<CommentModel> comments = new ArrayList<>();
 }

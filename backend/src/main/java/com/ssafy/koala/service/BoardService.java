@@ -65,13 +65,13 @@ public class BoardService {
 		boardRepository.deleteById(id);
 	}
 
-	private BoardDto convertToDto(BoardModel board) {
+	public BoardDto convertToDto(BoardModel board) {
 		BoardDto boardDto = new BoardDto();
 		BeanUtils.copyProperties(board, boardDto);
 		return boardDto;
 	}
 
-	private BoardModel convertToBoard(BoardDto boardDto) {
+	public BoardModel convertToBoard(BoardDto boardDto) {
 		BoardModel board = new BoardModel();
 		BeanUtils.copyProperties(boardDto, board);
 		return board;

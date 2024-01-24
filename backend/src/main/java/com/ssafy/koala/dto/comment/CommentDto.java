@@ -1,4 +1,4 @@
-package com.ssafy.koala.dto;
+package com.ssafy.koala.dto.comment;
 
 import com.ssafy.koala.model.BoardModel;
 import lombok.Data;

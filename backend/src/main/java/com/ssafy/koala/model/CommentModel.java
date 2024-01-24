@@ -16,7 +16,7 @@ public class CommentModel {
     private Date date;
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="board_id")
     private BoardModel board;
 }

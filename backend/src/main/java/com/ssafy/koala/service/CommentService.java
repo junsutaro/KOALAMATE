@@ -25,11 +25,8 @@ public class CommentService {
         Optional<CommentModel> commentOptional = commentRepository.findById(commentId);
         return commentOptional.orElse(null);
     }
+    ;
 
-    // 특정 게시물에 속한 모든 댓글 조회
-    public List<CommentModel> getCommentsByBoardId(Long boardId) {
-        return commentRepository.findByBoardId(boardId);
-    }
 
     // 댓글 업데이트
     public CommentModel updateComment(Long commentId, CommentModel updatedComment) {

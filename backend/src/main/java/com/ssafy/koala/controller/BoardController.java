@@ -3,6 +3,7 @@ package com.ssafy.koala.controller;
 import com.ssafy.koala.dto.BoardDto;
 import com.ssafy.koala.model.BoardModel;
 import com.ssafy.koala.service.BoardService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/board")
+@Tag(name="board", description="board controller")
 public class BoardController {
 	private final BoardService boardService;
 
