@@ -25,7 +25,7 @@ public class UserModel {
 	private double longitude;
 	@Column(name="birth_range")
 	private int birthRange;
-	private int gender;
+	private String gender;
 	private String profile;
 	private boolean isAdmin;
 }
