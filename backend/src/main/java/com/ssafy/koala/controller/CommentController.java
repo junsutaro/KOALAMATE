@@ -1,7 +1,7 @@
 package com.ssafy.koala.controller;
 
 import com.ssafy.koala.dto.BoardDto;
-import com.ssafy.koala.dto.comment.CommentDto;
+import com.ssafy.koala.dto.CommentDto;
 import com.ssafy.koala.model.CommentModel;
 import com.ssafy.koala.service.BoardService;
 import com.ssafy.koala.service.CommentService;
@@ -9,8 +9,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/comment")
