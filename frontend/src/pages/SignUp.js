@@ -31,9 +31,6 @@ const SignUp = () => {
 	const [isEmailChecked, setIsEmailChecked] = useState(false);
 	const [isNicknameChecked, setIsNicknameChecked] = useState(false);
 
-	// 중복 확인 여부 기반으로 회원가입 버튼 활성화 여부 확인
-	const isSubmitEnabled = isEmailChecked && isNicknameChecked;
-
 	// Yup 스키마 정의
 	const schema = yup.object().shape({
 		email: yup.string().email('올바른 이메일 주소를 입력하세요.').required('이메일을 입력하세요.'),
@@ -47,9 +44,9 @@ const SignUp = () => {
 		confirmPassword: yup.string().
 				oneOf([yup.ref('password'), null], '비밀번호가 일치하지 않습니다.').
 				required('비밀번호를 입력하세요.'),
-		nickname: yup.string().required('닉네임을 입력하세요.'),
-		birthRange: yup.string().required('연령대를 선택하세요.'),
-		gender: yup.string().required('성별을 선택하세요.'),
+		nickname: yup.string().required('닉네임을 입력하세요.').max(20, '닉네임은 최대 20자까지 입력 가능합니다.'),
+		birthRange: yup.number().required('연령대를 선택하세요.'),
+		gender: yup.number().required('성별을 선택하세요.'),
 	});
 
 	// React Hook Form 사용
@@ -63,7 +60,7 @@ const SignUp = () => {
 	const checkEmailAvailability = async (email) => {
 		console.log("checkEmail: ", email);
 		try {
-			const response = await axios.post('https://백엔드URL/api/check-email',
+			const response = await axios.post('https://localhost:8080/api/check-email',
 					{email});
 			setIsEmailAvailable(response.data.available);
 		} catch (error) {
@@ -74,7 +71,7 @@ const SignUp = () => {
 	const checkNicknameAvailability = async (nickname) => {
 		console.log("checkNickname: ", nickname);
 		try {
-			const response = await axios.post('https://백엔드URL/api/check-nickname',
+			const response = await axios.post('https://localhost:8080/api/check-nickname',
 					{nickname});
 			setIsNicknameAvailable(response.data.available);
 		} catch (error) {
@@ -104,8 +101,8 @@ const SignUp = () => {
 		console.log('회원가입 데이터:', data);
 
 // 중복 확인 여부를 검사하여 회원가입 처리
-		if (isSubmitEnabled) {
-			axios.post('https://백엔드URL/api/signup',
+		if (/*isEmailChecked && isNicknameChecked*/true) {
+			axios.post('http://localhost:8080/user/signup',
 					{email, password, nickname, birthRange, gender}).then(response => {
 				console.log('회원가입 성공', response.data);
 				navigate('/'); // 회원가입이 성공하면 '/'로 이동
@@ -212,10 +209,10 @@ const SignUp = () => {
 										<MenuItem value="" disabled>
 											연령대를 선택하세요
 										</MenuItem>
-										<MenuItem value="20대">20대</MenuItem>
-										<MenuItem value="30대">30대</MenuItem>
-										<MenuItem value="40대">40대</MenuItem>
-										<MenuItem value="50대">50대</MenuItem>
+										<MenuItem value="20">20대</MenuItem>
+										<MenuItem value="30">30대</MenuItem>
+										<MenuItem value="40">40대</MenuItem>
+										<MenuItem value="50">50대</MenuItem>
 									</Select>
 									{errors.birthRange && (
 											<Typography variant="caption" color="error">
@@ -227,10 +224,10 @@ const SignUp = () => {
 								<FormControl component="fieldset" error={!!errors.gender}
 								             fullWidth margin="normal">
 									<RadioGroup row aria-label="gender">
-										<FormControlLabel value="male"
+										<FormControlLabel value="0"
 										                  control={<Radio {...register('gender')}/>}
 										                  label="남성"/>
-										<FormControlLabel value="female"
+										<FormControlLabel value="1"
 										                  control={<Radio {...register('gender')}/>}
 										                  label="여성"/>
 									</RadioGroup>
