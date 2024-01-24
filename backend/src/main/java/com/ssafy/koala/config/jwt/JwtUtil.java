@@ -20,8 +20,8 @@ public class JwtUtil {
 	private final long accessTokenExpTime;
 
 	public JwtUtil(
-			@Value("a29hbGFzZWNyZXRzZWN1cml0eXNvdGlyZWRpd2FudHRvZ29ob21lcGxlYXNl") String secretKey,
-			@Value("86400000") long accessTokenExpTime
+			@Value(value = "${jwt.secret}") String secretKey,
+			@Value(value = "${jwt.expirationTime}") long accessTokenExpTime
 	) {
 		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 		this.key = Keys.hmacShaKeyFor(keyBytes);
