@@ -16,5 +16,4 @@ public class CommentDto {
     private Date date;
     private String content;
 
-    private BoardDto board;
 }
