@@ -3,17 +3,17 @@ import axios from 'axios';
 import {TextField, Button, Container, Typography, Box} from '@mui/material';
 
 const Login = () => {
-	const [username, setUsername] = React.useState('');
+	const [email, setEmail] = React.useState('');
 	const [password, setPassword] = React.useState('');
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		console.log('Login: ', username, password);
+		console.log('Login: ', email, password);
 
 		try {
 			const response = await axios.post('http://localhost:8080/user/login',
 					{
-						username: username,
+						email: email,
 						password: password,
 					});
 			console.log(response.data);
@@ -43,8 +43,8 @@ const Login = () => {
 								name="username"
 								autoComplete="username"
 								autoFocus
-								value={username}
-								onChange={(e) => setUsername(e.target.value)}
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
 						/>
 						<TextField
 								margin="normal"
