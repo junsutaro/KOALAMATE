@@ -45,6 +45,9 @@ public class JwtAuthFilter extends OncePerRequestFilter { // OncePerRequestFilte
 					SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 				}
 			}
+			else {
+				response.getWriter().write("토큰이 유효하지 않습니다. 다시 로그인 해주세요");
+			}
 		}
 
 		filterChain.doFilter(request, response); // 다음 필터로 넘기기
