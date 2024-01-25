@@ -23,9 +23,8 @@ public class BoardController {
 	}
 
 	@GetMapping("/list")
-	public Object listBoard(@RequestParam int page) {
+	public Object listBoard(@RequestParam int page, @RequestParam int size) {
 		ResponseEntity response = null;
-		int size = 10;  //한번에 가져올 게시판 개수
 
 		response = new ResponseEntity<>(boardService.getPageEntities(page-1, size),HttpStatus.OK); //페이지 시작은 0부터
 		return response;
