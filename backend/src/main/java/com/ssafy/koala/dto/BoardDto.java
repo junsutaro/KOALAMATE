@@ -1,10 +1,15 @@
 package com.ssafy.koala.dto;
 
+import com.ssafy.koala.model.CommentModel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class BoardDto {
 	private long id;
 	private String title;
@@ -13,4 +18,5 @@ public class BoardDto {
 	private int views;
 	private String nickname;
 
+	private List<CommentModel> comments;
 }

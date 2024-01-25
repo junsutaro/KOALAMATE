@@ -1,7 +1,9 @@
 package com.ssafy.koala.service;
 
+import com.ssafy.koala.dto.CommentDto;
 import com.ssafy.koala.model.CommentModel;
 import com.ssafy.koala.repository.CommentRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class CommentService {
     }
 
     // 댓글 조회
-    public CommentModel getCommentById(Long commentId) {
+    public CommentModel getCommentById(long commentId) {
         Optional<CommentModel> commentOptional = commentRepository.findById(commentId);
         return commentOptional.orElse(null);
     }
@@ -29,7 +31,7 @@ public class CommentService {
 
 
     // 댓글 업데이트
-    public CommentModel updateComment(Long commentId, CommentModel updatedComment) {
+    public CommentModel updateComment(long commentId, CommentDto updatedComment) {
         Optional<CommentModel> existingCommentOptional = commentRepository.findById(commentId);
 
         if (existingCommentOptional.isPresent()) {
@@ -43,7 +45,19 @@ public class CommentService {
         return null;
     }
     // 댓글 삭제
-    public void deleteComment(Long commentId) {
+    public void deleteComment(long commentId) {
         commentRepository.deleteById(commentId);
+    }
+
+    public CommentDto convertToDto(CommentModel comment) {
+        CommentDto commentDto = new CommentDto();
+        BeanUtils.copyProperties(comment, commentDto);
+        return commentDto;
+    }
+
+    public CommentModel convertToBoard(CommentDto commentDto) {
+        CommentModel comment = new CommentModel();
+        BeanUtils.copyProperties(commentDto, comment);
+        return comment;
     }
 }
