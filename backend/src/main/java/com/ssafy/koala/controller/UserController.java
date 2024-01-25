@@ -1,14 +1,17 @@
 package com.ssafy.koala.controller;
 
 //import com.ssafy.koala.config.jwt.JwtUtil;
+import com.ssafy.koala.dto.user.TokenResponse;
 import com.ssafy.koala.dto.user.UserDto;
 import com.ssafy.koala.service.user.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -23,23 +26,8 @@ public class UserController {
 
 	@PostMapping("/login")
 	public Object login(@RequestBody UserDto user) {
-//		ResponseEntity response = null;
-//
-//		Optional<UserDto> userOpt = userService.findUserByEmailAndPassword(user.getEmail(), user.getPassword());
-//
-//		System.out.println(user.getEmail() + " " + user.getPassword());
-//
-//		if(userOpt.isPresent()) {
-//			response = new ResponseEntity<>(userOpt.get(), HttpStatus.OK);
-//		}
-//		else {
-//			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//		}
-//
-//		return response;
-
-		String token = this.userService.auth(user);
-		return ResponseEntity.status(HttpStatus.OK).body(token);
+		TokenResponse tokens = this.userService.auth(user);
+		return ResponseEntity.ok(tokens);
 	}
 
 	@PostMapping("/signup")
@@ -53,19 +41,14 @@ public class UserController {
 		System.out.println(request.getEmail() + " " + request.getNickname());
 
 		if (userOpt.isEmpty()) {
-
 			UserDto newUser = new UserDto();
-			newUser.setEmail(request.getEmail());
-			newUser.setNickname(request.getNickname());
-			newUser.setPassword(request.getPassword());
-			newUser.setBirthRange(request.getBirthRange());
-			newUser.setGender(request.getGender());
+			BeanUtils.copyProperties(request, newUser);
 
 			userService.save(newUser);
 
-			response = new ResponseEntity<>(newUser, HttpStatus.OK);
+			response = new ResponseEntity<>(newUser, HttpStatus.CREATED);
 		} else {
-			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			response = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 		return response;
 	}

@@ -18,14 +18,17 @@ import java.util.Date;
 public class JwtUtil {
 	private final Key key;
 	private final long accessTokenExpTime;
+	private final long refreshTokenExpTime;
 
 	public JwtUtil(
-			@Value("a29hbGFzZWNyZXRzZWN1cml0eXNvdGlyZWRpd2FudHRvZ29ob21lcGxlYXNl") String secretKey,
-			@Value("86400000") long accessTokenExpTime
+			@Value(value = "${jwt.secret}") String secretKey,
+			@Value(value = "${jwt.expirationTime}") long accessTokenExpTime,
+			@Value(value = "${jwt.refreshTokenExpTime}") long refreshTokenExpTime
 	) {
 		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 		this.key = Keys.hmacShaKeyFor(keyBytes);
 		this.accessTokenExpTime = accessTokenExpTime;
+		this.refreshTokenExpTime = refreshTokenExpTime;
 	}
 
 	/**
@@ -34,9 +37,17 @@ public class JwtUtil {
 	 * @return Access Token String
 	 */
 	public String createAccessToken(UserDto user) {
-		return createToken(user, accessTokenExpTime);
+		return createToken(user, "AccessToken", accessTokenExpTime);
 	}
 
+	/**
+	 * Refresh Token 생성
+	 * @param user
+	 * @return Refresh Token String
+	 */
+	public String createRefreshToken(UserDto user) {
+		return createToken(user, "RefreshToken", refreshTokenExpTime);
+	}
 
 	/**
 	 * JWT 생성
@@ -44,8 +55,9 @@ public class JwtUtil {
 	 * @param expireTime
 	 * @return JWT String
 	 */
-	private String createToken(UserDto user, long expireTime) {
+	private String createToken(UserDto user, String subject, long expireTime) {
 		Claims claims = Jwts.claims();
+		claims.put("subject", subject);
 		claims.put("userId", user.getId());
 		claims.put("email", user.getEmail());
 		claims.put("isAdmin", user.isAdmin());

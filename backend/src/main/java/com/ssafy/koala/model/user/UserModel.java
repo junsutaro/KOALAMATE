@@ -1,6 +1,7 @@
 package com.ssafy.koala.model.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ssafy.koala.model.RefrigeratorModel;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,4 +29,9 @@ public class UserModel {
 	private String gender;
 	private String profile;
 	private boolean isAdmin;
+
+	// 준수시치가 건든 부분
+	@OneToOne
+	@JoinColumn(name = "refrigerator_id")
+	private RefrigeratorModel refrigerator;
 }
