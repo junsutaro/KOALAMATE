@@ -71,6 +71,7 @@ public class UserService {
 	}
 
 	public void save(UserDto newUser) {
+		newUser.setPassword(encoder.encode(newUser.getPassword())); // 비밀번호 암호화
 		UserModel user = convertToModel(newUser);
 		userRepository.save(user);
 	}
