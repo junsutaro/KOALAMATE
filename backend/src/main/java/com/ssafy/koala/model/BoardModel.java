@@ -1,8 +1,10 @@
 package com.ssafy.koala.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ssafy.koala.model.user.UserModel;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class BoardModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +26,11 @@ public class BoardModel {
 	@OneToOne
 	private RecipeModel recipe;
 
-	@OneToMany
-	private List<UserModel> users = new ArrayList<>();
+	//Like
+//	@OneToMany
+//	private List<UserModel> users = new ArrayList<>();
 
+	@JsonManagedReference
 	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-	private List<CommentModel> comments = new ArrayList<>();
+	private List<CommentModel> comments;
 }
