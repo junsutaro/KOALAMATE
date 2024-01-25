@@ -23,12 +23,14 @@ public class CommentController {
     }
 
     // 댓글 생성
-    @PostMapping("{board_id}/write")
-    public ResponseEntity<CommentModel> createComment(@PathVariable Long board_id, @RequestBody CommentDto commentDto) {
+    @PostMapping("/{board_id}/write")
+    public ResponseEntity<CommentModel> createComment(@PathVariable long board_id, @RequestBody CommentDto commentDto) {
         CommentModel comment = new CommentModel();
         comment.setNickname(commentDto.getNickname());
         comment.setDate(commentDto.getDate());
         comment.setContent(commentDto.getContent());
+
+        System.out.println(board_id + " " + comment.getContent());
 
         BoardDto board = boardService.getBoardById(board_id);
 
@@ -39,8 +41,10 @@ public class CommentController {
 
     // 댓글 조회
     @GetMapping("/{commentId}")
-    public ResponseEntity<CommentModel> getCommentById(@PathVariable Long commentId) {
+    public ResponseEntity<CommentModel> getCommentById(@PathVariable long commentId) {
+       // System.out.println(commentId);
         CommentModel comment = commentService.getCommentById(commentId);
+        //System.out.println(comment.getContent());
         if (comment != null) {
             return new ResponseEntity<>(comment, HttpStatus.OK);
         } else {
@@ -51,9 +55,10 @@ public class CommentController {
     // 댓글 업데이트
     @PutMapping("/{commentId}/modify")
     public ResponseEntity<CommentModel> updateComment(
-            @PathVariable Long commentId,
-            @RequestBody CommentModel updatedComment
+            @PathVariable long commentId,
+            @RequestBody CommentDto updatedComment
     ) {
+
         CommentModel updated = commentService.updateComment(commentId, updatedComment);
         if (updated != null) {
             return new ResponseEntity<>(updated, HttpStatus.OK);
@@ -64,7 +69,7 @@ public class CommentController {
 
     // 댓글 삭제
     @DeleteMapping("/{commentId}/delete")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
+    public ResponseEntity<Void> deleteComment(@PathVariable long commentId) {
         commentService.deleteComment(commentId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
