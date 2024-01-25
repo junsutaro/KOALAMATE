@@ -4,6 +4,7 @@ import RecipeFilter from 'components/RecipeFilter';
 import RecipeList from 'components/RecipeList';
 import RecipeItem from 'components/RecipeItem';
 import { Button, ButtonGroup, TextField } from '@mui/material';
+import Searchbar from '../components/Searchbar';
 const Recipe = () => {
 	return (
 			<div>
@@ -15,6 +16,7 @@ const Recipe = () => {
 					<Button> 레시피 백과 </Button>
 					<Button> 유저 레시피 </Button>
 				</ButtonGroup>
+				<Searchbar/>
 				<hr/>
 				<RecipeFilter/>
 				<RecipeList />

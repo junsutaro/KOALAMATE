@@ -1,0 +1,13 @@
+.container{
+    display: flex;
+    gap: 10px;
+}
+
+.container > input {
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.container > button {
+    border-radius: 5px;
+}
