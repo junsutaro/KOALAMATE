@@ -6,6 +6,7 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^3.3.4",
+    "@mui/icons-material": "^5.15.6",
     "@mui/material": "^5.15.5",
     "@reduxjs/toolkit": "^2.0.1",
     "@testing-library/jest-dom": "^5.17.0",
@@ -19,6 +20,8 @@
     "react-router-dom": "^6.21.3",
     "react-scripts": "5.0.1",
     "redux-logger": "^3.0.6",
+    "slate": "^0.101.5",
+    "slate-react": "^0.101.6",
     "styled-components": "^6.1.8",
     "web-vitals": "^2.1.4",
     "yup": "^1.3.3"
