@@ -92,7 +92,12 @@ public class JwtUtil {
 	 */
 	public boolean validateToken(String token) {
 		try {
-			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+			Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+			Date expiration = claims.getExpiration(); // 토큰의 만료 시간을 가져옴
+			// 현재 시간과 비교하여 토큰이 만료되었는지 확인
+			if(expiration.before(new Date())) {
+				return false;
+			}
 			return true;
 		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
 			log.info("Invalid JWT Token", e);
@@ -101,6 +106,7 @@ public class JwtUtil {
 		} catch (UnsupportedJwtException e) {
 			log.info("Unsupported JWT Token", e);
 		} catch (IllegalArgumentException e) {
+
 			log.info("JWT claims string is empty.", e);
 		}
 		return false;
