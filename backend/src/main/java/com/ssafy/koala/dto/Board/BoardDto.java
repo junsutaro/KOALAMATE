@@ -1,10 +1,11 @@
-package com.ssafy.koala.dto;
+package com.ssafy.koala.dto.Board;
 
+import com.ssafy.koala.dto.Recipe.RecipeDto;
 import com.ssafy.koala.model.CommentModel;
+import com.ssafy.koala.model.RecipeModel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class BoardDto {
 	private Date date;
 	private int views;
 	private String nickname;
-
+	private String image;
+	private RecipeModel recipe;
 	private List<CommentModel> comments;
 }

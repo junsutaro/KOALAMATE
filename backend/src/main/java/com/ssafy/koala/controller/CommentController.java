@@ -1,6 +1,6 @@
 package com.ssafy.koala.controller;
 
-import com.ssafy.koala.dto.BoardDto;
+import com.ssafy.koala.dto.Board.BoardDto;
 import com.ssafy.koala.dto.CommentDto;
 import com.ssafy.koala.model.CommentModel;
 import com.ssafy.koala.service.BoardService;
@@ -30,7 +30,7 @@ public class CommentController {
         comment.setDate(commentDto.getDate());
         comment.setContent(commentDto.getContent());
 
-        System.out.println(board_id + " " + comment.getContent());
+        //System.out.println(board_id + " " + comment.getContent());
 
         BoardDto board = boardService.getBoardById(board_id);
 

@@ -1,6 +1,5 @@
 package com.ssafy.koala.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -10,20 +9,17 @@ import java.util.List;
 
 @Entity
 @Data
-public class RecipeModel {
+public class DrinkModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String name;
-    private String manufacturer;
+    private int category;
     private String image;
-
-    @OneToOne
-    @JoinColumn(name="board_id")
-    @JsonBackReference
-    private BoardModel board;
+    private String label;
 
 
-    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "drink", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CocktailModel> cocktails = new ArrayList<>();
 }
