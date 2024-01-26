@@ -1,6 +1,15 @@
-import React, { useState } from 'react';
-import { Button, TextField, Typography, Box, TextareaAutosize } from '@mui/material';
+import React, {useState} from 'react';
+import {
+	Button,
+	TextField,
+	Typography,
+	Box,
+	TextareaAutosize,
+	IconButton, Grid,
+} from '@mui/material';
 import NoImage from 'assets/no_img.png'; // 'no_img.png' 이미지 경로 확인 필요
+import DeleteIcon from '@mui/icons-material/Delete';
+import CustomTextareaAutosize from '../components/CustomTextareaAutosize';
 
 function BulletinBoard() {
 	const [title, setTitle] = useState('');
@@ -32,7 +41,6 @@ function BulletinBoard() {
 		}
 	};
 
-
 	const handleCancelImage = () => {
 		setImagePreview(NoImage);
 	};
@@ -45,36 +53,39 @@ function BulletinBoard() {
 	};
 
 	return (
-			<Box component="form" sx={{ display: 'flex', flexDirection: 'column' }} noValidate autoComplete="off" onSubmit={handleSubmit}>
-				<Typography variant="h5">게시판</Typography>
-				<Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
-					<Box sx={{ width: '400px' }}>
-						<img src={imagePreview} alt="Preview" style={{ width: '100%', height: 'auto', marginBottom: 8 }} />
-						<Button variant="contained" component="label">
+			<Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit} mt={2}>
+				<Grid container spacing={2}>
+					<Grid item xs={12} sm={4}>
+						<Box sx={{ position: 'relative', width: '100%', mb: 1 }}>
+							<img src={imagePreview} alt="Preview" style={{ width: '100%', height: 'auto', borderRadius: '10px', border: '1px solid grey' }} />
+							{imagePreview !== NoImage && (
+									<IconButton
+											aria-label="delete"
+											sx={{ position: 'absolute', right: 0, bottom: 0, color: 'grey[900]', backgroundColor: 'lightgrey', borderRadius: '4px', margin: '0 4px 4px 0' }}
+											onClick={handleCancelImage}
+									>
+										<DeleteIcon />
+									</IconButton>
+							)}
+						</Box>
+						<Button variant="contained" component="label" fullWidth>
 							이미지 업로드
-							<input
-									type="file"
-									hidden
-									onChange={handleImageChange}
-									accept="image/*" // 모든 이미지 형식을 허용
-							/>
+							<input type="file" hidden onChange={handleImageChange} accept="image/*" />
 						</Button>
-						<Button variant="outlined" sx={{ mt: 1 }} onClick={handleCancelImage}>
-							취소
-						</Button>
-					</Box>
-					<Box sx={{ flex: 1 }}>
+					</Grid>
+					<Grid item xs={12} sm={8}>
 						<TextField label="제목" variant="outlined" fullWidth value={title} onChange={handleTitleChange} sx={{ mb: 2 }} />
-						<TextareaAutosize
-								minRows={6} // 초기 표시 행 수 증가
-								style={{ width: '100%', height: '200px' }} // 너비와 높이 조정
+						<CustomTextareaAutosize
+								minRows={12}
 								placeholder="내용"
 								value={content}
 								onChange={handleContentChange}
 						/>
-					</Box>
-				</Box>
-				<Button type="submit" variant="contained" color="primary" sx={{ mt: 2, alignSelf: 'flex-end' }}>게시글 올리기</Button>
+						<Box display="flex" justifyContent="flex-end" mt={2}>
+							<Button type="submit" variant="contained" color="primary">게시글 올리기</Button>
+						</Box>
+					</Grid>
+				</Grid>
 			</Box>
 	);
 }
