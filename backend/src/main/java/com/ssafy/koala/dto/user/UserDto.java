@@ -14,4 +14,5 @@ public class UserDto {
 	private String gender;
 	private String profile;
 	private boolean isAdmin;
+	private String refreshToken;
 }

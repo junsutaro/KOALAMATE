@@ -37,8 +37,14 @@ public class UserService {
 		return (user != null) ? Optional.of(convertToDto(user)) : Optional.empty();
 	}
 
+	public Optional<UserDto> findUserByRefreshToken(String refreshToken) {
+		UserModel user = userRepository.findUserByRefreshToken(refreshToken).orElse(null);
+
+		return (user != null) ? Optional.of(convertToDto(user)) : Optional.empty();
+	}
+
 	@Transactional
-	public TokenResponse auth(UserDto dto) {
+	public Map<String, Object> auth(UserDto dto) {
 		String email = dto.getEmail();
 		String password = dto.getPassword();
 		Optional<UserModel> userOpt = userRepository.getUserByEmail(email);
@@ -48,22 +54,25 @@ public class UserService {
 			if(!encoder.matches(password, userOpt.get().getPassword())) {
 				throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
 			}
+			UserDto result = new UserDto();
+			BeanUtils.copyProperties(userOpt.get(), result);
+			String accessToken = jwtUtil.createAccessToken(result);
+			String refreshToken = jwtUtil.createRefreshToken(result);
+			result.setRefreshToken(refreshToken);
+			userRepository.save(convertToModel(result)); // refreshToken은 db에 저장(redis 변경?)
+
+			TokenResponse tokenResponse = new TokenResponse();
+			tokenResponse.setAccessToken(accessToken);
+			tokenResponse.setRefreshToken(refreshToken);
+
+			Map<String, Object> resultMap = new HashMap<>();
+			resultMap.put("user", result);
+			resultMap.put("tokens", tokenResponse);
+			return resultMap;
 		}
 		else {
 			throw new UsernameNotFoundException("이메일이 존재하지 않습니다.");
 		}
-
-		UserDto result = new UserDto();
-		BeanUtils.copyProperties(userOpt.get(), result);
-		String accessToken = jwtUtil.createAccessToken(result);
-		String refreshToken = jwtUtil.createRefreshToken(result);
-		// refreshToken은 redis 저장 필요
-
-		TokenResponse tokenResponse = new TokenResponse();
-		tokenResponse.setAccessToken(accessToken);
-		tokenResponse.setRefreshToken(refreshToken);
-
-		return tokenResponse;
 	}
 
 	public void save(UserDto newUser) {
