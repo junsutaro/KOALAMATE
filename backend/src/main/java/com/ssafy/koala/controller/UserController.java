@@ -77,8 +77,7 @@ public class UserController {
 	// httponly 로그아웃
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(HttpServletResponse response) {
-		// refreshToken을 db에서 가져와야함
-		Cookie cookie = new Cookie("refreshToken", null);
+		Cookie cookie = new Cookie("refresh_token", null);
 		cookie.setHttpOnly(true);
 		cookie.setPath("/");
 		cookie.setMaxAge(0); // 쿠키를 즉시 만료시킵니다.
