@@ -1,12 +1,15 @@
-import style from 'components/Searchbar.module.css'
-import InputBase from '@mui/material/InputBase';
+import style from 'components/Searchbar.module.css';
+import Input from '@mui/material/Input';
 import SearchIcon from '@mui/icons-material/Search';
 
-
-export default function Searchbar () {
-	return <div className={style.container}>
-		<input/>
-		<button>검색</button>
-		<SearchIcon></SearchIcon>
-	</div>
+export default function Searchbar() {
+	return (
+			<div className={style.container}>
+				<Input
+						placeholder="레시피를 검색해보세요"
+						startAdornment={<SearchIcon className={style.searchIcon} />}
+				/>
+				<button>검색</button>
+			</div>
+	);
 }
