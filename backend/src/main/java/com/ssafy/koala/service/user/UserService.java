@@ -1,17 +1,21 @@
 package com.ssafy.koala.service.user;
 
 import com.ssafy.koala.config.jwt.JwtUtil;
+import com.ssafy.koala.dto.user.TokenResponse;
 import com.ssafy.koala.dto.user.UserDto;
 import com.ssafy.koala.model.user.UserModel;
 import com.ssafy.koala.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -21,26 +25,11 @@ public class UserService {
 	private final JwtUtil jwtUtil;
 	private final PasswordEncoder encoder;
 
-	//	public UserService(UserRepository userRepository) {
-//		this.userRepository = userRepository;
-//	}
-//	public UserService(UserRepository userRepository, JwtUtil jwtUtil, PasswordEncoder encoder, ModelMapper modelMapper) {
-//		this.userRepository = userRepository;
-//		this.jwtUtil = jwtUtil;
-//		this.encoder = encoder;
-//		this.modelMapper = modelMapper;
-//	}
 	public Optional<UserDto> findUserByEmailAndPassword(String email, String password) {
 		UserModel user = userRepository.findUserByEmailAndPassword(email,password).orElse(null);
 
 		return (user != null) ? Optional.of(convertToDto(user)) : Optional.empty();
 	}
-
-//	public Optional<UserDto> findUserByNicknameAndEmail(String email, String nickname) {
-//		UserModel user = userRepository.findUserByNicknameAndEmail(email,nickname).orElse(null);
-//
-//		return (user != null) ? Optional.of(convertToDto(user)) : Optional.empty();
-//	}
 
 	public Optional<UserDto> findUserByNicknameOrEmail(String nickname, String email) {
 		UserModel user = userRepository.findUserByNicknameOrEmail(nickname, email).orElse(null);
@@ -48,8 +37,14 @@ public class UserService {
 		return (user != null) ? Optional.of(convertToDto(user)) : Optional.empty();
 	}
 
+	public Optional<UserDto> findUserByRefreshToken(String refreshToken) {
+		UserModel user = userRepository.findUserByRefreshToken(refreshToken).orElse(null);
+
+		return (user != null) ? Optional.of(convertToDto(user)) : Optional.empty();
+	}
+
 	@Transactional
-	public String auth(UserDto dto) {
+	public Map<String, Object> auth(UserDto dto) {
 		String email = dto.getEmail();
 		String password = dto.getPassword();
 		Optional<UserModel> userOpt = userRepository.getUserByEmail(email);
@@ -59,15 +54,25 @@ public class UserService {
 			if(!encoder.matches(password, userOpt.get().getPassword())) {
 				throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
 			}
+			UserDto result = new UserDto();
+			BeanUtils.copyProperties(userOpt.get(), result);
+			String accessToken = jwtUtil.createAccessToken(result);
+			String refreshToken = jwtUtil.createRefreshToken(result);
+			result.setRefreshToken(refreshToken);
+			userRepository.save(convertToModel(result)); // refreshToken은 db에 저장(redis 변경?)
+
+			TokenResponse tokenResponse = new TokenResponse();
+			tokenResponse.setAccessToken(accessToken);
+			tokenResponse.setRefreshToken(refreshToken);
+
+			Map<String, Object> resultMap = new HashMap<>();
+			resultMap.put("user", result);
+			resultMap.put("tokens", tokenResponse);
+			return resultMap;
 		}
 		else {
 			throw new UsernameNotFoundException("이메일이 존재하지 않습니다.");
 		}
-
-		UserDto result = new UserDto();
-		BeanUtils.copyProperties(userOpt.get(), result);
-		return jwtUtil.createAccessToken(result);
-
 	}
 
 	public void save(UserDto newUser) {

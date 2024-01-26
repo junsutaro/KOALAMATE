@@ -29,6 +29,7 @@ public class UserModel {
 	private String gender;
 	private String profile;
 	private boolean isAdmin;
+	private String refreshToken;
 
 	// 준수시치가 건든 부분
 	@OneToOne

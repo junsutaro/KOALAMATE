@@ -20,6 +20,8 @@
     "react-router-dom": "^6.21.3",
     "react-scripts": "5.0.1",
     "redux-logger": "^3.0.6",
+    "slate": "^0.101.5",
+    "slate-react": "^0.101.6",
     "styled-components": "^6.1.8",
     "web-vitals": "^2.1.4",
     "yup": "^1.3.3"

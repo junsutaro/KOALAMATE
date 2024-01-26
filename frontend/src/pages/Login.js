@@ -1,24 +1,34 @@
 import React from 'react';
 import axios from 'axios';
-import {TextField, Button, Container, Typography, Box} from '@mui/material';
+import { TextField, Button, Container, Typography, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setLoading, setLoginStatus } from '../store/authSlice';
 
 const Login = () => {
 	const [email, setEmail] = React.useState('');
 	const [password, setPassword] = React.useState('');
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		console.log('Login: ', email, password);
+		dispatch(setLoading(true));
 
 		try {
-			const response = await axios.post('http://localhost:8080/user/login',
-					{
-						email: email,
-						password: password,
-					});
+			const response = await axios.post('/user/login', {
+				email,
+				password,
+			}, {withCredentials: true});
+			dispatch(setLoginStatus(true, response.data));
 			console.log(response.data);
+			navigate('/');
 		} catch (error) {
 			console.log(error);
+			dispatch(setLoginStatus(false));
+		} finally {
+			dispatch(setLoading(false));
 		}
 	};
 
@@ -31,17 +41,17 @@ const Login = () => {
 					alignItems: 'center',
 				}}>
 					<Typography component="h1" variant="h5">
-						Sign in
+						로그인
 					</Typography>
 					<Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
 						<TextField
 								margin="normal"
 								required
 								fullWidth
-								id="username"
-								label="Username"
-								name="username"
-								autoComplete="username"
+								id="email"
+								label="이메일"
+								name="email"
+								autoComplete="email"
 								autoFocus
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
@@ -51,7 +61,7 @@ const Login = () => {
 								required
 								fullWidth
 								name="password"
-								label="Password"
+								label="비밀번호"
 								type="password"
 								id="password"
 								autoComplete="current-password"

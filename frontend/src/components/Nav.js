@@ -1,32 +1,65 @@
 import React from 'react';
-import {NavLink} from 'react-router-dom';
-import {AppBar, Toolbar, Typography, Button} from '@mui/material';
+import {NavLink, useNavigate} from 'react-router-dom';
+import {AppBar, Toolbar, Typography, Button, Box} from '@mui/material';
+import {useDispatch, useSelector} from 'react-redux';
+import {setLoginStatus} from '../store/authSlice';
+import logoImage from 'assets/logo.png';
 
 const Nav = () => {
+	const { isLoggedIn } = useSelector(state => state.auth);
+
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const handleLogout = async () => {
+		try {
+			//await axios.post('/user/logout', {}, {withCredentials: true});
+			dispatch(setLoginStatus(false));
+			navigate('/');
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 			<AppBar position="static">
 				<Toolbar>
-					<Typography variant="h6" style={{flexGrow: 1}}>
-						My App
-					</Typography>
-					<Button color="inherit" component={NavLink} to="/">
-						Home
-					</Button>
+					<Box component={NavLink} to="/" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', color: 'inherit', textDecoration: 'inherit' }}>
+						<img src={logoImage} alt="Logo" style={{ maxHeight: '50px' }} />
+						<Typography variant="h6" noWrap component='a' sx={{
+							ml: 2,
+							display: { xs: 'none', md: 'flex' },
+							fontWeight: 700,
+							letterSpacing: '.2rem'
+						}}>
+								코알라 친구찾기
+						</Typography>
+					</Box>
 					<Button color="inherit" component={NavLink} to="/about">
 						About
 					</Button>
 					<Button color="inherit" component={NavLink} to="/recipe">
 						Recipe
 					</Button>
-					<Button color="inherit" component={NavLink} to="/contact">
-						Contact
-					</Button>
-					<Button color="inherit" component={NavLink} to="/login">
-						Login
-					</Button>
-					<Button color="inherit" component={NavLink} to="/signup">
-						SignUp
-					</Button>
+					{isLoggedIn ? (
+							<>
+								<Button color="inherit" component={NavLink} to="/writeBoard">
+									Write
+								</Button>
+								<Button color="inherit" onClick={handleLogout}>
+									Logout
+								</Button>
+							</>
+					) : (
+							<>
+								<Button color="inherit" component={NavLink} to="/login">
+									Login
+								</Button>
+								<Button color="inherit" component={NavLink} to="/signup">
+									SignUp
+								</Button>
+							</>
+					)}
 				</Toolbar>
 			</AppBar>
 	);

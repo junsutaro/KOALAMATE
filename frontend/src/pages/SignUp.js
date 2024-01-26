@@ -117,7 +117,6 @@ const SignUp = () => {
 
 	return (
 			<>
-				<Nav/>
 				<Container component="main" maxWidth="sm">
 					<Grid
 							container
