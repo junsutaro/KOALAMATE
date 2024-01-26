@@ -56,22 +56,31 @@ function BulletinBoard() {
 			<Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit} mt={2}>
 				<Grid container spacing={2}>
 					<Grid item xs={12} sm={4}>
-						<Box sx={{ position: 'relative', width: '100%', mb: 1 }}>
-							<img src={imagePreview} alt="Preview" style={{ width: '100%', height: 'auto', borderRadius: '10px', border: '1px solid grey' }} />
-							{imagePreview !== NoImage && (
-									<IconButton
-											aria-label="delete"
-											sx={{ position: 'absolute', right: 0, bottom: 0, color: 'grey[900]', backgroundColor: 'lightgrey', borderRadius: '4px', margin: '0 4px 4px 0' }}
-											onClick={handleCancelImage}
-									>
-										<DeleteIcon />
-									</IconButton>
-							)}
+						<Box
+								sx={{
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}
+						>
+							<Box sx={{ position: 'relative', width: '100%', maxWidth: '300px', mb: 1 }}>
+								<img src={imagePreview} alt="Preview" style={{ width: '100%', height: 'auto', borderRadius: '10px', border: '1px solid grey' }} />
+								{imagePreview !== NoImage && (
+										<IconButton
+												aria-label="delete"
+												sx={{ position: 'absolute', right: 0, bottom: 0, color: 'grey[900]', backgroundColor: 'lightgrey', borderRadius: '4px', margin: '0 4px 4px 0' }}
+												onClick={handleCancelImage}
+										>
+											<DeleteIcon />
+										</IconButton>
+								)}
+								<Button variant="contained" component="label" fullWidth>
+									이미지 업로드
+									<input type="file" hidden onChange={handleImageChange} accept="image/*" />
+								</Button>
+							</Box>
 						</Box>
-						<Button variant="contained" component="label" fullWidth>
-							이미지 업로드
-							<input type="file" hidden onChange={handleImageChange} accept="image/*" />
-						</Button>
+
 					</Grid>
 					<Grid item xs={12} sm={8}>
 						<TextField label="제목" variant="outlined" fullWidth value={title} onChange={handleTitleChange} sx={{ mb: 2 }} />

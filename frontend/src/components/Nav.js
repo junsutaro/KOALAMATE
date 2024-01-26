@@ -1,8 +1,9 @@
 import React from 'react';
 import {NavLink, useNavigate} from 'react-router-dom';
-import {AppBar, Toolbar, Typography, Button} from '@mui/material';
+import {AppBar, Toolbar, Typography, Button, Box} from '@mui/material';
 import {useDispatch, useSelector} from 'react-redux';
 import {setLoginStatus} from '../store/authSlice';
+import logoImage from 'assets/logo.png';
 
 const Nav = () => {
 	const { isLoggedIn } = useSelector(state => state.auth);
@@ -23,9 +24,17 @@ const Nav = () => {
 	return (
 			<AppBar position="static">
 				<Toolbar>
-					<Typography variant="h6" style={{ flexGrow: 1 }} component={NavLink} to="/">
-						My App
-					</Typography>
+					<Box component={NavLink} to="/" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', color: 'inherit', textDecoration: 'inherit' }}>
+						<img src={logoImage} alt="Logo" style={{ maxHeight: '50px' }} />
+						<Typography variant="h6" noWrap component='a' sx={{
+							ml: 2,
+							display: { xs: 'none', md: 'flex' },
+							fontWeight: 700,
+							letterSpacing: '.2rem'
+						}}>
+								코알라 친구찾기
+						</Typography>
+					</Box>
 					<Button color="inherit" component={NavLink} to="/about">
 						About
 					</Button>
