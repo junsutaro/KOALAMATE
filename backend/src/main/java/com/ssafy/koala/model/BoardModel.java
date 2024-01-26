@@ -22,8 +22,10 @@ public class BoardModel {
 	private Date date;
 	private int views;
 	private String nickname;
+	private String image;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="recipe_id")
 	private RecipeModel recipe;
 
 	//Like
@@ -31,6 +33,6 @@ public class BoardModel {
 //	private List<UserModel> users = new ArrayList<>();
 
 	@JsonManagedReference
-	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = CascadeType.ALL)
 	private List<CommentModel> comments;
 }

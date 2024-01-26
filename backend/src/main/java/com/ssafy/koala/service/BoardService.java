@@ -1,8 +1,11 @@
 package com.ssafy.koala.service;
 
-import com.ssafy.koala.dto.BoardDto;
+import com.ssafy.koala.dto.Board.BoardDto;
+import com.ssafy.koala.dto.Board.CreateBoardRequestDto;
 import com.ssafy.koala.model.BoardModel;
+import com.ssafy.koala.model.RecipeModel;
 import com.ssafy.koala.repository.BoardRepository;
+import com.ssafy.koala.repository.RecipeRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,16 +43,14 @@ public class BoardService {
 		return (board != null) ? convertToDto(board) : null;
 	}
 
-	public BoardDto createBoard(BoardDto boardDto) {
-		BoardModel board = convertToBoard(boardDto);
-
+	public BoardDto createBoard(BoardModel boardModel) {
 		//모자란 부분 추가
+		BoardModel savedBoard = boardRepository.save(boardModel);
 
-		BoardModel savedBoard = boardRepository.save(board);
 		return convertToDto(savedBoard);
 	}
 
-	public BoardDto updateBoard(Long id, BoardDto boardDto) {
+	public BoardDto updateBoard(Long id, CreateBoardRequestDto boardDto) {
 		BoardModel existingBoard = boardRepository.findById(id).orElse(null);
 
 		if (existingBoard != null) {
@@ -65,13 +66,13 @@ public class BoardService {
 		boardRepository.deleteById(id);
 	}
 
-	public BoardDto convertToDto(BoardModel board) {
+	public BoardDto convertToDto(Object board) {
 		BoardDto boardDto = new BoardDto();
 		BeanUtils.copyProperties(board, boardDto);
 		return boardDto;
 	}
 
-	public BoardModel convertToBoard(BoardDto boardDto) {
+	public BoardModel convertToBoard(Object boardDto) {
 		BoardModel board = new BoardModel();
 		BeanUtils.copyProperties(boardDto, board);
 		return board;
