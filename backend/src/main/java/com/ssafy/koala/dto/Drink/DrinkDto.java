@@ -1,6 +1,6 @@
 package com.ssafy.koala.dto.Drink;
 
-import com.ssafy.koala.dto.Cocktail.CocktailWithRecipeDto;
+import com.ssafy.koala.dto.Cocktail.CocktailWithBoardDto;
 import lombok.Data;
 
 import java.util.List;
@@ -14,6 +14,6 @@ public class DrinkDto {
     private String image;
     private String label;
 
-    private List<CocktailWithRecipeDto> cocktails = null;
+    private List<CocktailWithBoardDto> cocktails;
 
 }

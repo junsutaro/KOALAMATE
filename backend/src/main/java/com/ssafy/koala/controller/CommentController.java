@@ -32,7 +32,7 @@ public class CommentController {
 
         //System.out.println(board_id + " " + comment.getContent());
 
-        BoardDto board = boardService.getBoardById(board_id);
+        BoardDto board = boardService.getBoardDtoById(board_id);
 
         comment.setBoard(boardService.convertToBoard(board));
 

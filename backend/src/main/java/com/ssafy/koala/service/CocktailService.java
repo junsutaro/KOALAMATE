@@ -21,4 +21,16 @@ public class CocktailService {
     public void saveAllCocktails(List<CocktailModel> cocktails) {
         cocktailRepository.saveAll(cocktails);
     }
+
+    public void deleteCocktailsByBoardId(long boardId) {
+        List<CocktailModel> cocktailsToDelete = cocktailRepository.findByBoardId(boardId);
+
+        for (CocktailModel cocktail : cocktailsToDelete) {
+            // 참조를 먼저 제거
+            cocktail.setBoard(null);
+        }
+
+        // 삭제 연산 수행
+        cocktailRepository.deleteInBatch(cocktailsToDelete);
+    }
 }

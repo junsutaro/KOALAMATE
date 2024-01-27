@@ -1,16 +1,14 @@
 package com.ssafy.koala.dto.Cocktail;
 
-import com.ssafy.koala.dto.Drink.DrinkWithoutCocktailDto;
+import com.ssafy.koala.dto.Board.BoardWithoutCocktailDto;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class CocktailWithDrinkDto {
+public class CocktailWithBoardDto {
     private Long id;
 
     private double proportion;  //비율
     private String unit;  //단위
 
-    private DrinkWithoutCocktailDto drink;
+    private BoardWithoutCocktailDto board;
 }

@@ -7,5 +7,8 @@ import java.util.List;
 
 public interface CocktailRepository extends JpaRepository<CocktailModel,Long> {
     public List<CocktailModel> findByDrinkId(long id);
-    public List<CocktailModel> findByRecipeId(long id);
+    public List<CocktailModel> findByBoardId(long id);
+
+   // public void deleteByBoardId(long id);
+
 }

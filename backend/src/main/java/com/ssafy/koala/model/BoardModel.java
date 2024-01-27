@@ -24,15 +24,15 @@ public class BoardModel {
 	private String nickname;
 	private String image;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="recipe_id")
-	private RecipeModel recipe;
-
 	//Like
 //	@OneToMany
 //	private List<UserModel> users = new ArrayList<>();
 
+
+	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<CocktailModel> cocktails;
+
 	@JsonManagedReference
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<CommentModel> comments;
 }

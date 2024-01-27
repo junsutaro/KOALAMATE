@@ -1,6 +1,7 @@
 package com.ssafy.koala.service;
 
-import com.ssafy.koala.dto.Cocktail.CocktailWithRecipeDto;
+import com.ssafy.koala.dto.Board.BoardWithoutCocktailDto;
+import com.ssafy.koala.dto.Cocktail.CocktailWithBoardDto;
 import com.ssafy.koala.dto.Drink.DrinkDto;
 import com.ssafy.koala.dto.Drink.DrinkWithoutCocktailDto;
 import com.ssafy.koala.model.DrinkModel;
@@ -31,12 +32,17 @@ public class DrinkService {
                     drinkDto.setLabel(drinkModel.getLabel());
                     drinkDto.setImage(drinkModel.getImage());
 
-                    List<CocktailWithRecipeDto> cocktails = drinkModel.getCocktails().stream()
+                    List<CocktailWithBoardDto> cocktails = drinkModel.getCocktails().stream()
                             .map(temp -> {
-                                CocktailWithRecipeDto cocktailDto = new CocktailWithRecipeDto();
+                                CocktailWithBoardDto cocktailDto = new CocktailWithBoardDto();
                                 cocktailDto.setId(temp.getId());
                                 cocktailDto.setProportion(temp.getProportion());
                                 cocktailDto.setUnit(temp.getUnit());
+
+                                BoardWithoutCocktailDto insert = new BoardWithoutCocktailDto();
+                                BeanUtils.copyProperties(temp.getBoard(),insert);
+                                cocktailDto.setBoard(insert);
+
                                 return cocktailDto;
                             })
                             .collect(Collectors.toList());
