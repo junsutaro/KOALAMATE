@@ -32,7 +32,6 @@ public class UserModel {
 	private String refreshToken;
 
 	// 준수시치가 건든 부분
-	@OneToOne
-	@JoinColumn(name = "refrigerator_id")
-	private RefrigeratorModel refrigerator;
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+	private RefrigeratorModel refrigerator = new RefrigeratorModel();
 }
