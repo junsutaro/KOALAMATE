@@ -1,6 +1,6 @@
 package com.ssafy.koala.controller;
 
-import com.ssafy.koala.dto.Board.BoardDto;
+import com.ssafy.koala.dto.board.BoardDto;
 import com.ssafy.koala.dto.CommentDto;
 import com.ssafy.koala.model.CommentModel;
 import com.ssafy.koala.service.BoardService;

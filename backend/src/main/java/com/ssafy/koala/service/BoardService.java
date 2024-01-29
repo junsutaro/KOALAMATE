@@ -1,11 +1,11 @@
 package com.ssafy.koala.service;
 
-import com.ssafy.koala.dto.Board.BoardDto;
-import com.ssafy.koala.dto.Board.CreateBoardRequestDto;
-import com.ssafy.koala.dto.Board.ViewBoardResponseDto;
-import com.ssafy.koala.dto.Cocktail.CocktailWithDrinkDto;
+import com.ssafy.koala.dto.board.BoardDto;
+import com.ssafy.koala.dto.board.CreateBoardRequestDto;
+import com.ssafy.koala.dto.board.ViewBoardResponseDto;
+import com.ssafy.koala.dto.cocktail.CocktailWithDrinkDto;
 import com.ssafy.koala.dto.CommentDto;
-import com.ssafy.koala.dto.Drink.DrinkWithoutCocktailDto;
+import com.ssafy.koala.dto.drink.DrinkWithoutCocktailDto;
 import com.ssafy.koala.model.BoardModel;
 import com.ssafy.koala.model.CocktailModel;
 import com.ssafy.koala.model.DrinkModel;
@@ -19,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

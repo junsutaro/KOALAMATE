@@ -1,9 +1,7 @@
-package com.ssafy.koala.dto.Cocktail;
+package com.ssafy.koala.dto.cocktail;
 
-import com.ssafy.koala.dto.Drink.DrinkWithoutCocktailDto;
+import com.ssafy.koala.dto.drink.DrinkWithoutCocktailDto;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class CocktailWithDrinkDto {

@@ -1,4 +1,4 @@
-package com.ssafy.koala.dto.Drink;
+package com.ssafy.koala.dto.drink;
 
 import lombok.Data;
 

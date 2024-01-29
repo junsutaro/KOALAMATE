@@ -1,13 +1,13 @@
-package com.ssafy.koala.dto.Board;
+package com.ssafy.koala.dto.board;
 
-import com.ssafy.koala.model.CommentModel;
+import com.ssafy.koala.dto.cocktail.CocktailWithDrinkDto;
 import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
 
 @Data
-public class BoardWithoutCocktailDto {
+public class CreateBoardRequestDto {
     private long id;
     private String title;
     private String content;
@@ -15,5 +15,5 @@ public class BoardWithoutCocktailDto {
     private int views;
     private String nickname;
     private String image;
-    private List<CommentModel> comments;
+    private List<CocktailWithDrinkDto> cocktails;
 }

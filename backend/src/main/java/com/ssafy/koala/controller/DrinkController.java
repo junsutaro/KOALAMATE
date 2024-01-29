@@ -1,7 +1,7 @@
 package com.ssafy.koala.controller;
 
-import com.ssafy.koala.dto.Drink.DrinkDto;
-import com.ssafy.koala.dto.Drink.DrinkWithoutCocktailDto;
+import com.ssafy.koala.dto.drink.DrinkDto;
+import com.ssafy.koala.dto.drink.DrinkWithoutCocktailDto;
 import com.ssafy.koala.model.DrinkModel;
 import com.ssafy.koala.service.DrinkService;
 import io.swagger.v3.oas.annotations.tags.Tag;

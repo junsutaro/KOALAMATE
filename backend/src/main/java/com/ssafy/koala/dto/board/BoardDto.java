@@ -1,4 +1,4 @@
-package com.ssafy.koala.dto.Board;
+package com.ssafy.koala.dto.board;
 
 import com.ssafy.koala.model.CocktailModel;
 import com.ssafy.koala.model.CommentModel;

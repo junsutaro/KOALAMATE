@@ -1,9 +1,6 @@
 package com.ssafy.koala.controller;
 
-import com.ssafy.koala.dto.Board.BoardDto;
-import com.ssafy.koala.dto.Board.CreateBoardRequestDto;
-import com.ssafy.koala.dto.Board.ViewBoardResponseDto;
-import com.ssafy.koala.dto.Cocktail.CocktailWithDrinkDto;
+import com.ssafy.koala.dto.board.CreateBoardRequestDto;
 import com.ssafy.koala.model.BoardModel;
 import com.ssafy.koala.model.CocktailModel;
 import com.ssafy.koala.model.DrinkModel;
@@ -20,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

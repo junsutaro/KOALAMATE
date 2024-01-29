@@ -1,6 +1,6 @@
-package com.ssafy.koala.dto.Drink;
+package com.ssafy.koala.dto.drink;
 
-import com.ssafy.koala.dto.Cocktail.CocktailWithBoardDto;
+import com.ssafy.koala.dto.cocktail.CocktailWithBoardDto;
 import lombok.Data;
 
 import java.util.List;

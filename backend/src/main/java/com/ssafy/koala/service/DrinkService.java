@@ -1,9 +1,9 @@
 package com.ssafy.koala.service;
 
-import com.ssafy.koala.dto.Board.BoardWithoutCocktailDto;
-import com.ssafy.koala.dto.Cocktail.CocktailWithBoardDto;
-import com.ssafy.koala.dto.Drink.DrinkDto;
-import com.ssafy.koala.dto.Drink.DrinkWithoutCocktailDto;
+import com.ssafy.koala.dto.board.BoardWithoutCocktailDto;
+import com.ssafy.koala.dto.cocktail.CocktailWithBoardDto;
+import com.ssafy.koala.dto.drink.DrinkDto;
+import com.ssafy.koala.dto.drink.DrinkWithoutCocktailDto;
 import com.ssafy.koala.model.DrinkModel;
 import com.ssafy.koala.repository.DrinkRepository;
 import org.springframework.beans.BeanUtils;
