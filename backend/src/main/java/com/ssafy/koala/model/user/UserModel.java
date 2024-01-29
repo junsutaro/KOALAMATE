@@ -33,7 +33,7 @@ public class UserModel {
 	private String profile;
 	private boolean isAdmin;
 	private String refreshToken;
-	
+
 	@OneToMany(mappedBy = "user")
 	private List<ChatModel> chats;
 
