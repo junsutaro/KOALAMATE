@@ -15,7 +15,8 @@ public class RefrigeratorModel {
     @Column(name = "refrigerator_id")
     private Long id;
 
-    @OneToOne(mappedBy = "refrigerator")
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private UserModel user;
 
     private int refrigeratorType;

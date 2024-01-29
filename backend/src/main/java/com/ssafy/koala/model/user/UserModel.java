@@ -33,13 +33,11 @@ public class UserModel {
 	private String profile;
 	private boolean isAdmin;
 	private String refreshToken;
-
-	// 준수시치가 건든 부분
-	@OneToOne
-	@JoinColumn(name = "refrigerator_id")
-	private RefrigeratorModel refrigerator;
-
+	
 	@OneToMany(mappedBy = "user")
 	private List<ChatModel> chats;
 
+	// 준수시치가 건든 부분
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+	private RefrigeratorModel refrigerator = new RefrigeratorModel();
 }

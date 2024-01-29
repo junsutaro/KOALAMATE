@@ -84,4 +84,27 @@ public class UserController {
 		response.addCookie(cookie);
 		return ResponseEntity.ok().build();
 	}
+
+	@PostMapping("/signupWithRefrigerator")
+//	@ApiOperation(value = "가입하기") // swagger api 명세내용
+	public Object signupWithRef(@Valid @RequestBody UserDto request) {
+		ResponseEntity response = null;
+
+		Optional<UserDto> userOpt = Optional.empty();
+
+		userOpt = userService.findUserByNicknameOrEmail(request.getNickname(), request.getEmail());
+		System.out.println(request.getEmail() + " " + request.getNickname());
+
+		if (userOpt.isEmpty()) {
+			UserDto newUser = new UserDto();
+			BeanUtils.copyProperties(request, newUser);
+
+			userService.createUserWithRefrigerator(newUser);
+
+			response = new ResponseEntity<>(newUser, HttpStatus.CREATED);
+		} else {
+			response = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		return response;
+	}
 }
