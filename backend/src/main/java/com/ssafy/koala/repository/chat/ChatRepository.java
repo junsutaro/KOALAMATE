@@ -6,5 +6,5 @@ import com.ssafy.koala.model.user.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ChatRepository extends JpaRepository<ChatModel, Long> {
-    void deleteByUserAndChatRoom(UserModel user, ChatroomModel chatRoom);
+    void deleteByUserAndChatroom(UserModel user, ChatroomModel chatroom);
 }

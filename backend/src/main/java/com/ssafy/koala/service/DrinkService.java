@@ -9,6 +9,7 @@ import com.ssafy.koala.repository.DrinkRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,34 +24,7 @@ public class DrinkService {
     }
 
     public DrinkDto getDrinkById(long id) {
-        return drinkRepository.findById(id)
-                .map(drinkModel -> {
-                    DrinkDto drinkDto = new DrinkDto();
-                    drinkDto.setId(drinkModel.getId());
-                    drinkDto.setName(drinkModel.getName());
-                    drinkDto.setCategory(drinkModel.getCategory());
-                    drinkDto.setLabel(drinkModel.getLabel());
-                    drinkDto.setImage(drinkModel.getImage());
-
-                    List<CocktailWithBoardDto> cocktails = drinkModel.getCocktails().stream()
-                            .map(temp -> {
-                                CocktailWithBoardDto cocktailDto = new CocktailWithBoardDto();
-                                cocktailDto.setId(temp.getId());
-                                cocktailDto.setProportion(temp.getProportion());
-                                cocktailDto.setUnit(temp.getUnit());
-
-                                BoardWithoutCocktailDto insert = new BoardWithoutCocktailDto();
-                                BeanUtils.copyProperties(temp.getBoard(),insert);
-                                cocktailDto.setBoard(insert);
-
-                                return cocktailDto;
-                            })
-                            .collect(Collectors.toList());
-
-                    drinkDto.setCocktails(cocktails);
-                    return drinkDto;
-                })
-                .orElse(null);
+        return convertToDto(drinkRepository.findById(id).orElse(null));
     }
 
     public DrinkModel getDrinkModelById(long id) {
@@ -68,5 +42,47 @@ public class DrinkService {
         return drinkRepository.save(drinkModel);
     }
 
+    public List<DrinkDto> getDrinkByCategory(int category) {
+        List<DrinkModel> drinks = drinkRepository.findAllByCategory(category);
+        return drinks.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<DrinkDto> getDrinkByName(String name) {
+        System.out.println(name);
+        List<DrinkModel> drinks = drinkRepository.findAllByNameContaining(name);
+        System.out.println(drinks.size());
+        return drinks.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    public DrinkDto convertToDto(DrinkModel drinkModel) {
+        DrinkDto drinkDto = new DrinkDto();
+        drinkDto.setId(drinkModel.getId());
+        drinkDto.setName(drinkModel.getName());
+        drinkDto.setCategory(drinkModel.getCategory());
+        drinkDto.setLabel(drinkModel.getLabel());
+        drinkDto.setImage(drinkModel.getImage());
+
+        List<CocktailWithBoardDto> cocktails = drinkModel.getCocktails().stream()
+                .map(temp -> {
+                    CocktailWithBoardDto cocktailDto = new CocktailWithBoardDto();
+                    cocktailDto.setId(temp.getId());
+                    cocktailDto.setProportion(temp.getProportion());
+                    cocktailDto.setUnit(temp.getUnit());
+
+                    BoardWithoutCocktailDto insert = new BoardWithoutCocktailDto();
+                    BeanUtils.copyProperties(temp.getBoard(),insert);
+                    cocktailDto.setBoard(insert);
+
+                    return cocktailDto;
+                })
+                .collect(Collectors.toList());
+
+        drinkDto.setCocktails(cocktails);
+        return drinkDto;
+    }
 
 }

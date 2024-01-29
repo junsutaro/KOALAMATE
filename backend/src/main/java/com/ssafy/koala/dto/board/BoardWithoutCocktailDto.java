@@ -15,5 +15,5 @@ public class BoardWithoutCocktailDto {
     private int views;
     private String nickname;
     private String image;
-    private List<CommentModel> comments;
+    //private List<CommentModel> comments;
 }

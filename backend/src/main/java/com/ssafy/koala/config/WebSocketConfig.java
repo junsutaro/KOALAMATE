@@ -10,17 +10,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        // stomp 접속 주소 url => /ws-stomp
-        registry.addEndpoint("/ws-stomp") // 연 결될 엔드포인트
-                .withSockJS(); // SocketJS 를 연결한다는 설정
+        // 클라이언트가 WebSocket 서버에 연결할 엔드포인트를 "/chat"로 설정합니다.
+        registry.addEndpoint("/chat").setAllowedOriginPatterns("*").withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         // 메시지를 구독하는 요청 url => 즉 메시지 받을 때
-        registry.enableSimpleBroker("/sub");
+        registry.enableSimpleBroker("/topic");
 
         // 메시지를 발행하는 요청 url => 즉 메시지 보낼 때
-        registry.setApplicationDestinationPrefixes("/pub");
+        registry.setApplicationDestinationPrefixes("/app");
     }
 }

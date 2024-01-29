@@ -2,8 +2,11 @@ package com.ssafy.koala.model.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ssafy.koala.model.RefrigeratorModel;
+import com.ssafy.koala.model.chat.ChatModel;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -35,4 +38,8 @@ public class UserModel {
 	@OneToOne
 	@JoinColumn(name = "refrigerator_id")
 	private RefrigeratorModel refrigerator;
+
+	@OneToMany(mappedBy = "user")
+	private List<ChatModel> chats;
+
 }

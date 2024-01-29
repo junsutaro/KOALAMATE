@@ -12,19 +12,18 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
 
-    @Autowired
     public ChatService(ChatRepository chatRepository) {
         this.chatRepository = chatRepository;
     }
 
-    public void addUserToChatRoom(UserModel user, ChatroomModel chatRoom) {
+    public void addUserToChatroom(UserModel user, ChatroomModel chatroom) {
         ChatModel chat = new ChatModel();
         chat.setUser(user);
-        chat.setChatroom(chatRoom);
+        chat.setChatroom(chatroom);
         chatRepository.save(chat);
     }
 
-    public void removeUserFromChatRoom(UserModel user, ChatroomModel chatRoom) {
-        chatRepository.deleteByUserAndChatRoom(user, chatRoom);
+    public void removeUserFromChatroom(UserModel user, ChatroomModel chatroom) {
+        chatRepository.deleteByUserAndChatroom(user, chatroom);
     }
 }

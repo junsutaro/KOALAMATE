@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/drink")
 @Tag(name="drink", description="drink controller")
@@ -35,5 +37,19 @@ public class DrinkController {
         DrinkModel drinkModel = drinkService.createDrink(drinkDto);
 
         return new ResponseEntity<>(drinkModel, HttpStatus.OK);
+    }
+
+    @PostMapping("/search/category")
+    public Object searchDrinkByCategory(@RequestBody int category) {
+        List<DrinkDto> drinks = drinkService.getDrinkByCategory(category);
+
+        return new ResponseEntity<>(drinks, HttpStatus.OK);
+    }
+
+    @PostMapping("/search/name")
+    public Object searchDrinkByName(@RequestBody String name) {
+        List<DrinkDto> drinks = drinkService.getDrinkByName(name);
+
+        return new ResponseEntity<>(drinks, HttpStatus.OK);
     }
 }

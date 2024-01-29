@@ -14,7 +14,6 @@ import java.util.Optional;
 public class ChatroomService {
     private final ChatroomRepository chatroomRepository;
 
-    @Autowired
     public ChatroomService(ChatroomRepository chatroomRepository) {
         this.chatroomRepository = chatroomRepository;
     }
