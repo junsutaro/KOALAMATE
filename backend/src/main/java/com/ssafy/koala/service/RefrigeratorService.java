@@ -17,6 +17,9 @@ public class RefrigeratorService {
 
     private final RefrigeratorRepository refrigeratorRepository;
 
+    public RefrigeratorModel saveRefrigerator(RefrigeratorModel refrigerator) {
+        return refrigeratorRepository.save(refrigerator);
+    }
     public RefrigeratorService(RefrigeratorRepository refrigeratorRepository) {
         this.refrigeratorRepository = refrigeratorRepository;
     }

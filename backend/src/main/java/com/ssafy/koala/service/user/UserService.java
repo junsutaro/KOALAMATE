@@ -3,7 +3,9 @@ package com.ssafy.koala.service.user;
 import com.ssafy.koala.config.jwt.JwtUtil;
 import com.ssafy.koala.dto.user.TokenResponse;
 import com.ssafy.koala.dto.user.UserDto;
+import com.ssafy.koala.model.RefrigeratorModel;
 import com.ssafy.koala.model.user.UserModel;
+import com.ssafy.koala.repository.RefrigeratorRepository;
 import com.ssafy.koala.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,9 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final JwtUtil jwtUtil;
 	private final PasswordEncoder encoder;
+
+	private final RefrigeratorRepository refrigeratorRepository;
+
 
 	public Optional<UserDto> findUserByEmailAndPassword(String email, String password) {
 		UserModel user = userRepository.findUserByEmailAndPassword(email,password).orElse(null);
@@ -92,4 +97,39 @@ public class UserService {
 		BeanUtils.copyProperties(user, userModel);
 		return userModel;
 	}
+
+
+	@Transactional
+	public TokenResponse createUserWithRefrigerator(UserDto newUserDto) {
+		newUserDto.setPassword(encoder.encode(newUserDto.getPassword())); // 비밀번호 암호화
+		UserModel newUser = convertToModel(newUserDto);
+
+		// 냉장고 정보 저장
+		RefrigeratorModel newRefrigerator = new RefrigeratorModel();
+		newRefrigerator = refrigeratorRepository.save(newRefrigerator);
+		System.out.println(newRefrigerator.getId());
+
+		// 냉장고에 유저 설정
+		newRefrigerator.setUser(newUser);
+
+		// 유저에 냉장고 설정
+		newUser.setRefrigerator(newRefrigerator);
+
+		// 유저 정보 저장 (이때 냉장고 정보도 함께 저장됨)
+		newUser = userRepository.save(newUser);
+		System.out.println(newUser.getRefrigerator().getId());
+
+		// 토큰 생성
+		String accessToken = jwtUtil.createAccessToken(convertToDto(newUser));
+		String refreshToken = jwtUtil.createRefreshToken(convertToDto(newUser));
+
+		// refreshToken은 redis 저장 필요
+		TokenResponse tokenResponse = new TokenResponse();
+		tokenResponse.setAccessToken(accessToken);
+		tokenResponse.setRefreshToken(refreshToken);
+
+		return tokenResponse;
+	}
+
+
 }
