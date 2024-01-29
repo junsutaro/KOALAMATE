@@ -9,6 +9,7 @@ import SignUp from './pages/SignUp';
 import WriteBoard from './pages/WriteBoard';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
+import Chatting from './pages/Chatting';
 // 다른 페이지 컴포넌트들을 임포트
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
 						<Route path="/login" element={<Login />} />
 						<Route path="/signup" element={<SignUp />} />
 						<Route path="/writeBoard" element={<WriteBoard />} />
+						<Route path="/chatting" element={<Chatting />} />
 						{/* 다른 라우트들 */}
 					</Routes>
 					<Footer />
