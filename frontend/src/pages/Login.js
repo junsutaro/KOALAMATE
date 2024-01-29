@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { setLoading, setLoginStatus } from '../store/authSlice';
 
 const Login = () => {
@@ -21,8 +21,8 @@ const Login = () => {
 				email,
 				password,
 			}, {withCredentials: true});
-			dispatch(setLoginStatus(true, response.data));
-			console.log(response.data);
+			dispatch(setLoginStatus({ isLoggedIn: true, user: response.data }));
+			console.log();
 			navigate('/');
 		} catch (error) {
 			console.log(error);

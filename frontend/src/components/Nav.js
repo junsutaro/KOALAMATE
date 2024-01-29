@@ -4,16 +4,17 @@ import {AppBar, Toolbar, Typography, Button, Box} from '@mui/material';
 import {useDispatch, useSelector} from 'react-redux';
 import {setLoginStatus} from '../store/authSlice';
 import logoImage from 'assets/logo.png';
+import axios from 'axios';
 
 const Nav = () => {
-	const { isLoggedIn } = useSelector(state => state.auth);
-
+	const { user, isLoggedIn } = useSelector(state => state.auth);
+	// console.log(user, isLoggedIn);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	const handleLogout = async () => {
 		try {
-			//await axios.post('/user/logout', {}, {withCredentials: true});
+			await axios.post('/user/logout', {}, {withCredentials: true});
 			dispatch(setLoginStatus(false));
 			navigate('/');
 		} catch (error) {
@@ -36,6 +37,9 @@ const Nav = () => {
 						</Typography>
 					</Box>
 					<Button color="inherit" component={NavLink} to="/about">
+						About
+					</Button>
+					<Button color="inherit" component={NavLink} to="/1/comments">
 						About
 					</Button>
 					{isLoggedIn ? (
