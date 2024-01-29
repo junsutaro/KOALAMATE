@@ -45,11 +45,21 @@
 // 	);
 // }
 
-import React from 'react';
+import React, {useState} from 'react';
 import style from "components/RecipeItem.module.css";
 import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 function RecipeItem({ imageUrl, title, author, tags }) {
+
+		// 좋아요 상태를 추적하기 위한 상태 변수와 setter 함수
+		const [isLiked, setIsLiked] = useState(false);
+
+		// 클릭 핸들러 함수
+		const handleLikeClick = () => {
+			setIsLiked(!isLiked); // 현재 좋아요 상태를 토글
+		};
+
 	return (
 			<div className={style.card}> {/* CSS 모듈 스타일 적용 */}
 				<img src={imageUrl} alt={title} className={style.cardImage}/>
@@ -62,9 +72,12 @@ function RecipeItem({ imageUrl, title, author, tags }) {
 						))}
 					</div>
 				</div>
-				<button className={style.likeButton}>
-					{/*<FavoriteBorderRoundedIcon style={{ fontSize: '2rem' }}/>*/}
-					<FavoriteTwoToneIcon style={{ fontSize: '2rem' }}/>
+				<button className={style.likeButton} onClick={handleLikeClick}>
+					{isLiked ? (
+							<FavoriteIcon sx={{ fontSize: '2rem', color: '#FF9B9B' }} />
+					) : (
+							<FavoriteTwoToneIcon sx={{ fontSize: '2rem', color: 'inherit' }} />
+					)}
 				</button>
 			</div>
 	);
