@@ -11,7 +11,6 @@ import style from 'pages/Recipe.module.css';
 const Recipe = () => {
 	return (
 			<div>
-				<Nav />
 				<h1>레시피 조회 페이지</h1>
 				<p></p>
 				<div className={style.topContainer}>
@@ -22,10 +21,11 @@ const Recipe = () => {
 					</ButtonGroup>
 					<Searchbar />
 				</div>
-				<hr />
+				<hr/>
 				<Ranking />
 				<RecipeFilter />
-				<RecipeList recipe={recipe}/>
+				{/*<RecipeList recipe={recipe}/>*/}
+				<RecipeList />
 			</div>
 
 	);
