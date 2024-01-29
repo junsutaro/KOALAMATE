@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import {AnimationMixer, LoopRepeat} from 'three';
+import {AnimationMixer, LoopRepeat, LoopOnce } from 'three';
 
 import refrigerator from 'assets/refrigerator.glb';
 
 function GLBLoaderComponent() {
 	const mountRef = React.useRef(null);
-
 	const clock = new THREE.Clock();
+	let action = null;
+	const raycaster = new THREE.Raycaster();
+	const mouse = new THREE.Vector2();
 
 	useEffect(() => {
 		const currentMount = mountRef.current;
@@ -30,18 +32,48 @@ function GLBLoaderComponent() {
 			console.log(gltf);
 			scene.add(gltf.scene);
 
-			camera.position.set(10, 1, 0);
-			camera.lookAt(0, 0, 0);
+			camera.position.set(10, 0.5, 0);
+			camera.lookAt(0, 0.5, 0);
 
 			console.log(gltf.animations);
 			console.log(gltf.animations.length);
 
-			if (gltf.animations.length === 1) {
-				const action = mixer.clipAction(gltf.animations[0]);
-				action.setLoop(LoopRepeat);
-				//action.clampWhenFinished = true;
+			const onMouseClick = (event) => {
+
+				mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+				mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+				raycaster.setFromCamera(mouse, camera);
+				const intersects = raycaster.intersectObjects(gltf.scene.children, true);
+
+				if (intersects.length > 0) {
+					intersects[0].object.material.color.set((Math.random() * 0xffffff));
+				}
+
+
+				if (gltf.animations.length === 1) {
+					action = mixer.clipAction(gltf.animations[0]);
+					action.setLoop(LoopOnce);
+				}
+				console.log(action);
+				action.stop();
 				action.play();
+			};
+			window.addEventListener('mousedown', onMouseClick, false);
+
+			const onRightClick = (event) => {
+				event.preventDefault();
+				console.log(gltf);
+
+				let newColorValue = Math.random() * 0xffffff;
+				gltf.scene.traverse(function (object) {
+					if (object.isMesh && object.name.includes('Fridge')) {
+						object.material.color.set(newColorValue);
+					}
+				})
 			}
+			window.addEventListener('contextmenu', onRightClick, false);
+
 
 			if (gltf.scenes && gltf.scenes.length > 0) {
 				gltf.scenes.forEach((scene) => {
@@ -65,7 +97,6 @@ function GLBLoaderComponent() {
 				camera.position.y = mouseY * 2;
 
 				// 카메라가 바라보는 방향 조정 (마우스 위치에 따라)
-				console.log(scene.position);
 				camera.lookAt(0, 0.5, 0);
 			}
 
@@ -91,14 +122,19 @@ function GLBLoaderComponent() {
 			};
 			animate();
 
+
+
 			return () => {
 				currentMount.removeChild(renderer.domElement);
 				renderer.dispose();
 				window.removeEventListener('resize', onWindowResize);
+				window.removeEventListener('mousemove', onMouseMove);
 				// 여기에 추가적인 정리 코드
 			};
 		});
 	}, []);
+
+
 
 	return <div ref={mountRef}></div>
 }

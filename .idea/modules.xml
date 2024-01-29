@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend.koala.iml" filepath="$PROJECT_DIR$/.idea/modules/backend.koala.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend.koala.main.iml" filepath="$PROJECT_DIR$/.idea/modules/backend.koala.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend.koala.main~1.iml" filepath="$PROJECT_DIR$/.idea/modules/backend.koala.main~1.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend.koala.test.iml" filepath="$PROJECT_DIR$/.idea/modules/backend.koala.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/frontend.iml" filepath="$PROJECT_DIR$/frontend.iml" />
       <module fileurl="file://$PROJECT_DIR$/koala.iml" filepath="$PROJECT_DIR$/koala.iml" />

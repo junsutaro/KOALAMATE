@@ -3,7 +3,7 @@ import {Button, Modal} from '@mui/material';
 import {NavLink} from 'react-router-dom';
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
-import refrigerator from 'assets/refrigerator.glb';
+import refrigerator from 'assets/refrigerator_prev.glb';
 import GLBLoderComponent from 'components/GLBLoaderComponent';
 
 const Home = () => {
@@ -32,19 +32,24 @@ const Home = () => {
 					write
 				</Button>
 				<Button onClick={handleOpen}>모델 렌더링</Button>
-					<Modal open={open}
-					       aria-labelledby="modal-modal-title"
-					       aria-describedby="modal-modal-description"
-					       style={{ overflow: 'scroll', backdropFilter: 'blur(3px)', backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
-					>
-						<div style={style}>
-							<GLBLoderComponent />
-							<Button onClick={handleClose} variant={"contained"}>qwer</Button>
-						</div>
-					</Modal>
-					<p>Welcome to the home page of our website!</p>
+				<Modal open={open}
+				       onClose={handleClose}
+				       aria-labelledby="modal-modal-title"
+				       aria-describedby="modal-modal-description"
+				       style={{
+					       overflow: 'scroll',
+					       backdropFilter: 'blur(3px)',
+					       backgroundColor: 'rgba(0, 0, 0, 0.7)',
+				       }}
+				>
+					<div style={style}>
+						<GLBLoderComponent/>
+						<Button onClick={handleClose} variant={'contained'}>qwer</Button>
+					</div>
+				</Modal>
+				<p>Welcome to the home page of our website!</p>
 			</div>
-);
+	);
 };
 
 export default Home;
