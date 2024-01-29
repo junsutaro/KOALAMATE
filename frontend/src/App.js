@@ -9,11 +9,8 @@ import SignUp from './pages/SignUp';
 import WriteBoard from './pages/WriteBoard';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
-<<<<<<< HEAD
 import CommentList from './components/CommentList';
-=======
 import Chatting from './pages/Chatting';
->>>>>>> issue-front-chatting
 // 다른 페이지 컴포넌트들을 임포트
 
 function App() {
