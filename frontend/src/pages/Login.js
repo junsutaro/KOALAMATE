@@ -4,12 +4,15 @@ import { TextField, Button, Container, Typography, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import { setLoading, setLoginStatus } from '../store/authSlice';
+import { useWebSocket } from 'context/WebSocketContext';
 
 const Login = () => {
 	const [email, setEmail] = React.useState('');
 	const [password, setPassword] = React.useState('');
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const { connect } = useWebSocket();
+
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -22,7 +25,8 @@ const Login = () => {
 				password,
 			}, {withCredentials: true});
 			dispatch(setLoginStatus({ isLoggedIn: true, user: response.data }));
-			console.log();
+			connect('http://192.168.100.210:8080/chat');
+			console.log(response.data);
 			navigate('/');
 		} catch (error) {
 			console.log(error);

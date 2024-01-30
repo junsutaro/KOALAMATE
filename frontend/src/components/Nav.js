@@ -8,7 +8,7 @@ import axios from 'axios';
 
 const Nav = () => {
 	const { user, isLoggedIn } = useSelector(state => state.auth);
-	// console.log(user, isLoggedIn);
+	console.log(user, isLoggedIn);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
@@ -27,7 +27,7 @@ const Nav = () => {
 				<Toolbar>
 					<Box component={NavLink} to="/" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', color: 'inherit', textDecoration: 'inherit' }}>
 						<img src={logoImage} alt="Logo" style={{ maxHeight: '50px' }} />
-						<Typography variant="h6" noWrap component='a' sx={{
+						<Typography variant="h6" noWrap sx={{
 							ml: 2,
 							display: { xs: 'none', md: 'flex' },
 							fontWeight: 700,
