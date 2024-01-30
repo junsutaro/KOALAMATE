@@ -40,7 +40,7 @@ const Nav = () => {
 						About
 					</Button>
 					<Button color="inherit" component={NavLink} to="/1/comments">
-						About
+						댓글 확인
 					</Button>
 					{isLoggedIn ? (
 							<>
@@ -49,6 +49,9 @@ const Nav = () => {
 								</Button>
 								<Button color="inherit" onClick={handleLogout}>
 									Logout
+								</Button>
+								<Button color="inherit" component={NavLink} to="/user/1">
+									마이페이지
 								</Button>
 							</>
 					) : (
