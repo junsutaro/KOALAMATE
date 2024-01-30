@@ -19,11 +19,15 @@ public class RefrigeratorModel {
     @JoinColumn(name = "user_id")
     private UserModel user;
 
-    private int refrigeratorType;
-    private String color;
+    private int refrigeratorType = 1;
+
+    private String color = "#ffffff";
 
     @OneToMany(mappedBy = "refrigerator")
     private List<RefrigeratorCustomobjModel> refrigeratorCustomobjs;
+
+    @OneToMany(mappedBy = "refrigerator")
+    private List<RefrigeratorDrinkModel> refrigeratorDrinkModels;
 
 
 

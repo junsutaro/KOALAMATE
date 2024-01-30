@@ -1,18 +1,12 @@
 package com.ssafy.koala.controller;
 
-import com.ssafy.koala.dto.Board.BoardDto;
-import com.ssafy.koala.dto.Board.CreateBoardRequestDto;
-import com.ssafy.koala.dto.Cocktail.CocktailDto;
-import com.ssafy.koala.dto.Cocktail.CocktailWithDrinkDto;
-import com.ssafy.koala.dto.Recipe.RecipeDto;
+import com.ssafy.koala.dto.board.CreateBoardRequestDto;
 import com.ssafy.koala.model.BoardModel;
 import com.ssafy.koala.model.CocktailModel;
 import com.ssafy.koala.model.DrinkModel;
-import com.ssafy.koala.model.RecipeModel;
 import com.ssafy.koala.service.BoardService;
 import com.ssafy.koala.service.CocktailService;
 import com.ssafy.koala.service.DrinkService;
-import com.ssafy.koala.service.RecipeService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -23,8 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/board")
@@ -32,15 +26,12 @@ import java.util.List;
 public class BoardController {
 	private final BoardService boardService;
 	private final DrinkService drinkService;
-	private final RecipeService recipeService;
 	private final CocktailService cocktailService;
 	@PersistenceContext
 	private EntityManager entityManager;
-
-	public BoardController (BoardService boardService, DrinkService drinkService, RecipeService recipeService, CocktailService cocktailService) {
+	public BoardController (BoardService boardService, DrinkService drinkService, CocktailService cocktailService) {
 		this.boardService = boardService;
 		this.drinkService = drinkService;
-		this.recipeService = recipeService;
 		this.cocktailService = cocktailService;
 	}
 
@@ -60,51 +51,42 @@ public class BoardController {
 		return response;
 	}
 
+	@Transactional
 	@PostMapping("/write")
 	public Object writeBoard(@RequestBody CreateBoardRequestDto board) {
-		ResponseEntity response = null;
-
 		BoardModel boardModel = new BoardModel();
-		RecipeModel recipe = new RecipeModel();
-		RecipeDto recipeDto = board.getRecipe();
+		BeanUtils.copyProperties(board, boardModel);
+		boardService.createBoard(boardModel);
 
-		BeanUtils.copyProperties(board,boardModel);
-		BeanUtils.copyProperties(recipeDto, recipe);
+		List<CocktailModel> list = board.getCocktails().stream()
+				.map(temp -> {
+					DrinkModel drinkModel = drinkService.getDrinkModelById(temp.getDrink().getId());
 
-		boardModel.setRecipe(recipe);
+					CocktailModel insert = new CocktailModel();
+					insert.setBoard(boardModel);
+					insert.setDrink(drinkModel);
+					insert.setProportion(temp.getProportion());
+					insert.setUnit(temp.getUnit());
+					insert.setId(temp.getId());
 
-		BoardDto boardDto = boardService.createBoard(boardModel);
-		recipe.setBoard(boardModel);
+					return insert;
+				})
+				.collect(Collectors.toList());
 
+		cocktailService.saveAllCocktails(list);
 
-		List<CocktailModel> list = new ArrayList<>();
-		for(CocktailWithDrinkDto temp : board.getRecipe().getCocktails()) {
-			CocktailModel insert = new CocktailModel();
-
-			DrinkModel drinkModel = new DrinkModel();
-			BeanUtils.copyProperties(drinkService.getDrinkModelById(temp.getDrink().getId()), drinkModel);
-
-			insert.setDrink(drinkModel);
-			insert.setRecipe(recipe);
-			insert.setProportion(temp.getProportion());
-			insert.setUnit(temp.getUnit());
-			insert.setId(temp.getId());
-
-			list.add(insert);
-		}
-		recipe.setCocktails(list);
-		recipeService.createRecipe(recipe);
-		response = new ResponseEntity<>(boardDto,HttpStatus.OK);
-
+		ResponseEntity response = new ResponseEntity<>(boardModel, HttpStatus.OK);
 		return response;
 	}
 
+	@Transactional
 	@PutMapping("/modify/{board_id}")
 	public Object modifyBoard(@PathVariable long board_id, @RequestBody CreateBoardRequestDto board) {
 		ResponseEntity response = null;
 
-		BoardDto boardDto = boardService.updateBoard(board_id, board);
-		response = new ResponseEntity<>(boardDto,HttpStatus.OK);
+		cocktailService.deleteCocktailsByBoardId(board_id);
+		BoardModel boardModel = boardService.updateBoard(board_id, board);
+		response = new ResponseEntity<>(boardModel,HttpStatus.OK);
 
 		return response;
 	}

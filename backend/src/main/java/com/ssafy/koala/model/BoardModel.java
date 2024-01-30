@@ -5,7 +5,11 @@ import com.ssafy.koala.model.user.UserModel;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,26 +17,30 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class BoardModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String title;
 	private String content;
-	private Date date;
+
+	@CreatedDate
+	private LocalDateTime date;
+
 	private int views;
 	private String nickname;
 	private String image;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="recipe_id")
-	private RecipeModel recipe;
 
 	//Like
 //	@OneToMany
 //	private List<UserModel> users = new ArrayList<>();
 
+
+	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<CocktailModel> cocktails;
+
 	@JsonManagedReference
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<CommentModel> comments;
 }

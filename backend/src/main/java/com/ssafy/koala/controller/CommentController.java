@@ -1,6 +1,6 @@
 package com.ssafy.koala.controller;
 
-import com.ssafy.koala.dto.Board.BoardDto;
+import com.ssafy.koala.dto.board.BoardDto;
 import com.ssafy.koala.dto.CommentDto;
 import com.ssafy.koala.model.CommentModel;
 import com.ssafy.koala.service.BoardService;
@@ -27,12 +27,11 @@ public class CommentController {
     public ResponseEntity<CommentModel> createComment(@PathVariable long board_id, @RequestBody CommentDto commentDto) {
         CommentModel comment = new CommentModel();
         comment.setNickname(commentDto.getNickname());
-        comment.setDate(commentDto.getDate());
         comment.setContent(commentDto.getContent());
 
         //System.out.println(board_id + " " + comment.getContent());
 
-        BoardDto board = boardService.getBoardById(board_id);
+        BoardDto board = boardService.getBoardDtoById(board_id);
 
         comment.setBoard(boardService.convertToBoard(board));
 

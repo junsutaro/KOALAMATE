@@ -16,8 +16,9 @@ public class CocktailModel {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recipe_id")
-    private RecipeModel recipe;
+    @JoinColumn(name = "board_id")
+    private BoardModel board;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "drink_id")
