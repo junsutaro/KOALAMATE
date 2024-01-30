@@ -8,5 +8,5 @@ import java.util.List;
 @Data
 public class FollowResponseDto {
     private long followCnt; // 사람 수
-    private List<UserModel> list; // 팔로우 or 팔로워 리스트
+    private List<UserListDto> list; // 팔로우 or 팔로워 리스트
 }

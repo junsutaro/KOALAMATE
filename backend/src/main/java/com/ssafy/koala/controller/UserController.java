@@ -4,6 +4,7 @@ package com.ssafy.koala.controller;
 import com.ssafy.koala.dto.user.FollowResponseDto;
 import com.ssafy.koala.dto.user.TokenResponse;
 import com.ssafy.koala.dto.user.UserDto;
+import com.ssafy.koala.dto.user.UserListDto;
 import com.ssafy.koala.model.user.UserModel;
 import com.ssafy.koala.repository.FollowRepository;
 import com.ssafy.koala.service.AuthService;
@@ -99,35 +100,25 @@ public class UserController {
 	// 유저 팔로우 목록
 	@GetMapping("{user_id}/followee")
 	public ResponseEntity<?> getFolloweeList(@PathVariable long user_id) {
-		Optional<List<UserModel>> followeeList = followService.findFolloweeById(user_id);
-		if(followeeList.isPresent()) {
-			long cnt = followService.countByFollowee_Id(user_id);
-			// DTO에 팔로우 수랑 유저가 팔로우 하는 리스트 담아서 리턴
-			FollowResponseDto dto = new FollowResponseDto();
-			dto.setFollowCnt(cnt);
-			dto.setList(followeeList.get());
-			return new ResponseEntity<>(dto, HttpStatus.OK);
-
-		}
-		// 팔로우 리스트 없음
-		return new ResponseEntity<>(Optional.empty(), HttpStatus.NO_CONTENT);
+		List<UserListDto> followeeList = followService.findFolloweeById(user_id);
+		long cnt = followService.countByFollowee_Id(user_id);
+		// DTO에 팔로우 수랑 유저가 팔로우 하는 리스트 담아서 리턴
+		FollowResponseDto dto = new FollowResponseDto();
+		dto.setFollowCnt(cnt);
+		dto.setList(followeeList);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
 	// 유저 팔로워 목록
 	@GetMapping("{user_id}/follower")
 	public ResponseEntity<?> getFollowerList(@PathVariable long user_id) {
-		Optional<List<UserModel>> followerList = followService.findFollowerById(user_id);
-		if(followerList.isPresent()) {
-			long cnt = followService.countByFollower_Id(user_id);
-			// DTO에 팔로워 수랑 유저를 팔로우 하는 리스트 담아서 리턴
-			FollowResponseDto dto = new FollowResponseDto();
-			dto.setFollowCnt(cnt);
-			dto.setList(followerList.get());
-			return new ResponseEntity<>(dto, HttpStatus.OK);
-
-		}
-		// 팔로우 리스트 없음
-		return new ResponseEntity<>(Optional.empty(), HttpStatus.NO_CONTENT);
+		List<UserListDto> followerList = followService.findFollowerById(user_id);
+		long cnt = followService.countByFollower_Id(user_id);
+		// DTO에 팔로워 수랑 유저를 팔로우 하는 리스트 담아서 리턴
+		FollowResponseDto dto = new FollowResponseDto();
+		dto.setFollowCnt(cnt);
+		dto.setList(followerList);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
 	// 팔로우 요청

@@ -1,5 +1,6 @@
 package com.ssafy.koala.service.user;
 
+import com.ssafy.koala.dto.user.UserListDto;
 import com.ssafy.koala.model.user.FollowModel;
 import com.ssafy.koala.model.user.UserModel;
 import com.ssafy.koala.repository.FollowRepository;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,25 +21,31 @@ public class FollowService {
     private FollowRepository followRepository;
 
     // 해당 uid의 유저를 팔로우하는 유저 리스트
-    public Optional<List<UserModel>> findFollowerById(long userId) {
+    public List<UserListDto> findFollowerById(long userId) {
         // 유저를(userId) 팔로우하는 유저들의 리스트를 가져옴
         List<FollowModel> followers = followRepository.findFollowerByFollowee_Id(userId);
         // 각각의 FollowModel에서 follower를 추출하여 List<UserModel>으로 변환
         List<UserModel> followerUsers = followers.stream()
                 .map(FollowModel::getFollower)
                 .collect(Collectors.toList());
-        return (followerUsers != null) ? Optional.of(followerUsers) : Optional.empty();
+        // followerUsers를 List<UserListDto>로 바꾸기
+        List<UserListDto> result = convertToListDto(followerUsers);
+
+        return result;
     }
 
     // 해당 uid의 유저가 팔로우 하는 유저 리스트
-    public Optional<List<UserModel>> findFolloweeById(Long userId) {
+    public List<UserListDto> findFolloweeById(Long userId) {
         // 유저가(userId) 팔로우하는 유저들의 리스트를 가져옴
         List<FollowModel> followees = followRepository.findFolloweeByFollower_Id(userId);
         // 각각의 FollowModel에서 followee를 추출하여 List<UserModel>으로 변환
         List<UserModel> followeeUsers = followees.stream()
                 .map(FollowModel::getFollowee)
                 .collect(Collectors.toList());
-        return (followeeUsers != null) ? Optional.of(followeeUsers) : Optional.empty();
+        // followeeUsers를 List<UserListDto>로 바꾸기
+        List<UserListDto> result = convertToListDto(followeeUsers);
+
+        return result;
     }
 
     // 해당 uid의 유저 팔로워 수
@@ -79,4 +87,18 @@ public class FollowService {
         followRepository.deleteByFollowerAndFollowee(follower, followee);
     }
 
+    // List 타입 바꾸기
+    List<UserListDto> convertToListDto(List<UserModel> list) {
+        List<UserListDto> result = new ArrayList<>();
+        for(UserModel um : list) {
+            UserListDto dto = new UserListDto();
+            dto.setId(um.getId());
+            dto.setNickname(um.getNickname());
+            dto.setBirthRange(um.getBirthRange());
+            dto.setGender(um.getGender());
+            dto.setProfile(um.getProfile());
+            result.add(dto);
+        }
+        return result;
+    }
 }
