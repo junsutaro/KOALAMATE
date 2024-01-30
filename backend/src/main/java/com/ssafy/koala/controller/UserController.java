@@ -1,14 +1,12 @@
 package com.ssafy.koala.controller;
 
 //import com.ssafy.koala.config.jwt.JwtUtil;
-import com.ssafy.koala.dto.user.FollowResponseDto;
-import com.ssafy.koala.dto.user.TokenResponse;
-import com.ssafy.koala.dto.user.UserDto;
-import com.ssafy.koala.dto.user.UserListDto;
+import com.ssafy.koala.dto.user.*;
 import com.ssafy.koala.model.user.UserModel;
 import com.ssafy.koala.repository.FollowRepository;
 import com.ssafy.koala.service.AuthService;
 import com.ssafy.koala.service.user.FollowService;
+import com.ssafy.koala.service.user.ProfileService;
 import com.ssafy.koala.service.user.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
@@ -85,6 +83,33 @@ public class UserController {
 			response = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 		return response;
+	}
+	@RestController
+	@RequestMapping("/profile")
+	public class ProfileController {
+
+		private final ProfileService profileService;
+
+		public ProfileController(ProfileService profileService) {
+			this.profileService = profileService;
+		}
+
+		@GetMapping("/{userId}")
+		public ResponseEntity<ProfileDto> getProfileByUserId(@PathVariable Long userId) {
+			return profileService.getProfileDtoByUserId(userId)
+					.map(ResponseEntity::ok)
+					.orElse(ResponseEntity.notFound().build());
+		}
+
+		@PostMapping("/{userId}/modify")
+		public ResponseEntity<String> modifyProfile(@PathVariable Long userId, @RequestBody ProfileDto modifiedProfile) {
+			boolean result = profileService.modifyProfile(userId, modifiedProfile);
+			if (result) {
+				return ResponseEntity.ok("프로필이 성공적으로 수정되었습니다.");
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("프로필 수정에 실패했습니다.");
+			}
+		}
 	}
 
 	// httponly 로그아웃

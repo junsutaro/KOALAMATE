@@ -40,4 +40,11 @@ public class UserModel {
 	// 준수시치가 건든 부분
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
 	private RefrigeratorModel refrigerator = new RefrigeratorModel();
+
+	private String introduction;
+	private double alcoholLimit; // 주량
+	private double mannersScore = 36.5;  // 매너점수
+	private List<String> tags; // 태그들
+
+
 }
