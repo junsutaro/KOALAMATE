@@ -87,6 +87,16 @@ public class FollowService {
         followRepository.deleteByFollowerAndFollowee(follower, followee);
     }
 
+    // 사용자가 상대를 팔로우 중인지 확인. 팔로우 하고있으면 true
+    boolean checkFollow(Long myId, Long userId) {
+        UserModel follower = new UserModel();
+        UserModel followee = new UserModel();
+        follower.setId(myId);
+        followee.setId(userId);
+        return followRepository.existsByFollowerAndFollowee(follower, followee);
+    }
+
+
     // List 타입 바꾸기
     List<UserListDto> convertToListDto(List<UserModel> list) {
         List<UserListDto> result = new ArrayList<>();

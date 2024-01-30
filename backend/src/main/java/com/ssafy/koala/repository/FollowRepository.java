@@ -23,4 +23,6 @@ public interface FollowRepository extends JpaRepository<FollowModel, Long> {
     // 언팔로우
     void deleteByFollowerAndFollowee(UserModel followerId, UserModel followeeId);
 
+    // 사용자가 상대를 팔로우 중인지 확인
+    boolean existsByFollowerAndFollowee(UserModel follower, UserModel followee);
 }
