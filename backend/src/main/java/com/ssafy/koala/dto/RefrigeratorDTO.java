@@ -19,4 +19,15 @@ public class RefrigeratorDTO {
 
         return dto;
     }
+
+    public static RefrigeratorDTO mapToDTO(RefrigeratorModel refrigerator) {
+        RefrigeratorDTO dto = new RefrigeratorDTO();
+        dto.setRefrigeratorType(refrigerator.getRefrigeratorType());
+        dto.setColor(refrigerator.getColor());
+        // 필요한 다른 필드들을 추가로 매핑
+
+        return dto;
+    }
+
+
 }

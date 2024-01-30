@@ -1,6 +1,5 @@
 package com.ssafy.koala.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -22,4 +21,8 @@ public class DrinkModel {
 
     @OneToMany(mappedBy = "drink", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CocktailModel> cocktails = new ArrayList<>();
+
+    @OneToMany(mappedBy = "drink")
+    private List<RefrigeratorDrinkModel> refrigeratorDrinkModels;
+
 }
