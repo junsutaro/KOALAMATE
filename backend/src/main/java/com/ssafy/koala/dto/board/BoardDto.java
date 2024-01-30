@@ -5,6 +5,7 @@ import com.ssafy.koala.model.CommentModel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class BoardDto {
 	private long id;
 	private String title;
 	private String content;
-	private Date date;
+	private LocalDateTime date;
 	private int views;
 	private String nickname;
 	private String image;
