@@ -81,7 +81,16 @@ public class JwtUtil {
 	 * @return User ID
 	 */
 	public Long getUserId(String token) {
-		return parseClaims(token).get("memberId", Long.class);
+		return parseClaims(token).get("userId", Long.class);
+	}
+
+	/**
+	 * Token에서 User Email 추출
+	 * @param token
+	 * @return User Email
+	 */
+	public String getUserEmail(String token) {
+		return parseClaims(token).get("email", String.class);
 	}
 
 
