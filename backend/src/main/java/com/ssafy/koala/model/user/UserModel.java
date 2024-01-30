@@ -1,6 +1,7 @@
 package com.ssafy.koala.model.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ssafy.koala.model.LikeModel;
 import com.ssafy.koala.model.RefrigeratorModel;
 import com.ssafy.koala.model.chat.ChatModel;
 import jakarta.persistence.*;
@@ -40,4 +41,7 @@ public class UserModel {
 	// 준수시치가 건든 부분
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
 	private RefrigeratorModel refrigerator = new RefrigeratorModel();
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private List<LikeModel> likes;
 }

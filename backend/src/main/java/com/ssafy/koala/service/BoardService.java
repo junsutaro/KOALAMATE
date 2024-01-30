@@ -9,9 +9,12 @@ import com.ssafy.koala.dto.drink.DrinkWithoutCocktailDto;
 import com.ssafy.koala.model.BoardModel;
 import com.ssafy.koala.model.CocktailModel;
 import com.ssafy.koala.model.DrinkModel;
+import com.ssafy.koala.model.LikeModel;
+import com.ssafy.koala.model.user.UserModel;
 import com.ssafy.koala.repository.BoardRepository;
 import com.ssafy.koala.repository.CocktailRepository;
 import com.ssafy.koala.repository.DrinkRepository;
+import com.ssafy.koala.repository.LikeRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,10 +32,13 @@ public class BoardService {
 	private final BoardRepository boardRepository;
 	private final DrinkRepository drinkRepository;
 	private final CocktailRepository cocktailRepository;
-	public BoardService(BoardRepository boardRepository, DrinkRepository drinkRepository, CocktailRepository cocktailRepository) {
+	private final LikeRepository likeRepository;
+	public BoardService(BoardRepository boardRepository, DrinkRepository drinkRepository, CocktailRepository cocktailRepository,
+						LikeRepository likeRepository) {
 		this.boardRepository = boardRepository;
 		this.drinkRepository = drinkRepository;
 		this.cocktailRepository = cocktailRepository;
+		this.likeRepository = likeRepository;
 	}
 
 	public List<BoardDto> getAllEntities() {
@@ -93,6 +99,18 @@ public class BoardService {
 		if (board != null) {
 			ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
 			BeanUtils.copyProperties(board, boardDto);
+
+			// 현재 유저가 게시글 좋아요 했는지 확인
+			AuthService auth = new AuthService();
+			long userId = auth.getCurrentUser().getId();
+			UserModel user = new UserModel();
+			user.setId(userId);
+			boolean isLike = likeRepository.existsByUserAndBoard(user, board);
+			boardDto.setLiked(isLike);
+
+			// 좋아요 수 확인
+			long likeCount = likeRepository.countByBoard_Id(id);
+			boardDto.setLikeCount(likeCount);
 
 			List<CocktailWithDrinkDto> list = board.getCocktails().stream()
 					.map(temp -> {
@@ -158,6 +176,27 @@ public class BoardService {
 
 	public void deleteBoard(Long id) {
 		boardRepository.deleteById(id);
+	}
+
+	public void likeBoard(Long id) {
+		AuthService auth = new AuthService();
+		long myId = auth.getCurrentUser().getId();
+		UserModel user = new UserModel();
+		user.setId(myId);
+		BoardModel board = new BoardModel();
+		board.setId(id);
+		// 유저가 게시글을 좋아요 했던 기록이 있는가?
+		boolean exists = likeRepository.existsByUserAndBoard(user, board);
+		if(exists) {
+			// 좋아요 취소
+			likeRepository.deleteByUserAndBoard(user, board);
+		} else {
+			// 좋아요 수행
+			LikeModel like = new LikeModel();
+			like.setUser(user);
+			like.setBoard(board);
+			likeRepository.save(like);
+		}
 	}
 
 	public BoardDto convertToDto(Object board) {
