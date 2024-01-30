@@ -142,6 +142,4 @@ public class UserController {
 		followService.unfollowUser(myUid, user_id);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
-
->>>>>>> issue-back-follow
 }
