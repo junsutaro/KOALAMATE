@@ -46,22 +46,31 @@
 // }
 
 import React, {useState} from 'react';
-import style from "components/RecipeItem.module.css";
+import { useNavigate } from 'react-router-dom';
+import style from "components/RecipeBoard/RecipeItem.module.css";
 import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
-function RecipeItem({ imageUrl, title, author, tags }) {
+
+function RecipeItem({ id, imageUrl, title, author, tags }) {
+
+		const navigate = useNavigate();
 
 		// 좋아요 상태를 추적하기 위한 상태 변수와 setter 함수
 		const [isLiked, setIsLiked] = useState(false);
 
 		// 클릭 핸들러 함수
-		const handleLikeClick = () => {
-			setIsLiked(!isLiked); // 현재 좋아요 상태를 토글
+		const handleCardClick = () => {
+			navigate(`/recipe/${id}`); // 레시피 상세 페이지로 이동
+		};
+
+		const handleLikeClick = (e) => {
+			e.stopPropagation(); // 버튼 클릭 시 이벤트 버블링을 방지
+			setIsLiked(!isLiked); // 좋아요 상태를 토글
 		};
 
 	return (
-			<div className={style.card}> {/* CSS 모듈 스타일 적용 */}
+			<div className={style.card} onClick={handleCardClick}> {/* CSS 모듈 스타일 적용 */}
 				<img src={imageUrl} alt={title} className={style.cardImage}/>
 				<div className={style.cardContent}>
 					<p className={style.cardTitle}>{title}</p>

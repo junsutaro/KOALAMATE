@@ -14,7 +14,7 @@ function Ranking() {
 
 	return (
 			<div>
-				<h4>지금 핫한 레시피 TOP10</h4>
+				<h4>🔥 지금 핫한 레시피 TOP10</h4>
 				{/* rankings.map((item, index) => (
 						<div key={index}>
 							<h2>{index + 1}위: {item.name}</h2>

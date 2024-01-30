@@ -1,4 +1,4 @@
-import style from 'components/Searchbar.module.css';
+import style from 'components/RecipeBoard/Searchbar.module.css';
 import Input from '@mui/material/Input';
 import SearchIcon from '@mui/icons-material/Search';
 
