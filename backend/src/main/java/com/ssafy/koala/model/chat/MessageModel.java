@@ -1,5 +1,6 @@
 package com.ssafy.koala.model.chat;
 
+import com.ssafy.koala.dto.chat.MessageDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -22,10 +23,10 @@ public class MessageModel {
 
     private int category;
 
-    @CreatedDate
     private LocalDateTime date;
 
     @ManyToOne
     @JoinColumn(name="chatroom_id")
     private ChatroomModel chatroom;
+
 }
