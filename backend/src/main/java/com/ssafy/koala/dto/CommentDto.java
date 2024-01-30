@@ -4,6 +4,7 @@ import com.ssafy.koala.model.BoardModel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -13,7 +14,7 @@ public class CommentDto {
     private long id;
 
     private String nickname;
-    private Date date;
+    private LocalDateTime date;
     private String content;
 
 }

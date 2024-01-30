@@ -26,4 +26,6 @@ public class ChatService {
     public void removeUserFromChatroom(UserModel user, ChatroomModel chatroom) {
         chatRepository.deleteByUserAndChatroom(user, chatroom);
     }
+
+
 }

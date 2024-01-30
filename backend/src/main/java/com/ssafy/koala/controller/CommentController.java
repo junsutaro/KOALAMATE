@@ -27,7 +27,6 @@ public class CommentController {
     public ResponseEntity<CommentModel> createComment(@PathVariable long board_id, @RequestBody CommentDto commentDto) {
         CommentModel comment = new CommentModel();
         comment.setNickname(commentDto.getNickname());
-        comment.setDate(commentDto.getDate());
         comment.setContent(commentDto.getContent());
 
         //System.out.println(board_id + " " + comment.getContent());
