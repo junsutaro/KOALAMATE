@@ -3,11 +3,15 @@ package com.ssafy.koala.dto.chat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
-@AllArgsConstructor
 public class MessageDto {
+    private long id;
     private String nickname;
-    private String contect;
-   // private int category;
+
+    private String content;
+    private int category;
+    private LocalDateTime date = LocalDateTime.now();
 
 }

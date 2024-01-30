@@ -1,8 +1,10 @@
 package com.ssafy.koala.model.chat;
 
+import com.ssafy.koala.dto.chat.MessageDto;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -14,10 +16,13 @@ public class MessageModel {
 
     private String nickname;
     private String content;
-    private Date date;
+
     private int category;
+
+    private LocalDateTime date;
 
     @ManyToOne
     @JoinColumn(name="chatroom_id")
     private ChatroomModel chatroom;
+
 }
