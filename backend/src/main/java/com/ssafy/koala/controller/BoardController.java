@@ -104,4 +104,18 @@ public class BoardController {
 			return new ResponseEntity<>("Error deleting board with ID " + board_id, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	@PostMapping("/like")
+	public ResponseEntity<?> likeBoard(@RequestBody long board_id) {
+		try{
+			boardService.likeBoard(board_id);
+			return new ResponseEntity<>("like request processed successfully.", HttpStatus.OK);
+		} catch (EmptyResultDataAccessException e) {
+			// 해당 ID에 해당하는 엔티티가 존재하지 않는 경우
+			return new ResponseEntity<>("Board with ID " + board_id + " not found.", HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			// 기타 예외 처리
+			return new ResponseEntity<>("Error processing like with ID " + board_id, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

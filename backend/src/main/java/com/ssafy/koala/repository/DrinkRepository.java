@@ -9,6 +9,8 @@ import java.util.Optional;
 
 @Repository
 public interface DrinkRepository extends JpaRepository<DrinkModel, Long> {
+
     List<DrinkModel> findAllByCategory(int category);
+
     List<DrinkModel> findAllByNameContaining(String name);
 }

@@ -2,12 +2,14 @@ package com.ssafy.koala.controller;
 
 import com.ssafy.koala.dto.RefrigeratorCustomobjDTO;
 import com.ssafy.koala.dto.RefrigeratorDTO;
+import com.ssafy.koala.dto.RefrigeratorDrinkDTO;
 import com.ssafy.koala.service.RefrigeratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,5 +54,27 @@ public class RefrigeratorController {
         return ResponseEntity.ok(modifiedContents);
     }
 
+
+    @PutMapping("/{userId}/addCustomobjs")
+    public ResponseEntity<List<RefrigeratorCustomobjDTO>> addCustomobjsToRefrigerator(
+            @PathVariable Long userId,
+            @RequestBody List<RefrigeratorCustomobjDTO> customobjDTOs) {
+        System.out.println(userId);
+        List<RefrigeratorCustomobjDTO> modifiedRefrigeratorContents = refrigeratorService.addCustomobjsToRefrigerator(userId, customobjDTOs);
+        System.out.println(userId);
+        return ResponseEntity.ok(modifiedRefrigeratorContents);
+    }
+
+
+    @PutMapping("/{userId}/addDrinks")
+    public ResponseEntity<List<RefrigeratorDrinkDTO>> addDrinksToRefrigerator(
+            @PathVariable Long userId,
+            @RequestBody List<Long> drinkIds) {
+
+
+        List<RefrigeratorDrinkDTO> modifiedRefrigeratorContents = refrigeratorService.addDrinksToRefrigerator(userId, drinkIds);
+        System.out.println(userId);
+        return ResponseEntity.ok(modifiedRefrigeratorContents);
+    }
 
 }

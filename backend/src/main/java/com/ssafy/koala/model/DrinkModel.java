@@ -21,4 +21,8 @@ public class DrinkModel {
 
     @OneToMany(mappedBy = "drink", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CocktailModel> cocktails = new ArrayList<>();
+
+    @OneToMany(mappedBy = "drink")
+    private List<RefrigeratorDrinkModel> refrigeratorDrinkModels;
+
 }

@@ -45,6 +45,9 @@ const Nav = () => {
 					<Button color="inherit" component={NavLink} to="/1/comments">
 						About
 					</Button>
+					<Button color="inherit" component={NavLink} to="/recipe">
+						Recipe
+					</Button>
 					{isLoggedIn ? (
 							<>
 								<Button color="inherit" component={NavLink} to="/writeBoard">

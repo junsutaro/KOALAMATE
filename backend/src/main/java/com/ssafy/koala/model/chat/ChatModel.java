@@ -11,6 +11,7 @@ public class ChatModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int theme;
+    private long lastId;
 
     @ManyToOne
     @JoinColumn(name = "chatroom_id")
