@@ -50,8 +50,7 @@ public class ChatService {
                 })
                 .collect(Collectors.toList());
     }
-<<<<<<< Updated upstream
-=======
+
 
     public List<ChatModel> findByUserId(long id) {
         return chatRepository.findByUserId(id);
@@ -62,5 +61,4 @@ public class ChatService {
         // ChatRepository를 사용하여 Chat 엔티티를 업데이트합니다.
 
     }
->>>>>>> Stashed changes
 }

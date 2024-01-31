@@ -37,7 +37,6 @@ public class CommentService {
         if (existingCommentOptional.isPresent()) {
             CommentModel existingComment = existingCommentOptional.get();
             existingComment.setContent(updatedComment.getContent());
-            existingComment.setDate(updatedComment.getDate());
             // 기타 필드 업데이트
 
             return commentRepository.save(existingComment);

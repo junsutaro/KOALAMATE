@@ -10,6 +10,7 @@ public class RefrigeratorCustomobjDTO {
     private Long id;
     private Long refrigeratorId;
     private Long customobjId;
+
     private int posX;
     private int posY;
 
