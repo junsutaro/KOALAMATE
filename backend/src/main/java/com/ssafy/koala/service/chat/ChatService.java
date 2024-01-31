@@ -26,20 +26,13 @@ public class ChatService {
         this.chatRepository = chatRepository;
     }
 
-    public void addUserToChatroom(UserModel user, ChatroomModel chatroom) {
-        ChatModel chat = new ChatModel();
-        chat.setUser(user);
-        chat.setChatroom(chatroom);
-        chatRepository.save(chat);
-    }
-
     @Transactional
     public void removeUserFromChatroom(String userEmail, long chatroomId) {
         chatRepository.deleteByUserEmailAndChatroomId(userEmail, chatroomId);
     }
 
-    public List<ChatroomResponseDto> getChatroomByUserId(String email) {
-        List<ChatModel> results = chatRepository.findByUserEmail(email);
+    public List<ChatroomResponseDto> getChatroomByUserId(long id) {
+        List<ChatModel> results = chatRepository.findByUserId(id);
         return results.stream()
                 .map(temp -> {
                     ChatroomResponseDto insert = new ChatroomResponseDto();
@@ -57,4 +50,17 @@ public class ChatService {
                 })
                 .collect(Collectors.toList());
     }
+<<<<<<< Updated upstream
+=======
+
+    public List<ChatModel> findByUserId(long id) {
+        return chatRepository.findByUserId(id);
+    }
+
+    public void updateLastId(long id) {
+        chatRepository.updateLastIdForChatByUserId(id);
+        // ChatRepository를 사용하여 Chat 엔티티를 업데이트합니다.
+
+    }
+>>>>>>> Stashed changes
 }
