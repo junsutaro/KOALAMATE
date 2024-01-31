@@ -1,6 +1,7 @@
 package com.ssafy.koala.model.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ssafy.koala.model.LikeModel;
 import com.ssafy.koala.model.RefrigeratorModel;
 import com.ssafy.koala.model.chat.ChatModel;
 import jakarta.persistence.*;
@@ -46,5 +47,6 @@ public class UserModel {
 	private double mannersScore = 36.5;  // 매너점수
 	private List<String> tags; // 태그들
 
-
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private List<LikeModel> likes;
 }
