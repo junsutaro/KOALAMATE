@@ -1,13 +1,15 @@
 package com.ssafy.koala.dto.user;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProfileDto {
+public class ProfileModifyDto {
     private String nickname;
     private int birthRange;
     private String gender;
@@ -15,6 +17,5 @@ public class ProfileDto {
     private String introduction;
     private double alcoholLimitBottle;
     private double alcoholLimitGlass;
-    private double mannersScore;
     private List<String> tags;
 }
