@@ -38,8 +38,24 @@ export const WebSocketProvider = ({ children }) => {
 		}
 	};
 
+	const subscribe = (destination, callback) => {
+		if (stompClient && stompClient.connected) {
+			console.log("qwewaerawerwegadgaestetawetaewraewr")
+			stompClient.subscribe(destination, callback);
+		}
+	};
+
+	const sendMessage = (destination, body) => {
+		if (stompClient && stompClient.connected) {
+			stompClient.publish({
+				destination,
+				body: body,
+			});
+		}
+	};
+
 	return (
-			<WebSocketContext.Provider value={{ stompClient, connected, connect, disconnect }}>
+			<WebSocketContext.Provider value={{ stompClient, connected, connect, disconnect, sendMessage, subscribe }}>
 				{children}
 			</WebSocketContext.Provider>
 	);

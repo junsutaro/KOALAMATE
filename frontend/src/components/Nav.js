@@ -5,17 +5,20 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setLoginStatus} from '../store/authSlice';
 import logoImage from 'assets/logo.png';
 import axios from 'axios';
+import { useWebSocket } from 'context/WebSocketContext';
 
 const Nav = () => {
 	const { user, isLoggedIn } = useSelector(state => state.auth);
-	console.log(user, isLoggedIn);
+	console.log("현재 상태: ", user, isLoggedIn);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const {disconnect} = useWebSocket();
 
 	const handleLogout = async () => {
 		try {
 			await axios.post('/user/logout', {}, {withCredentials: true});
 			dispatch(setLoginStatus(false));
+			disconnect();
 			navigate('/');
 		} catch (error) {
 			console.log(error);
@@ -49,6 +52,9 @@ const Nav = () => {
 								</Button>
 								<Button color="inherit" onClick={handleLogout}>
 									Logout
+								</Button>
+								<Button component={NavLink} to="/chatting">
+									Chatting
 								</Button>
 							</>
 					) : (

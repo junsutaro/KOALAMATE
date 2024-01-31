@@ -25,7 +25,7 @@ const Login = () => {
 				password,
 			}, {withCredentials: true});
 			dispatch(setLoginStatus({ isLoggedIn: true, user: response.data }));
-			connect('http://192.168.100.210:8080/chat');
+			connect('chat');
 			console.log(response.data);
 			navigate('/');
 		} catch (error) {
