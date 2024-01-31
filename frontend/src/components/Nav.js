@@ -50,7 +50,7 @@ const Nav = () => {
 								<Button color="inherit" onClick={handleLogout}>
 									Logout
 								</Button>
-								<Button color="inherit" component={NavLink} to="/user/1">
+								<Button color="inherit" component={NavLink} to="/user/30">
 									마이페이지
 								</Button>
 							</>

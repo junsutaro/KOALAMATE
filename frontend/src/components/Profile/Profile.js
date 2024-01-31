@@ -1,10 +1,14 @@
 import React from 'react';
-import {Avatar, Typography, Box, Chip} from '@mui/material';
+import {Avatar, Typography, Box, Chip, Button} from '@mui/material';
 import Brightness1Icon from '@mui/icons-material/Brightness1'; // Import the correct icon
-import profileImg from 'assets/profile.jpg'; // 기본 프로필 이미지
-import {useSelector} from 'react-redux';
+import standardImg from 'assets/profile.jpg'; // 기본 프로필 이미지
+import {NavLink} from 'react-router-dom';
 
-const Profile = ({nickname}) => {
+const Profile = ({img, nickname, gender, age, follower, followee}) => {
+
+	const followerCnt = follower.cnt;
+	const followeeCnt = followee.cnt;
+
 	return (
 			<>
 				<Box
@@ -13,11 +17,12 @@ const Profile = ({nickname}) => {
 							width: 300,
 							display: 'flex',
 							flexDirection: 'column',
-							alignItems: 'center', // Center items horizontally
-							justifyContent: 'center', // Center items vertically
+							alignItems: 'center',
+							justifyContent: 'center',
 						}}
 				>
-					<Avatar sx={{width: 200, height: 200}} src={profileImg}/>
+					<Avatar sx={{width: 200, height: 200}}
+					        src={img | standardImg}/>
 
 					<div style={{
 						display: 'flex',
@@ -36,9 +41,9 @@ const Profile = ({nickname}) => {
 					</div>
 
 					<div style={{display: 'flex', marginTop: '10px', gap: 10}}>
-						<Chip label="연령대" variant="Filled"
+						<Chip  label={`${age}대`} variant="Filled"
 						      sx={{backgroundColor: '#CDFAD5'}}/>
-						<Chip label="성별" variant="Filled"
+						<Chip label={gender} variant="Filled"
 						      sx={{backgroundColor: '#FF9B9B'}}/>
 					</div>
 
@@ -48,8 +53,12 @@ const Profile = ({nickname}) => {
 						marginBottom: '10px',
 						// gap: 10,
 					}}>
-						<Box m={1} p={1} >팔로워 0</Box>
-						<Box m={1} p={1}>팔로우 0</Box>
+
+						<Button m={1} p={1} component={NavLink}
+						        to="/user/31/follower">팔로워 {followerCnt}</Button>
+						<Button m={1} p={1} component={NavLink}
+						        to="/user/31/followee">팔로우 {followeeCnt}</Button>
+
 					</Box>
 
 				</Box>
