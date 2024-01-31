@@ -1,13 +1,33 @@
-.container{
+.searchContainer {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 5px;
 }
 
-.container > input {
-    border-radius: 5px;
-    padding: 10px;
+.searchIcon {
+    color: #757575;
+    padding: 0 5px;
 }
 
-.container > button {
-    border-radius: 5px;
+.searchInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    /*padding-left: 10px;*/
+}
+
+.searchButton {
+    background-color: #f2f2f2;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-left: 5px;
+}
+
+/* 추가적으로 input 포커스 시 outline 제거 등의 스타일을 지정할 수 있습니다. */
+.searchInput:focus {
+    outline: none;
 }
