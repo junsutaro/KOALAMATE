@@ -3,7 +3,7 @@ import RecipeFilter from 'components/RecipeBoard/RecipeFilter';
 import RecipeList from 'components/RecipeBoard/RecipeList';
 import RecipeItem from 'components/RecipeBoard/RecipeItem';
 import Searchbar from '../components/RecipeBoard/Searchbar';
-import Ranking from '../components/RecipeBoard/Ranking';
+import PopularRecipes from '../components/RecipeBoard/PopularRecipes';
 import style from 'pages/Recipe.module.css';
 import RecipeButton from 'components/RecipeBoard/RecipeButton';
 
@@ -17,7 +17,7 @@ const Recipe = () => {
 					<Searchbar />
 				</div>
 				<hr/>
-				<Ranking />
+				<PopularRecipes />
 				<RecipeFilter />
 				{/*<RecipeList recipe={recipe}/>*/}
 				<RecipeList />

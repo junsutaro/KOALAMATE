@@ -1,0 +1,47 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+}
+
+.fixedText {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px; /* 레시피 목록과의 간격 */
+}
+
+.flameIcon {
+    margin-right: 5px;
+}
+
+.recipesContainer {
+    height: 50px; /* 한 레시피 이름의 높이 */
+    overflow: hidden;
+    margin: 0 10px;
+}
+
+.recipe {
+    animation: roll 7s linear infinite;
+}
+
+.recipeName {
+    height: 50px; /* 이 값은 recipesContainer의 height와 같아야 함 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.moreButton {
+    margin-top: 5px; /* 레시피 목록과의 간격 */
+}
+
+@keyframes roll {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-100%);
+    }
+}
