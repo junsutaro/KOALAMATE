@@ -28,8 +28,8 @@ public class ProfileController {
     @PostMapping("/{userId}/modify")
     public ResponseEntity<String> modifyProfile(
             @PathVariable Long userId,
-            @RequestBody ProfileModifyDto modifiedProfile,
-            @RequestParam("file") MultipartFile file) {
+            @RequestPart("file") MultipartFile file,
+            @RequestPart("modifiedProfile") ProfileModifyDto modifiedProfile) {
 
         System.out.println("Controller의 modifyProfile 메서드 호출 확인");
 

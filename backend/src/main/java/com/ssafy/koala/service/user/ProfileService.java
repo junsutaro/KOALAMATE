@@ -43,13 +43,14 @@ public class ProfileService {
             UserModel user = userOptional.get();
 
             // modifiedProfile에서 필요한 정보를 가져와서 UserModel을 업데이트한다.
-            System.out.println("Nickname: " + modifiedProfile.getNickname());
-            System.out.println("BirthRange: " + modifiedProfile.getBirthRange());
-            System.out.println("Gender: " + modifiedProfile.getGender());
-            System.out.println("Introduction: " + modifiedProfile.getIntroduction());
-            System.out.println("AlcoholLimitBottle: " + modifiedProfile.getAlcoholLimitBottle());
-            System.out.println("AlcoholLimitGlass: " + modifiedProfile.getAlcoholLimitGlass());
-            System.out.println("Tags: " + modifiedProfile.getTags());
+            user.setNickname(modifiedProfile.getNickname());
+            user.setBirthRange(modifiedProfile.getBirthRange());
+            user.setGender(modifiedProfile.getGender());
+//            user.setProfile(modifiedProfile.getProfile());
+            user.setIntroduction(modifiedProfile.getIntroduction());
+            user.setAlcoholLimitBottle(modifiedProfile.getAlcoholLimitBottle());
+            user.setAlcoholLimitGlass(modifiedProfile.getAlcoholLimitGlass());
+            user.setTags(modifiedProfile.getTags());
 
             try {
                 // 업로드된 프로필 이미지를 저장할 디렉토리 경로 설정
