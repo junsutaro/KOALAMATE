@@ -1,4 +1,4 @@
-# 첫 번째 스테이지: 빌드 환경 설정
+q# 첫 번째 스테이지: 빌드 환경 설정
 FROM gradle:8.5.0-jdk17-alpine AS build
 
 # 작업 디렉토리를 /app으로 설정
