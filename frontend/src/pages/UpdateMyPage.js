@@ -21,7 +21,6 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 
 const UpdateMyPage = () => {
 	const {userId} = useParams();
-
 	// state
 	const [profileData, setProfileData] = useState({
 		nickname: '',
@@ -29,8 +28,8 @@ const UpdateMyPage = () => {
 		gender: '',
 		profile: '',
 		introduction: '',
-		alcoholLimit: 0,
-		mannersScore: 0,
+		alcoholLimitBottle: 0,
+		alcoholLimitGlass: 0,
 		tags: [],
 	});
 	const [imagePreview, setImagePreview] = useState(NoImage);
@@ -62,14 +61,15 @@ const UpdateMyPage = () => {
 					gender: data.gender || '',
 					profile: data.profile || NoImage,
 					introduction: data.introduction || '',
-					alcoholLimit: data.alcoholLimit || 0,
-					mannersScore: data.mannersScore || 0,
+					alcoholLimitBottle: data.alcoholLimitBottle || 0,
+					alcoholLimitGlass: data.alcoholLimitGlass || 0,
 					tags: data.tags || [],
 				});
-				// setSojuBottleCount(data.sojuBottleCount || 0)
-				// setSojuCupCount(data.sojuCupCount || 0)
-				setIntroduction(data.introduction || '');
-				setSelectedTags(data.tags || []);
+				setSojuBottleCount(profileData.alcoholLimitBottle || 0);
+				setSojuCupCount(profileData.alcoholLimitGlass || 0);
+				setIntroduction(profileData.introduction || '');
+				setSelectedTags(profileData.tags || []);
+				setImagePreview(profileData.profile);
 			} catch (error) {
 				console.log('프로필 데이터를 가져오는 중 에러 발생: ', error);
 			}
@@ -165,24 +165,33 @@ const UpdateMyPage = () => {
 	const saveProfile = async () => {
 		try {
 			const response = await axios.put(
-					`http://localhost:8080/profile/${userId}/modify`, {
-						nickname: profileData.nickname,
-						birthRange: profileData.ageRange,
-						gender: profileData.gender,
-						profile: profileData.profile,
-						introduction: introduction,
-						alcoholLimit: profileData.alcoholLimit,
-						mannersScore: profileData.mannersScore,
-						tags: selectedTags,
-						// sojuBottleCount: sojuBottleCount,
-						// sojuCupCount: sojuCupCount,
+					`http://localhost:8080/profile/${userId}/modify`,
+					{
+						'modifiedProfile': {
+							nickname: profileData.nickname,
+							birthRange: profileData.ageRange,
+							gender: profileData.gender,
+							introduction: introduction,
+							alcoholLimitBottle: sojuBottleCount,
+							alcoholLimitGlass: sojuCupCount,
+							tags: selectedTags,
+						},
+						file: imagePreview,
 					});
-		 console.log('프로필 저장 성공 :', response.data)
+			console.log('프로필 저장 성공 :', response.data);
 		} catch (error) {
 			console.log(' 프로필 저장 중 에러 발생 : ', error);
 		}
-
 	};
+
+	console.log(`nickname: ${profileData.nickname}`)
+	console.log(`ageRange: ${profileData.ageRange}`)
+	console.log(`gender: ${profileData.gender}`)
+	console.log(`introduction: ${introduction}`)
+	console.log(`sojuBottleCount: ${sojuBottleCount}`)
+	console.log(`sojuCupCount: ${sojuCupCount}`)
+	console.log(`selectedTags: ${selectedTags}`)
+	console.log(`imagePreview: ${imagePreview}`)
 
 	return (
 			<Container component="form">
