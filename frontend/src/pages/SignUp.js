@@ -102,7 +102,7 @@ const SignUp = () => {
 
 // 중복 확인 여부를 검사하여 회원가입 처리
 		if (/*isEmailChecked && isNicknameChecked*/true) {
-			axios.post('http://localhost:8080/user/signup',
+			axios.post('user/signup',
 					{email, password, nickname, birthRange, gender}).then(response => {
 				console.log('회원가입 성공', response.data);
 				navigate('/'); // 회원가입이 성공하면 '/'로 이동
