@@ -162,27 +162,62 @@ const UpdateMyPage = () => {
 		}
 	};
 
+	// const saveProfile = async () => {
+	// 	try {
+	// 		const response = await axios.put(
+	// 				`http://localhost:8080/profile/${userId}/modify`,
+	// 				{
+	// 					'modifiedProfile': {
+	// 						nickname: profileData.nickname,
+	// 						birthRange: profileData.ageRange,
+	// 						gender: profileData.gender,
+	// 						introduction: introduction,
+	// 						alcoholLimitBottle: sojuBottleCount,
+	// 						alcoholLimitGlass: sojuCupCount,
+	// 						tags: selectedTags,
+	// 					},
+	// 					file: imagePreview,
+	// 				});
+	// 		console.log('프로필 저장 성공 :', response.data);
+	// 	} catch (error) {
+	// 		console.log(' 프로필 저장 중 에러 발생 : ', error);
+	// 	}
+	// };
+
 	const saveProfile = async () => {
 		try {
+			const formData = new FormData();
+
+			// JSON 데이터 추가
+			formData.append('modifiedProfile', JSON.stringify({
+				nickname: profileData.nickname,
+				birthRange: profileData.ageRange,
+				gender: profileData.gender,
+				introduction: introduction,
+				alcoholLimitBottle: sojuBottleCount,
+				alcoholLimitGlass: sojuCupCount,
+				tags: selectedTags,
+			}));
+
+			// 파일 데이터 추가
+			formData.append('file', imagePreview);
+			console.log([...formData.entries()]);
 			const response = await axios.put(
 					`http://localhost:8080/profile/${userId}/modify`,
+					formData,
 					{
-						'modifiedProfile': {
-							nickname: profileData.nickname,
-							birthRange: profileData.ageRange,
-							gender: profileData.gender,
-							introduction: introduction,
-							alcoholLimitBottle: sojuBottleCount,
-							alcoholLimitGlass: sojuCupCount,
-							tags: selectedTags,
+						headers: {
+							'Content-Type': 'multipart/form-data',
 						},
-						file: imagePreview,
-					});
+					}
+			);
+
 			console.log('프로필 저장 성공 :', response.data);
 		} catch (error) {
-			console.log(' 프로필 저장 중 에러 발생 : ', error);
+			console.log('프로필 저장 중 에러 발생 : ', error);
 		}
 	};
+
 
 	console.log(`nickname: ${profileData.nickname}`)
 	console.log(`ageRange: ${profileData.ageRange}`)
