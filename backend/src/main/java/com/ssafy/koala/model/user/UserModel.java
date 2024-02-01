@@ -42,7 +42,9 @@ public class UserModel {
 	private RefrigeratorModel refrigerator = new RefrigeratorModel();
 
 	private String introduction;
-	private double alcoholLimit; // 주량
+	private double alcoholLimit = 0; // 주량
+	private double alcoholLimitBottle = 0; // 주량
+	private double alcoholLimitGlass = 0; // 주량
 	private double mannersScore = 36.5;  // 매너점수
 	private List<String> tags; // 태그들
 

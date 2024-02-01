@@ -58,14 +58,18 @@ const UpdateMyPage = () => {
 				const data = response.data;
 				setProfileData({
 					nickname: data.nickname || '',
-					ageRange: data.birthRange || 0,
+					birthRange: data.birthRange || 0,
 					gender: data.gender || '',
-					profile: data.profile || '',
-					intro: data.introduction || '',
+					profile: data.profile || NoImage,
+					introduction: data.introduction || '',
 					alcoholLimit: data.alcoholLimit || 0,
 					mannersScore: data.mannersScore || 0,
 					tags: data.tags || [],
 				});
+				// setSojuBottleCount(data.sojuBottleCount || 0)
+				// setSojuCupCount(data.sojuCupCount || 0)
+				setIntroduction(data.introduction || '');
+				setSelectedTags(data.tags || []);
 			} catch (error) {
 				console.log('프로필 데이터를 가져오는 중 에러 발생: ', error);
 			}
@@ -158,6 +162,28 @@ const UpdateMyPage = () => {
 		}
 	};
 
+	const saveProfile = async () => {
+		try {
+			const response = await axios.put(
+					`http://localhost:8080/profile/${userId}/modify`, {
+						nickname: profileData.nickname,
+						birthRange: profileData.ageRange,
+						gender: profileData.gender,
+						profile: profileData.profile,
+						introduction: introduction,
+						alcoholLimit: profileData.alcoholLimit,
+						mannersScore: profileData.mannersScore,
+						tags: selectedTags,
+						// sojuBottleCount: sojuBottleCount,
+						// sojuCupCount: sojuCupCount,
+					});
+		 console.log('프로필 저장 성공 :', response.data)
+		} catch (error) {
+			console.log(' 프로필 저장 중 에러 발생 : ', error);
+		}
+
+	};
+
 	return (
 			<Container component="form">
 				<MyPageButton/>
@@ -238,17 +264,21 @@ const UpdateMyPage = () => {
 					</>
 
 					<Box sx={{display: 'flex', flexDirection: 'column'}}>
-						<Box margin="20px 0px 5px 0px" sx={{display: 'flex', gap:1}}>
+						<Box margin="20px 0px 5px 0px" sx={{display: 'flex', gap: 1}}>
 							<Typography
 									sx={{fontWeight: 'bold'}}
 									variant="h6"
 							>
 								주량 입력하기
 							</Typography>
-							<Typography fontSize='12px' sx={{marginTop: 1, color:'gray'}}>:</Typography>
-							<Typography fontSize='12px' sx={{marginTop: 1, color:'gray'}}>주량 작성 ex)</Typography>
-							<Typography fontSize='12px' sx={{marginTop: 1, color:'gray'}}>소주 2병 3잔, </Typography>
-							<Typography fontSize='12px' sx={{marginTop: 1, color:'gray'}}>소주 0병 1잔</Typography>
+							<Typography fontSize="12px"
+							            sx={{marginTop: 1, color: 'gray'}}>:</Typography>
+							<Typography fontSize="12px" sx={{marginTop: 1, color: 'gray'}}>주량
+								작성 ex)</Typography>
+							<Typography fontSize="12px" sx={{marginTop: 1, color: 'gray'}}>소주
+								2병 3잔, </Typography>
+							<Typography fontSize="12px" sx={{marginTop: 1, color: 'gray'}}>소주
+								0병 1잔</Typography>
 						</Box>
 						<Box sx={{display: 'flex'}}>
 							<Box>
@@ -366,6 +396,7 @@ const UpdateMyPage = () => {
 								backgroundColor: '#ff7f7f',
 							},
 						}}
+						onClick={saveProfile}
 				>프로필 저장하기</Button>
 			</Container>
 	);
