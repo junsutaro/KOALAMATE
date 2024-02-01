@@ -42,6 +42,9 @@ const Nav = () => {
 					<Button color="inherit" component={NavLink} to="/1/comments">
 						댓글 확인
 					</Button>
+					<Button color="inherit" component={NavLink} to="/recipe">
+						Recipe
+					</Button>
 					{isLoggedIn ? (
 							<>
 								<Button color="inherit" component={NavLink} to="/writeBoard">

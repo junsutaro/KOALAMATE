@@ -51,4 +51,14 @@ public class ChatroomService {
     public ChatroomModel getChatroomById(long id) {
         return chatroomRepository.findById(id).orElseThrow();
     }
+
+    public void addUserToChatroom(String email, long roomId) {
+        ChatModel chat = new ChatModel();
+        UserModel user = userRepository.getUserByEmail(email).orElseThrow();
+        ChatroomModel chatroom = chatroomRepository.findById(roomId).orElseThrow();
+        chat.setUser(user);
+        chat.setChatroom(chatroom);
+
+        chatRepository.save(chat);
+    }
 }

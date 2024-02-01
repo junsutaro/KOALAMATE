@@ -19,4 +19,6 @@ public class ViewBoardResponseDto {
     private String image;
     private List<CocktailWithDrinkDto> cocktails;
     private List<CommentDto> comments;
+    private boolean isLiked;
+    private long likeCount;
 }

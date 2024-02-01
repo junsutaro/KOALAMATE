@@ -43,4 +43,7 @@ public class BoardModel {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<CommentModel> comments;
+
+	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<LikeModel> likes;
 }

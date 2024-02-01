@@ -2,6 +2,7 @@ package com.ssafy.koala.service.chat;
 
 
 import com.ssafy.koala.dto.chat.MessageDto;
+import com.ssafy.koala.model.chat.ChatroomModel;
 import com.ssafy.koala.model.chat.MessageModel;
 import com.ssafy.koala.repository.chat.MessageRepository;
 import org.springframework.beans.BeanUtils;
@@ -19,7 +20,7 @@ public class MessageService {
     }
 
     public List<MessageDto> getMessagesByRoomId(long id) {
-        return messageRepository.findTop50ByChatroomIdOrderByChatroomIdDesc(id)
+        return messageRepository.findTop50ByChatroomIdOrderByIdDesc(id)
                 .stream()
                 .map(temp -> {
                     MessageDto insert = new MessageDto();
@@ -32,4 +33,5 @@ public class MessageService {
     public void saveMessage(MessageModel messageModel) {
         messageRepository.save(messageModel);
     }
+
 }

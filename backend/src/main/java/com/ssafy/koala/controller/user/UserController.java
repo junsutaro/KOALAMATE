@@ -1,4 +1,4 @@
-package com.ssafy.koala.controller;
+package com.ssafy.koala.controller.user;
 
 //import com.ssafy.koala.config.jwt.JwtUtil;
 import com.ssafy.koala.dto.user.*;
@@ -16,8 +16,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.Option;
@@ -32,10 +37,11 @@ import java.util.Optional;
 @Tag(name="user", description="user controller")
 @Slf4j
 public class UserController {
-
 	private final UserService userService;
 	private final FollowService followService;
 	private final AuthService authService;
+	//private final AuthenticationManager authenticationManager;
+
 
 	@PostMapping("/login")
 	public Object login(@RequestBody UserDto user, HttpServletResponse response) {
@@ -54,6 +60,16 @@ public class UserController {
 		UserDto storedUser = (UserDto) userInfo.get("user");
 		resultMap.put("email", storedUser.getEmail()); // 이메일 반환
 		resultMap.put("nickname", storedUser.getNickname()); // 닉네임 반환
+
+//		//System.out.println(storedUser);
+//		// 사용자 인증
+//		Authentication authentication = authenticationManager.authenticate(
+//				new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
+//		);
+//
+//		// 인증 성공 후, Security Context에 Authentication 객체 저장
+//		SecurityContextHolder.getContext().setAuthentication(authentication);
+//		System.out.println("in user controller " + authentication.getName() + "     ");
 
 		// 헤더에 accessToken 추가
 		response.addHeader("Authorization", "Bearer " + tokens.getAccessToken());
@@ -75,7 +91,7 @@ public class UserController {
 			UserDto newUser = new UserDto();
 			BeanUtils.copyProperties(request, newUser);
 
-			userService.save(newUser);
+//			userService.save(newUser);
 			userService.createUserWithRefrigerator(newUser);
 
 			response = new ResponseEntity<>(newUser, HttpStatus.CREATED);
@@ -83,33 +99,6 @@ public class UserController {
 			response = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 		return response;
-	}
-	@RestController
-	@RequestMapping("/profile")
-	public class ProfileController {
-
-		private final ProfileService profileService;
-
-		public ProfileController(ProfileService profileService) {
-			this.profileService = profileService;
-		}
-
-		@GetMapping("/{userId}")
-		public ResponseEntity<ProfileDto> getProfileByUserId(@PathVariable Long userId) {
-			return profileService.getProfileDtoByUserId(userId)
-					.map(ResponseEntity::ok)
-					.orElse(ResponseEntity.notFound().build());
-		}
-
-		@PostMapping("/{userId}/modify")
-		public ResponseEntity<String> modifyProfile(@PathVariable Long userId, @RequestBody ProfileDto modifiedProfile) {
-			boolean result = profileService.modifyProfile(userId, modifiedProfile);
-			if (result) {
-				return ResponseEntity.ok("프로필이 성공적으로 수정되었습니다.");
-			} else {
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("프로필 수정에 실패했습니다.");
-			}
-		}
 	}
 
 	// httponly 로그아웃
@@ -147,24 +136,30 @@ public class UserController {
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
-	// 팔로우 요청
+	// 팔로우 여부에 따라 팔로우 or 언팔로우
 	@PostMapping("/follow")
-	public ResponseEntity<?> followRequest(@RequestBody long user_id) {
+	public ResponseEntity<?> followToggle(@RequestBody long userId) {
 		// 자신의 정보는 JWT에서 가져오기
 		UserDto currentUser = authService.getCurrentUser();
 		log.info(currentUser.getId()+"\n");
 		long myUid = currentUser.getId();
-		followService.followUser(myUid, user_id);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
-	}
 
-	// 언팔로우 요청
-	@PostMapping("/unfollow")
-	public ResponseEntity<?> unfollowRequest(@RequestBody long user_id) {
-		// 자신의 정보는 JWT에서 가져오기
-		UserDto currentUser = authService.getCurrentUser();
-		long myUid = currentUser.getId();
-		followService.unfollowUser(myUid, user_id);
-		return ResponseEntity.status(HttpStatus.OK).build();
+		try {
+			boolean isFollowed = followService.checkFollow(myUid, userId);
+			if(isFollowed) {
+				// 언팔로우
+				followService.unfollowUser(myUid, userId);
+			} else {
+				// 팔로우
+				followService.followUser(myUid, userId);
+			}
+			return new ResponseEntity<>("Follow for ID " + userId + " processed successfully.", HttpStatus.OK);
+		} catch (EmptyResultDataAccessException e) {
+			// 해당 ID에 해당하는 엔티티가 존재하지 않는 경우
+			return new ResponseEntity<>("Follow with ID " + userId + " not found.", HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			// 기타 예외 처리
+			return new ResponseEntity<>("Error follow request with ID " + userId, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 }

@@ -13,7 +13,8 @@ public class ProfileDto {
     private String gender;
     private String profile;
     private String introduction;
-    private double alcoholLimit;
+    private double alcoholLimitBottle;
+    private double alcoholLimitGlass;
     private double mannersScore;
     private List<String> tags;
 }

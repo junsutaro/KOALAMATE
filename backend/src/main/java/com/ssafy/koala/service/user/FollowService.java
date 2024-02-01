@@ -88,7 +88,7 @@ public class FollowService {
     }
 
     // 사용자가 상대를 팔로우 중인지 확인. 팔로우 하고있으면 true
-    boolean checkFollow(Long myId, Long userId) {
+    public boolean checkFollow(Long myId, Long userId) {
         UserModel follower = new UserModel();
         UserModel followee = new UserModel();
         follower.setId(myId);
