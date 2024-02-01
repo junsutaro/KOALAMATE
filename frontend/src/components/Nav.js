@@ -36,11 +36,11 @@ const Nav = () => {
 								코알라 친구찾기
 						</Typography>
 					</Box>
-					<Button color="inherit" component={NavLink} to="/about">
-						About
+					<Button color="inherit" component={NavLink} to="/mate">
+						MATE
 					</Button>
 					<Button color="inherit" component={NavLink} to="/1/comments">
-						About
+						COMMENT
 					</Button>
 					<Button color="inherit" component={NavLink} to="/recipe">
 						Recipe

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 
 import Home from './pages/Home';
-import About from './pages/About';
+import Mate from './pages/Mate';
 import Recipe from './pages/Recipe';
 import RecipeDetail from './pages/RecipeDetail';
 import Login from './pages/Login';
@@ -22,7 +22,7 @@ function App() {
 					<Nav />
 					<Routes>
 						<Route path="/" element={<Home />} />
-						<Route path="/about" element={<About />} />
+						<Route path="/mate" element={<Mate />} />
 
 						<Route path="/recipe" element={<Recipe/>} />
 						{/*<Route path="/recipe/search" element={<Search/>}/>*/}
