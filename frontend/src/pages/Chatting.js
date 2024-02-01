@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
-const SERVER_URL = 'http://192.168.100.210:8080/chat'; // Spring Boot 서버 SockJS 엔드포인트
+const SERVER_URL = `${process.env.REACT_APP_API_URL}/chat`; // Spring Boot 서버 SockJS 엔드포인트
 
 const Chatting = () => {
 	const [client, setClient] = useState(null);

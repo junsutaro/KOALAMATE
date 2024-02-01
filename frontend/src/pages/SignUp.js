@@ -60,7 +60,7 @@ const SignUp = () => {
 	const checkEmailAvailability = async (email) => {
 		console.log("checkEmail: ", email);
 		try {
-			const response = await axios.post('https://localhost:8080/api/check-email',
+			const response = await axios.post('${process.env.REACT_APP_API_URL}/check-email',
 					{email});
 			setIsEmailAvailable(response.data.available);
 		} catch (error) {
@@ -71,7 +71,7 @@ const SignUp = () => {
 	const checkNicknameAvailability = async (nickname) => {
 		console.log("checkNickname: ", nickname);
 		try {
-			const response = await axios.post('https://localhost:8080/api/check-nickname',
+			const response = await axios.post('${process.env.REACT_APP_API_URL}/check-nickname',
 					{nickname});
 			setIsNicknameAvailable(response.data.available);
 		} catch (error) {
@@ -102,7 +102,7 @@ const SignUp = () => {
 
 // 중복 확인 여부를 검사하여 회원가입 처리
 		if (/*isEmailChecked && isNicknameChecked*/true) {
-			axios.post('user/signup',
+			axios.post(`${process.env.REACT_APP_API_URL}/user/signup`,
 					{email, password, nickname, birthRange, gender}).then(response => {
 				console.log('회원가입 성공', response.data);
 				navigate('/'); // 회원가입이 성공하면 '/'로 이동

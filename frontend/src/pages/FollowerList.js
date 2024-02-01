@@ -15,7 +15,7 @@ const FollowerList = () => {
 	useEffect(() => {
 		const getFollowerData = async () => {
 			try {
-				const response = await axios.get(`http://localhost:8080/user/${userId}/follower`);
+				const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/${userId}/follower`);
 				const data = response.data;
 				setFollowerData({
 					cnt: data.followCnt,

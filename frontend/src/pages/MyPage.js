@@ -45,7 +45,7 @@ const MyPage = () => {
 				// const response = await axios.get(
 				// 		`http://localhost:8080/profile/${userId}`);
 				const response = await axios.get(
-						`http://localhost:8080/profile/${userId}`);
+						`${process.env.REACT_APP_API_URL}/profile/${userId}`);
 				const data = response.data;
 				setProfileData({
 					nickname: data.nickname || '',
@@ -65,7 +65,7 @@ const MyPage = () => {
 		const getFollowerData = async () => {
 			try {
 				const response = await axios.get(
-						`http://localhost:8080/user/${userId}/follower`);
+						`${process.env.REACT_APP_API_URL}/user/${userId}/follower`);
 				const data = response.data;
 				setFollowerData({
 					cnt: data.followCnt,
@@ -80,7 +80,7 @@ const MyPage = () => {
 		const getFolloweeData = async () => {
 			try {
 				const response = await axios.get(
-						`http://localhost:8080/user/${userId}/followee`);
+						`${process.env.REACT_APP_API_URL}/user/${userId}/followee`);
 				const data = response.data;
 				setFolloweeData({
 					cnt: data.followCnt,

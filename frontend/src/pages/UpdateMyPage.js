@@ -53,7 +53,7 @@ const UpdateMyPage = () => {
 		const getProfileData = async () => {
 			try {
 				const response = await axios.get(
-						`http://localhost:8080/profile/${userId}`);
+						`${process.env.REACT_APP_API_URL}/profile/${userId}`);
 				const data = response.data;
 				setProfileData({
 					nickname: data.nickname || '',
@@ -203,7 +203,7 @@ const UpdateMyPage = () => {
 			formData.append('file', imagePreview);
 			console.log([...formData.entries()]);
 			const response = await axios.put(
-					`http://localhost:8080/profile/${userId}/modify`,
+					`${process.env.REACT_APP_API_URL}/profile/${userId}/modify`,
 					formData,
 					{
 						headers: {

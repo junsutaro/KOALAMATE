@@ -40,7 +40,7 @@ const CommentForm = ({boardId, updateComments}) => {
 
 		try {
 			const response = await axios.post(
-					`http://localhost:8080/comment/${boardId}/write`, {
+					`${process.env.REACT_APP_API_URL}/comment/${boardId}/write`, {
 						board_id: Number(boardId),
 						nickname: commentData.nickname,
 						content: commentData.content,

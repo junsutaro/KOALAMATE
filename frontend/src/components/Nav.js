@@ -14,7 +14,7 @@ const Nav = () => {
 
 	const handleLogout = async () => {
 		try {
-			await axios.post('/user/logout', {}, {withCredentials: true});
+			await axios.post(`${process.env.REACT_APP_API_URL}/user/logout`, {}, {withCredentials: true});
 			dispatch(setLoginStatus(false));
 			navigate('/');
 		} catch (error) {
