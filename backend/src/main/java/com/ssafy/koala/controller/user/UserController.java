@@ -19,6 +19,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.Option;
@@ -33,10 +37,11 @@ import java.util.Optional;
 @Tag(name="user", description="user controller")
 @Slf4j
 public class UserController {
-
 	private final UserService userService;
 	private final FollowService followService;
 	private final AuthService authService;
+	//private final AuthenticationManager authenticationManager;
+
 
 	@PostMapping("/login")
 	public Object login(@RequestBody UserDto user, HttpServletResponse response) {
@@ -55,6 +60,16 @@ public class UserController {
 		UserDto storedUser = (UserDto) userInfo.get("user");
 		resultMap.put("email", storedUser.getEmail()); // 이메일 반환
 		resultMap.put("nickname", storedUser.getNickname()); // 닉네임 반환
+
+//		//System.out.println(storedUser);
+//		// 사용자 인증
+//		Authentication authentication = authenticationManager.authenticate(
+//				new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
+//		);
+//
+//		// 인증 성공 후, Security Context에 Authentication 객체 저장
+//		SecurityContextHolder.getContext().setAuthentication(authentication);
+//		System.out.println("in user controller " + authentication.getName() + "     ");
 
 		// 헤더에 accessToken 추가
 		response.addHeader("Authorization", "Bearer " + tokens.getAccessToken());

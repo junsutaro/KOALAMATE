@@ -13,7 +13,7 @@ public class ProfileModifyDto {
     private String nickname;
     private int birthRange;
     private String gender;
-    private String profile;
+//    private String profile;
     private String introduction;
     private double alcoholLimitBottle;
     private double alcoholLimitGlass;

@@ -26,8 +26,17 @@ public class ProfileController {
     }
 
     @PostMapping("/{userId}/modify")
-    public ResponseEntity<String> modifyProfile(@PathVariable Long userId, @RequestBody ProfileModifyDto modifiedProfile) {
-        boolean result = profileService.modifyProfile(userId, modifiedProfile);
+    public ResponseEntity<String> modifyProfile(
+            @PathVariable Long userId,
+            @RequestBody ProfileModifyDto modifiedProfile,
+            @RequestParam("file") MultipartFile file) {
+
+        System.out.println("Controller의 modifyProfile 메서드 호출 확인");
+
+        String ProfileImageUploadDir = "ProfileFileUploads"; // 파일 저장 경로
+
+        boolean result = profileService.modifyProfile(userId, modifiedProfile, file, ProfileImageUploadDir);
+        System.out.println("프로필 서비스의 modifyProfile 메서드 실행 !");
         if (result) {
             return ResponseEntity.ok("프로필이 성공적으로 수정되었습니다.");
         } else {
@@ -36,7 +45,9 @@ public class ProfileController {
     }
 
     @PostMapping("/{userId}/uploadProfileImage")
-    public ResponseEntity<String> uploadProfileImage(@PathVariable Long userId, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadProfileImage(
+            @PathVariable Long userId,
+            @RequestParam("file") MultipartFile file) {
         // 여기에 파일 업로드 및 경로 저장 로직 추가
         String ProfileImageUploadDir = "ProfileFileUploads"; // 파일 저장 경로
         boolean result = profileService.uploadProfileImage(userId, file, ProfileImageUploadDir);

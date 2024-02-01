@@ -7,6 +7,7 @@ import com.ssafy.koala.service.chat.ChatroomService;
 import com.ssafy.koala.service.chat.MessageService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -40,15 +41,15 @@ public class WebChatController {
         return message;
     }
 
-    @MessageMapping("/message/{roomId}")
+    @MessageMapping("/messages/{roomId}")
     @SendTo("/topic/messages/{roomId}")
-    public MessageDto sendMessage(@PathVariable String roomId, MessageDto message) {
-       // System.out.println(roomId);
-        ChatroomModel chatroom = chatroomService.getChatroomById(Long.parseLong(roomId));
-        MessageModel messageModel = new MessageModel();
-        BeanUtils.copyProperties(message,messageModel);
-        messageModel.setChatroom(chatroom);
-        messageService.saveMessage(messageModel);
+    public String sendMessage(@DestinationVariable String roomId, String message) {
+        System.out.println(roomId + " " + message);
+//        ChatroomModel chatroom = chatroomService.getChatroomById(Long.parseLong(roomId));
+//        MessageModel messageModel = new MessageModel();
+//        BeanUtils.copyProperties(message,messageModel);
+//        messageModel.setChatroom(chatroom);
+//        messageService.saveMessage(messageModel);
 
         // 메시지를 받아서 "/topic/messages"에 있는 모든 구독자에게 브로드캐스트합니다.
         return message;

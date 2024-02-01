@@ -4,6 +4,8 @@ import { styled } from '@mui/material/styles';
 
 import Home from './pages/Home';
 import About from './pages/About';
+import Recipe from './pages/Recipe';
+import RecipeDetail from './pages/RecipeDetail';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import WriteBoard from './pages/WriteBoard';
@@ -21,6 +23,11 @@ function App() {
 					<Routes>
 						<Route path="/" element={<Home />} />
 						<Route path="/about" element={<About />} />
+
+						<Route path="/recipe" element={<Recipe/>} />
+						{/*<Route path="/recipe/search" element={<Search/>}/>*/}
+						<Route path="/recipe/:boarId" component={RecipeDetail} />
+
 						<Route path="/login" element={<Login />} />
 						<Route path="/signup" element={<SignUp />} />
 						<Route path="/writeBoard" element={<WriteBoard />} />
