@@ -60,26 +60,46 @@ public class UserController {
 	@PostMapping("/signup")
 //	@ApiOperation(value = "가입하기") // swagger api 명세내용
 	public Object signup(@Valid @RequestBody UserDto request) {
-		ResponseEntity response = null;
-
-		Optional<UserDto> userOpt = Optional.empty();
-
-		userOpt = userService.findUserByNicknameOrEmail(request.getNickname(), request.getEmail());
-		System.out.println(request.getEmail() + " " + request.getNickname());
-
-		if (userOpt.isEmpty()) {
+		try {
 			UserDto newUser = new UserDto();
 			BeanUtils.copyProperties(request, newUser);
 
 			userService.save(newUser);
 			userService.createUserWithRefrigerator(newUser);
-
-			response = new ResponseEntity<>(newUser, HttpStatus.CREATED);
-		} else {
-			response = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+		} catch(Exception e) {
+			return new ResponseEntity<>("회원가입 실패", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return response;
 	}
+
+	@PostMapping("/checkEmail")
+	public ResponseEntity<String> checkEmailDuplicate(@RequestBody String email) {
+		try {
+			Optional<UserDto> userOpt = userService.findByEmail(email);
+			if (userOpt.isEmpty()) {
+				return new ResponseEntity<>("사용가능한 이메일입니다.", HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("사용불가능한 이메일입니다.", HttpStatus.OK);
+			}
+		} catch(Exception e) {
+			return new ResponseEntity<>("중복확인에 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PostMapping("/checkNickname")
+	public  ResponseEntity<String> checkNicknameDuplicate(@RequestBody String nickname) {
+		try {
+			Optional<UserDto> userOpt = userService.findByNickname(nickname);
+			if (userOpt.isEmpty()) {
+				return new ResponseEntity<>("사용가능한 닉네임입니다.", HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("사용불가능한 닉네임입니다.", HttpStatus.OK);
+			}
+		} catch(Exception e) {
+			return new ResponseEntity<>("중복확인에 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@RestController
 	@RequestMapping("/profile")
 	public class ProfileController {
