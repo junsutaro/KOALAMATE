@@ -101,16 +101,16 @@ public class BoardService {
 			BeanUtils.copyProperties(board, boardDto);
 
 			// 현재 유저가 게시글 좋아요 했는지 확인
-			AuthService auth = new AuthService();
-			long userId = auth.getCurrentUser().getId();
-			UserModel user = new UserModel();
-			user.setId(userId);
-			boolean isLike = likeRepository.existsByUserAndBoard(user, board);
-			boardDto.setLiked(isLike);
-
-			// 좋아요 수 확인
-			long likeCount = likeRepository.countByBoard_Id(id);
-			boardDto.setLikeCount(likeCount);
+//			AuthService auth = new AuthService();
+//			long userId = auth.getCurrentUser().getId();
+//			UserModel user = new UserModel();
+//			user.setId(userId);
+//			boolean isLike = likeRepository.existsByUserAndBoard(user, board);
+//			boardDto.setLiked(isLike);
+//
+//			// 좋아요 수 확인
+//			long likeCount = likeRepository.countByBoard_Id(id);
+//			boardDto.setLikeCount(likeCount);
 
 			List<CocktailWithDrinkDto> list = board.getCocktails().stream()
 					.map(temp -> {
