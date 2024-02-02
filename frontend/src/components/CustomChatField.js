@@ -1,0 +1,32 @@
+import React from 'react';
+import TextField from '@mui/material/TextField';
+import {styled} from '@mui/material/styles';
+
+const CustomTextField = styled(TextField)(({ theme }) => ({
+	'& .MuiOutlinedInput-root': {
+		'& fieldset': {
+			borderColor: 'transparent', // 테두리 색상을 투명하게 설정
+		},
+		'&:hover fieldset': {
+			borderColor: 'transparent', // 호버 시 테두리 색상을 투명하게 설정
+		},
+		'&.Mui-focused fieldset': {
+			borderColor: 'transparent', // 포커스 시 테두리 색상을 투명하게 설정
+		},
+	},
+	'& .MuiOutlinedInput-input': {
+		padding: '10px 10px',
+	},
+}));
+
+const CustomChatField = () => {
+	return (
+		<CustomTextField
+			variant="outlined"
+			placeholder="메시지를 입력하세요"
+			fullWidth
+		/>
+	);
+}
+
+export default CustomChatField;

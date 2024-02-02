@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Drawer, Button, List, ListItem, ListItemText, Box } from '@mui/material';
+import Chattings from 'components/Chattings';
 
 export default function SlideIn() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +40,7 @@ export default function SlideIn() {
 			>
 				<Button onClick={toggleDrawer(true)}>Open Slide-In</Button>
 				<Drawer anchor="right" open={isOpen} onClose={toggleDrawer(false)} variant="persistent">
-					{list()}
+					<Chattings />
 				</Drawer>
 				{/* 여기에 나머지 페이지 컨텐츠를 추가합니다. */}
 				<Box>

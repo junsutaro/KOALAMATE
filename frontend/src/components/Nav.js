@@ -56,9 +56,6 @@ const Nav = () => {
 								<Button color="inherit" onClick={handleLogout}>
 									Logout
 								</Button>
-								<Button component={NavLink} to="/chatting">
-									Chatting
-								</Button>
 							</>
 					) : (
 							<>

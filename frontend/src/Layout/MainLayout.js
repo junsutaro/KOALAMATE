@@ -9,18 +9,17 @@ import Login from '../pages/Login';
 import SignUp from '../pages/SignUp';
 import WriteBoard from '../pages/WriteBoard';
 import CommentList from '../components/CommentList';
-import Chatting from '../pages/Chatting';
 import Footer from '../components/Footer';
+import Chattings from '../components/Chattings';
 
 const SlideInMenu = ({ isOpen, toggleDrawer }) => { // isOpen과 toggleDrawer를 props로 받음
 	const list = () => (
 			<Box
-					sx={{ width: 250 }}
+					sx={{ width: 350 }}
 					role="presentation"
-					onClick={toggleDrawer(false)}
-					onKeyDown={toggleDrawer(false)}
 			>
 				<List>
+					<Chattings />
 					{['Item 1', 'Item 2', 'Item 3', 'Item 4'].map((text) => (
 							<ListItem button key={text}>
 								<ListItemText primary={text} />
@@ -32,7 +31,7 @@ const SlideInMenu = ({ isOpen, toggleDrawer }) => { // isOpen과 toggleDrawer를
 
 	return (
 			<>
-				<Button onClick={toggleDrawer(true)}>Open Slide-In</Button>
+				<Button onClick={isOpen ? toggleDrawer(false) : toggleDrawer(true)}>Open Slide-In</Button>
 				<Drawer anchor="right" open={isOpen} onClose={toggleDrawer(false)} variant="persistent">
 					{list()}
 				</Drawer>
@@ -56,7 +55,7 @@ const MainLayout = () => {
 			<Box
 					sx={{
 						transition: 'margin 0.3s ease-out',
-						marginRight: isLoggedIn && isOpen ? '250px' : 0, // Drawer가 열리면 marginRight을 적용하여 전체 화면을 밀어냄
+						marginRight: isLoggedIn && isOpen ? '350px' : 0, // Drawer가 열리면 marginRight을 적용하여 전체 화면을 밀어냄
 					}}
 			>
 				{isLoggedIn && <SlideInMenu isOpen={isOpen} toggleDrawer={toggleDrawer} />}
@@ -68,7 +67,6 @@ const MainLayout = () => {
 					<Route path="/signup" element={<SignUp />} />
 					<Route path="/writeBoard" element={<WriteBoard />} />
 					<Route path="/:boardId/comments" element={<CommentList />} />
-					<Route path="/chatting" element={<Chatting />} />
 					{/* 다른 라우트들 */}
 				</Routes>
 				<Footer />
