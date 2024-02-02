@@ -11,8 +11,12 @@ import SignUp from './pages/SignUp';
 import WriteBoard from './pages/WriteBoard';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
-import CommentList from './components/CommentList';
-import Chatting from './pages/Chatting';
+import CommentList from './components/Comment/CommentList';
+import Chatting from './components/Chatting'
+import MyPage from './pages/MyPage';
+import WriteMyPage from './pages/UpdateMyPage';
+import FollowerList from './pages/FollowerList';
+import FolloweeList from './pages/FolloweeList';
 // 다른 페이지 컴포넌트들을 임포트
 
 function App() {
@@ -32,7 +36,11 @@ function App() {
 						<Route path="/signup" element={<SignUp />} />
 						<Route path="/writeBoard" element={<WriteBoard />} />
 						<Route path="/:boardId/comments" element={<CommentList />} />
-						<Route path="/chatting" element={<Chatting />} />
+						<Route path="chatting" element={<Chatting />} />
+						<Route path="/user/:userId" element={<MyPage />} />
+						<Route path="/user/:userId/update" element={<WriteMyPage />} />
+						<Route path="/user/:userId/follower" element={<FollowerList />} />
+						<Route path="/user/:userId/followee" element={<FolloweeList />} />
 						{/* 다른 라우트들 */}
 					</Routes>
 					<Footer />

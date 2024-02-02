@@ -1,7 +1,9 @@
 import React from 'react';
+import SearchFilter from '../components/SearchFilter';
 const About = () => {
 	return (
 			<div>
+
 				<h1>About</h1>
 				<p>Welcome to the about page of our website!</p>
 			</div>

@@ -14,7 +14,7 @@ const Nav = () => {
 
 	const handleLogout = async () => {
 		try {
-			await axios.post('/user/logout', {}, {withCredentials: true});
+			await axios.post(`${process.env.REACT_APP_API_URL}/user/logout`, {}, {withCredentials: true});
 			dispatch(setLoginStatus(false));
 			navigate('/');
 		} catch (error) {
@@ -40,7 +40,7 @@ const Nav = () => {
 						About
 					</Button>
 					<Button color="inherit" component={NavLink} to="/1/comments">
-						About
+						댓글 확인
 					</Button>
 					<Button color="inherit" component={NavLink} to="/recipe">
 						Recipe
@@ -52,6 +52,9 @@ const Nav = () => {
 								</Button>
 								<Button color="inherit" onClick={handleLogout}>
 									Logout
+								</Button>
+								<Button color="inherit" component={NavLink} to="/user/30">
+									마이페이지
 								</Button>
 							</>
 					) : (

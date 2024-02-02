@@ -37,7 +37,7 @@ public class SecurityConfig {
 				.authorizeHttpRequests(authorize -> authorize.requestMatchers(AUTH_WHITELIST).permitAll())
 				.csrf(csrf -> csrf.disable()) // CSRF 설정 적용
 				// JwtAuthFilter를 UsernamePasswordAuthenticationFilter 앞에 추가
-				.addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtUtil), UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtUtil), UsernamePasswordAuthenticationFilter.class);
 				//세션 관리 상태 없음으로 구성, Spring Security가 세션 생성 or 사용 X
 //				.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
 //						SessionCreationPolicy.STATELESS))
@@ -45,10 +45,10 @@ public class SecurityConfig {
 //				.formLogin((form) -> form.disable())
 //				.httpBasic(httpBasic -> httpBasic.disable())
 				// 예외 처리
-				.exceptionHandling((exceptionHandling) -> exceptionHandling
-						.authenticationEntryPoint(authenticationEntryPoint)
-						.accessDeniedHandler(accessDeniedHandler)
-				);
+//				.exceptionHandling((exceptionHandling) -> exceptionHandling
+//						.authenticationEntryPoint(authenticationEntryPoint)
+//						.accessDeniedHandler(accessDeniedHandler)
+//				);
 
 		return http.build();
 	}
