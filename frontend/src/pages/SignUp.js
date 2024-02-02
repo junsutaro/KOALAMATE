@@ -46,7 +46,7 @@ const SignUp = () => {
 				required('비밀번호를 입력하세요.'),
 		nickname: yup.string().required('닉네임을 입력하세요.').max(20, '닉네임은 최대 20자까지 입력 가능합니다.'),
 		birthRange: yup.number().required('연령대를 선택하세요.'),
-		gender: yup.number().required('성별을 선택하세요.'),
+		gender: yup.string().required('성별을 선택하세요.'),
 	});
 
 	// React Hook Form 사용
@@ -60,7 +60,7 @@ const SignUp = () => {
 	const checkEmailAvailability = async (email) => {
 		console.log("checkEmail: ", email);
 		try {
-			const response = await axios.post('https://localhost:8080/api/check-email',
+			const response = await axios.post('https://localhost:8080/user/check-email',
 					{email});
 			setIsEmailAvailable(response.data.available);
 		} catch (error) {
@@ -71,7 +71,7 @@ const SignUp = () => {
 	const checkNicknameAvailability = async (nickname) => {
 		console.log("checkNickname: ", nickname);
 		try {
-			const response = await axios.post('https://localhost:8080/api/check-nickname',
+			const response = await axios.post('https://localhost:8085/user/check-nickname',
 					{nickname});
 			setIsNicknameAvailable(response.data.available);
 		} catch (error) {
@@ -146,8 +146,7 @@ const SignUp = () => {
 										margin="normal"
 								/>
 								<Grid container justifyContent="flex-end">
-									<Button variant="outlined" onClick={() => handleEmailCheck(getValues('email'))}>중복
-										확인</Button>
+									<Button variant="outlined" onClick={() => handleEmailCheck(getValues('email'))}>중복 확인</Button>
 								</Grid>
 								{isNicknameChecked && isNicknameAvailable && (
 										<Typography
@@ -193,8 +192,7 @@ const SignUp = () => {
 										margin="normal"
 								/>
 								<Grid container justifyContent="flex-end">
-									<Button variant="outlined" onClick={() => handleNicknameCheck('nickname')}>중복
-										확인</Button>
+									<Button variant="outlined" onClick={() => handleNicknameCheck(getValues('nickname'))}>중복 확인</Button>
 								</Grid>
 
 								<FormControl variant="outlined" fullWidth margin="normal">
@@ -223,12 +221,8 @@ const SignUp = () => {
 								<FormControl component="fieldset" error={!!errors.gender}
 								             fullWidth margin="normal">
 									<RadioGroup row aria-label="gender">
-										<FormControlLabel value="0"
-										                  control={<Radio {...register('gender')}/>}
-										                  label="남성"/>
-										<FormControlLabel value="1"
-										                  control={<Radio {...register('gender')}/>}
-										                  label="여성"/>
+										<FormControlLabel value="남자" control={<Radio {...register('gender', { value: '남자' })} />} label="남성" />
+										<FormControlLabel value="여자" control={<Radio {...register('gender', { value: '여자' })} />} label="여성" />
 									</RadioGroup>
 									{errors.gender && (
 											<Typography variant="caption" color="error">
