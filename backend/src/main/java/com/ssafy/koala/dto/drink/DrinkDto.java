@@ -10,7 +10,7 @@ public class DrinkDto {
     private long id;
 
     private String name;
-    private int category; //Non_alcohol, Gin, Rum, Vodka, Whiskey, Tequila, Brandy, Liqueur, Beer, Soju
+    private int category;
     private String image;
     private String label;
 

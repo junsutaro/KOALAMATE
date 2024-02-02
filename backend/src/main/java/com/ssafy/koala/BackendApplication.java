@@ -13,15 +13,12 @@ public class BackendApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
-        new SimpleSocketServer();
     }
 
     @PostConstruct
     private void init() {
         // uploads 디렉토리 생성
         new File("ProfileFileUploads").mkdir();
-        new File("DrinkFileUploads").mkdir();
-       // new File("BoardFileUploads").mkdir();
     }
 
 }

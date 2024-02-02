@@ -18,10 +18,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setAllowedOrigins("http://i10d212.p.ssafy.io")
                 .addInterceptors(new CustomHandshakeInterceptor())
                 .withSockJS();
-
-        registry.addEndpoint("/kurento")
-                .setAllowedOrigins("http://i10d212.p.ssafy.io")
-                .withSockJS();
     }
 
     @Override

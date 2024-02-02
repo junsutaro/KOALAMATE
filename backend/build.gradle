@@ -52,9 +52,6 @@ dependencies {
     //encryption
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 
-    //kurento
-    implementation group: 'org.kurento', name: 'kurento-client', version: '6.16.0'
-
 }
 
 tasks.named('test') {
