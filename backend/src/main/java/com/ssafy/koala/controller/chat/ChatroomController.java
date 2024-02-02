@@ -7,6 +7,7 @@ import com.ssafy.koala.service.AuthService;
 import com.ssafy.koala.service.chat.ChatService;
 import com.ssafy.koala.service.chat.ChatroomService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,23 +31,26 @@ public class ChatroomController {
     }
 
     @PostMapping("/createRoom")
-    public ResponseEntity<ChatroomDto> createRoom(@RequestBody String otherUserEmail) {
-        String email = authService.getCurrentUser().getEmail();
+    public ResponseEntity<ChatroomDto> createRoom(@RequestBody String otherUserEmail, HttpServletRequest request) {
+        String accessToken = authService.getAccessToken(request);
+        String email = authService.extractUserFromToken(accessToken).getEmail();
         ChatroomDto chatroom = chatroomService.createRoom(email, otherUserEmail);
 
         return new ResponseEntity<>(chatroom,HttpStatus.OK);
     }
 
     @PostMapping("/roomlist")
-    public ResponseEntity<List<ChatroomResponseDto>> getChatroomByUserId() {
-        long id = authService.getCurrentUser().getId();
+    public ResponseEntity<List<ChatroomResponseDto>> getChatroomByUserId(HttpServletRequest request) {
+        String accessToken = authService.getAccessToken(request);
+        long id = authService.extractUserFromToken(accessToken).getId();
         List<ChatroomResponseDto> list = chatService.getChatroomByUserId(id);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @PostMapping("/leave")
-    public Object leaveChatroomByUserIdAndChatroomId(@RequestBody long roomId) {
-        String email = authService.getCurrentUser().getEmail();
+    public Object leaveChatroomByUserIdAndChatroomId(@RequestBody long roomId, HttpServletRequest request) {
+        String accessToken = authService.getAccessToken(request);
+        String email = authService.extractUserFromToken(accessToken).getEmail();
         chatService.removeUserFromChatroom(email, roomId);
         return new ResponseEntity<>(null,HttpStatus.OK);
     }

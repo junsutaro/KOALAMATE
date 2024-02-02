@@ -1,9 +1,6 @@
 package com.ssafy.koala.controller;
 
-//import com.ssafy.koala.config.jwt.JwtUtil;
 import com.ssafy.koala.dto.user.*;
-import com.ssafy.koala.model.user.UserModel;
-import com.ssafy.koala.repository.FollowRepository;
 import com.ssafy.koala.service.AuthService;
 import com.ssafy.koala.service.user.FollowService;
 import com.ssafy.koala.service.user.ProfileService;
@@ -19,13 +16,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,8 +32,6 @@ public class UserController {
 	private final UserService userService;
 	private final FollowService followService;
 	private final AuthService authService;
-	//private final AuthenticationManager authenticationManager;
-
 
 	@PostMapping("/login")
 	public Object login(@RequestBody UserDto user, HttpServletResponse response) {
@@ -60,16 +50,6 @@ public class UserController {
 		UserDto storedUser = (UserDto) userInfo.get("user");
 		resultMap.put("email", storedUser.getEmail()); // 이메일 반환
 		resultMap.put("nickname", storedUser.getNickname()); // 닉네임 반환
-
-//		//System.out.println(storedUser);
-//		// 사용자 인증
-//		Authentication authentication = authenticationManager.authenticate(
-//				new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
-//		);
-//
-//		// 인증 성공 후, Security Context에 Authentication 객체 저장
-//		SecurityContextHolder.getContext().setAuthentication(authentication);
-//		System.out.println("in user controller " + authentication.getName() + "     ");
 
 		// 헤더에 accessToken 추가
 		response.addHeader("Authorization", "Bearer " + tokens.getAccessToken());
@@ -165,11 +145,12 @@ public class UserController {
 
 	// 팔로우 여부에 따라 팔로우 or 언팔로우
 	@PostMapping("/follow")
-	public ResponseEntity<?> followToggle(@RequestBody long userId) {
+	public ResponseEntity<?> followToggle(@RequestBody long userId, HttpServletRequest request) {
 		// 자신의 정보는 JWT에서 가져오기
-		UserDto currentUser = authService.getCurrentUser();
-		log.info(currentUser.getId()+"\n");
-		long myUid = currentUser.getId();
+		String accessToken = authService.getAccessToken(request);
+		UserDto user = authService.extractUserFromToken(accessToken);
+		log.info(user.getId()+"\n");
+		long myUid = user.getId();
 
 		try {
 			boolean isFollowed = followService.checkFollow(myUid, userId);

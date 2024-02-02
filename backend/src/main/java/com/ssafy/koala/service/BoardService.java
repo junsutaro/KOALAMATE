@@ -1,10 +1,10 @@
 package com.ssafy.koala.service;
 
+import com.ssafy.koala.dto.CommentDto;
 import com.ssafy.koala.dto.board.BoardDto;
 import com.ssafy.koala.dto.board.CreateBoardRequestDto;
 import com.ssafy.koala.dto.board.ViewBoardResponseDto;
 import com.ssafy.koala.dto.cocktail.CocktailWithDrinkDto;
-import com.ssafy.koala.dto.CommentDto;
 import com.ssafy.koala.dto.drink.DrinkWithoutCocktailDto;
 import com.ssafy.koala.model.BoardModel;
 import com.ssafy.koala.model.CocktailModel;
@@ -33,13 +33,15 @@ public class BoardService {
 	private final DrinkRepository drinkRepository;
 	private final CocktailRepository cocktailRepository;
 	private final LikeRepository likeRepository;
+	private final AuthService authService;
 	public BoardService(BoardRepository boardRepository, DrinkRepository drinkRepository, CocktailRepository cocktailRepository,
-						LikeRepository likeRepository) {
+                        LikeRepository likeRepository, AuthService authService) {
 		this.boardRepository = boardRepository;
 		this.drinkRepository = drinkRepository;
 		this.cocktailRepository = cocktailRepository;
 		this.likeRepository = likeRepository;
-	}
+        this.authService = authService;
+    }
 
 	public List<BoardDto> getAllEntities() {
 		List<BoardModel> entities = boardRepository.findAll();
@@ -93,7 +95,7 @@ public class BoardService {
 		return (board != null) ? convertToDto(board) : null;
 	}
 
-	public ViewBoardResponseDto getBoardById(Long id) {
+	public ViewBoardResponseDto getBoardById(Long id, Long userId) {
 		BoardModel board = boardRepository.findById(id).orElse(null);
 
 		if (board != null) {
@@ -101,8 +103,6 @@ public class BoardService {
 			BeanUtils.copyProperties(board, boardDto);
 
 			// 현재 유저가 게시글 좋아요 했는지 확인
-			AuthService auth = new AuthService();
-			long userId = auth.getCurrentUser().getId();
 			UserModel user = new UserModel();
 			user.setId(userId);
 			boolean isLike = likeRepository.existsByUserAndBoard(user, board);
@@ -178,9 +178,7 @@ public class BoardService {
 		boardRepository.deleteById(id);
 	}
 
-	public void likeBoard(Long id) {
-		AuthService auth = new AuthService();
-		long myId = auth.getCurrentUser().getId();
+	public void likeBoard(Long id, Long myId) {
 		UserModel user = new UserModel();
 		user.setId(myId);
 		BoardModel board = new BoardModel();
