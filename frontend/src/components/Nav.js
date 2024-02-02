@@ -53,7 +53,7 @@ const Nav = () => {
 								<Button color="inherit" onClick={handleLogout}>
 									Logout
 								</Button>
-								<Button color="inherit" component={NavLink} to="/user/30">
+								<Button color="inherit" component={NavLink} to="/user/2">
 									마이페이지
 								</Button>
 							</>

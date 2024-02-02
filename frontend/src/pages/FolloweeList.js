@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import MyPageButton from '../components/Profile/MyPageButton';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import FollowItem from '../components/Follow/FollowItem';
 
 const FolloweeList = () => {
 	const { userId } = useParams();
@@ -37,14 +38,14 @@ const FolloweeList = () => {
 				<h3>팔로워 목록 {followeeData.cnt}</h3>
 				<ul>
 					{followeeData.list.map(followee => (
-							<li key={followee.id}>
-								{/* 여기에서 follower 객체의 필요한 속성을 사용하여 렌더링 */}
-								<span>닉네임 : {followee.nickname}  |   </span>
-								<span>연령대 : {followee.birthRange}  |   </span>
-								<span>성별 : {followee.gender}  |   </span>
-								<span>프로필 이미지 : {followee.profile}  |   </span>
-								<span>id : {followee.id}  |   </span>
-							</li>
+							<FollowItem
+									key={followee.id}
+									id={followee.id}
+									nickname={followee.nickname}
+									birthRange={followee.birthRange}
+									gender={followee.gender}
+									imgSrc={followee.profile}
+							/>
 					))}
 				</ul>
 			</>

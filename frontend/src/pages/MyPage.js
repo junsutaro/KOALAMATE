@@ -49,8 +49,8 @@ const MyPage = () => {
 				const data = response.data;
 				setProfileData({
 					nickname: data.nickname || '',
-					ageRange: data.birthRange || 0,
-					gender: data.gender || '',
+					birthRange: data.birthRange || 0,
+					gender: data.gender === '1' ? '여성' : '남성',
 					profile: data.profile || '',
 					intro: data.introduction || '',
 					alcoholLimit: data.alcoholLimit || 0,
@@ -119,7 +119,7 @@ const MyPage = () => {
 							img={profileData.profile}
 							nickname={profileData.nickname}
 							gender={profileData.gender}
-							age={profileData.ageRange}
+							age={profileData.birthRange}
 							follower={followerData}
 							followee={followeeData}
 					/>

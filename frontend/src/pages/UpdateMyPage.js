@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {useParams} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import MyPageButton from '../components/Profile/MyPageButton';
 import Soju from 'assets/alcohol.png';
@@ -19,30 +19,32 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 
+
 const UpdateMyPage = () => {
-	const {userId} = useParams();
+	const { userId } = useParams();
+
 	// state
 	const [profileData, setProfileData] = useState({
 		nickname: '',
 		birthRange: 0,
 		gender: '',
-		profile: '',
+		profile: '', // 프로필 이미지 주소
 		introduction: '',
 		alcoholLimitBottle: 0,
 		alcoholLimitGlass: 0,
 		tags: [],
 	});
+
 	const [imagePreview, setImagePreview] = useState(NoImage);
 	const [sojuBottleCount, setSojuBottleCount] = useState(0);
 	const [sojuCupCount, setSojuCupCount] = useState(0);
 	const [introduction, setIntroduction] = useState('');
-	const [tagOptions, setTagOptions] = useState(
-			[
-				'1~2명', '3~5명', '6~8명', '8~10명',
-				'20대', '30대', '40대', '50대', '60대 이상',
-				'직장인', '학생', '취준생', '주부', '홈 프로텍터',
-				'남자만', '여자만', '남녀 모두',
-			]);
+	const [tagOptions, setTagOptions] = useState([
+		'1~2명', '3~5명', '6~8명', '8~10명',
+		'20대', '30대', '40대', '50대', '60대 이상',
+		'직장인', '학생', '취준생', '주부', '홈 프로텍터',
+		'남자만', '여자만', '남녀 모두',
+	]);
 	const [selectedTags, setSelectedTags] = useState([]);
 	const [isVisible, setIsVisible] = useState(false);
 	const [addTag, setAddTag] = useState('');
@@ -53,29 +55,31 @@ const UpdateMyPage = () => {
 		const getProfileData = async () => {
 			try {
 				const response = await axios.get(
-						`http://localhost:8080/profile/${userId}`);
+						`http://localhost:8080/profile/${userId}`
+				);
 				const data = response.data;
 				setProfileData({
 					nickname: data.nickname || '',
 					birthRange: data.birthRange || 0,
-					gender: data.gender || '',
-					profile: data.profile || NoImage,
+					gender: data.gender === '1' ? '여성' : '남성',
+					profile: data.profile || '',
 					introduction: data.introduction || '',
 					alcoholLimitBottle: data.alcoholLimitBottle || 0,
 					alcoholLimitGlass: data.alcoholLimitGlass || 0,
 					tags: data.tags || [],
 				});
-				setSojuBottleCount(profileData.alcoholLimitBottle || 0);
-				setSojuCupCount(profileData.alcoholLimitGlass || 0);
-				setIntroduction(profileData.introduction || '');
-				setSelectedTags(profileData.tags || []);
-				setImagePreview(profileData.profile);
+				setSojuBottleCount(data.alcoholLimitBottle || 0);
+				setSojuCupCount(data.alcoholLimitGlass || 0);
+				setIntroduction(data.introduction || '');
+				setSelectedTags(data.tags || []);
+				setImagePreview(data.profile);
 			} catch (error) {
 				console.log('프로필 데이터를 가져오는 중 에러 발생: ', error);
 			}
 		};
 		getProfileData();
 	}, [userId]);
+
 
 	// 프로필 이미지 변경 함수
 	const handleImageChange = (event) => {
@@ -88,12 +92,14 @@ const UpdateMyPage = () => {
 			}
 
 			const reader = new FileReader();
-			reader.readAsDataURL(file);
+			reader.readAsArrayBuffer(file); // FileReader를 사용하여 ArrayBuffer로 읽어옴
 			reader.onloadend = () => {
-				setImagePreview(reader.result);
+				const blob = new Blob([reader.result], { type: file.type });
+				setImagePreview(blob);
 			};
 		}
 	};
+
 	// 프로필 기본 이미지로 초기화하는 함수
 	const handleCancelImage = () => {
 		setImagePreview(NoImage);
@@ -111,12 +117,14 @@ const UpdateMyPage = () => {
 	// 태그 렌더딩 함수
 	const renderTags = () => {
 		return (
-				<Box sx={{
-					display: 'flex',
-					gap: 1,
-					marginTop: 1,
-					flexWrap: 'wrap', // flex items가 한 줄에 다 들어가지 않을 때 줄 바꿈 설정
-				}}>
+				<Box
+						sx={{
+							display: 'flex',
+							gap: 1,
+							marginTop: 1,
+							flexWrap: 'wrap',
+						}}
+				>
 					{tagOptions.map((tag) => (
 							<Chip
 									key={tag}
@@ -126,9 +134,7 @@ const UpdateMyPage = () => {
 									sx={{
 										mr: 1,
 										mb: 1,
-										backgroundColor: selectedTags.includes(tag)
-												? '#ff9b9b'
-												: undefined,
+										backgroundColor: selectedTags.includes(tag) ? '#ff9b9b' : undefined,
 										color: selectedTags.includes(tag) ? '#fff' : undefined,
 									}}
 							/>
@@ -184,24 +190,29 @@ const UpdateMyPage = () => {
 	// 	}
 	// };
 
+
+	const convertToBlob = async (url) => {
+		const response = await axios.get(url, { responseType: 'blob' });
+		return response.data;
+	};
+
 	const saveProfile = async () => {
 		try {
 			const formData = new FormData();
+			formData.append('file', imagePreview, 'profile-image.jpg');
+			formData.append(
+					'modifiedProfile',
+					JSON.stringify({
+						nickname: profileData.nickname,
+						birthRange: profileData.birthRange,
+						gender: profileData.gender,
+						introduction: introduction,
+						alcoholLimitBottle: sojuBottleCount,
+						alcoholLimitGlass: sojuCupCount,
+						tags: selectedTags,
+					})
+			);
 
-			// JSON 데이터 추가
-			formData.append('modifiedProfile', JSON.stringify({
-				nickname: profileData.nickname,
-				birthRange: profileData.ageRange,
-				gender: profileData.gender,
-				introduction: introduction,
-				alcoholLimitBottle: sojuBottleCount,
-				alcoholLimitGlass: sojuCupCount,
-				tags: selectedTags,
-			}));
-
-			// 파일 데이터 추가
-			formData.append('file', imagePreview);
-			console.log([...formData.entries()]);
 			const response = await axios.put(
 					`http://localhost:8080/profile/${userId}/modify`,
 					formData,
@@ -211,16 +222,16 @@ const UpdateMyPage = () => {
 						},
 					}
 			);
-
-			console.log('프로필 저장 성공 :', response.data);
+			console.log('프로필 저장 성공:', response.data);
 		} catch (error) {
-			console.log('프로필 저장 중 에러 발생 : ', error);
+			console.error('프로필 저장 중 에러 발생: ', error);
 		}
 	};
 
 
+
 	console.log(`nickname: ${profileData.nickname}`)
-	console.log(`ageRange: ${profileData.ageRange}`)
+	console.log(`birthRange: ${profileData.birthRange}`)
 	console.log(`gender: ${profileData.gender}`)
 	console.log(`introduction: ${introduction}`)
 	console.log(`sojuBottleCount: ${sojuBottleCount}`)
@@ -231,6 +242,11 @@ const UpdateMyPage = () => {
 	return (
 			<Container component="form">
 				<MyPageButton/>
+				{/*<img src={NoImage} alt=""/>*/}
+				<img src={`${profileData.profile}`}
+				     alt=""/>
+
+				<p>{`${profileData.profile}`}</p>
 				<Box
 						sx={{
 							display: 'flex',
@@ -255,7 +271,8 @@ const UpdateMyPage = () => {
 										borderRadius: '50%',
 										mb: 1,
 									}}
-									src={imagePreview !== NoImage ? imagePreview : NoImage}
+									// src={imagePreview !== NoImage ? imagePreview : NoImage}
+									src={profileData.profile}
 									alt="Preview"
 							/>
 
@@ -298,7 +315,7 @@ const UpdateMyPage = () => {
 								</Typography>
 
 								<div style={{display: 'flex', marginTop: '10px', gap: 10}}>
-									<Chip label={`${profileData.ageRange}대`} variant="Filled"
+									<Chip label={`${profileData.birthRange}대`} variant="Filled"
 									      sx={{backgroundColor: '#CDFAD5'}}/>
 									<Chip label={profileData.gender} variant="Filled"
 									      sx={{backgroundColor: '#FF9B9B'}}/>

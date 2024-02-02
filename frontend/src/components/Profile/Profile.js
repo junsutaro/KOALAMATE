@@ -55,9 +55,9 @@ const Profile = ({img, nickname, gender, age, follower, followee}) => {
 					}}>
 
 						<Button m={1} p={1} component={NavLink}
-						        to="/user/31/follower">팔로워 {followerCnt}</Button>
+						        to="/user/2/follower">팔로워 {followerCnt}</Button>
 						<Button m={1} p={1} component={NavLink}
-						        to="/user/31/followee">팔로우 {followeeCnt}</Button>
+						        to="/user/2/followee">팔로우 {followeeCnt}</Button>
 
 					</Box>
 

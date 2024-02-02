@@ -25,7 +25,7 @@ public class ProfileController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/{userId}/modify")
+    @PutMapping(value = "/{userId}/modify", consumes = "application/json")
     public ResponseEntity<String> modifyProfile(
             @PathVariable Long userId,
             @RequestPart("file") MultipartFile file,
