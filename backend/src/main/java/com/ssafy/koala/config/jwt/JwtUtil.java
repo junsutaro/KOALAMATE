@@ -4,6 +4,8 @@ import com.ssafy.koala.dto.user.UserDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -31,35 +33,23 @@ public class JwtUtil {
 		this.refreshTokenExpTime = refreshTokenExpTime;
 	}
 
-	/**
-	 * Access Token 생성
-	 * @param user
-	 * @return Access Token String
-	 */
+	// Access Token 생성
 	public String createAccessToken(UserDto user) {
-		return createToken(user, "AccessToken", accessTokenExpTime);
+		return createToken(user, "Access_token", accessTokenExpTime);
 	}
 
-	/**
-	 * Refresh Token 생성
-	 * @param user
-	 * @return Refresh Token String
-	 */
+	// Refresh Token 생성
 	public String createRefreshToken(UserDto user) {
-		return createToken(user, "RefreshToken", refreshTokenExpTime);
+		return createToken(user, "Refresh_token", refreshTokenExpTime);
 	}
 
-	/**
-	 * JWT 생성
-	 * @param user
-	 * @param expireTime
-	 * @return JWT String
-	 */
+	// JWT 생성
 	private String createToken(UserDto user, String subject, long expireTime) {
 		Claims claims = Jwts.claims();
 		claims.put("subject", subject);
 		claims.put("userId", user.getId());
 		claims.put("email", user.getEmail());
+		claims.put("nickname", user.getNickname());
 		claims.put("isAdmin", user.isAdmin());
 
 		ZonedDateTime now = ZonedDateTime.now();
@@ -75,30 +65,22 @@ public class JwtUtil {
 	}
 
 
-	/**
-	 * Token에서 User ID 추출
-	 * @param token
-	 * @return User ID
-	 */
+	// 토큰에서 user id 추출
 	public Long getUserId(String token) {
 		return parseClaims(token).get("userId", Long.class);
 	}
 
-	/**
-	 * Token에서 User Email 추출
-	 * @param token
-	 * @return User Email
-	 */
+	// 토큰에서 이메일 추출
 	public String getUserEmail(String token) {
 		return parseClaims(token).get("email", String.class);
 	}
 
+	// 토큰에서 닉네임 추출
+	public String getNickname(String token) {
+		return parseClaims(token).get("email", String.class);
+	}
 
-	/**
-	 * JWT 검증
-	 * @param token
-	 * @return IsValidate
-	 */
+	// JWT 검증
 	public boolean validateToken(String token) {
 		try {
 			Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
@@ -122,11 +104,7 @@ public class JwtUtil {
 	}
 
 
-	/**
-	 * JWT Claims 추출
-	 * @param accessToken
-	 * @return JWT Claims
-	 */
+	// JWT Claims 추출
 	public Claims parseClaims(String accessToken) {
 		try {
 			return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();

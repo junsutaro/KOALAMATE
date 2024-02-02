@@ -48,11 +48,23 @@ public class UserService {
 		return (user != null) ? Optional.of(convertToDto(user)) : Optional.empty();
 	}
 
+	public Optional<UserDto> findByEmail(String email) {
+		UserModel user = userRepository.findByEmail(email).orElse(null);
+
+		return (user != null) ? Optional.of(convertToDto(user)) : Optional.empty();
+	}
+
+	public Optional<UserDto> findByNickname(String nickname) {
+		UserModel user = userRepository.findByNickname(nickname).orElse(null);
+
+		return (user != null) ? Optional.of(convertToDto(user)) : Optional.empty();
+	}
+
 	@Transactional
 	public Map<String, Object> auth(UserDto dto) {
 		String email = dto.getEmail();
 		String password = dto.getPassword();
-		Optional<UserModel> userOpt = userRepository.getUserByEmail(email);
+		Optional<UserModel> userOpt = userRepository.findByEmail(email);
 
 		if(userOpt.isPresent()) { // 유저 정보가 db에 존재
 			// 암호화된 password를 디코딩한 값과 입력한 패스워드 값이 다르면 null 반환
