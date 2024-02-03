@@ -17,7 +17,7 @@ const CommentList = () => {
 					`http://localhost:8080/board/view?id=${boardId}`);
 			setComments(response.data.comments || []);
 		} catch (error) {
-			console.log('댓글 목록을 가져오는 중 에러 발생: ', error);
+			console.error('댓글 목록을 가져오는 중 에러 발생: ', error);
 		}
 	};
 

@@ -31,7 +31,6 @@ function App() {
 						<Route path="/recipe" element={<Recipe/>} />
 						{/*<Route path="/recipe/search" element={<Search/>}/>*/}
 						<Route path="/recipe/:boarId" component={RecipeDetail} />
-
 						<Route path="/login" element={<Login />} />
 						<Route path="/signup" element={<SignUp />} />
 						<Route path="/writeBoard" element={<WriteBoard />} />

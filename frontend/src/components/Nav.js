@@ -1,5 +1,5 @@
 import React from 'react';
-import {NavLink, useNavigate} from 'react-router-dom';
+import {NavLink, useNavigate, useParams} from 'react-router-dom';
 import {AppBar, Toolbar, Typography, Button, Box} from '@mui/material';
 import {useDispatch, useSelector} from 'react-redux';
 import {setLoginStatus} from '../store/authSlice';
@@ -8,7 +8,6 @@ import axios from 'axios';
 
 const Nav = () => {
 	const { user, isLoggedIn } = useSelector(state => state.auth);
-	// console.log(user, isLoggedIn);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
@@ -53,9 +52,10 @@ const Nav = () => {
 								<Button color="inherit" onClick={handleLogout}>
 									Logout
 								</Button>
-								<Button color="inherit" component={NavLink} to="/user/2">
+								<Button color="inherit" component={NavLink} to={`/user/8`}>
 									마이페이지
 								</Button>
+
 							</>
 					) : (
 							<>

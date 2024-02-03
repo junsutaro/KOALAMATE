@@ -1,466 +1,306 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, {useState, useEffect, useRef} from 'react';
+import {useParams} from 'react-router-dom';
 import axios from 'axios';
 import MyPageButton from '../components/Profile/MyPageButton';
-import Soju from 'assets/alcohol.png';
-import SojuCup from 'assets/cup2.png';
 import NoImage from 'assets/profile.jpg';
 import {
-	Typography,
-	Box,
-	Container,
-	Chip,
-	Button,
-	IconButton,
-	Avatar,
-	TextField,
+    Typography,
+    Box,
+    Container,
+    Chip,
+    Button,
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-
+import TagsInput from "../components/Profile/Update/TagsInput";
+import ProfileImageUploader from "../components/Profile/Update/ProfileImageUploader";
+import DrinkingAmountInput from "../components/Profile/Update/DrinkingAmountInput";
+import IntroductionInput from "../components/Profile/Update/IntroductionInput";
 
 const UpdateMyPage = () => {
-	const { userId } = useParams();
-
-	// state
-	const [profileData, setProfileData] = useState({
-		nickname: '',
-		birthRange: 0,
-		gender: '',
-		profile: '', // 프로필 이미지 주소
-		introduction: '',
-		alcoholLimitBottle: 0,
-		alcoholLimitGlass: 0,
-		tags: [],
-	});
-
-	const [imagePreview, setImagePreview] = useState(NoImage);
-	const [sojuBottleCount, setSojuBottleCount] = useState(0);
-	const [sojuCupCount, setSojuCupCount] = useState(0);
-	const [introduction, setIntroduction] = useState('');
-	const [tagOptions, setTagOptions] = useState([
-		'1~2명', '3~5명', '6~8명', '8~10명',
-		'20대', '30대', '40대', '50대', '60대 이상',
-		'직장인', '학생', '취준생', '주부', '홈 프로텍터',
-		'남자만', '여자만', '남녀 모두',
-	]);
-	const [selectedTags, setSelectedTags] = useState([]);
-	const [isVisible, setIsVisible] = useState(false);
-	const [addTag, setAddTag] = useState('');
-	const [error, setError] = useState('');
-
-	// userId가 바뀌면 user 프로필 정보를 가져오는 함수
-	useEffect(() => {
-		const getProfileData = async () => {
-			try {
-				const response = await axios.get(
-						`http://localhost:8080/profile/${userId}`
-				);
-				const data = response.data;
-				setProfileData({
-					nickname: data.nickname || '',
-					birthRange: data.birthRange || 0,
-					gender: data.gender === '1' ? '여성' : '남성',
-					profile: data.profile || '',
-					introduction: data.introduction || '',
-					alcoholLimitBottle: data.alcoholLimitBottle || 0,
-					alcoholLimitGlass: data.alcoholLimitGlass || 0,
-					tags: data.tags || [],
-				});
-				setSojuBottleCount(data.alcoholLimitBottle || 0);
-				setSojuCupCount(data.alcoholLimitGlass || 0);
-				setIntroduction(data.introduction || '');
-				setSelectedTags(data.tags || []);
-				setImagePreview(data.profile);
-			} catch (error) {
-				console.log('프로필 데이터를 가져오는 중 에러 발생: ', error);
-			}
-		};
-		getProfileData();
-	}, [userId]);
+    const {userId} = useParams();
+    const imageInputRef = useRef(null);
 
 
-	// 프로필 이미지 변경 함수
-	const handleImageChange = (event) => {
-		const file = event.target.files[0];
-		if (file) {
-			// 이미지 파일인지 확인
-			if (!file.type.startsWith('image/')) {
-				alert('이미지 파일만 업로드할 수 있습니다.');
-				return;
-			}
+    // state
+    const [profileData, setProfileData] = useState({
+        nickname: '',
+        birthRange: 0,
+        gender: '',
+        profile: '',
+        introduction: '',
+        alcoholLimitBottle: 0,
+        alcoholLimitGlass: 0,
+        tags: [],
+    });
+    const [imagePreview, setImagePreview] = useState(NoImage);
+    const [sojuBottleCount, setSojuBottleCount] = useState(0);
+    const [sojuCupCount, setSojuCupCount] = useState(0);
+    const [introduction, setIntroduction] = useState('');
+    const [tagOptions, setTagOptions] = useState([
+        "1~2명", "3~5명", "6~8명", "8~10명",
+        "20대", "30대", "40대", "50대", "60대 이상",
+        "직장인", "학생", "취준생", "주부", "홈 프로텍터",
+        "남자만", "여자만", "남녀 모두",
+    ]);
 
-			const reader = new FileReader();
-			reader.readAsArrayBuffer(file); // FileReader를 사용하여 ArrayBuffer로 읽어옴
-			reader.onloadend = () => {
-				const blob = new Blob([reader.result], { type: file.type });
-				setImagePreview(blob);
-			};
-		}
-	};
+    const [selectedTags, setSelectedTags] = useState([]);
+    const [isVisible, setIsVisible] = useState(false);
+    const [addTag, setAddTag] = useState('');
+    const [error, setError] = useState('');
 
-	// 프로필 기본 이미지로 초기화하는 함수
-	const handleCancelImage = () => {
-		setImagePreview(NoImage);
-	};
+    // selectedImageFile 상태를 관리하기 위한 useState
+    const [selectedImageFile, setSelectedImageFile] = useState(null);
 
-	// 태그 선택 함수
-	const handleTagClick = (clickTag) => {
-		if (selectedTags.includes(clickTag)) {
-			setSelectedTags((prevTags) => prevTags.filter((tag) => tag !== clickTag));
-		} else {
-			setSelectedTags((prevTags) => [...prevTags, clickTag]);
-		}
-	};
+    // user 프로필 정보를 가져오는 함수
+    useEffect(() => {
+        const getProfileData = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/profile/${userId}`);
+                const data = response.data;
 
-	// 태그 렌더딩 함수
-	const renderTags = () => {
-		return (
-				<Box
-						sx={{
-							display: 'flex',
-							gap: 1,
-							marginTop: 1,
-							flexWrap: 'wrap',
-						}}
-				>
-					{tagOptions.map((tag) => (
-							<Chip
-									key={tag}
-									label={tag}
-									variant="filled"
-									onClick={() => handleTagClick(tag)}
-									sx={{
-										mr: 1,
-										mb: 1,
-										backgroundColor: selectedTags.includes(tag) ? '#ff9b9b' : undefined,
-										color: selectedTags.includes(tag) ? '#fff' : undefined,
-									}}
-							/>
-					))}
-				</Box>
-		);
-	};
+                setProfileData({
+                    nickname: data.nickname || '',
+                    birthRange: data.birthRange || 0,
+                    gender: data.gender || '',
+                    profile: data.profile || NoImage,
+                    introduction: data.introduction || '',
+                    alcoholLimitBottle: data.alcoholLimitBottle || 0,
+                    alcoholLimitGlass: data.alcoholLimitGlass || 0,
+                    tags: data.tags || [],
+                });
 
-	// 태그 추가 버튼 클릭 함수 (클릭할 때마다 폼 표시 여부 토글)
-	const handleAddButton = () => {
-		setIsVisible(!isVisible);
-	};
+                // setProfileData 이후에 상태 업데이트 수행
+                setSojuBottleCount(data.alcoholLimitBottle || 0);
+                setSojuCupCount(data.alcoholLimitGlass || 0);
+                setIntroduction(data.introduction || '');
+                setSelectedTags(data.tags || []);
+                setImagePreview(data.profile || NoImage);
+            } catch (error) {
+                console.log('프로필 데이터를 가져오는 중 에러 발생: ', error);
+            }
+        };
 
-	const addTagOptions = () => {
-		if (addTag.trim() !== '' && addTag.length <= 10) {
-			if (!tagOptions.includes(addTag)) {
-				const updatedTags = [...tagOptions, addTag];
-
-				// 선택된 태그 업데이트
-				setSelectedTags([...selectedTags, addTag]);
-
-				// 상태 업데이트
-				setTagOptions(updatedTags);
-				setAddTag('');
-				setError('');
-			} else {
-				setError('이미 존재하는 태그입니다.');
-			}
-		} else {
-			setError('태그는 1자 이상 10자 이하로 작성해주세요.');
-		}
-	};
-
-	// const saveProfile = async () => {
-	// 	try {
-	// 		const response = await axios.put(
-	// 				`http://localhost:8080/profile/${userId}/modify`,
-	// 				{
-	// 					'modifiedProfile': {
-	// 						nickname: profileData.nickname,
-	// 						birthRange: profileData.ageRange,
-	// 						gender: profileData.gender,
-	// 						introduction: introduction,
-	// 						alcoholLimitBottle: sojuBottleCount,
-	// 						alcoholLimitGlass: sojuCupCount,
-	// 						tags: selectedTags,
-	// 					},
-	// 					file: imagePreview,
-	// 				});
-	// 		console.log('프로필 저장 성공 :', response.data);
-	// 	} catch (error) {
-	// 		console.log(' 프로필 저장 중 에러 발생 : ', error);
-	// 	}
-	// };
+        getProfileData();
+    }, [userId]);
 
 
-	const convertToBlob = async (url) => {
-		const response = await axios.get(url, { responseType: 'blob' });
-		return response.data;
-	};
+    // 프로필 이미지 변경 함수
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            // 이미지 파일인지 확인
+            if (!file.type.startsWith('image/')) {
+                alert('이미지 파일만 업로드할 수 있습니다.');
+                return;
+            }
 
-	const saveProfile = async () => {
-		try {
-			const formData = new FormData();
-			formData.append('file', imagePreview, 'profile-image.jpg');
-			formData.append(
-					'modifiedProfile',
-					JSON.stringify({
-						nickname: profileData.nickname,
-						birthRange: profileData.birthRange,
-						gender: profileData.gender,
-						introduction: introduction,
-						alcoholLimitBottle: sojuBottleCount,
-						alcoholLimitGlass: sojuCupCount,
-						tags: selectedTags,
-					})
-			);
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+            };
 
-			const response = await axios.put(
-					`http://localhost:8080/profile/${userId}/modify`,
-					formData,
-					{
-						headers: {
-							'Content-Type': 'multipart/form-data',
-						},
-					}
-			);
-			console.log('프로필 저장 성공:', response.data);
-		} catch (error) {
-			console.error('프로필 저장 중 에러 발생: ', error);
-		}
-	};
+            // 이미지 파일을 상태로 업데이트
+            setSelectedImageFile(file);
+        }
+    };
+
+
+    // 프로필 기본 이미지로 초기화하는 함수
+    const handleCancelImage = () => {
+        setImagePreview(NoImage);
+    };
+
+    // 태그 선택 함수
+    const handleTagClick = (clickTag) => {
+        if (selectedTags.includes(clickTag)) {
+            setSelectedTags((prevTags) => prevTags.filter((tag) => tag !== clickTag));
+        } else {
+            setSelectedTags((prevTags) => [...prevTags, clickTag]);
+        }
+    };
+
+
+    // 태그 추가 버튼 클릭 함수 (클릭할 때마다 폼 표시 여부 토글)
+    const handleAddButton = () => {
+        setIsVisible(!isVisible);
+    };
+
+    const addTagOptions = () => {
+        if (addTag.trim() !== '' && addTag.length <= 10) {
+            if (!tagOptions.includes(addTag)) {
+                const updatedTags = [...tagOptions, addTag];
+
+                // 선택된 태그 업데이트
+                setSelectedTags([...selectedTags, addTag]);
+
+                // 상태 업데이트
+                setTagOptions(updatedTags);
+                setAddTag('');
+                setError('');
+            } else {
+                setError('이미 존재하는 태그입니다.');
+            }
+        } else {
+            setError('태그는 1자 이상 10자 이하로 작성해주세요.');
+        }
+    };
+
+    const SaveProfileImage = async () => {
+        try {
+            console.log("Selected Image File:", selectedImageFile);
+            // 이미지 파일이 선택되지 않았을 경우 예외처리
+            if (!selectedImageFile) {
+                console.error("이미지 파일이 선택되지 않았습니다.");
+                return;
+            }
+            // FormData 객체를 생성하여 이미지 파일을 담음
+            const formData = new FormData();
+            formData.append("file", selectedImageFile);
+
+            // Axios를 사용하여 이미지를 업로드하는 요청 보냄
+            const response = await axios.put(`http://localhost:8080/profile/${userId}/uploadProfileImage`, formData);
+
+            // 응답에 따른 처리 (여기서는 콘솔에 출력)
+            console.log(response.data);
+        } catch (error) {
+            console.error("프로필 이미지 업로드에 실패했습니다.", error);
+        }
+    };
+    // saveProfile 함수 수정
+    const saveProfile = async () => {
+        try {
+            // 서버에 요청 보내기
+            const response = await axios.put(
+                `http://localhost:8080/profile/${userId}/modify`,
+                {
+                    nickname: profileData.nickname,
+                    birthRange: profileData.birthRange,
+                    gender: profileData.gender,
+                    introduction: introduction,
+                    alcoholLimitBottle: sojuBottleCount,
+                    alcoholLimitGlass: sojuCupCount,
+                    tags: selectedTags,
+                });
+
+            console.log('프로필 저장 성공:', response.data);
+        } catch (error) {
+            console.log('프로필 저장 중 에러 발생:', error);
+        }
+    };
+
+    // 저장 버튼 클릭 시 SaveProfileImage 함수와 saveProfile 함수를 호출
+    const handleSaveButtonClick = async () => {
+        await SaveProfileImage(); // SaveProfileImage 함수의 완료를 기다림
+        saveProfile(); // SaveProfileImage가 완료된 후 saveProfile 함수 실행
+    };
 
 
 
-	console.log(`nickname: ${profileData.nickname}`)
-	console.log(`birthRange: ${profileData.birthRange}`)
-	console.log(`gender: ${profileData.gender}`)
-	console.log(`introduction: ${introduction}`)
-	console.log(`sojuBottleCount: ${sojuBottleCount}`)
-	console.log(`sojuCupCount: ${sojuCupCount}`)
-	console.log(`selectedTags: ${selectedTags}`)
-	console.log(`imagePreview: ${imagePreview}`)
 
-	return (
-			<Container component="form">
-				<MyPageButton/>
-				{/*<img src={NoImage} alt=""/>*/}
-				<img src={`${profileData.profile}`}
-				     alt=""/>
+    console.log(`nickname: ${profileData.nickname}`)
+    console.log(`birthRange: ${profileData.birthRange}`)
+    console.log(`gender: ${profileData.gender}`)
+    console.log(`introduction: ${introduction}`)
+    console.log(`sojuBottleCount: ${sojuBottleCount}`)
+    console.log(`sojuCupCount: ${sojuCupCount}`)
+    console.log(`selectedTags: ${selectedTags}`)
+    console.log(`imagePreview: ${imagePreview}`)
 
-				<p>{`${profileData.profile}`}</p>
-				<Box
-						sx={{
-							display: 'flex',
-							gap: 4,
-						}}
-				>
-					<>
-						<Box
-								m={3}
-								sx={{
-									width: 300,
-									display: 'flex',
-									flexDirection: 'column',
-									alignItems: 'center',
-									justifyContent: 'center',
-								}}
-						>
-							<Avatar
-									sx={{
-										width: 200,
-										height: 200,
-										borderRadius: '50%',
-										mb: 1,
-									}}
-									// src={imagePreview !== NoImage ? imagePreview : NoImage}
-									src={profileData.profile}
-									alt="Preview"
-							/>
+    return (
+        <Container component="form">
+            <MyPageButton/>
+            <Box
+                sx={{
+                    display: 'flex',
+                    gap: 4,
+                }}
+            >
+                <>
+                    <Box
+                        m={3}
+                        sx={{
+                            width: 300,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <ProfileImageUploader
+                            userId={userId}
+                            imagePreview={imagePreview}
+                            handleImageChange={handleImageChange}
+                            handleCancelImage={handleCancelImage}
+                            selectedImageFile={selectedImageFile}
+                            saveProfileImage={SaveProfileImage}
+                        />
+                        <Box
+                            m={3}
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <Typography sx={{fontWeight: 'bold'}} variant="h5">
+                                {profileData.nickname}
+                            </Typography>
+                            <div style={{display: 'flex', marginTop: '10px', gap: 10}}>
+                                <Chip label={`${profileData.birthRange}대`} variant="Filled"
+                                      sx={{backgroundColor: '#CDFAD5'}}/>
+                                <Chip label={profileData.gender} variant="Filled" sx={{backgroundColor: '#FF9B9B'}}/>
+                            </div>
+                        </Box>
+                    </Box>
+                </>
+                <Box sx={{display: 'flex', flexDirection: 'column'}}>
 
-							<Box sx={{
-								display: 'flex',
-								justifyContent: 'flex-end',
-								width: '100%',
-							}}>
-								<Button variant="contained" component="label" fullWidth>
-									프로필 이미지 변경
-									<input type="file" hidden onChange={handleImageChange}
-									       accept="image/*"/>
-								</Button>
-								{imagePreview !== NoImage && (
-										<IconButton
-												aria-label="delete"
-												sx={{
-													color: 'grey[900]',
-													backgroundColor: 'lightgrey',
-													borderRadius: '4px',
-													margin: '0 4px 4px 0',
-												}}
-												onClick={handleCancelImage}
-										>
-											<DeleteIcon/>
-										</IconButton>
-								)}
-							</Box>
-
-							<Box m={3}
-							     sx={{
-								     display: 'flex',
-								     flexDirection: 'column',
-								     alignItems: 'center',
-								     justifyContent: 'center',
-							     }}
-							>
-								<Typography sx={{fontWeight: 'bold'}} variant="h5">
-									{profileData.nickname}
-								</Typography>
-
-								<div style={{display: 'flex', marginTop: '10px', gap: 10}}>
-									<Chip label={`${profileData.birthRange}대`} variant="Filled"
-									      sx={{backgroundColor: '#CDFAD5'}}/>
-									<Chip label={profileData.gender} variant="Filled"
-									      sx={{backgroundColor: '#FF9B9B'}}/>
-								</div>
-							</Box>
-						</Box>
-					</>
-
-					<Box sx={{display: 'flex', flexDirection: 'column'}}>
-						<Box margin="20px 0px 5px 0px" sx={{display: 'flex', gap: 1}}>
-							<Typography
-									sx={{fontWeight: 'bold'}}
-									variant="h6"
-							>
-								주량 입력하기
-							</Typography>
-							<Typography fontSize="12px"
-							            sx={{marginTop: 1, color: 'gray'}}>:</Typography>
-							<Typography fontSize="12px" sx={{marginTop: 1, color: 'gray'}}>주량
-								작성 ex)</Typography>
-							<Typography fontSize="12px" sx={{marginTop: 1, color: 'gray'}}>소주
-								2병 3잔, </Typography>
-							<Typography fontSize="12px" sx={{marginTop: 1, color: 'gray'}}>소주
-								0병 1잔</Typography>
-						</Box>
-						<Box sx={{display: 'flex'}}>
-							<Box>
-								<img
-										src={Soju}
-										width="30"
-								/>
-								<TextField
-										sx={{marginTop: 4, marginX: 3}}
-										type="number"
-										label="소주 병 수"
-										value={sojuBottleCount}
-										onChange={(e) => setSojuBottleCount(Number(e.target.value))}
-								/>
-							</Box>
-
-							<Box>
-								<img
-										src={SojuCup}
-										width="30"
-								/>
-								<TextField
-										sx={{marginTop: 4, marginX: 3}}
-										type="number"
-										label="소주 잔 수"
-										value={sojuCupCount}
-										onChange={(e) => setSojuCupCount(Number(e.target.value))}
-								/>
-							</Box>
-						</Box>
-						<Box>
-							<TextField
-									sx={{marginTop: 2, width: 600}}
-									type="string"
-									label="TMI"
-									placeholder={`${profileData.nickname}님을 나타낼 수 있는 한 줄 소개를 작성해주세요`}
-									value={introduction}
-									onChange={(e) => setIntroduction((e.target.value))}
-							/>
-						</Box>
-
-						<Box>
-							<Typography
-									mt={3}
-									mb={2}
-									sx={{fontWeight: 'bold'}}
-									variant="h6"
-							>
-								선호하는 모임 태그 선택하기
-							</Typography>
-							<Box sx={{
-								display: 'flex',
-								gap: 1,
-								marginTop: 1,
-							}}>{renderTags()}</Box>
-
-							<Box sx={{
-								display: 'flex',
-								flexDirection: 'column',
-								alignItems: 'flex-end',
-							}}>
-								<Button onClick={handleAddButton}>
-									<AddBoxIcon sx={{fontSize: '50px', color: '#ff9b9b'}}/>
-								</Button>
-								{isVisible && (
-										<Box>
-											<TextField
-													sx={{marginTop: 2, width: 600}}
-													label="태그 추가하기"
-													placeholder="추가하고 싶은 모임 태그를 작성해주세요"
-													value={addTag}
-													onChange={(e) => setAddTag(e.target.value)}
-											/>
-											<Button onClick={addTagOptions}
-											        sx={{
-												        marginTop: 2,
-												        backgroundColor: '#ff9b9b',
-												        color: 'white',
-												        fontWeight: 'bold',
-												        borderRadius: '5px',
-												        padding: '15px',
-												        '&:hover': {
-													        backgroundColor: '#ff7f7f',
-												        },
-											        }}
-											>추가</Button>
-											{error && (
-													<Typography
-															sx={{color: 'red', marginTop: 1}}
-															variant="body2"
-													>
-														{error}
-													</Typography>
-											)}
-										</Box>
-								)}
-							</Box>
+                    <DrinkingAmountInput
+                        sojuBottleCount={sojuBottleCount}
+                        sojuCupCount={sojuCupCount}
+                        setSojuBottleCount={setSojuBottleCount}
+                        setSojuCupCount={setSojuCupCount}
+                    />
 
 
-						</Box>
-					</Box>
+                    <IntroductionInput
+                        introduction={introduction}
+                        setIntroduction={setIntroduction}
+                    />
 
-				</Box>
-
-				<Button
-						fullWidth
-						sx={{
-							marginTop: 2,
-							backgroundColor: '#ff9b9b',
-							color: 'white',
-							fontWeight: 'bold',
-							borderRadius: '5px',
-							padding: '15px',
-							'&:hover': {
-								backgroundColor: '#ff7f7f',
-							},
-						}}
-						onClick={saveProfile}
-				>프로필 저장하기</Button>
-			</Container>
-	);
+                    <TagsInput
+                        tagOptions={tagOptions}
+                        selectedTags={selectedTags}
+                        handleTagClick={handleTagClick}
+                        isVisible={isVisible}
+                        toggleVisibility={handleAddButton}
+                        addTagOptions={addTagOptions}
+                        addTag={addTag}
+                        setAddTag={setAddTag}
+                        error={error}
+                    />
+                </Box>
+            </Box>
+            <Button
+                fullWidth
+                sx={{
+                    marginTop: 2,
+                    backgroundColor: '#ff9b9b',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    borderRadius: '5px',
+                    padding: '15px',
+                    '&:hover': {
+                        backgroundColor: '#ff7f7f',
+                    },
+                }}
+                onClick={handleSaveButtonClick}
+            >
+                프로필 저장하기
+            </Button>
+        </Container>
+    );
 };
 
 export default UpdateMyPage;

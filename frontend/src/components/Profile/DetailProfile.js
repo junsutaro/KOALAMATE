@@ -3,7 +3,7 @@ import Soju from '../../assets/alcohol.png';
 import SojuCup from '../../assets/cup.png';
 import React, {useEffect, useState} from 'react';
 
-const ProfileData = ({intro, limit, mannersScore, tags}) => {
+const DetailProfile = ({intro, alcoholLimitBottle, alcoholLimitGlass, mannersScore, tags}) => {
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
 	useEffect(() => {
@@ -29,43 +29,44 @@ const ProfileData = ({intro, limit, mannersScore, tags}) => {
 				}}
 		>
 			<Box>
-
-
 				<Typography sx={{fontWeight: 'bold', marginBottom: 2}} variant="h5">
 					주량
 				</Typography>
 
-				{Array.from({length: Math.min(limit, 10)}, (_, index) => (
+				{Array.from({length: Math.min(alcoholLimitBottle, 10)}, (_, index) => (
 						<img
 								key={index}
 								src={Soju}
 								alt={`Soju Image ${index + 1}`}
 								width={windowWidth > 600 ? 25 : 20}
 						/>
-
 			))}
 
-				{Array.from({length: Math.min(limit, 10)}, (_, index) => (
+				{Array.from({length: Math.min(alcoholLimitGlass, 10)}, (_, index) => (
 						<img
 								key={index}
 								src={SojuCup}
 								alt={`Soju Image ${index + 1}`}
 								width={windowWidth > 600 ? 25 : 20}
 						/>
-
 				))}
 
-
 		</Box>
-		<Box>
-			<p>{intro}</p>
-			<Typography sx={{fontWeight: 'bold', color: '#00a152'}}
-			            variant="h4">
-				소주 {limit}병
-			</Typography>
+			<Box  sx={{display: 'flex', flexDirection:'column', justifyContent:'center', alignItems:'right', marginTop:8}}>
+				<Box sx={{display: 'flex', alignItems:'center', gap:4}}>
+				<Typography sx={{fontWeight: 'bold', color: '#00a152'}}
+							variant="h5">
+					소주
+				</Typography>
+				<Typography sx={{fontWeight: 'bold', color: '#00a152'}}
+							variant="h4">
+					{alcoholLimitBottle}병 {alcoholLimitGlass}잔
+				</Typography>
+				</Box>
+				<p>{intro}</p>
+			</Box>
 		</Box>
-	</Box>
-	<Box sx={{marginTop: 5}}>
+			<Box sx={{marginTop: 5}}>
 		<Typography sx={{fontWeight: 'bold'}} variant="h5">
 			선호하는 모임
 		</Typography>
@@ -95,4 +96,4 @@ const ProfileData = ({intro, limit, mannersScore, tags}) => {
 )
 
 }
-export default ProfileData;
+export default DetailProfile;
