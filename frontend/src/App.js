@@ -12,7 +12,7 @@ import WriteBoard from './pages/WriteBoard';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 import CommentList from './components/Comment/CommentList';
-import Chatting from './components/Chatting'
+import Chatting from './pages/Chatting'
 import MyPage from './pages/MyPage';
 import WriteMyPage from './pages/UpdateMyPage';
 import FollowerList from './pages/FollowerList';

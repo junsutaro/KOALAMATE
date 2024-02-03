@@ -20,6 +20,6 @@ public interface ChatRepository extends JpaRepository<ChatModel, Long> {
     @Modifying
     @Query("UPDATE ChatModel c " +
             "SET c.lastId = (SELECT MAX(m.id) FROM MessageModel m WHERE m.chatroom.id = c.chatroom.id) " +
-            "WHERE c.user.id = :userId")
-    void updateLastIdForChatByUserId(@Param("userId") Long userId);
+            "WHERE c.user.nickname = :userNickname")
+    void updateLastIdForChatByUserNickname(@Param("userNickname") String userNickname);
 }
