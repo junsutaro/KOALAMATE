@@ -44,7 +44,7 @@ const Home = () => {
 				       }}
 				>
 					<div style={style}>
-						<GLBLoderComponent/>
+						{open && <GLBLoderComponent/>}
 						<Button onClick={handleClose} variant={'contained'}>qwer</Button>
 					</div>
 				</Modal>
