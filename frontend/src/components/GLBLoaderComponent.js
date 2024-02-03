@@ -1,22 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import {AnimationMixer, LoopRepeat, LoopOnce } from 'three';
+import LinearProgress from '@mui/material/LinearProgress';
 
 import refrigerator from 'assets/refrigerator.glb';
+import {Box, Typography} from '@mui/material';
+
+function LinearProgressWithLabel(props) {
+	return (
+			<Box sx={{ display: 'flex', alignItems: 'center' }}>
+				<Box sx={{ width: '300px', mr: 1 }}>
+					<LinearProgress variant="determinate" {...props} />
+				</Box>
+				<Box sx={{ minWidth: 35 }}>
+					<Typography variant="body2" color="white">{`${Math.round(
+							props.value,
+					)}%`}</Typography>
+				</Box>
+			</Box>
+	);
+}
 
 function GLBLoaderComponent() {
-	const mountRef = React.useRef(null);
-	const gltfRef = React.useRef(null);
-	const mixerRef = React.useRef(null);
-	const  actionRef = React.useRef(null);
-	const cameraRef = React.useRef(null);
+	const mountRef = useRef(null);
+	const gltfRef = useRef(null);
+	const mixerRef = useRef(null);
+	const actionRef = useRef(null);
+	const cameraRef = useRef(null);
+
+	const [isLoading, setIsLoading] = useState(true);
+	const [loadingProgress, setLoadingProgress] = useState(0);
 
 	const clock = new THREE.Clock();
 	const raycaster = new THREE.Raycaster();
 	const mouse = new THREE.Vector2();
 
 	useEffect(() => {
+		if (!mountRef.current) return;
 		const currentMount = mountRef.current;
 		const scene = new THREE.Scene();
 		const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -56,7 +77,21 @@ function GLBLoaderComponent() {
 					});
 				});
 			}
-		});
+
+			console.log("asdfasdfasdfasdf");
+
+			setIsLoading(false);
+		},
+				function (xhr) {
+			//if (xhr.total === 0) return;
+			const progress = (xhr.loaded / 18143484/*xhr.total*/) * 100;
+				setLoadingProgress(progress);
+				console.log(`${progress}% loaded`)
+			},
+			function (error) {
+				console.error('Error loading gltf', error);
+			}
+		);
 
 		const onMouseClick = (event) => {
 
@@ -141,9 +176,26 @@ function GLBLoaderComponent() {
 		};
 	}, []);
 
+	// if (isLoading) return <div>Loading...</div>;
 
-
-	return <div ref={mountRef}></div>
+	return (
+			<div ref={mountRef}>
+				{isLoading && (
+						<div style={{
+							position: 'fixed', // 화면에 고정
+							top: '50%', // 상단에서 50% 위치
+							left: '50%', // 왼쪽에서 50% 위치
+							transform: 'translate(-50%, -50%)', // 정중앙 정렬
+							width: 'fit-content', // 내용에 맞게 폭 조정
+						}}>
+							<LinearProgressWithLabel
+									value={loadingProgress}
+									// 필요한 경우 추가 스타일링
+							/>
+						</div>
+				)}
+			</div>
+	);
 }
 
 export default GLBLoaderComponent;
