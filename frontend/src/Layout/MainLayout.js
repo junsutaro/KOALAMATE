@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
-import { Drawer, Button, List, ListItem, ListItemText, Box } from '@mui/material';
+import {
+	Drawer,
+	Button,
+	List,
+	ListItem,
+	ListItemText,
+	Box,
+	IconButton,
+	Divider,
+} from '@mui/material';
+import ChatIcon from '@mui/icons-material/Chat';
+import CloseIcon from '@mui/icons-material/Close';
+import Typography from '@mui/material/Typography';
 import { useSelector } from 'react-redux';
 import Nav from '../components/Nav';
 import { Route, Routes } from 'react-router-dom';
@@ -11,54 +23,42 @@ import WriteBoard from '../pages/WriteBoard';
 import CommentList from '../components/CommentList';
 import Footer from '../components/Footer';
 import Chattings from '../components/Chattings';
-
-const SlideInMenu = ({ isOpen, toggleDrawer }) => { // isOpen과 toggleDrawer를 props로 받음
-	const list = () => (
-			<Box
-					sx={{ width: 350 }}
-					role="presentation"
-			>
-				<List>
-					<Chattings />
-					{['Item 1', 'Item 2', 'Item 3', 'Item 4'].map((text) => (
-							<ListItem button key={text}>
-								<ListItemText primary={text} />
-							</ListItem>
-					))}
-				</List>
-			</Box>
-	);
-
-	return (
-			<>
-				<Button onClick={isOpen ? toggleDrawer(false) : toggleDrawer(true)}>Open Slide-In</Button>
-				<Drawer anchor="right" open={isOpen} onClose={toggleDrawer(false)} variant="persistent">
-					{list()}
-				</Drawer>
-			</>
-	);
-};
+import Toolbar from '@mui/material/Toolbar';
 
 const MainLayout = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const { isLoggedIn } = useSelector(state => state.auth);
-	console.log("isLoggedIn: ", isLoggedIn);
 
-	const toggleDrawer = (open) => (event) => {
-		if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-			return;
-		}
+	const toggleDrawer = (open) => {
+		console.log("toggleDrawer: ", open);
 		setIsOpen(open);
 	};
 
 	return (
-			<Box
-					sx={{
-						transition: 'margin 0.3s ease-out',
-						marginRight: isLoggedIn && isOpen ? '350px' : 0, // Drawer가 열리면 marginRight을 적용하여 전체 화면을 밀어냄
-					}}
-			>
-				{isLoggedIn && <SlideInMenu isOpen={isOpen} toggleDrawer={toggleDrawer} />}
+			<Box sx={{ transition: 'margin 0.3s ease-out', marginRight: isLoggedIn && isOpen ? '350px' : 0 }}>
+				{isLoggedIn && !isOpen && (
+						<IconButton onClick={() => toggleDrawer(true)} sx={{ position: 'fixed', right: 16, bottom: 16, zIndex: 1300 }}>
+							<ChatIcon />
+						</IconButton>
+				)}
+
+				{isLoggedIn && (
+						<Drawer variant={'persistent'} anchor="right" open={isOpen} onClose={() => toggleDrawer(false)} >
+							<Toolbar>
+								<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+									Chattings
+								</Typography>
+								<IconButton onClick={() => toggleDrawer(false)} >
+									<CloseIcon />
+								</IconButton>
+							</Toolbar>
+							<Divider />
+							<Box sx={{ width: 350 }} role="presentation">
+								<Chattings />
+							</Box>
+						</Drawer>
+				)}
+
 				<Nav />
 				<Routes>
 					<Route path="/" element={<Home />} />

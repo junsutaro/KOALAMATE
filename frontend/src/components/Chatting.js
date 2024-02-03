@@ -90,7 +90,7 @@ const Chatting = ({ roomNumber }) => {
 						<CustomChatField />
 					</Grid>
 					<Grid item xs={2}>
-						<IconButton variant="contained" fullWidth onClick={handleSendMessage}>
+						<IconButton variant="contained" onClick={handleSendMessage}>
 							<SendIcon />
 						</IconButton>
 					</Grid>
