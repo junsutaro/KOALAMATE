@@ -11,15 +11,13 @@ import com.ssafy.koala.model.CocktailModel;
 import com.ssafy.koala.model.DrinkModel;
 import com.ssafy.koala.model.LikeModel;
 import com.ssafy.koala.model.user.UserModel;
-import com.ssafy.koala.repository.BoardRepository;
-import com.ssafy.koala.repository.CocktailRepository;
-import com.ssafy.koala.repository.DrinkRepository;
-import com.ssafy.koala.repository.LikeRepository;
+import com.ssafy.koala.repository.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,14 +31,12 @@ public class BoardService {
 	private final DrinkRepository drinkRepository;
 	private final CocktailRepository cocktailRepository;
 	private final LikeRepository likeRepository;
-	private final AuthService authService;
 	public BoardService(BoardRepository boardRepository, DrinkRepository drinkRepository, CocktailRepository cocktailRepository,
-                        LikeRepository likeRepository, AuthService authService) {
+                        LikeRepository likeRepository) {
 		this.boardRepository = boardRepository;
 		this.drinkRepository = drinkRepository;
 		this.cocktailRepository = cocktailRepository;
 		this.likeRepository = likeRepository;
-        this.authService = authService;
     }
 
 	public List<BoardDto> getAllEntities() {
@@ -207,5 +203,46 @@ public class BoardService {
 		BoardModel board = new BoardModel();
 		BeanUtils.copyProperties(boardDto, board);
 		return board;
+	}
+
+	public List<ViewBoardResponseDto> searchAndPageBoards(String keyword, int page, int size) {
+		Sort sort = Sort.by(Sort.Direction.DESC, "id");
+		PageRequest pageable = PageRequest.of(page, size, sort);
+
+		// 검색 및 페이징을 위한 Specification을 사용
+		Specification<BoardModel> spec = BoardSpecifications.search(keyword);
+		Page<BoardModel> pageResult = boardRepository.findAll(spec, pageable);
+
+		return pageResult.getContent().stream()
+				.map(board -> {
+					ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
+					BeanUtils.copyProperties(board, boardDto);
+
+					List<CocktailWithDrinkDto> cocktails = board.getCocktails().stream()
+							.map(temp -> {
+								CocktailWithDrinkDto insert = new CocktailWithDrinkDto();
+								BeanUtils.copyProperties(temp, insert);
+
+								DrinkWithoutCocktailDto drinkDto = new DrinkWithoutCocktailDto();
+								BeanUtils.copyProperties(temp.getDrink(), drinkDto);
+
+								insert.setDrink(drinkDto);
+								return insert;
+							})
+							.collect(Collectors.toList());
+
+					List<CommentDto> comments = board.getComments().stream()
+							.map(temp -> {
+								CommentDto insert = new CommentDto();
+								BeanUtils.copyProperties(temp, insert);
+								return insert;
+							})
+							.collect(Collectors.toList());
+
+					boardDto.setCocktails(cocktails);
+					boardDto.setComments(comments);
+					return boardDto;
+				})
+				.collect(Collectors.toList());
 	}
 }

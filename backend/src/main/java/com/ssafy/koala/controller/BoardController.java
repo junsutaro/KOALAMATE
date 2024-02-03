@@ -128,4 +128,10 @@ public class BoardController {
 			return new ResponseEntity<>("Error processing like with ID " + board_id, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	@GetMapping("/search")
+	public ResponseEntity<?> searchBoard(@RequestParam int page, @RequestParam int size, @RequestParam String keyword) {
+
+		return new ResponseEntity<>(boardService.searchAndPageBoards(keyword, page-1, size),HttpStatus.OK);
+	}
 }
