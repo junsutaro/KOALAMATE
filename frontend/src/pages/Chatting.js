@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
-const SERVER_URL = `${process.env.REACT_APP_API_URL}/chat`; // Spring Boot 서버 SockJS 엔드포인트
+const SERVER_URL = `http://localhost:8086/chat`; // Spring Boot 서버 SockJS 엔드포인트
 
 const Chatting = () => {
 	const [client, setClient] = useState(null);
@@ -11,19 +11,23 @@ const Chatting = () => {
 	const [chat1, setChat1] = useState([]);
 	const [chat2, setChat2] = useState([]);
 
+
 	useEffect(() => {
 		// STOMP 클라이언트 생성 및 구성
 		const stompClient = new Client({
 			webSocketFactory: () => new SockJS(SERVER_URL), // SockJS를 사용한 연결
 			onConnect: () => {
 				console.log('Connected');
+
+				const userHeaders = { "user-id": "123" };
+
 				// 메시지를 받을 때 호출될 콜백 함수를 구독합니다.
 				stompClient.subscribe('/topic/messages/1', (message) => {
 					setChat1((prevChat) => [...prevChat, JSON.parse(message.body).content]);
-				});
+				},userHeaders);
 				stompClient.subscribe('/topic/messages/2', (message) => {
 					setChat2((prevChat) => [...prevChat, JSON.parse(message.body).content]);
-				});
+				},userHeaders);
 			},
 			onStompError: (frame) => {
 				console.error('Broker reported error: ' + frame.headers['message']);
@@ -44,7 +48,7 @@ const Chatting = () => {
 		if (client) {
 			// 서버로 메시지를 전송합니다.
 			client.publish({
-				destination: '/app/message/1',
+				destination: '/app/messages/1',
 				body: JSON.stringify({ content: message1 }),
 			});
 			setMessage1('');
@@ -55,7 +59,7 @@ const Chatting = () => {
 		if (client) {
 			// 서버로 메시지를 전송합니다.
 			client.publish({
-				destination: '/app/message/2',
+				destination: '/app/messages/2',
 				body: JSON.stringify({ content: message2 }),
 			});
 			setMessage2('');

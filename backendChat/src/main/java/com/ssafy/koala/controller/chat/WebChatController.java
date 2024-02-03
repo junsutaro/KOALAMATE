@@ -1,9 +1,14 @@
 package com.ssafy.koala.controller.chat;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.koala.dto.MessageDto;
+import com.ssafy.koala.dto.SocketMessageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,15 +16,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class WebChatController {
     @Autowired
     private static SimpMessagingTemplate messagingTemplate;
     private final Socket socket;
-    private final PrintWriter writer;
+    public static PrintWriter writer;
+    private ObjectMapper objectMapper;
     public WebChatController(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
+        this.objectMapper = new ObjectMapper();
 
 	    try {
 		    socket = new Socket("localhost", 7777);
@@ -28,7 +39,6 @@ public class WebChatController {
             throw new RuntimeException(e);
         }
     }
-
 
     @MessageMapping("/notification/{email}")
     @SendTo("/topic/notification/{email}")
@@ -39,10 +49,21 @@ public class WebChatController {
 
     @MessageMapping("/messages/{roomId}")
     @SendTo("/topic/messages/{roomId}")
-    public String sendMessage(@DestinationVariable String roomId, String message) {
-        System.out.println(roomId + " " + message);
+    public String sendMessage(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomId, String message) throws JsonProcessingException {
+        String sessionId = headerAccessor.getSessionId();
 
-        writer.println(message);
+        MessageDto messageDto = objectMapper.readValue(message, MessageDto.class);
+
+        System.out.println(roomId + " " + message + " " + sessionId);
+
+        SocketMessageDto sockMessageDto = new SocketMessageDto();
+        sockMessageDto.setSessionId(sessionId);
+        sockMessageDto.setContent(messageDto.getContent());
+        sockMessageDto.setRoomId(Long.parseLong(roomId));
+        sockMessageDto.setNickname("ssafy");
+
+        String jsonString = objectMapper.writeValueAsString(sockMessageDto);
+        writer.println(jsonString);
 
 
 //        ChatroomModel chatroom = chatroomService.getChatroomById(Long.parseLong(roomId));
