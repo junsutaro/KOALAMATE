@@ -29,7 +29,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
+//@Controller
 public class WebChatController {
     private final Map<String, String> sessionUserMap = new HashMap<>();
     private final MessageService messageService;

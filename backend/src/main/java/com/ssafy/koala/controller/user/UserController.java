@@ -162,4 +162,11 @@ public class UserController {
 			return new ResponseEntity<>("Error follow request with ID " + userId, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	@PostMapping("/myId")
+	public ResponseEntity<?> getMyId(HttpServletRequest request) {
+		String accessToken = authService.getAccessToken(request);
+		UserDto user = authService.extractUserFromToken(accessToken);
+		return new ResponseEntity<>(user.getId(), HttpStatus.OK);
+	}
 }

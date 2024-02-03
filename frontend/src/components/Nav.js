@@ -58,6 +58,17 @@ const Nav = () => {
 		}
 	};
 
+const handleMyPage = async () => {
+	try {
+		const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/myId`,
+				{}, {withCredentials: true});
+		console.log(res);
+
+	} catch (error) {
+		console.log(error);
+	}
+}
+
 	const NavButton = styled(Button)({
 		margin: '0 20px',
 		fontSize: '1rem',
@@ -71,7 +82,7 @@ const Nav = () => {
 	});
 
 	const settings = [
-		{name: '마이페이지', path: '/mypage'},
+		{name: '마이페이지', action: handleMyPage},
 		{name: '설정', path: '/settings'},
 		{name: '로그아웃', action: handleLogout},
 	];

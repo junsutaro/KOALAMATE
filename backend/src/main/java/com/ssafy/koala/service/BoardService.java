@@ -214,7 +214,9 @@ public class BoardService {
 
 	public BoardModel convertToBoard(Object boardDto) {
 		BoardModel board = new BoardModel();
-		BeanUtils.copyProperties(boardDto, board);
+		if (boardDto != null) {
+			BeanUtils.copyProperties(boardDto, board);
+		}
 		return board;
 	}
 
