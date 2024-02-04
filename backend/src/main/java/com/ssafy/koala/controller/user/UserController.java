@@ -1,6 +1,7 @@
 package com.ssafy.koala.controller.user;
 
 import com.ssafy.koala.dto.user.*;
+import com.ssafy.koala.model.user.UserModel;
 import com.ssafy.koala.service.AuthService;
 import com.ssafy.koala.service.user.FollowService;
 import com.ssafy.koala.service.user.ProfileService;
@@ -112,7 +113,7 @@ public class UserController {
 	}
 
 	// 유저 팔로우 목록
-	@GetMapping("{user_id}/followee")
+	@GetMapping("/{user_id}/followee")
 	public ResponseEntity<?> getFolloweeList(@PathVariable long user_id) {
 		List<UserListDto> followeeList = followService.findFolloweeById(user_id);
 		long cnt = followService.countByFollowee_Id(user_id);
@@ -124,7 +125,7 @@ public class UserController {
 	}
 
 	// 유저 팔로워 목록
-	@GetMapping("{user_id}/follower")
+	@GetMapping("/{user_id}/follower")
 	public ResponseEntity<?> getFollowerList(@PathVariable long user_id) {
 		List<UserListDto> followerList = followService.findFollowerById(user_id);
 		long cnt = followService.countByFollower_Id(user_id);
