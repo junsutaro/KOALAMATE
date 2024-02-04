@@ -17,11 +17,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // 클라이언트가 WebSocket 서버에 연결할 엔드포인트를 "/chat"로 설정합니다.
         registry.addEndpoint("/chat")
-                .setAllowedOrigins("http://localhost:3000")
+                .setAllowedOrigins("http://i10d212.p.ssafy.io", "http://localhost:3000")
                 .withSockJS();
 
-        registry.addEndpoint("/kurento")
-                .setAllowedOrigins("http://i10d212.p.ssafy.io")
+        registry.addEndpoint("/voice")
+                .setAllowedOrigins("http://i10d212.p.ssafy.io", "http://localhost:3000")
                 .withSockJS();
     }
 

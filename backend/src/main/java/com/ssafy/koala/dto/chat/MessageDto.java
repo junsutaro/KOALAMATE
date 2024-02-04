@@ -12,7 +12,6 @@ public class MessageDto {
     private String nickname;
 
     private String content;
-    private int category;
     private LocalDateTime date = LocalDateTime.now();
 
 }
