@@ -1,5 +1,6 @@
-package com.ssafy.koala.controller.user;
+package com.ssafy.koala.controller;
 
+import com.ssafy.koala.dto.LocationDto;
 import com.ssafy.koala.dto.user.UserDto;
 import com.ssafy.koala.service.AuthService;
 import com.ssafy.koala.service.user.UserService;
@@ -21,15 +22,12 @@ public class FindMateController {
 
     // 친구 찾기 페이지를 접속할 때 자신의 위치 정보 갱신
     @PutMapping("/save-location")
-    public ResponseEntity<?> saveLocation(@RequestBody double latitude, @RequestBody double longitude, HttpServletRequest request) {
-        System.out.println("들어오니??");
+    public ResponseEntity<?> saveLocation(@RequestBody LocationDto location, HttpServletRequest request) {
         try {
             String accessToken = authService.getAccessToken(request);
-            System.out.println("debug: " + accessToken);
             UserDto dto = authService.extractUserFromToken(accessToken);
-            System.out.println("debug: " + dto.getId());
 
-            userService.saveLocation(dto.getId(), latitude, longitude);
+            userService.saveLocation(dto.getId(), location.getLatitude(), location.getLongitude());
             return new ResponseEntity<>("save location success.", HttpStatus.OK);
         } catch(EmptyResultDataAccessException e) {
             return new ResponseEntity<>("user not found.", HttpStatus.NOT_FOUND);
