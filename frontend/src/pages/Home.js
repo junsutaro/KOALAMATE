@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Modal} from '@mui/material';
+import {Button, Container, Modal} from '@mui/material';
 import {NavLink} from 'react-router-dom';
 
 import * as THREE from 'three';
@@ -27,7 +27,7 @@ const Home = () => {
 	};
 
 	return (
-			<div>
+			<Container>
 				<h1>Home</h1>
 				<Button color="inherit" component={NavLink} to="/writeBoard">
 					write
@@ -44,12 +44,12 @@ const Home = () => {
 				       }}
 				>
 					<div style={style}>
-						<GLBLoderComponent/>
+						{open && <GLBLoderComponent/>}
 						<Button onClick={handleClose} variant={'contained'}>qwer</Button>
 					</div>
 				</Modal>
 				<p>Welcome to the home page of our website!</p>
-			</div>
+			</Container>
 	);
 };
 

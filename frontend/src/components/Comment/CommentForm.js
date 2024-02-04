@@ -45,7 +45,7 @@ const CommentForm = ({boardId, updateComments}) => {
 						nickname: commentData.nickname,
 						content: commentData.content,
 						date: new Date()
-					});
+					}, {withCredentials: true});
 
 			console.log('댓글 추가 완료 : ', response.data);
 
