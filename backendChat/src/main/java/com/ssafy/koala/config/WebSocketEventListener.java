@@ -6,9 +6,11 @@ import com.ssafy.koala.controller.chat.WebChatController;
 import com.ssafy.koala.dto.SocketMessageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
+import org.springframework.http.*;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
@@ -39,7 +41,18 @@ public class WebSocketEventListener {
         sockMessageDto.setNickname("");
 
         String jsonString = objectMapper.writeValueAsString(sockMessageDto);
-        WebChatController.writer.println(jsonString);
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<SocketMessageDto> requestEntity = new HttpEntity<>(sockMessageDto, headers);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                "http://localhost:8085/socket/message",
+                HttpMethod.POST,
+                requestEntity,
+                String.class
+        );
     }
 
     @EventListener
@@ -56,6 +69,17 @@ public class WebSocketEventListener {
         sockMessageDto.setNickname("");
 
         String jsonString = objectMapper.writeValueAsString(sockMessageDto);
-        WebChatController.writer.println(jsonString);
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<SocketMessageDto> requestEntity = new HttpEntity<>(sockMessageDto, headers);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                "http://localhost:8085/socket/message",
+                HttpMethod.POST,
+                requestEntity,
+                String.class
+        );
     }
 }
