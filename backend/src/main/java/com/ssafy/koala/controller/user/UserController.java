@@ -73,28 +73,30 @@ public class UserController {
 		}
 	}
 
-	@PostMapping("/checkEmail")
-	public ResponseEntity<String> checkEmailDuplicate(@RequestBody String email) {
+	@PostMapping("/check-email")
+	public ResponseEntity<?> checkEmailDuplicate(@RequestBody UserDto user) {
 		try {
+			String email = user.getEmail();
 			Optional<UserDto> userOpt = userService.findByEmail(email);
 			if (userOpt.isEmpty()) {
-				return new ResponseEntity<>("사용가능한 이메일입니다.", HttpStatus.OK);
+				return new ResponseEntity<>(Map.of("available", true), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>("사용불가능한 이메일입니다.", HttpStatus.OK);
+				return new ResponseEntity<>(Map.of("available", false), HttpStatus.OK);
 			}
 		} catch(Exception e) {
 			return new ResponseEntity<>("중복확인에 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	@PostMapping("/checkNickname")
-	public  ResponseEntity<String> checkNicknameDuplicate(@RequestBody String nickname) {
+	@PostMapping("/check-nickname")
+	public  ResponseEntity<?> checkNicknameDuplicate(@RequestBody UserDto user) {
 		try {
+			String nickname = user.getNickname();
 			Optional<UserDto> userOpt = userService.findByNickname(nickname);
 			if (userOpt.isEmpty()) {
-				return new ResponseEntity<>("사용가능한 닉네임입니다.", HttpStatus.OK);
+				return new ResponseEntity<>(Map.of("available", true), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>("사용불가능한 닉네임입니다.", HttpStatus.OK);
+				return new ResponseEntity<>(Map.of("available", false), HttpStatus.OK);
 			}
 		} catch(Exception e) {
 			return new ResponseEntity<>("중복확인에 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
