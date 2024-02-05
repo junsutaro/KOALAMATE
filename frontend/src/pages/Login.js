@@ -25,6 +25,21 @@ const Login = () => {
 		}
 	};
 
+	const getRoomList = async () => {
+		try {
+			const authHeader = localStorage.getItem('authHeader');
+			console.log('Auth Header: ', authHeader);
+			return await axios.post(`${process.env.REACT_APP_API_URL}/chatroom/roomlist`, {},{
+				headers: {
+					'Authorization': authHeader,
+				},
+				withCredentials: true});
+		} catch (error) {
+			console.log('Get Room List Error: ', error);
+			throw error;
+		}
+	}
+
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		console.log('Login: ', email, password);
@@ -35,10 +50,16 @@ const Login = () => {
 			console.log(response);
 			const authHeader = response.headers['authorization'];
 			if (!authHeader) throw new Error('No Authorization Header');
-			console.log(authHeader);
 			localStorage.setItem('authHeader', authHeader);
+			const roomList = getRoomList()
+				.then((response) => {
+					console.log("asdfasdf: ",response.data);
+					sessionStorage.setItem('roomList', JSON.stringify(response.data));
+				}).catch((error) => {
+					console.log('Get Room List Failed: ', error);
+				});
 			dispatch(setLoginStatus({isLoggedIn: true, user: response.data}));
-			connect('chat');
+			connect(`${process.env.REACT_APP_CHAT_URL}/chat`);
 			console.log(response.data);
 			navigate('/');
 		}).catch((error) => {

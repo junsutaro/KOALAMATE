@@ -41,6 +41,7 @@ export const WebSocketProvider = ({ children }) => {
 	const subscribe = (destination, callback) => {
 		if (stompClient && stompClient.connected) {
 			console.log("qwewaerawerwegadgaestetawetaewraewr")
+			console.log(destination);
 			stompClient.subscribe(destination, callback);
 		}
 	};
@@ -48,7 +49,7 @@ export const WebSocketProvider = ({ children }) => {
 	const sendMessage = (destination, body) => {
 		if (stompClient && stompClient.connected) {
 			stompClient.publish({
-				destination,
+				destination: destination,
 				body: body,
 			});
 		}

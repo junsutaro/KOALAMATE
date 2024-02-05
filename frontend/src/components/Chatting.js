@@ -27,6 +27,7 @@ const Chatting = ({ roomNumber }) => {
 	useEffect(() => {
 		// 메시지 수신 구독
 		const subscription = subscribe(messageDestination, (message) => {
+			console.log(messageDestination);
 			const receivedMessage = message.body.content;
 			console.log(receivedMessage)
 			setMessages((prevMessages) => [...prevMessages, receivedMessage]);
@@ -39,13 +40,17 @@ const Chatting = ({ roomNumber }) => {
 	}, [subscribe]);
 
 	const handleSendMessage = () => {
-		if (inputMessage.trim() !== '') {
-			const messageToSend = { content: inputMessage, nickName: user.nickName };
-			console.log(user.nickName);
+		console.log(inputMessage);
+		// (inputMessage.trim() !== '') {
+		// const messageToSend = { message: "inputMessagasdfasdfe"};
+		// 	const messageToSend = { content: inputMessage, nickname: user.nickName };
+		// const messageToSend = "asdfasdf";
+		const messageToSend = JSON.stringify({ content: "inputMessage", nickname: user.nickname });
+			console.log(user.nickname);
 			sendMessage(sendDestination, messageToSend);
 			setInputMessage('');
 			console.log("Message sent");
-		}
+		//}
 	};
 
 	return (

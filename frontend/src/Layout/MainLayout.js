@@ -61,7 +61,7 @@ const MainLayout = () => {
 							</Toolbar>
 							<Divider />
 							<Box sx={{ width: 350 }} role="presentation">
-								<Chattings />
+								{isOpen && (<Chattings />)}
 							</Box>
 						</Drawer>
 				)}
