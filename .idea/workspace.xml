@@ -6,29 +6,20 @@
   <component name="ChangeListManager">
     <list default="true" id="8c24e642-801b-4b32-b49e-7d5789639fba" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/d5348aa2-3e4e-4c60-9f3a-06b5f0f38632.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d5348aa2-3e4e-4c60-9f3a-06b5f0f38632.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/controller/DrinkController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/controller/DrinkController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/controller/user/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/controller/user/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/dto/user/FollowResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/dto/user/FollowResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/dto/user/UserListDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/dto/user/UserListDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/service/user/FollowService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/service/user/FollowService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/service/user/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/service/user/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Follow/FollowItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Follow/FollowItem.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Nav.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Nav.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Profile/DetailProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Profile/DetailProfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Profile/MyPageButton.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Profile/MyPageButton.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Profile/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Profile/Profile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/RecipeBoard/RecipeItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/RecipeBoard/RecipeItem.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.env" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Layout/MainLayout.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Layout/MainLayout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/AddIngredient.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/AddIngredient.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Comment/CommentList.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Comment/CommentList.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/RecipeBoard/RecipeList.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/RecipeBoard/RecipeList.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/FolloweeList.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/FolloweeList.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/FollowerList.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/FollowerList.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/MyPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/MyPage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/RecipeDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/RecipeDetail.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/UpdateMyPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/UpdateMyPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/WriteBoard.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/WriteBoard.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,6 +89,9 @@
 }</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/frontend/package.json" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -294,12 +288,31 @@
       <workItem from="1706972312850" duration="17000" />
       <workItem from="1706972339977" duration="3768000" />
       <workItem from="1707015941343" duration="21134000" />
-      <workItem from="1707091328356" duration="3150000" />
+      <workItem from="1707091328356" duration="4283000" />
+      <workItem from="1707095768256" duration="1590000" />
+      <workItem from="1707097458505" duration="640000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-core" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework.security:spring-security-core" />
+    <option featureType="dependencySupport" implementationName="javascript:npm:react" />
+    <option featureType="dependencySupport" implementationName="javascript:npm:styled-components" />
+    <option featureType="dependencySupport" implementationName="java:jakarta.validation:jakarta.validation-api" />
+    <option featureType="dependencySupport" implementationName="executable:kubectl" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework.data:spring-data-commons" />
+    <option featureType="dependencySupport" implementationName="java:org.hibernate.validator:hibernate-validator" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-webmvc" />
+    <option featureType="dependencySupport" implementationName="java:org.projectlombok:lombok" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-websocket" />
+    <option featureType="dependencySupport" implementationName="executable:docker" />
+    <option featureType="dependencySupport" implementationName="java:jakarta.persistence:jakarta.persistence-api" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-messaging" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

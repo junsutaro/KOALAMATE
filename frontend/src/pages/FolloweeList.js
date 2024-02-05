@@ -18,7 +18,7 @@ const FolloweeList = () => {
 
 	const getFolloweeData = async () => {
 		try {
-			const response = await axios.get(`http://localhost:8080/user/${userId}/followee`);
+			const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/${userId}/followee`);
 			const data = response.data;
 			setFolloweeData({
 				cnt: data.followCnt,

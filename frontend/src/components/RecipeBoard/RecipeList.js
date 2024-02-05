@@ -10,7 +10,7 @@ function RecipeList() {
 
     const getCardData = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/board/list?page=${pageNum}&size=${sizeNum}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/board/list?page=${pageNum}&size=${sizeNum}`);
             const data = response.data;             // data는 레시피 목록을 포함하는 배열
             console.log(data);
             // 배열 데이터를 받아온 그대로 상태에 설정

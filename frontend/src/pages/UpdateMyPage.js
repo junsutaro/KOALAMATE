@@ -56,7 +56,7 @@ const UpdateMyPage = () => {
     useEffect(() => {
         const getProfileData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/profile/${userId}`);
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/profile/${userId}`);
                 const data = response.data;
 
                 setProfileData({
@@ -160,7 +160,7 @@ const UpdateMyPage = () => {
             formData.append("file", selectedImageFile);
 
             // Axios를 사용하여 이미지를 업로드하는 요청 보냄
-            const response = await axios.put(`http://localhost:8080/profile/${userId}/uploadProfileImage`, formData);
+            const response = await axios.put(`${process.env.REACT_APP_API_URL}/profile/${userId}/uploadProfileImage`, formData);
 
             // 응답에 따른 처리 (여기서는 콘솔에 출력)
             console.log(response.data);
@@ -174,7 +174,7 @@ const UpdateMyPage = () => {
         try {
             // 서버에 요청 보내기
             const response = await axios.put(
-                `http://localhost:8080/profile/${userId}/modify`,
+                `${process.env.REACT_APP_API_URL}/profile/${userId}/modify`,
                 {
                     nickname: profileData.nickname,
                     birthRange: profileData.birthRange,

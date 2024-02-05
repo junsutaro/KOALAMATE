@@ -1,6 +1,7 @@
 package com.ssafy.koala.controller.user;
 
 import com.ssafy.koala.dto.user.*;
+import com.ssafy.koala.model.user.UserModel;
 import com.ssafy.koala.service.AuthService;
 import com.ssafy.koala.service.user.FollowService;
 import com.ssafy.koala.service.user.ProfileService;

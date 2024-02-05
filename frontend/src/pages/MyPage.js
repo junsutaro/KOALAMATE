@@ -43,7 +43,7 @@ const MyPage = () => {
     const getProfileData = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:8080/profile/${userId}`);
+                `${process.env.REACT_APP_API_URL}/profile/${userId}`);
             const data = response.data;
 
             // 이미지 URL을 가져와서 상태 업데이트
@@ -69,7 +69,7 @@ const MyPage = () => {
     const getFollowerData = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:8080/user/${userId}/follower`);
+                `${process.env.REACT_APP_API_URL}/user/${userId}/follower`);
             const data = response.data;
             setFollowerData({
                 cnt: data.followCnt,
@@ -84,7 +84,7 @@ const MyPage = () => {
     const getFolloweeData = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:8080/user/${userId}/followee`);
+                `${process.env.REACT_APP_API_URL}/user/${userId}/followee`);
             const data = response.data;
             setFolloweeData({
                 cnt: data.followCnt,

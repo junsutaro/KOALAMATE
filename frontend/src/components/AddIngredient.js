@@ -15,7 +15,7 @@ const AddIngredient = () => {
 
     const fetchIngredients = async (search) => {
         try {
-            const response = await axios.get(`http://localhost:8080/drink/search?name=${search}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/drink/search?name=${search}`);
             setSearchResults(response.data);
         } catch (error) {
             console.error('Error fetching ingredients:', error);
