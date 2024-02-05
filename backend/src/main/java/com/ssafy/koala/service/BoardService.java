@@ -99,18 +99,6 @@ public class BoardService {
 			BeanUtils.copyProperties(board, boardDto);
 
 			// 현재 유저가 게시글 좋아요 했는지 확인
-
-//			AuthService auth = new AuthService();
-//			long userId = auth.getCurrentUser().getId();
-//			UserModel user = new UserModel();
-//			user.setId(userId);
-//			boolean isLike = likeRepository.existsByUserAndBoard(user, board);
-//			boardDto.setLiked(isLike);
-//
-//			// 좋아요 수 확인
-//			long likeCount = likeRepository.countByBoard_Id(id);
-//			boardDto.setLikeCount(likeCount);
-
 			UserModel user = new UserModel();
 			user.setId(userId);
 			boolean isLike = likeRepository.existsByUserAndBoard(user, board);
@@ -259,5 +247,38 @@ public class BoardService {
 					return boardDto;
 				})
 				.collect(Collectors.toList());
+	}
+
+	public ViewBoardResponseDto getBoardByIdWithoutLike(Long id) {
+		BoardModel board = boardRepository.findById(id).orElse(null);
+
+		if (board != null) {
+			ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
+			BeanUtils.copyProperties(board, boardDto);
+
+			List<CocktailWithDrinkDto> list = board.getCocktails().stream()
+					.map(temp -> {
+						CocktailWithDrinkDto insert = new CocktailWithDrinkDto();
+						BeanUtils.copyProperties(temp, insert);
+
+						DrinkWithoutCocktailDto drinkDto = new DrinkWithoutCocktailDto();
+						BeanUtils.copyProperties(temp.getDrink(), drinkDto);
+
+						insert.setDrink(drinkDto);
+						return insert;
+					})
+					.collect(Collectors.toList());
+
+			boardDto.setCocktails(list);
+			List<CommentDto> comments = board.getComments().stream()
+					.map(temp -> {
+						CommentDto insert = new CommentDto();
+						BeanUtils.copyProperties(temp, insert);
+						return insert;
+					}).collect(Collectors.toList());
+			boardDto.setComments(comments);
+			return boardDto;
+		}
+		return null;
 	}
 }

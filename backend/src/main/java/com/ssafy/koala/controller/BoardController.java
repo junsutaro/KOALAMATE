@@ -51,13 +51,15 @@ public class BoardController {
 
 	@GetMapping("/view")
 	public Object viewBoard(@RequestParam long id, HttpServletRequest request) {
-		ResponseEntity response = null;
 
-		String token = authService.getAccessToken(request);
-		UserDto user = authService.extractUserFromToken(token);
-
-		response = new ResponseEntity<>(boardService.getBoardById(id, user.getId()),HttpStatus.OK);
-		return response;
+		if(request.getHeader("Authorization") != null) {
+			String token = authService.getAccessToken(request);
+			UserDto user = authService.extractUserFromToken(token);
+			return new ResponseEntity<>(boardService.getBoardById(id, user.getId()),HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<>(boardService.getBoardByIdWithoutLike(id),HttpStatus.OK);
+		}
 	}
 
 	@Transactional
