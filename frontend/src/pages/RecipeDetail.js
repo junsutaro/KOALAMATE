@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import axios from "axios";
+import CommentList from "components/Comment/CommentList";
 
 const RecipeDetail = () => {
     const {boardId} = useParams(); // URL 파라미터에서 boardId 추출
@@ -17,7 +18,7 @@ const RecipeDetail = () => {
         ingredients: []
     })
 
-    const getDetailRecipe = async() => {
+    const getDetailRecipe = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/board/view?id=${boardId}`)
             const data = response.data
@@ -34,8 +35,7 @@ const RecipeDetail = () => {
                 liked: data.liked,
                 ingredients: data.cocktails || [],
             })
-        }
-        catch (error) {
+        } catch (error) {
             console.error('데이터를 가져오는 중 에러 발생: ', error)
         }
     }
@@ -46,18 +46,22 @@ const RecipeDetail = () => {
 
 
     return (
-        <div>
-            <div>{`${recipe.id}번째 레시피입니다`}</div>
-            <div>{recipe.title}</div>
-            <div>{recipe.content}</div>
-            <div>{recipe.date}</div>
-            <div>{recipe.views}</div>
-            <div>{recipe.nickname}</div>
-            <div>{recipe.comments}</div>
-            <div>{recipe.likeCount}</div>
-            <div>{recipe.liked}</div>
-            <div>{recipe.ingredients}</div>
-        </div>
+        <>
+            <div>
+                <div>{`${recipe.id}번째 레시피입니다`}</div>
+                <div>{recipe.title}</div>
+                <div>{recipe.content}</div>
+                <div>{recipe.date}</div>
+                <div>{recipe.views}</div>
+                <div>{recipe.nickname}</div>
+                <div>{recipe.comments}</div>
+                <div>{recipe.likeCount}</div>
+                <div>{recipe.liked}</div>
+                <div>{recipe.ingredients}</div>
+            </div>
+            <CommentList/>
+        </>
+
     );
 }
 
