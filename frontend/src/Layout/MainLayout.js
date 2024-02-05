@@ -30,6 +30,8 @@ import Chatting from '../components/Chatting';
 import MyPage from '../pages/MyPage';
 import FollowerList from '../pages/FollowerList';
 import FolloweeList from '../pages/FolloweeList';
+import Mate from '../pages/Mate';
+import UpdateMyPage from '../pages/UpdateMyPage';
 
 const MainLayout = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -68,7 +70,7 @@ const MainLayout = () => {
 				<Nav />
 				<Routes>
 					<Route path="/" element={<Home />} />
-					<Route path="/about" element={<About />} />
+					<Route path="/mate" element={<Mate />} />
 
 					<Route path="/recipe" element={<Recipe/>} />
 					{/*<Route path="/recipe/search" element={<Search/>}/>*/}
@@ -80,7 +82,7 @@ const MainLayout = () => {
 					<Route path="/:boardId/comments" element={<CommentList />} />
 					<Route path="chatting" element={<Chatting />} />
 					<Route path="/user/:userId" element={<MyPage />} />
-					{/*<Route path="/user/:userId/update" element={<WriteMyPage />} />*/}
+					<Route path="/user/:userId/update" element={<UpdateMyPage />} />
 					<Route path="/user/:userId/follower" element={<FollowerList />} />
 					<Route path="/user/:userId/followee" element={<FolloweeList />} />
 					{/* 다른 라우트들 */}

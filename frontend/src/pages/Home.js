@@ -6,7 +6,6 @@ import * as THREE from 'three';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
 import refrigerator from 'assets/refrigerator_prev.glb';
 import GLBLoderComponent from 'components/GLBLoaderComponent';
-import Carousel from 'components/Home/Carousel.js'
 
 const Home = () => {
 	const [open, setOpen] = useState(false);
@@ -30,7 +29,6 @@ const Home = () => {
 	return (
 			<Container>
 				<h1>Home</h1>
-				<Carousel/>
 				<Button color="inherit" component={NavLink} to="/writeBoard">
 					write
 				</Button>
