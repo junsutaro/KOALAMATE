@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+<<<<<<< HEAD
 @RequestMapping("/voice")
 @Component
 @CrossOrigin(origins = "http://i10d212.p.ssafy.io")
+=======
+@CrossOrigin(value="http://i10d212.p.ssafy.io")
+>>>>>>> issue-back-chat
 public class VoiceChatController {
 
     @Value("${OPENVIDU_URL}")
