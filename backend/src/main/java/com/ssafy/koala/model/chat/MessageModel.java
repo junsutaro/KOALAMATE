@@ -21,11 +21,9 @@ public class MessageModel {
     private String nickname;
     private String content;
 
-    private int category;
-
     private LocalDateTime date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="chatroom_id")
     private ChatroomModel chatroom;
 

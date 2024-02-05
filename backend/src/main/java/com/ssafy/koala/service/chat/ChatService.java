@@ -8,6 +8,7 @@ import com.ssafy.koala.model.chat.ChatroomModel;
 import com.ssafy.koala.model.chat.MessageModel;
 import com.ssafy.koala.model.user.UserModel;
 import com.ssafy.koala.repository.chat.ChatRepository;
+import com.ssafy.koala.repository.chat.MessageRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,20 +27,13 @@ public class ChatService {
         this.chatRepository = chatRepository;
     }
 
-    public void addUserToChatroom(UserModel user, ChatroomModel chatroom) {
-        ChatModel chat = new ChatModel();
-        chat.setUser(user);
-        chat.setChatroom(chatroom);
-        chatRepository.save(chat);
-    }
-
     @Transactional
     public void removeUserFromChatroom(String userEmail, long chatroomId) {
         chatRepository.deleteByUserEmailAndChatroomId(userEmail, chatroomId);
     }
 
-    public List<ChatroomResponseDto> getChatroomByUserId(String email) {
-        List<ChatModel> results = chatRepository.findByUserEmail(email);
+    public List<ChatroomResponseDto> getChatroomByUserId(long id) {
+        List<ChatModel> results = chatRepository.findByUserId(id);
         return results.stream()
                 .map(temp -> {
                     ChatroomResponseDto insert = new ChatroomResponseDto();
@@ -49,14 +43,26 @@ public class ChatService {
                     insert.setRoomName(temp.getChatroom().getRoomName());
 
                     int lastIdx = temp.getChatroom().getMessages().size() - 1;
+                    System.out.println("lastIdx " + lastIdx);
+                    MessageDto message = null;
                     if(lastIdx >= 0) {
-                        MessageDto message = new MessageDto();
+                        message = new MessageDto();
                         BeanUtils.copyProperties(temp.getChatroom().getMessages().get(lastIdx), message);
                     }
+                    insert.setLastMessage(message);
                     return insert;
                 })
                 .collect(Collectors.toList());
     }
 
 
+    public List<ChatModel> findByUserId(long id) {
+        return chatRepository.findByUserId(id);
+    }
+
+    public void updateLastId(String nickname) {
+        chatRepository.updateLastIdForChatByUserNickname(nickname);
+        // ChatRepository를 사용하여 Chat 엔티티를 업데이트합니다.
+
+    }
 }

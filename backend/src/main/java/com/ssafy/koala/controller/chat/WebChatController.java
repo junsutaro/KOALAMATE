@@ -1,56 +1,75 @@
 package com.ssafy.koala.controller.chat;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.koala.dto.chat.MessageDto;
+import com.ssafy.koala.dto.chat.SocketMessageDto;
 import com.ssafy.koala.model.chat.ChatroomModel;
 import com.ssafy.koala.model.chat.MessageModel;
+import com.ssafy.koala.service.chat.ChatService;
 import com.ssafy.koala.service.chat.ChatroomService;
 import com.ssafy.koala.service.chat.MessageService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
-@Controller
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+//@Controller
 public class WebChatController {
-    @Autowired
-    private static SimpMessagingTemplate messagingTemplate;
-
-   // public ChatController(SimpMessagingTemplate messagingTemplate) {
-   //     this.messagingTemplate = messagingTemplate;
-   // }
+    private final Map<String, String> sessionUserMap = new HashMap<>();
     private final MessageService messageService;
     private final ChatroomService chatroomService;
-    public WebChatController(MessageService messageService, ChatroomService chatroomService, SimpMessagingTemplate messagingTemplate) {
-        this.messagingTemplate = messagingTemplate;
+    private final ChatService chatService;
+    public WebChatController(MessageService messageService, ChatroomService chatroomService, ChatService chatService) {
+
         this.messageService = messageService;
         this.chatroomService = chatroomService;
+        this.chatService = chatService;
+
+        //chatSocket();
     }
 
+    @PostMapping("/socket/message")
+    public ResponseEntity<String> receiveMessage(@RequestBody SocketMessageDto clientMessage) {
+        System.out.println(clientMessage);
+        if (clientMessage.getRoomId() == -1) {  //최초 로그인
+            sessionUserMap.put(clientMessage.getSessionId(), "init");
+        } else if (clientMessage.getRoomId() == -2) {  //세션 종료 -> 마지막 메시지 저장 필요
+            //chatService.updateLastId(sessionUserMap.get(clientMessage.getSessionId())); // 마지막 메시지 저장
+            System.out.println(sessionUserMap.get(clientMessage.getSessionId()));
+            sessionUserMap.remove(clientMessage.getSessionId());
+        } else {
+            if (sessionUserMap.get(clientMessage.getSessionId()).equals("init")) { //이후 메시지 올 경우, sessionId -> nickname 맵핑
+                sessionUserMap.replace(clientMessage.getSessionId(), clientMessage.getNickname());
+            }
+//            ChatroomModel chatroom = chatroomService.getChatroomById(clientMessage.getRoomId());
+//            MessageModel messageModel = new MessageModel();
+//            BeanUtils.copyProperties(clientMessage, messageModel);
+//            messageModel.setChatroom(chatroom);
+//            messageModel.setDate(LocalDateTime.now());
+//            messageService.saveMessage(messageModel);
+        }
 
-    @MessageMapping("/notification/{email}")
-    @SendTo("/topic/notification/{email}")
-    public String sendNotification(@PathVariable String email, String message) {
-        System.out.println(email + " " + message);
-        return message;
+        return ResponseEntity.ok("Response");
     }
 
-    @MessageMapping("/message/{roomId}")
-    @SendTo("/topic/messages/{roomId}")
-    public MessageDto sendMessage(@PathVariable String roomId, MessageDto message) {
-       // System.out.println(roomId);
-        ChatroomModel chatroom = chatroomService.getChatroomById(Long.parseLong(roomId));
-        MessageModel messageModel = new MessageModel();
-        BeanUtils.copyProperties(message,messageModel);
-        messageModel.setChatroom(chatroom);
-        messageService.saveMessage(messageModel);
-
-        // 메시지를 받아서 "/topic/messages"에 있는 모든 구독자에게 브로드캐스트합니다.
-        return message;
-    }
 }

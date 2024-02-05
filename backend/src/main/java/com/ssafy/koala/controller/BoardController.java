@@ -1,15 +1,19 @@
 package com.ssafy.koala.controller;
 
 import com.ssafy.koala.dto.board.CreateBoardRequestDto;
+import com.ssafy.koala.dto.user.UserDto;
 import com.ssafy.koala.model.BoardModel;
 import com.ssafy.koala.model.CocktailModel;
 import com.ssafy.koala.model.DrinkModel;
+import com.ssafy.koala.service.AuthService;
 import com.ssafy.koala.service.BoardService;
 import com.ssafy.koala.service.CocktailService;
 import com.ssafy.koala.service.DrinkService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -27,13 +31,15 @@ public class BoardController {
 	private final BoardService boardService;
 	private final DrinkService drinkService;
 	private final CocktailService cocktailService;
+	private final AuthService authService;
 	@PersistenceContext
 	private EntityManager entityManager;
-	public BoardController (BoardService boardService, DrinkService drinkService, CocktailService cocktailService) {
+	public BoardController (BoardService boardService, DrinkService drinkService, CocktailService cocktailService, AuthService authService) {
 		this.boardService = boardService;
 		this.drinkService = drinkService;
 		this.cocktailService = cocktailService;
-	}
+        this.authService = authService;
+    }
 
 	@GetMapping("/list")
 	public Object listBoard(@RequestParam int page, @RequestParam int size) {
@@ -44,10 +50,13 @@ public class BoardController {
 	}
 
 	@GetMapping("/view")
-	public Object viewBoard(@RequestParam long id) {
+	public Object viewBoard(@RequestParam long id, HttpServletRequest request) {
 		ResponseEntity response = null;
 
-		response = new ResponseEntity<>(boardService.getBoardById(id),HttpStatus.OK);
+		String token = authService.getAccessToken(request);
+		UserDto user = authService.extractUserFromToken(token);
+
+		response = new ResponseEntity<>(boardService.getBoardById(id, user.getId()),HttpStatus.OK);
 		return response;
 	}
 
@@ -106,9 +115,10 @@ public class BoardController {
 	}
 
 	@PostMapping("/like")
-	public ResponseEntity<?> likeBoard(@RequestBody long board_id) {
+	public ResponseEntity<?> likeBoard(@RequestBody long board_id, HttpServletRequest request) {
 		try{
-			boardService.likeBoard(board_id);
+			String accessToken = authService.getAccessToken(request);
+			boardService.likeBoard(board_id, authService.extractUserFromToken(accessToken).getId());
 			return new ResponseEntity<>("like request processed successfully.", HttpStatus.OK);
 		} catch (EmptyResultDataAccessException e) {
 			// 해당 ID에 해당하는 엔티티가 존재하지 않는 경우
@@ -117,5 +127,11 @@ public class BoardController {
 			// 기타 예외 처리
 			return new ResponseEntity<>("Error processing like with ID " + board_id, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	@GetMapping("/search")
+	public ResponseEntity<?> searchBoard(@RequestParam int page, @RequestParam int size, @RequestParam String keyword) {
+
+		return new ResponseEntity<>(boardService.searchAndPageBoards(keyword, page-1, size),HttpStatus.OK);
 	}
 }
