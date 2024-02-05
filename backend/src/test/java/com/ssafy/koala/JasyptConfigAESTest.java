@@ -13,6 +13,6 @@ class JasyptConfigAESTest {
 
     @Test
     void stringEncryptor() {
-
     }
+
 }

@@ -14,7 +14,7 @@ const CommentList = () => {
 	const getComments = async () => {
 		try {
 			const response = await axios.get(
-					`http://localhost:8080/board/view?id=${boardId}`);
+					`${process.env.REACT_APP_API_URL}/board/view?id=${boardId}`);
 			setComments(response.data.comments || []);
 		} catch (error) {
 			console.error('댓글 목록을 가져오는 중 에러 발생: ', error);
@@ -27,7 +27,7 @@ const CommentList = () => {
 
 	const handleDeleteComment = async (commentId) => {
 		try {
-			await axios.delete(`http://localhost:8080/comment/${commentId}/delete`);
+			await axios.delete(`${process.env.REACT_APP_API_URL}/comment/${commentId}/delete`);
 			setComments((prevComments) => prevComments.filter(
 					(comment) => comment.id !== commentId));
 		} catch (error) {
@@ -37,7 +37,7 @@ const CommentList = () => {
 
 	const handleEditComment = async (commentId, editedContent) => {
 		try {
-			await axios.put(`http://localhost:8080/comment/${commentId}/modify`, {
+			await axios.put(`${process.env.REACT_APP_API_URL}/comment/${commentId}/modify`, {
 				commentId: commentId,
 				content: editedContent,
 			});

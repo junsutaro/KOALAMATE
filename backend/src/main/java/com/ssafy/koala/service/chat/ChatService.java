@@ -8,6 +8,7 @@ import com.ssafy.koala.model.chat.ChatroomModel;
 import com.ssafy.koala.model.chat.MessageModel;
 import com.ssafy.koala.model.user.UserModel;
 import com.ssafy.koala.repository.chat.ChatRepository;
+import com.ssafy.koala.repository.chat.MessageRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,10 +43,13 @@ public class ChatService {
                     insert.setRoomName(temp.getChatroom().getRoomName());
 
                     int lastIdx = temp.getChatroom().getMessages().size() - 1;
+                    System.out.println("lastIdx " + lastIdx);
+                    MessageDto message = null;
                     if(lastIdx >= 0) {
-                        MessageDto message = new MessageDto();
+                        message = new MessageDto();
                         BeanUtils.copyProperties(temp.getChatroom().getMessages().get(lastIdx), message);
                     }
+                    insert.setLastMessage(message);
                     return insert;
                 })
                 .collect(Collectors.toList());
@@ -56,8 +60,8 @@ public class ChatService {
         return chatRepository.findByUserId(id);
     }
 
-    public void updateLastId(long id) {
-        chatRepository.updateLastIdForChatByUserId(id);
+    public void updateLastId(String nickname) {
+        chatRepository.updateLastIdForChatByUserNickname(nickname);
         // ChatRepository를 사용하여 Chat 엔티티를 업데이트합니다.
 
     }

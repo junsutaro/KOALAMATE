@@ -21,8 +21,6 @@ public class MessageModel {
     private String nickname;
     private String content;
 
-    private int category;
-
     private LocalDateTime date;
 
     @ManyToOne(fetch = FetchType.LAZY)

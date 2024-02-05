@@ -20,6 +20,8 @@ public interface UserRepository extends JpaRepository<UserModel,Long> {
 
 	Optional<UserModel> findByEmail(String email);
 
+    Optional<UserModel> findByNickname(String nickname);
+
 	// 시치 추가
 	@Transactional
 	@Modifying

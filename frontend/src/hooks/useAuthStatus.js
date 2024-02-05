@@ -10,7 +10,7 @@ const useAuthStatus = () => {
 		const checkAuthStatus = async () => {
 			dispatch(setLoading(true));
 			try {
-				await axios.get('/auth/status', { withCredentials: true });
+				await axios.get(`${process.env.REACT_APP_API_URL}/auth/status`, { withCredentials: true });
 				dispatch(setAuthStatus(true));
 			} catch (error) {
 				dispatch(setAuthStatus(false));

@@ -54,7 +54,7 @@ public class ChatroomService {
 
     public void addUserToChatroom(String email, long roomId) {
         ChatModel chat = new ChatModel();
-        UserModel user = userRepository.getUserByEmail(email).orElseThrow();
+        UserModel user = userRepository.findByEmail(email).orElseThrow();
         ChatroomModel chatroom = chatroomRepository.findById(roomId).orElseThrow();
         chat.setUser(user);
         chat.setChatroom(chatroom);

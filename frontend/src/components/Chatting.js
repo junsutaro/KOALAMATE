@@ -1,67 +1,101 @@
-import React, { useEffect, useState } from 'react';
-import { Client } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
+import React, { useState, useEffect } from 'react';
+import { useWebSocket } from 'context/WebSocketContext';
+import {
+	Box,
+	TextField,
+	Button,
+	Typography,
+	Grid,
+	IconButton,
+} from '@mui/material';
+import { useSelector } from 'react-redux';
+import {AbortedDeferredError} from 'react-router-dom';
+import CustomChatField from './CustomChatField';
+import SendIcon from '@mui/icons-material/Send';
 
-const SERVER_URL = 'http://192.168.100.210:8080/chat'; // Spring Boot 서버 SockJS 엔드포인트
+const Chatting = ({ roomNumber }) => {
+	const { sendMessage, subscribe } = useWebSocket();
+	const [messages, setMessages] = useState([]);
+	const [inputMessage, setInputMessage] = useState('');
+	// 메시지를 수신할 대상 주소
+	const messageDestination = `/topic/messages/${roomNumber}`;
+	// 메시지를 전송할 대상 주소
+	const sendDestination = `/app/messages/${roomNumber}`;
 
-const Chatting = () => {
-	const [client, setClient] = useState(null);
-	const [message, setMessage] = useState('');
-	const [chat, setChat] = useState([]);
+	const user = useSelector(state => state.auth.user);
 
 	useEffect(() => {
-		// STOMP 클라이언트 생성 및 구성
-		const stompClient = new Client({
-			webSocketFactory: () => new SockJS(SERVER_URL), // SockJS를 사용한 연결
-			onConnect: () => {
-				console.log('Connected');
-				// 메시지를 받을 때 호출될 콜백 함수를 구독합니다.
-				stompClient.subscribe('/topic/messages', (message) => {
-					setChat((prevChat) => [...prevChat, JSON.parse(message.body).content]);
-				});
-			},
-			onStompError: (frame) => {
-				console.error('Broker reported error: ' + frame.headers['message']);
-				console.error('Additional details: ' + frame.body);
-			},
+		// 메시지 수신 구독
+		const subscription = subscribe(messageDestination, (message) => {
+			const receivedMessage = message.body.content;
+			console.log(receivedMessage)
+			setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+			console.log("Message received");
 		});
 
-		stompClient.activate();
-		setClient(stompClient);
-
+		// 컴포넌트 언마운트 시 연결 해제
 		return () => {
-			stompClient.deactivate();
 		};
-	}, []);
+	}, [subscribe]);
 
-	const sendMessage = (e) => {
-		e.preventDefault();
-		if (client) {
-			// 서버로 메시지를 전송합니다.
-			client.publish({
-				destination: '/app/message',
-				body: JSON.stringify({ content: message }),
-			});
-			setMessage('');
+	const handleSendMessage = () => {
+		if (inputMessage.trim() !== '') {
+			const messageToSend = { content: inputMessage, nickName: user.nickName };
+			console.log(user.nickName);
+			sendMessage(sendDestination, messageToSend);
+			setInputMessage('');
+			console.log("Message sent");
 		}
 	};
 
 	return (
-			<div>
-				<ul id="messages">
-					{chat.map((msg, index) => (
-							<li key={index}>{msg}</li>
+			<Box sx={{ maxWidth: 500, margin: '0 auto', textAlign: 'center' }}>
+				<Box
+						sx={{
+							maxHeight: 300,
+							overflowY: 'auto',
+							marginBottom: 2,
+							padding: 1,
+							border: '1px solid #ccc',
+							borderRadius: '4px',
+						}}
+				>
+					{messages.map((message, index) => (
+							<Box
+									key={index}
+									sx={{
+										textAlign: message.sender === 'you' ? 'right' : 'left',
+										margin: '10px 0',
+									}}
+							>
+								<Typography
+										variant="body1"
+										sx={{
+											display: 'inline-block',
+											maxWidth: '70%',
+											wordWrap: 'break-word',
+											padding: '8px 16px',
+											borderRadius: '20px',
+											backgroundColor: message.sender === `${user.nickName}` ? '#0B93F6' : '#e0e0e0',
+											color: message.sender === `${user.nickName}` ? '#fff' : '#000',
+										}}
+								>
+									{message.text}
+								</Typography>
+							</Box>
 					))}
-				</ul>
-				<form onSubmit={sendMessage}>
-					<input
-							autoComplete="off"
-							value={message}
-							onChange={(e) => setMessage(e.target.value)}
-					/>
-					<button type="submit">Send</button>
-				</form>
-			</div>
+				</Box>
+				<Grid container alignItems="center" border={1} borderColor="grey.500" borderRadius={4}>
+					<Grid item xs={10}>
+						<CustomChatField />
+					</Grid>
+					<Grid item xs={2}>
+						<IconButton variant="contained" onClick={handleSendMessage}>
+							<SendIcon />
+						</IconButton>
+					</Grid>
+				</Grid>
+			</Box>
 	);
 };
 

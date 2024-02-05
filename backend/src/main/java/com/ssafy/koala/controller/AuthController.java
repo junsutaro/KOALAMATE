@@ -40,37 +40,34 @@ public class AuthController {
 			// access token이 유효하지 않다면,쿠키에서 refreshToken 추출
 			Cookie[] cookies = request.getCookies();
 			if (cookies == null) {
-				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>("null cookies", HttpStatus.UNAUTHORIZED);
 			}
 			// 쿠키 배열을 순회하면서 원하는 쿠키를 찾음
 			for (Cookie cookie : cookies) {
 				if ("refresh_token".equals(cookie.getName())) {
 					String refreshToken = cookie.getValue();
-					// db에서 해당 유저의 정보를 가져옴
-					Optional<UserDto> user = userService.findUserByRefreshToken(refreshToken);
 
-					// refresh token null 검사
-					if(user.isEmpty()) {
-						return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-					}
-					// db에 저장된 refresh token과 사용자의 refresh token이 동일하지 않으면 권한x
-					if(!user.get().getRefreshToken().equals(refreshToken)) {
-						return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-					}
-
-					// validate() 검사 -> unAuthorized
+					// refresh token 유효성 검사
 					if(jwtUtil.validateToken(refreshToken)) {
+						// db에서 해당 유저의 정보를 가져옴
+						Optional<UserDto> user = userService.findUserByRefreshToken(refreshToken);
+
+						// db에 저장된 refresh token과 사용자가 준 refresh token이 동일하지 않으면 권한x
+						if(user.isEmpty()) {
+							return new ResponseEntity<>("invalid refresh token. please login again", HttpStatus.UNAUTHORIZED);
+						}
+
 						// access token 생성, ok 반환
 						String newToken = jwtUtil.createAccessToken(user.get());
 						response.addHeader("Authorization", "Bearer " + newToken);
 						return new ResponseEntity<>(HttpStatus.OK);
-
 					}
 					// refresh token 만료됨
-					return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+					return new ResponseEntity<>("token is expired. please login again", HttpStatus.UNAUTHORIZED);
 				}
 			}
+			return new ResponseEntity<>("refresh token is not in cookie", HttpStatus.UNAUTHORIZED);
 		}
-		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<>("access token is not in Authorization header", HttpStatus.UNAUTHORIZED);
 	}
 }
