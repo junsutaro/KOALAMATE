@@ -159,14 +159,14 @@ public class UserController {
 
 	// 팔로우 여부에 따라 팔로우 or 언팔로우
 	@PostMapping("/follow")
-	public ResponseEntity<?> followToggle(@RequestBody long userId, HttpServletRequest request) {
+	public ResponseEntity<?> followToggle(@RequestBody UserDto dto, HttpServletRequest request) {
 		// 자신의 정보는 JWT에서 가져오기
 		String accessToken = authService.getAccessToken(request);
 		UserDto user = authService.extractUserFromToken(accessToken);
 		log.info(user.getId()+"\n");
 		long myUid = user.getId();
-
 		try {
+			long userId = dto.getId();
 			boolean isFollowed = followService.checkFollow(myUid, userId);
 			if(isFollowed) {
 				// 언팔로우
@@ -178,10 +178,10 @@ public class UserController {
 			return new ResponseEntity<>("Follow for ID " + userId + " processed successfully.", HttpStatus.OK);
 		} catch (EmptyResultDataAccessException e) {
 			// 해당 ID에 해당하는 엔티티가 존재하지 않는 경우
-			return new ResponseEntity<>("Follow with ID " + userId + " not found.", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("Not found follow user", HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			// 기타 예외 처리
-			return new ResponseEntity<>("Error follow request with ID " + userId, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Error follow request", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

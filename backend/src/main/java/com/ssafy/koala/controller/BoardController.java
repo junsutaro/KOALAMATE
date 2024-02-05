@@ -1,5 +1,6 @@
 package com.ssafy.koala.controller;
 
+import com.ssafy.koala.dto.board.BoardWithoutCocktailDto;
 import com.ssafy.koala.dto.board.CreateBoardRequestDto;
 import com.ssafy.koala.dto.user.UserDto;
 import com.ssafy.koala.model.BoardModel;
@@ -117,17 +118,18 @@ public class BoardController {
 	}
 
 	@PostMapping("/like")
-	public ResponseEntity<?> likeBoard(@RequestBody long board_id, HttpServletRequest request) {
+	public ResponseEntity<?> likeBoard(@RequestBody BoardWithoutCocktailDto dto, HttpServletRequest request) {
 		try{
+			long board_id = dto.getId();
 			String accessToken = authService.getAccessToken(request);
 			boardService.likeBoard(board_id, authService.extractUserFromToken(accessToken).getId());
 			return new ResponseEntity<>("like request processed successfully.", HttpStatus.OK);
 		} catch (EmptyResultDataAccessException e) {
 			// 해당 ID에 해당하는 엔티티가 존재하지 않는 경우
-			return new ResponseEntity<>("Board with ID " + board_id + " not found.", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("Not found board", HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			// 기타 예외 처리
-			return new ResponseEntity<>("Error processing like with ID " + board_id, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Error processing like", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
