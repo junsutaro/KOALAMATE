@@ -93,7 +93,9 @@ public class UserService {
 	}
 
 	public void save(UserDto newUser) {
-		newUser.setPassword(encoder.encode(newUser.getPassword())); // 비밀번호 암호화
+		if(newUser.getPassword() != null) {
+			newUser.setPassword(encoder.encode(newUser.getPassword())); // 비밀번호 암호화
+		}
 		UserModel user = convertToModel(newUser);
 		userRepository.save(user);
 	}
@@ -143,5 +145,15 @@ public class UserService {
 		return tokenResponse;
 	}
 
+	@Transactional
+	public void saveLocation(Long userId, double latitude, double longitude) {
+		Optional<UserModel> existingUser = userRepository.findById(userId);
 
+		if (existingUser.isPresent()) {
+			UserModel user = existingUser.get();
+			user.setLatitude(latitude);
+			user.setLongitude(longitude);
+			userRepository.save(user);
+		}
+	}
 }
