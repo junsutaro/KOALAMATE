@@ -77,6 +77,7 @@ public class ChatService {
                 .map(temp -> {
                     UserListDto insert = new UserListDto();
                     insert.setId(temp.getUser().getId());
+                    insert.setEmail(temp.getUser().getEmail());
                     insert.setNickname(temp.getUser().getNickname());
                     insert.setGender(temp.getUser().getGender());
                     insert.setProfile(temp.getUser().getProfile());

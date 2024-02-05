@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class UserListDto {
     private long id;
+    private String email;
     private String nickname;
     private int birthRange;
     private String gender;
