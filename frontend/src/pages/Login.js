@@ -1,39 +1,52 @@
 import React from 'react';
 import axios from 'axios';
-import { TextField, Button, Container, Typography, Box } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import {useDispatch, useSelector} from 'react-redux';
-import { setLoading, setLoginStatus } from '../store/authSlice';
-import { useWebSocket } from 'context/WebSocketContext';
+import {Box, Button, Container, TextField, Typography} from '@mui/material';
+import {useNavigate} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
+import {setLoading, setLoginStatus} from '../store/authSlice';
+import {useWebSocket} from 'context/WebSocketContext';
 
 const Login = () => {
 	const [email, setEmail] = React.useState('');
 	const [password, setPassword] = React.useState('');
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const { connect } = useWebSocket();
+	const {connect} = useWebSocket();
 
+	const login = async (email, password) => {
+		try {
+			return await axios.post(`${process.env.REACT_APP_API_URL}/user/login`, {
+				email,
+				password,
+			}, {withCredentials: true});
+		} catch (error) {
+			console.log('Login Error: ', error);
+			throw error;
+		}
+	};
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		console.log('Login: ', email, password);
 		dispatch(setLoading(true));
 
-		try {
-			const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/login`, {
-				email,
-				password,
-			}, {withCredentials: true});
-			dispatch(setLoginStatus({ isLoggedIn: true, user: response.data }));
+		login(email, password)
+		.then((response) => {
+			console.log(response);
+			const authHeader = response.headers['authorization'];
+			if (!authHeader) throw new Error('No Authorization Header');
+			console.log(authHeader);
+			localStorage.setItem('authHeader', authHeader);
+			dispatch(setLoginStatus({isLoggedIn: true, user: response.data}));
 			connect('chat');
 			console.log(response.data);
 			navigate('/');
-		} catch (error) {
-			console.log(error);
+		}).catch((error) => {
+			console.log('Login Failed: ', error);
 			dispatch(setLoginStatus(false));
-		} finally {
+		}).finally(() => {
 			dispatch(setLoading(false));
-		}
+		});
 	};
 
 	return (
