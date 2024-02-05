@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
+@CrossOrigin(value="http://i10d212.p.ssafy.io")
 public class VoiceChatController {
 
     @Value("${OPENVIDU_URL}")
