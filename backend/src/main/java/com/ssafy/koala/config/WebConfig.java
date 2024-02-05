@@ -20,6 +20,7 @@ public class WebConfig {
 		configuration.setAllowedOrigins(Arrays.asList("http://i10d212.p.ssafy.io", "http://localhost:3000")); // 허용할 출처 목록
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메소드
 		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With")); // 허용할 헤더
+		configuration.setExposedHeaders(Arrays.asList("Authorization")); // 클라이언트에 노출할 헤더
 		configuration.setAllowCredentials(true); // 쿠키 허용
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
