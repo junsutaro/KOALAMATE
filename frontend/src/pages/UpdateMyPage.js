@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import MyPageButton from '../components/Profile/MyPageButton';
 import NoImage from 'assets/profile.jpg';
@@ -49,6 +49,8 @@ const UpdateMyPage = () => {
 
     // selectedImageFile 상태를 관리하기 위한 useState
     const [selectedImageFile, setSelectedImageFile] = useState(null);
+
+    const navigate  = useNavigate ()
 
     // user 프로필 정보를 가져오는 함수
     useEffect(() => {
@@ -166,6 +168,7 @@ const UpdateMyPage = () => {
             console.error("프로필 이미지 업로드에 실패했습니다.", error);
         }
     };
+
     // saveProfile 함수 수정
     const saveProfile = async () => {
         try {
@@ -181,8 +184,13 @@ const UpdateMyPage = () => {
                     alcoholLimitGlass: sojuCupCount,
                     tags: selectedTags,
                 });
-
             console.log('프로필 저장 성공:', response.data);
+
+            // 프로필 저장 완료 확인 창
+            alert('프로필이 성공적으로 변경되었습니다😊')
+            // 프로필 저장이 완료되면 사용자를 해당 페이지로 이동
+            navigate(`/user/${userId}`);
+
         } catch (error) {
             console.log('프로필 저장 중 에러 발생:', error);
         }
@@ -190,21 +198,10 @@ const UpdateMyPage = () => {
 
     // 저장 버튼 클릭 시 SaveProfileImage 함수와 saveProfile 함수를 호출
     const handleSaveButtonClick = async () => {
-        await SaveProfileImage(); // SaveProfileImage 함수의 완료를 기다림
-        saveProfile(); // SaveProfileImage가 완료된 후 saveProfile 함수 실행
+        await SaveProfileImage();    // SaveProfileImage 함수의 완료를 기다림
+        saveProfile();               // SaveProfileImage가 완료된 후 saveProfile 함수 실행
     };
 
-
-
-
-    console.log(`nickname: ${profileData.nickname}`)
-    console.log(`birthRange: ${profileData.birthRange}`)
-    console.log(`gender: ${profileData.gender}`)
-    console.log(`introduction: ${introduction}`)
-    console.log(`sojuBottleCount: ${sojuBottleCount}`)
-    console.log(`sojuCupCount: ${sojuCupCount}`)
-    console.log(`selectedTags: ${selectedTags}`)
-    console.log(`imagePreview: ${imagePreview}`)
 
     return (
         <Container component="form">

@@ -10,9 +10,6 @@ const standardImgPath = '/assets/profile.jpg';
 const Profile = ({img, nickname, gender, age, follower, followee, userId}) => {
     console.log(img)
 
-    // 이미지 경로를 public 폴더로 업데이트
-    // const profileImage = img || 'assets/profile.jpg'; // 기본 이미지 경로 설정
-
     const profileImage = img || '/assets/profile.jpg'
     console.log(profileImage)
     const followerCnt = follower.cnt;
@@ -31,8 +28,6 @@ const Profile = ({img, nickname, gender, age, follower, followee, userId}) => {
                 }}
             >
 
-
-                {/* `Avatar` 컴포넌트와 `img` 태그 모두에서 동일한 경로를 사용합니다. */}
                 <Avatar sx={{width: 200, height: 200}} src={profileImage}/>
 
 
@@ -67,9 +62,9 @@ const Profile = ({img, nickname, gender, age, follower, followee, userId}) => {
                 }}>
 
                     <Button m={1} p={1} component={NavLink}
-                            to="/user/4/follower">팔로워 {followerCnt}</Button>
+                            to={`/user/${userId}/follower`}>팔로워 {followerCnt}</Button>
                     <Button m={1} p={1} component={NavLink}
-                            to="/user/4/followee">팔로우 {followeeCnt}</Button>
+                            to={`/user/${userId}/followee`}>팔로우 {followeeCnt}</Button>
 
                 </Box>
 

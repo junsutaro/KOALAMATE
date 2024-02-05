@@ -10,4 +10,5 @@ public class UserListDto {
     private int birthRange;
     private String gender;
     private String profile;
+    private String introduction;
 }

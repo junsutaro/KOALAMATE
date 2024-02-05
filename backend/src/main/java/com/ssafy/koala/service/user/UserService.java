@@ -63,16 +63,19 @@ public class UserService {
 			BeanUtils.copyProperties(userOpt.get(), result);
 			String accessToken = jwtUtil.createAccessToken(result);
 			String refreshToken = jwtUtil.createRefreshToken(result);
-			result.setRefreshToken(refreshToken);
-			userRepository.save(convertToModel(result)); // refreshToken은 db에 저장(redis 변경?)
+
+//			result.setRefreshToken(refreshToken);
+//			userRepository.save(convertToModel(result)); // refreshToken은 db에 저장(redis 변경?)
+
+			userRepository.updateRefreshTokenByEmail(refreshToken, email); // 수정된 부분
 
 			TokenResponse tokenResponse = new TokenResponse();
 			tokenResponse.setAccessToken(accessToken);
 			tokenResponse.setRefreshToken(refreshToken);
 
 			Map<String, Object> resultMap = new HashMap<>();
-			resultMap.put("user", result);
-			resultMap.put("tokens", tokenResponse);
+			resultMap.put("user", result); // 사용자 정보 반환해용
+			resultMap.put("tokens", tokenResponse); // 토큰 정보 반환해용
 			return resultMap;
 		}
 		else {
@@ -132,4 +135,7 @@ public class UserService {
 	}
 
 
+	public Optional<UserModel> findById(long userId) {
+		return userRepository.findById(userId);
+	}
 }

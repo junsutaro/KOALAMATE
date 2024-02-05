@@ -121,7 +121,17 @@ public class UserController {
 		FollowResponseDto dto = new FollowResponseDto();
 		dto.setFollowCnt(cnt);
 		dto.setList(followeeList);
+
+		// 해당 id의 userId, nickname Optional로(필요없긴함) 같이 넘겨요
+		Optional<UserModel> userOpt = userService.findById(user_id); // userService에 findById 메소드가 있다고 가정
+		if (userOpt.isPresent()) {
+			UserModel user = userOpt.get();
+			dto.setId(user.getId());
+			dto.setNickname(user.getNickname());
+		}
+
 		return new ResponseEntity<>(dto, HttpStatus.OK);
+
 	}
 
 	// 유저 팔로워 목록
@@ -133,7 +143,16 @@ public class UserController {
 		FollowResponseDto dto = new FollowResponseDto();
 		dto.setFollowCnt(cnt);
 		dto.setList(followerList);
+
+		// 해당 id의 userId, nickname Optional로(필요없긴함) 같이 넘겨요
+		Optional<UserModel> userOpt = userService.findById(user_id); // userService에 findById 메소드가 있다고 가정
+		if (userOpt.isPresent()) {
+			UserModel user = userOpt.get();
+			dto.setId(user.getId());
+			dto.setNickname(user.getNickname());
+		}
 		return new ResponseEntity<>(dto, HttpStatus.OK);
+
 	}
 
 	// 팔로우 여부에 따라 팔로우 or 언팔로우

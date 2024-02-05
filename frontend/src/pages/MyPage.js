@@ -39,67 +39,67 @@ const MyPage = () => {
         list: [],
     });
 
-    // userId가 바뀌면 user 프로필 정보를 가져오는 함수들
+
+    const getProfileData = async () => {
+        try {
+            const response = await axios.get(
+                `http://localhost:8080/profile/${userId}`);
+            const data = response.data;
+
+            // 이미지 URL을 가져와서 상태 업데이트
+            setProfileImageUrl(`/${data.profile}`)
+
+            // 나머지 프로필 데이터 업데이트
+            setProfileData({
+                nickname: data.nickname,
+                birthRange: data.birthRange,
+                gender: data.gender,
+                profile: data.profile,
+                intro: data.introduction || '',
+                alcoholLimitBottle: data.alcoholLimitBottle,
+                alcoholLimitGlass: data.alcoholLimitGlass,
+                mannersScore: data.mannersScore,
+                tags: data.tags || [],
+            });
+        } catch (error) {
+            console.log('프로필 데이터를 가져오는 중 에러 발생: ', error);
+        }
+    };
+
+    const getFollowerData = async () => {
+        try {
+            const response = await axios.get(
+                `http://localhost:8080/user/${userId}/follower`);
+            const data = response.data;
+            setFollowerData({
+                cnt: data.followCnt,
+                list: data.list,
+            });
+
+        } catch (error) {
+            console.log(`팔로워 데이터를 가져오는 중 에러 발생 : `, error);
+        }
+    };
+
+    const getFolloweeData = async () => {
+        try {
+            const response = await axios.get(
+                `http://localhost:8080/user/${userId}/followee`);
+            const data = response.data;
+            setFolloweeData({
+                cnt: data.followCnt,
+                list: data.list,
+            });
+        } catch (error) {
+            console.log(`팔로잉 데이터를 가져오는 중 에러 발생 : `, error);
+        }
+    };
+
+    // userId가 바뀌면 user 프로필 정보를 가져오기
     useEffect(() => {
-        const getProfileData = async () => {
-            try {
-                const response = await axios.get(
-                    `http://localhost:8080/profile/${userId}`);
-                const data = response.data;
-
-                // 이미지 URL을 가져와서 상태 업데이트
-                setProfileImageUrl(`/${data.profile}`)
-
-                // 나머지 프로필 데이터 업데이트
-                setProfileData({
-                    nickname: data.nickname,
-                    birthRange: data.birthRange,
-                    gender: data.gender,
-                    profile: data.profile,
-                    intro: data.introduction || '',
-                    alcoholLimitBottle: data.alcoholLimitBottle,
-                    alcoholLimitGlass: data.alcoholLimitGlass,
-                    mannersScore: data.mannersScore,
-                    tags: data.tags || [],
-                });
-            } catch (error) {
-                console.log('프로필 데이터를 가져오는 중 에러 발생: ', error);
-            }
-        };
-
-        const getFollowerData = async () => {
-            try {
-                const response = await axios.get(
-                    `http://localhost:8080/user/${userId}/follower`);
-                const data = response.data;
-                setFollowerData({
-                    cnt: data.followCnt,
-                    list: data.list,
-                });
-
-            } catch (error) {
-                console.log(`팔로워 데이터를 가져오는 중 에러 발생 : `, error);
-            }
-        };
-
-        const getFolloweeData = async () => {
-            try {
-                const response = await axios.get(
-                    `http://localhost:8080/user/${userId}/followee`);
-                const data = response.data;
-                setFolloweeData({
-                    cnt: data.followCnt,
-                    list: data.list,
-                });
-            } catch (error) {
-                console.log(`팔로잉 데이터를 가져오는 중 에러 발생 : `, error);
-            }
-        };
-
         getProfileData();
         getFollowerData();
         getFolloweeData();
-
     }, [userId]);
 
     return (

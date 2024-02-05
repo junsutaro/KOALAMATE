@@ -46,8 +46,8 @@ public class DrinkController {
         return new ResponseEntity<>(drinks, HttpStatus.OK);
     }
 
-    @PostMapping("/search/name")
-    public Object searchDrinkByName(@RequestBody String name) {
+    @GetMapping("/search")
+    public Object searchDrinkByName(@RequestParam String name) {
         List<DrinkDto> drinks = drinkService.getDrinkByName(name);
 
         return new ResponseEntity<>(drinks, HttpStatus.OK);

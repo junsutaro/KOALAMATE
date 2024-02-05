@@ -5,36 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8c24e642-801b-4b32-b49e-7d5789639fba" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/backend.koala.main.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ProfileFileUploads/28/1류.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ProfileFileUploads/28/KIRBY_FLOWER.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ProfileFileUploads/28/hawaiian_wolf.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ProfileFileUploads/29/1류.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ProfileFileUploads/29/KIRBY_FLOWER.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ProfileFileUploads/29/hawaiian_wolf.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ProfileFileUploads/29/trust01.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ProfileFileUploads/29/trust02.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ProfileFileUploads/30/hawaiian_wolf.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ProfileFileUploads/31/hawaiian_wolf.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ProfileFileUploads/5/hawaiian_wolf.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/controller/user/ProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/controller/user/ProfileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/service/user/ProfileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/service/user/ProfileService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Comment/CommentList.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Comment/CommentList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d5348aa2-3e4e-4c60-9f3a-06b5f0f38632.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d5348aa2-3e4e-4c60-9f3a-06b5f0f38632.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/controller/DrinkController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/controller/DrinkController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/controller/user/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/controller/user/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/dto/user/FollowResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/dto/user/FollowResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/dto/user/UserListDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/dto/user/UserListDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/service/user/FollowService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/service/user/FollowService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/service/user/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/koala/service/user/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Follow/FollowItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Follow/FollowItem.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/Nav.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Nav.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Profile/DetailProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Profile/DetailProfile.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/Profile/MyPageButton.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Profile/MyPageButton.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/Profile/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Profile/Profile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Profile/ProfileData.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Profile/DetailProfile.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/RecipeBoard/RecipeItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/RecipeBoard/RecipeItem.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/RecipeBoard/RecipeList.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/RecipeBoard/RecipeList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/FolloweeList.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/FolloweeList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/FollowerList.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/FollowerList.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/MyPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/MyPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/UpdateMyPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/RecipeDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/RecipeDetail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/UpdateMyPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/UpdateMyPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/WriteBoard.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/WriteBoard.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,6 +93,9 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -111,49 +108,49 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Gradle.Build backend.executor": "Run",
-    "Gradle.C:/Users/SSAFY/IdeaProjects/S10P12D212/backend [dependencies].executor": "Run",
-    "Gradle.backend.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.BackendApplication (1).executor": "Run",
-    "Spring Boot.BackendApplication.executor": "Run",
-    "git-widget-placeholder": "issue-front-mypage",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/SSAFY/IdeaProjects/S10P12D212",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "npm.start.executor": "Run",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.3.2\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Gradle.Build backend.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.C:/Users/SSAFY/IdeaProjects/S10P12D212/backend [dependencies].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.backend.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.BackendApplication (1).executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.BackendApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;issue-front-mypage&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/SSAFY/IdeaProjects/S10P12D212&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.start.executor&quot;: &quot;Run&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.3.2\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mariadb"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mariadb&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\SSAFY\IdeaProjects\S10P12D212\frontend\src\components\Comment" />
       <recent name="C:\Users\SSAFY\IdeaProjects\S10P12D212\frontend\src\components\Profile" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.start">
+  <component name="RunManager" selected="Spring Boot.BackendApplication">
     <configuration name="C:/Users/SSAFY/IdeaProjects/S10P12D212/backend [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -296,6 +293,8 @@
       <workItem from="1706972033886" duration="264000" />
       <workItem from="1706972312850" duration="17000" />
       <workItem from="1706972339977" duration="3768000" />
+      <workItem from="1707015941343" duration="21134000" />
+      <workItem from="1707091328356" duration="3150000" />
     </task>
     <servers />
   </component>

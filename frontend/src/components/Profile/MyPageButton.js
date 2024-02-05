@@ -8,10 +8,10 @@ const MyPageButton = () => {
 			<>
 				<ButtonGroup variant="outlined" aria-label="outlined button group"
 				             sx={{margin: '10px'}}>
-					<Button component={NavLink} to="/user/8/update">프로필 수정</Button>
-					<Button component={NavLink} to="/user/8">회원정보 수정</Button>
-					<Button component={NavLink} to='/user/8/follower'>팔로우</Button>
-					<Button component={NavLink} to='/user/8/followee'>팔로잉</Button>
+					<Button component={NavLink} to="/user/3/update">프로필 수정</Button>
+					<Button component={NavLink} to="/user/3">회원정보 수정</Button>
+					<Button component={NavLink} to='/user/3/follower'>팔로우</Button>
+					<Button component={NavLink} to='/user/3/followee'>팔로잉</Button>
 				</ButtonGroup>
 			</>
 	);

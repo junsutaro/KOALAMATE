@@ -53,7 +53,7 @@ const DetailProfile = ({intro, alcoholLimitBottle, alcoholLimitGlass, mannersSco
 
 		</Box>
 			<Box  sx={{display: 'flex', flexDirection:'column', justifyContent:'center', alignItems:'right', marginTop:8}}>
-				<Box sx={{display: 'flex', alignItems:'center', gap:4}}>
+				<Box sx={{display: 'flex', alignItems:'center', gap:2}}>
 				<Typography sx={{fontWeight: 'bold', color: '#00a152'}}
 							variant="h5">
 					소주

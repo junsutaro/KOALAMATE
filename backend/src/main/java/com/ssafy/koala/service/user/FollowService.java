@@ -107,6 +107,7 @@ public class FollowService {
             dto.setBirthRange(um.getBirthRange());
             dto.setGender(um.getGender());
             dto.setProfile(um.getProfile());
+            dto.setIntroduction(um.getIntroduction());
             result.add(dto);
         }
         return result;

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import MyPageButton from '../components/Profile/MyPageButton';
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import MyPageButton from '../components/Profile/MyPageButton';
 import FollowItem from '../components/Follow/FollowItem';
+import { Box } from '@mui/material';
 
 const FolloweeList = () => {
 	const { userId } = useParams();
@@ -11,22 +12,26 @@ const FolloweeList = () => {
 	const [followeeData, setFolloweeData] = useState({
 		cnt: 0,
 		list: [],
+		user: '',
+		id: 0,
 	});
 
-	useEffect(() => {
-		const getFolloweeData = async () => {
-			try {
-				const response = await axios.get(`http://localhost:8080/user/${userId}/followee`);
-				const data = response.data;
-				setFolloweeData({
-					cnt: data.followCnt,
-					list: data.list,
-				});
-			} catch (error) {
-				console.log(`팔로잉 데이터를 가져오는 중 에러 발생: `, error);
-			}
-		};
+	const getFolloweeData = async () => {
+		try {
+			const response = await axios.get(`http://localhost:8080/user/${userId}/followee`);
+			const data = response.data;
+			setFolloweeData({
+				cnt: data.followCnt,
+				list: data.list,
+				user: data.nickname,
+				id: data.id,
+			});
+		} catch (error) {
+			console.log(`팔로잉 데이터를 가져오는 중 에러 발생: `, error);
+		}
+	};
 
+	useEffect(() => {
 		getFolloweeData();
 	}, [userId]);
 
@@ -35,7 +40,8 @@ const FolloweeList = () => {
 	return (
 			<>
 				<MyPageButton/>
-				<h3>팔로워 목록 {followeeData.cnt}</h3>
+				<Box sx={{display:'flex', justifyContent:'center'}}>
+				<h3>{followeeData.user}님의 팔로잉 목록 {followeeData.cnt}</h3>
 				<ul>
 					{followeeData.list.map(followee => (
 							<FollowItem
@@ -44,10 +50,13 @@ const FolloweeList = () => {
 									nickname={followee.nickname}
 									birthRange={followee.birthRange}
 									gender={followee.gender}
-									imgSrc={followee.profile}
+									img={followee.profile}
+									intro={followee.introduction}
 							/>
 					))}
+
 				</ul>
+				</Box>
 			</>
 	);
 };
