@@ -60,9 +60,10 @@ const SignUp = () => {
 	const checkEmailAvailability = async (email) => {
 		console.log("checkEmail: ", email);
 		try {
-			const response = await axios.post('${process.env.REACT_APP_API_URL}/check-email',
+			const response = await axios.post('${process.env.REACT_APP_API_URL}/user/checkEmail',
 					{email});
-			setIsEmailAvailable(response.data.available);
+			console.log(response.data)
+			setIsEmailAvailable(response.data);
 		} catch (error) {
 			console.error('이메일 가용성 확인 중 오류 발생', error);
 		}
@@ -71,7 +72,7 @@ const SignUp = () => {
 	const checkNicknameAvailability = async (nickname) => {
 		console.log("checkNickname: ", nickname);
 		try {
-			const response = await axios.post('${process.env.REACT_APP_API_URL}/check-nickname',
+			const response = await axios.post('${process.env.REACT_APP_API_URL}/user/checkNickname',
 					{nickname});
 			setIsNicknameAvailable(response.data.available);
 		} catch (error) {

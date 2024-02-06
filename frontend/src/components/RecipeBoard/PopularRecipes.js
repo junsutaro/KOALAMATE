@@ -11,16 +11,28 @@ const recipeNames = [
 
 const PopularRecipes = () => {
 	const [currentRecipeIndex, setCurrentRecipeIndex] = useState(0);
+	const [isHovering, setIsHovering] = useState(false);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
+			if (!isHovering) {
 			setCurrentRecipeIndex(
 					(currentRecipeIndex) => (currentRecipeIndex + 1) % recipeNames.length
-			);
+			)}
 		}, 3000); // 3초마다 레시피 변경
 
 		return () => clearInterval(interval);
-	}, []);
+	}, [isHovering]);
+
+	const handleMouseEnter = (index) => {
+		setIsHovering(true);
+		setCurrentRecipeIndex(index);
+	};
+
+	const handleMouseLeave = () => {
+		setIsHovering(false);
+	};
+
 
 	return (
 			<div className={styles.container}>
@@ -33,9 +45,14 @@ const PopularRecipes = () => {
 							style={{ transform: `translateY(${-currentRecipeIndex * 100}%)` }}
 					>
 						{recipeNames.map((name, index) => (
-								<div key={index} className={styles.recipeName}>
-									{name}
-								</div>
+							<div
+								key={index}
+								className={styles.recipeName}
+								onMouseEnter={() => handleMouseEnter(index)}
+								onMouseLeave={handleMouseLeave}
+							>
+								{name}
+							</div>
 						))}
 					</div>
 				</div>

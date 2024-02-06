@@ -4,14 +4,14 @@ import {
     Box, Typography, TextField, Button, InputLabel, Select, MenuItem, FormControl, List, ListItem, ListItemText
 } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
+import Ingredients from "./Ingredients";
 
-const AddIngredient = () => {
+const AddIngredient = ({updateCocktails}) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [selectedIngredient, setSelectedIngredient] = useState(null);
     const [proportion, setProportion] = useState('');
     const [unit, setUnit] = useState('');
-    const [cocktails, setCocktails] = useState([]);
 
     const fetchIngredients = async (search) => {
         try {
@@ -42,14 +42,18 @@ const AddIngredient = () => {
                     category: selectedIngredient.category,
                 }
             };
-            setCocktails([...cocktails, newIngredient]);
+            updateCocktails((prevCocktails) => {
+                const updatedCocktails = [...prevCocktails, newIngredient];
+                // console.log('Updated cocktails:', updatedCocktails); 확인용
+                return updatedCocktails;
+            })
 
-            // Clear the input
             setSelectedIngredient(null);
             setProportion('');
             setUnit('');
         }
     };
+
 
     return (
         <Box m={1} p={4} sx={{
@@ -67,7 +71,7 @@ const AddIngredient = () => {
                 value={searchTerm}
                 onInputChange={handleSearchChange}
                 onChange={(event, newValue) => {
-                    const ingredient = searchResults.find(i => i.name === newValue);
+                    const ingredient = searchResults.find(item => item.name === newValue);
                     setSelectedIngredient(ingredient);
                 }}
                 renderInput={(params) => (
@@ -104,15 +108,7 @@ const AddIngredient = () => {
                 </FormControl>
             </Box>
             <Button variant="outlined" onClick={handleAddIngredient} sx={{ alignSelf: 'flex-end' }}>재료 추가</Button>
-            {cocktails.map((ingredient, index) => (
-                <List key={index} sx={{ mt: 2 }}>
-                    <ListItem>
-                        <ListItemText
-                            primary={`재료 이름: ${ingredient.drink.name}, 용량: ${ingredient.proportion}, 단위: ${ingredient.unit}`}
-                        />
-                    </ListItem>
-                </List>
-            ))}
+
         </Box>
     );
 }

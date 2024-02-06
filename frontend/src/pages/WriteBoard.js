@@ -1,167 +1,204 @@
 import React, {useState} from 'react';
-import {
-	Button,
-	TextField,
-	Typography,
-	Box,
-	TextareaAutosize,
-	IconButton, Grid, Container
-} from '@mui/material';
-import NoImage from 'assets/no_img.png'; // 'no_img.png' 이미지 경로 확인 필요
-import DeleteIcon from '@mui/icons-material/Delete';
-import CustomTextareaAutosize from '../components/CustomTextareaAutosize';
-import AddIngredient from "../components/AddIngredient";
 import {useSelector} from 'react-redux';
 import axios from 'axios';
+import NoImage from 'assets/no_img.png';
+import CustomTextareaAutosize from 'components/CustomTextareaAutosize';
+import AddIngredient from "components/AddIngredient";
+import Ingredients from "components/Ingredients";
+import {Button, TextField, Typography, Box, TextareaAutosize, IconButton, Grid, Container} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import {array} from "yup";
 
 function BulletinBoard() {
-	const [title, setTitle] = useState('');
-	const [content, setContent] = useState('');
-	const [imagePreview, setImagePreview] = useState(NoImage);
-	const nickname = useSelector(state => state.auth.user?.nickname);
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const [imagePreview, setImagePreview] = useState(NoImage);
+    const nickname = useSelector(state => state.auth.user?.nickname);
+    const [cocktails, setCocktails] = useState([]);
+    const [selectedImageFile, setSelectedImageFile] = useState(null);
+    const [imgUrl, setImgUrl] = useState('')
 
-	const handleTitleChange = (event) => {
-		setTitle(event.target.value);
-	};
+    const handleTitleChange = (event) => {
+        setTitle(event.target.value);
+    };
 
-	const handleContentChange = (event) => {
-		setContent(event.target.value);
-	};
+    const handleContentChange = (event) => {
+        setContent(event.target.value);
+    };
 
-	const handleImageChange = (event) => {
-		const file = event.target.files[0];
-		if (file) {
-			// 이미지 파일인지 확인
-			if (!file.type.startsWith('image/')) {
-				alert('이미지 파일만 업로드할 수 있습니다.');
-				return;
-			}
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            // 이미지 파일인지 확인
+            if (!file.type.startsWith('image/')) {
+                alert('이미지 파일만 업로드할 수 있습니다.');
+                return;
+            }
 
-			const reader = new FileReader();
-			reader.readAsDataURL(file);
-			reader.onloadend = () => {
-				setImagePreview(reader.result);
-			};
-		}
-	};
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+            };
 
-	const handleCancelImage = () => {
-		setImagePreview(NoImage);
-	};
+            // 이미지 파일을 상태로 업데이트
+            setSelectedImageFile(file);
+        }
+    };
 
-	const handleSubmit = async (event) => {
-		event.preventDefault();
+    const handleCancelImage = () => {
+        setImagePreview(NoImage);
+    };
 
-		let imageBase64 = null;
-		const fileInput = document.querySelector('input[type="file"]');
-		if (fileInput.files[0]) {
-			imageBase64 = await toBase64(fileInput.files[0]);
-		}
+    const saveRecipeImage = async (e) => {
+        e.preventDefault()
+        try {
+            // 이미지 파일이 선택되지 않았을 경우 예외처리
+            if (!selectedImageFile) {
+                console.error("이미지 파일이 선택되지 않았습니다.");
+                return;
+            }
 
-		const boardData = {
-			title: title,
-			content: content,
-			nickname: nickname,
-			image: imageBase64, // Base64 인코딩된 이미지 문자열
-		};
+            // FormData 객체를 생성하여 이미지 파일을 담음
+            const formData = new FormData();
+            formData.append("file", selectedImageFile);
 
-		try {
-			const res = await axios.post(
-					`${process.env.REACT_APP_API_URL}/board/write`,
-					boardData, // JSON 형태로 데이터 전송
-					{
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						withCredentials: true,
-					},
-			);
-			console.log('게시글 작성 완료 : ', res.data);
-		} catch (error) {
-			console.error('게시글 작성 중 오류 발생 : ', error);
-		}
+            // Axios를 사용하여 이미지를 업로드하는 요청 보냄
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/uploadBoardImage`, formData);
 
-	};
+            // 이미지 업로드 완료 후 URL을 반환
+            return response.data.imageUrl;
 
-	function toBase64(file) {
-		return new Promise((resolve, reject) => {
-			const reader = new FileReader();
-			reader.readAsDataURL(file);
-			reader.onload = () => resolve(reader.result);
-			reader.onerror = error => reject(error);
-		});
-	}
+        } catch (error) {
+            console.error("이미지 업로드에 실패했습니다.", error);
+            throw error; // 에러를 다시 던져서 호출한 곳에서 처리할 수 있도록 함
+        }
+    };
 
-	return (
-			<Container>
-				<Box component="form" noValidate autoComplete="off"
-				     onSubmit={handleSubmit} mt={2}>
-					<Grid container spacing={2}>
-						<Grid item xs={12} sm={4}>
-							<Box
-									sx={{
-										display: 'flex',
-										justifyContent: 'center',
-										alignItems: 'center',
-									}}
-							>
-								<Box sx={{
-									position: 'relative',
-									width: '100%',
-									maxWidth: '300px',
-									mb: 1,
-								}}>
-									<img src={imagePreview} alt="Preview" style={{
-										width: '100%',
-										height: 'auto',
-										borderRadius: '10px',
-										border: '1px solid grey',
-									}}/>
-									{imagePreview !== NoImage && (
-											<IconButton
-													aria-label="delete"
-													sx={{
-														position: 'absolute',
-														right: 0,
-														bottom: 0,
-														color: 'grey[900]',
-														backgroundColor: 'lightgrey',
-														borderRadius: '4px',
-														margin: '0 4px 4px 0',
-													}}
-													onClick={handleCancelImage}
-											>
-												<DeleteIcon/>
-											</IconButton>
-									)}
-									<Button variant="contained" component="label" fullWidth>
-										이미지 업로드
-										<input type="file" hidden onChange={handleImageChange}
-										       accept="image/*"/>
-									</Button>
-								</Box>
-							</Box>
+    // 게시글 저장 함수, 이제 imageUrl을 인자로 받음
+    const saveRecipe = async (imageUrl) => {
+        console.log("saveRecipe");
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/write`, {
+                nickname: nickname,
+                title: title,
+                content: content,
+                cocktails: cocktails,
+                image: imageUrl // 인자로 받은 이미지 URL 사용
+            });
 
-						</Grid>
-						<Grid item xs={12} sm={8}>
-							<TextField label="제목" variant="outlined" fullWidth value={title}
-							           onChange={handleTitleChange} sx={{mb: 2}}/>
-							{/*<CustomTextareaAutosize*/}
-							{/*		minRows={12}*/}
-							{/*		placeholder="내용"*/}
-							{/*		value={content}*/}
-							{/*		onChange={handleContentChange}*/}
-							{/*/>*/}
-                            <AddIngredient />
-							<Box display="flex" justifyContent="flex-end" mt={2}>
-								<Button type="submit" variant="contained" color="primary">게시글
-									올리기</Button>
-							</Box>
-						</Grid>
-					</Grid>
-				</Box>
-			</Container>
-	);
+            console.log('게시글 작성 완료: ', response.data);
+        } catch (error) {
+            console.error('게시글 작성 중 오류 발생: ', error);
+            throw error; // 에러를 다시 던져서 호출한 곳에서 처리할 수 있도록 함
+        }
+    };
+
+    // // 이미지 업로드 및 게시글 저장을 담당하는 함수
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault(); // 폼 제출 기본 동작 방지
+    //     try {
+    //         const imageUrl = await saveRecipeImage(e); // 이미지 업로드 완료까지 기다림
+    //         await saveRecipe(imageUrl); // 업로드된 이미지 URL을 가지고 게시글 저장
+    //         alert('레시피가 성공적으로 저장되었습니다😊');
+    //     } catch (error) {
+    //         console.error('게시글 작성 중 오류 발생: ', error);
+    //     }
+    // };
+
+    // 이미지 업로드 및 게시글 저장을 담당하는 함수
+    const handleSubmit = async (e) => {
+        e.preventDefault(); // 폼 제출 기본 동작 방지
+        try {
+            const imageUrl = await saveRecipeImage(e); // 이미지 업로드 완료까지 기다림
+            await saveRecipe(imageUrl); // 업로드된 이미지 URL을 가지고 게시글 저장
+            alert('레시피가 성공적으로 저장되었습니다😊');
+
+            // 입력 필드와 이미지 미리보기를 초기화
+            setTitle(''); // 제목 초기화
+            setContent(''); // 내용 초기화
+            setCocktails([]); // 재료 목록 초기화
+            setImagePreview(NoImage); // 이미지 미리보기 초기화
+            setSelectedImageFile(null); // 선택된 이미지 파일 초기화
+        } catch (error) {
+            console.error('게시글 작성 중 오류 발생: ', error);
+        }
+    };
+
+
+    return (
+        <Container>
+            <Box component="form" noValidate autoComplete="off" mt={2}>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} sm={4}>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Box sx={{
+                                position: 'relative',
+                                width: '100%',
+                                maxWidth: '300px',
+                                mb: 1,
+                            }}>
+                                <img src={imagePreview} alt="Preview" style={{
+                                    width: '100%',
+                                    height: 'auto',
+                                    borderRadius: '10px',
+                                    border: '1px solid grey',
+                                }}/>
+                                {imagePreview !== NoImage && (
+                                    <IconButton
+                                        aria-label="delete"
+                                        sx={{
+                                            position: 'absolute',
+                                            right: 0,
+                                            bottom: 0,
+                                            color: 'grey[900]',
+                                            backgroundColor: 'lightgrey',
+                                            borderRadius: '4px',
+                                            margin: '0 4px 4px 0',
+                                        }}
+                                        onClick={handleCancelImage}
+                                    >
+                                        <DeleteIcon/>
+                                    </IconButton>
+                                )}
+                                <Button variant="contained" component="label" fullWidth>
+                                    이미지 업로드
+                                    <input type="file" hidden onChange={handleImageChange}
+                                           accept="image/*"/>
+                                </Button>
+                            </Box>
+                        </Box>
+
+                    </Grid>
+                    <Grid item xs={12} sm={8}>
+                        <TextField label="제목" variant="outlined" fullWidth value={title}
+                                   onChange={handleTitleChange} sx={{mb: 2}}/>
+
+                        <CustomTextareaAutosize
+                            minRows={12}
+                            placeholder="내용"
+                            value={content}
+                            onChange={handleContentChange}
+                        />
+                        <Ingredients cocktails={cocktails}/>
+                        <AddIngredient updateCocktails={setCocktails}/> {/* prop으로 상태 업데이트 함수 전달 */}
+
+                        <Box display="flex" justifyContent="flex-end" mt={2}>
+                            <Button type="submit" variant="contained" color="primary" onClick={handleSubmit}>
+                                레시피 올리기
+                            </Button>
+                        </Box>
+                    </Grid>
+                </Grid>
+            </Box>
+        </Container>
+    );
 }
 
 export default BulletinBoard;

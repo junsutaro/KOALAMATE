@@ -1,50 +1,3 @@
-
-// 더미 데이터
-// const dummy = [
-// 	{
-// 		id: 1,
-// 		recipeName: '레시피1',
-// 		writerName: '작성자1',
-// 		recipeImg: '이미지 URL1',
-// 		percent: '도수1',
-// 		base: '베이스주1',
-// 		tag: '태그1',
-// 	},
-// 	{
-// 		id: 2,
-// 		recipeName: '레시피2',
-// 		writerName: '작성자2',
-// 		recipeImg: '이미지 URL2',
-// 		percent: '도수2',
-// 		base: '베이스주2',
-// 		tag: '태그2',
-// 	},
-// 	// 나머지 레시피 데이터...
-// ];
-//
-// export default function RecipeItem({
-// 		id,
-// 		recipeName,
-// 		writerName,
-// 		recipeImg,
-// 		percent,
-// 		base,
-// 		tag,
-// }) {
-// 	return (
-// 			<div className={style.container}>
-// 				<img className={style.recipe_img} src={recipeImg} />
-// 				<div className={style.content}>
-// 					<div className={style.recipe_name}>
-// 						{recipeName}
-// 					</div>
-// 					<div>By {writerName}</div>
-// 					<div>#{tag}</div>
-// 				</div>
-// 			</div>
-// 	);
-// }
-
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import style from "components/RecipeBoard/RecipeItem.module.css";
@@ -53,6 +6,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 
 
 function RecipeItem({ id, imageUrl, title, author, tags, liked }) {
+    const img = `http://localhost:3000/${imageUrl}`
+    console.log(imageUrl)
   console.log(`liked: ${liked}`)
   const navigate = useNavigate();
 
@@ -71,7 +26,7 @@ function RecipeItem({ id, imageUrl, title, author, tags, liked }) {
 
   return (
       <div className={style.card} onClick={handleCardClick}> {/* CSS 모듈 스타일 적용 */}
-        <img src='/recipeImages/recipe_img_1.jpg' alt={title} className={style.cardImage}/>
+        <img src={img} alt={title} className={style.cardImage}/>
         <div className={style.cardContent}>
           <p className={style.cardTitle}>{title}</p>
           <p className={style.cardAuthor}>By {author}</p>

@@ -31,7 +31,7 @@ public class BoardModel {
 	private int views;
 	private String nickname;
 	private String image;
-
+	private double dosu = 0;
 	//Like
 //	@OneToMany
 //	private List<UserModel> users = new ArrayList<>();
