@@ -3,6 +3,7 @@ package com.ssafy.koala.controller.user;
 import com.ssafy.koala.dto.user.*;
 import com.ssafy.koala.model.user.UserModel;
 import com.ssafy.koala.service.AuthService;
+import com.ssafy.koala.service.BoardService;
 import com.ssafy.koala.service.user.FollowService;
 import com.ssafy.koala.service.user.ProfileService;
 import com.ssafy.koala.service.user.UserService;
@@ -33,6 +34,7 @@ public class UserController {
 	private final UserService userService;
 	private final FollowService followService;
 	private final AuthService authService;
+	private final BoardService boardService;
 
 	@PostMapping("/login")
 	public Object login(@RequestBody UserDto user, HttpServletResponse response) {
@@ -192,6 +194,7 @@ public class UserController {
 		return new ResponseEntity<>(user.getId(), HttpStatus.OK);
 	}
 
+	// 상대방의 유저 정보, 음료 정보, 팔로우 정보 반환 (메이트 찾기에서 사용)
 	@GetMapping("/list")
 	public ResponseEntity<?> getUserList(HttpServletRequest request) {
 		String accessToken = authService.getAccessToken(request);
@@ -199,4 +202,20 @@ public class UserController {
 
 		return new ResponseEntity<>(userService.findAllUser(user.getId()), HttpStatus.OK);
 	}
+
+	// 유저의 매너 점수 갱신
+	@PostMapping("/score")
+	public ResponseEntity<?> evaluateMannerScore(@RequestBody ScoreDto evaluateData) {
+		// 평가할 유저가 누구인지, 몇점 줄건지
+		try {
+			userService.updateMannerScore(evaluateData.getEmail(), evaluateData.getScore());
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (EmptyResultDataAccessException e) {
+			// 해당 이메일에 해당하는 엔티티가 존재하지 않는 경우
+			return new ResponseEntity<>("Not found evaluate user", HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error evaluate manner score", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 }
