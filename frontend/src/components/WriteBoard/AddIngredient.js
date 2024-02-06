@@ -32,7 +32,7 @@ const AddIngredient = ({updateCocktails}) => {
     };
 
     const handleAddIngredient = () => {
-        if (selectedIngredient && proportion && unit) {
+        if (selectedIngredient && proportion >= 1 && unit) {
             const newIngredient = {
                 proportion: parseFloat(proportion),
                 unit: unit,
@@ -47,10 +47,12 @@ const AddIngredient = ({updateCocktails}) => {
                 // console.log('Updated cocktails:', updatedCocktails); 확인용
                 return updatedCocktails;
             })
-
+            setSearchTerm('')
             setSelectedIngredient(null);
             setProportion('');
             setUnit('');
+        }  else {
+            alert('용량은 1 이상이어야 합니다.');
         }
     };
 
@@ -85,6 +87,15 @@ const AddIngredient = ({updateCocktails}) => {
                         type='number'
                         value={proportion}
                         onChange={(e) => setProportion(e.target.value)}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            if (value >= 0) {
+                                setProportion(value);
+                            }
+                        }}
+                        inputProps={{
+                            min: 1      // 최솟값을 1으로 설정
+                        }}
                     />
                 </FormControl>
                 <FormControl fullWidth>
