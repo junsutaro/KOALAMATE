@@ -26,7 +26,7 @@ function App () {
 			})
 				.then((response) => {
 					console.log('Auth Response: ', response);
-					connect(`${process.env.REACT_APP_CHAT_URL}/chat`);
+					connect(`${process.env.REACT_APP_CHAT_URL}`);
 				})
 				.catch((error) => {
 					console.log('Auth Error: ', error);
