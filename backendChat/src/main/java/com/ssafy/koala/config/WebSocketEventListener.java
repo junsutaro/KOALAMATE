@@ -48,7 +48,7 @@ public class WebSocketEventListener {
 
         HttpEntity<SocketMessageDto> requestEntity = new HttpEntity<>(sockMessageDto, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                "https://localhost:8085/socket/message",
+                "http://i10d212.p.ssafy.io/api/socket/message",
                 HttpMethod.POST,
                 requestEntity,
                 String.class
@@ -76,7 +76,7 @@ public class WebSocketEventListener {
 
         HttpEntity<SocketMessageDto> requestEntity = new HttpEntity<>(sockMessageDto, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                "http://localhost:8085/socket/message",
+                "http://i10d212.p.ssafy.io/api/socket/message",
                 HttpMethod.POST,
                 requestEntity,
                 String.class
