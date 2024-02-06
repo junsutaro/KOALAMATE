@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/voice")
+@RequestMapping("/rtc")
 @Component
 @CrossOrigin(origins = "http://i10d212.p.ssafy.io")
 public class VoiceChatController {
