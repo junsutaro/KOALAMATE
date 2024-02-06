@@ -35,4 +35,5 @@ public class FindMateController {
             return new ResponseEntity<>("error save location", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

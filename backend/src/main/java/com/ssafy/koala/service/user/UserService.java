@@ -1,10 +1,16 @@
 package com.ssafy.koala.service.user;
 
 import com.ssafy.koala.config.jwt.JwtUtil;
+import com.ssafy.koala.dto.drink.DrinkWithoutCocktailDto;
 import com.ssafy.koala.dto.user.TokenResponse;
 import com.ssafy.koala.dto.user.UserDto;
+import com.ssafy.koala.dto.user.UserResponseDto;
+import com.ssafy.koala.model.DrinkModel;
 import com.ssafy.koala.model.RefrigeratorModel;
+import com.ssafy.koala.model.user.FollowModel;
 import com.ssafy.koala.model.user.UserModel;
+import com.ssafy.koala.repository.DrinkRepository;
+import com.ssafy.koala.repository.FollowRepository;
 import com.ssafy.koala.repository.RefrigeratorRepository;
 import com.ssafy.koala.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -16,9 +22,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,8 @@ public class UserService {
     private final PasswordEncoder encoder;
 
     private final RefrigeratorRepository refrigeratorRepository;
+    private final FollowRepository followRepository;
+    private final DrinkRepository drinkRepository;
 
 
     public Optional<UserDto> findUserByEmailAndPassword(String email, String password) {
@@ -163,5 +169,37 @@ public class UserService {
             user.setLongitude(longitude);
             userRepository.save(user);
         }
+    }
+
+    @Transactional
+    public List<UserResponseDto> findAllUser(Long id) {
+        List<UserResponseDto> result = new ArrayList<>();
+        List<FollowModel> follows = followRepository.findFolloweeByFollower_Id(id);
+
+        List<UserModel> users = userRepository.findAll();
+        for(UserModel user : users) {
+            UserResponseDto tmp = new UserResponseDto();
+            BeanUtils.copyProperties(user, tmp);
+
+            for(FollowModel follow : follows) {
+                if(user.getId() == follow.getFollowee().getId()) {
+                    tmp.setFollow(true);
+                    break;
+                }
+            }
+
+            List<DrinkModel> drinks = drinkRepository.findAllEntitiesByUserId(user.getId());
+            List<DrinkWithoutCocktailDto> drinkList = new ArrayList<>();
+
+            for(DrinkModel d : drinks) {
+                DrinkWithoutCocktailDto drink = new DrinkWithoutCocktailDto();
+                BeanUtils.copyProperties(d, drink);
+                drinkList.add(drink);
+            }
+
+            tmp.setDrinks(drinkList);
+            result.add(tmp);
+        }
+        return result;
     }
 }

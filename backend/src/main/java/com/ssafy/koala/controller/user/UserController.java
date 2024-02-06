@@ -191,4 +191,12 @@ public class UserController {
 		UserDto user = authService.extractUserFromToken(accessToken);
 		return new ResponseEntity<>(user.getId(), HttpStatus.OK);
 	}
+
+	@GetMapping("/list")
+	public ResponseEntity<?> getUserList(HttpServletRequest request) {
+		String accessToken = authService.getAccessToken(request);
+		UserDto user = authService.extractUserFromToken(accessToken);
+
+		return new ResponseEntity<>(userService.findAllUser(user.getId()), HttpStatus.OK);
+	}
 }
