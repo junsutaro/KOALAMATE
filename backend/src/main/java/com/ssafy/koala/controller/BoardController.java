@@ -138,4 +138,25 @@ public class BoardController {
 
 		return new ResponseEntity<>(boardService.searchAndPageBoards(keyword, page-1, size),HttpStatus.OK);
 	}
+
+	// 내가 작성한 게시글(레시피) 리스트
+	@GetMapping("/mylist")
+	public ResponseEntity<?> listMyBoard(@RequestParam int page, @RequestParam int size, HttpServletRequest request) {
+		String accessToken = authService.getAccessToken(request);
+		UserDto user = authService.extractUserFromToken(accessToken);
+
+		//페이지 시작은 0부터
+		return new ResponseEntity<>(boardService.getMyPageEntities(page-1, size, user.getNickname()),HttpStatus.OK);
+	}
+
+	// 내가 좋아요 한 게시글(레시피) 리스트
+	@GetMapping("/likelist")
+	public ResponseEntity<?> listLikeBoard(@RequestParam int page, @RequestParam int size, HttpServletRequest request) {
+		String accessToken = authService.getAccessToken(request);
+		UserDto user = authService.extractUserFromToken(accessToken);
+
+		//페이지 시작은 0부터
+		return new ResponseEntity<>(boardService.getLikedPageEntities(page-1, size, user.getId()),HttpStatus.OK);
+	}
+
 }

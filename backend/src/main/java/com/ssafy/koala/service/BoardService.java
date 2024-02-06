@@ -281,4 +281,89 @@ public class BoardService {
 		}
 		return null;
 	}
+
+	public List<ViewBoardResponseDto> getMyPageEntities(int page, int size, String nickname) {
+		Sort sort = Sort.by(Sort.Direction.DESC, "id");
+		Pageable pageable = PageRequest.of(page, size, sort);
+		Page<BoardModel> entities = boardRepository.findByNickname(nickname, pageable);
+
+		List<ViewBoardResponseDto> result = entities.stream()
+				.map(board -> {
+					ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
+					BeanUtils.copyProperties(board, boardDto);
+
+					List<CocktailWithDrinkDto> cocktails = board.getCocktails().stream()
+							.map(temp -> {
+								CocktailWithDrinkDto insert = new CocktailWithDrinkDto();
+								BeanUtils.copyProperties(temp, insert);
+
+								DrinkWithoutCocktailDto drinkDto = new DrinkWithoutCocktailDto();
+								BeanUtils.copyProperties(temp.getDrink(), drinkDto);
+
+								insert.setDrink(drinkDto);
+								return insert;
+							})
+							.collect(Collectors.toList());
+
+					List<CommentDto> comments = board.getComments().stream()
+							.map(temp -> {
+								CommentDto insert = new CommentDto();
+								BeanUtils.copyProperties(temp, insert);
+								return insert;
+							})
+							.collect(Collectors.toList());
+
+					boardDto.setCocktails(cocktails);
+					boardDto.setComments(comments);
+					return boardDto;
+				})
+				.collect(Collectors.toList());
+
+		return result;
+	}
+
+	public List<ViewBoardResponseDto> getLikedPageEntities(int page, int size, Long userId) {
+		Sort sort = Sort.by(Sort.Direction.DESC, "id");
+		Pageable pageable = PageRequest.of(page, size, sort);
+
+		// 사용자가 좋아요 한 board_id 리스트를 가져온다.
+		List<Long> likedBoardIds = likeRepository.findLikedBoardIdsByUserId(userId);
+
+		// Specification을 사용하여 조건에 맞는 BoardModel 조회
+		Page<BoardModel> entities = boardRepository.findAll(BoardSpecifications.boardIsLikedByUser(likedBoardIds), pageable);
+
+		List<ViewBoardResponseDto> result = entities.stream()
+				.map(board -> {
+					ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
+					BeanUtils.copyProperties(board, boardDto);
+
+					List<CocktailWithDrinkDto> cocktails = board.getCocktails().stream()
+							.map(temp -> {
+								CocktailWithDrinkDto insert = new CocktailWithDrinkDto();
+								BeanUtils.copyProperties(temp, insert);
+
+								DrinkWithoutCocktailDto drinkDto = new DrinkWithoutCocktailDto();
+								BeanUtils.copyProperties(temp.getDrink(), drinkDto);
+
+								insert.setDrink(drinkDto);
+								return insert;
+							})
+							.collect(Collectors.toList());
+
+					List<CommentDto> comments = board.getComments().stream()
+							.map(temp -> {
+								CommentDto insert = new CommentDto();
+								BeanUtils.copyProperties(temp, insert);
+								return insert;
+							})
+							.collect(Collectors.toList());
+
+					boardDto.setCocktails(cocktails);
+					boardDto.setComments(comments);
+					return boardDto;
+				})
+				.collect(Collectors.toList());
+
+		return result;
+	}
 }
