@@ -73,28 +73,30 @@ public class UserController {
 		}
 	}
 
-	@PostMapping("/checkEmail")
-	public ResponseEntity<String> checkEmailDuplicate(@RequestBody String email) {
+	@PostMapping("/check-email")
+	public ResponseEntity<?> checkEmailDuplicate(@RequestBody UserDto user) {
 		try {
+			String email = user.getEmail();
 			Optional<UserDto> userOpt = userService.findByEmail(email);
 			if (userOpt.isEmpty()) {
-				return new ResponseEntity<>("사용가능한 이메일입니다.", HttpStatus.OK);
+				return new ResponseEntity<>(Map.of("available", true), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>("사용불가능한 이메일입니다.", HttpStatus.OK);
+				return new ResponseEntity<>(Map.of("available", false), HttpStatus.OK);
 			}
 		} catch(Exception e) {
 			return new ResponseEntity<>("중복확인에 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	@PostMapping("/checkNickname")
-	public  ResponseEntity<String> checkNicknameDuplicate(@RequestBody String nickname) {
+	@PostMapping("/check-nickname")
+	public  ResponseEntity<?> checkNicknameDuplicate(@RequestBody UserDto user) {
 		try {
+			String nickname = user.getNickname();
 			Optional<UserDto> userOpt = userService.findByNickname(nickname);
 			if (userOpt.isEmpty()) {
-				return new ResponseEntity<>("사용가능한 닉네임입니다.", HttpStatus.OK);
+				return new ResponseEntity<>(Map.of("available", true), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>("사용불가능한 닉네임입니다.", HttpStatus.OK);
+				return new ResponseEntity<>(Map.of("available", false), HttpStatus.OK);
 			}
 		} catch(Exception e) {
 			return new ResponseEntity<>("중복확인에 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -121,7 +123,17 @@ public class UserController {
 		FollowResponseDto dto = new FollowResponseDto();
 		dto.setFollowCnt(cnt);
 		dto.setList(followeeList);
+
+		// 해당 id의 userId, nickname Optional로(필요없긴함) 같이 넘겨요
+		Optional<UserModel> userOpt = userService.findById(user_id); // userService에 findById 메소드가 있다고 가정
+		if (userOpt.isPresent()) {
+			UserModel user = userOpt.get();
+			dto.setId(user.getId());
+			dto.setNickname(user.getNickname());
+		}
+
 		return new ResponseEntity<>(dto, HttpStatus.OK);
+
 	}
 
 	// 유저 팔로워 목록
@@ -133,19 +145,28 @@ public class UserController {
 		FollowResponseDto dto = new FollowResponseDto();
 		dto.setFollowCnt(cnt);
 		dto.setList(followerList);
+
+		// 해당 id의 userId, nickname Optional로(필요없긴함) 같이 넘겨요
+		Optional<UserModel> userOpt = userService.findById(user_id); // userService에 findById 메소드가 있다고 가정
+		if (userOpt.isPresent()) {
+			UserModel user = userOpt.get();
+			dto.setId(user.getId());
+			dto.setNickname(user.getNickname());
+		}
 		return new ResponseEntity<>(dto, HttpStatus.OK);
+
 	}
 
 	// 팔로우 여부에 따라 팔로우 or 언팔로우
 	@PostMapping("/follow")
-	public ResponseEntity<?> followToggle(@RequestBody long userId, HttpServletRequest request) {
+	public ResponseEntity<?> followToggle(@RequestBody UserDto dto, HttpServletRequest request) {
 		// 자신의 정보는 JWT에서 가져오기
 		String accessToken = authService.getAccessToken(request);
 		UserDto user = authService.extractUserFromToken(accessToken);
 		log.info(user.getId()+"\n");
 		long myUid = user.getId();
-
 		try {
+			long userId = dto.getId();
 			boolean isFollowed = followService.checkFollow(myUid, userId);
 			if(isFollowed) {
 				// 언팔로우
@@ -157,10 +178,10 @@ public class UserController {
 			return new ResponseEntity<>("Follow for ID " + userId + " processed successfully.", HttpStatus.OK);
 		} catch (EmptyResultDataAccessException e) {
 			// 해당 ID에 해당하는 엔티티가 존재하지 않는 경우
-			return new ResponseEntity<>("Follow with ID " + userId + " not found.", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("Not found follow user", HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			// 기타 예외 처리
-			return new ResponseEntity<>("Error follow request with ID " + userId, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Error follow request", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -169,5 +190,13 @@ public class UserController {
 		String accessToken = authService.getAccessToken(request);
 		UserDto user = authService.extractUserFromToken(accessToken);
 		return new ResponseEntity<>(user.getId(), HttpStatus.OK);
+	}
+
+	@GetMapping("/list")
+	public ResponseEntity<?> getUserList(HttpServletRequest request) {
+		String accessToken = authService.getAccessToken(request);
+		UserDto user = authService.extractUserFromToken(accessToken);
+
+		return new ResponseEntity<>(userService.findAllUser(user.getId()), HttpStatus.OK);
 	}
 }

@@ -10,6 +10,7 @@ import {
 import NoImage from 'assets/no_img.png'; // 'no_img.png' 이미지 경로 확인 필요
 import DeleteIcon from '@mui/icons-material/Delete';
 import CustomTextareaAutosize from '../components/CustomTextareaAutosize';
+import AddIngredient from "../components/AddIngredient";
 import {useSelector} from 'react-redux';
 import axios from 'axios';
 
@@ -151,6 +152,7 @@ function BulletinBoard() {
 							{/*		value={content}*/}
 							{/*		onChange={handleContentChange}*/}
 							{/*/>*/}
+                            <AddIngredient />
 							<Box display="flex" justifyContent="flex-end" mt={2}>
 								<Button type="submit" variant="contained" color="primary">게시글
 									올리기</Button>

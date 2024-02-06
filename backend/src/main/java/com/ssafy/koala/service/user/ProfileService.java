@@ -35,7 +35,7 @@ public class ProfileService {
         return profileDto;
     }
 
-    public boolean modifyProfile(Long userId, ProfileModifyDto modifiedProfile, MultipartFile file, String filePath) {
+    public boolean modifyProfile(Long userId, ProfileModifyDto modifiedProfile) {
         System.out.println("modifyProfile 메서드 호출 확인");
         Optional<UserModel> userOptional = userRepository.findById(userId);
 
@@ -52,38 +52,68 @@ public class ProfileService {
             user.setAlcoholLimitGlass(modifiedProfile.getAlcoholLimitGlass());
             user.setTags(modifiedProfile.getTags());
 
-            try {
-                // 업로드된 프로필 이미지를 저장할 디렉토리 경로 설정
-                String fileDir = filePath + "/" + userId;
-                File directory = new File(fileDir);
+            userRepository.save(user);
 
-                // 상위 디렉토리가 없으면 생성
-                createDirectory(directory);
+            // 오류 메시지 출력
+            System.out.println("프로필 수정이 완료되었습니다.");
 
-                // 업로드된 파일의 실제 경로 설정
-                String uploadedFilePath = fileDir + "/" + file.getOriginalFilename();
-                System.out.println("Uploaded File Path: " + uploadedFilePath);
+            return true; // 수정 성공을 나타내는 값
+        } else {
+            // 오류 메시지 출력
+            System.out.println("유저를 찾을 수 없습니다. 유저 ID를 확인해주세요.");
 
-                // 파일 저장
-                Files.copy(file.getInputStream(), Paths.get(uploadedFilePath), StandardCopyOption.REPLACE_EXISTING);
-
-                // 업로드된 프로필 이미지 경로를 UserModel에 설정
-                user.setProfile(uploadedFilePath);
-
-                // UserRepository를 사용하여 업데이트된 사용자 정보를 저장
-                userRepository.save(user);
-
-                return true;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            return false; // 수정 실패를 나타내는 값
         }
-
-        return false;
     }
+//public boolean modifyProfile(Long userId, ProfileModifyDto modifiedProfile, MultipartFile file, String filePath) {
+//        System.out.println("modifyProfile 메서드 호출 확인");
+//        Optional<UserModel> userOptional = userRepository.findById(userId);
+//
+//        if (userOptional.isPresent()) {
+//            UserModel user = userOptional.get();
+//
+//            // modifiedProfile에서 필요한 정보를 가져와서 UserModel을 업데이트한다.
+//            user.setNickname(modifiedProfile.getNickname());
+//            user.setBirthRange(modifiedProfile.getBirthRange());
+//            user.setGender(modifiedProfile.getGender());
+////            user.setProfile(modifiedProfile.getProfile());
+//            user.setIntroduction(modifiedProfile.getIntroduction());
+//            user.setAlcoholLimitBottle(modifiedProfile.getAlcoholLimitBottle());
+//            user.setAlcoholLimitGlass(modifiedProfile.getAlcoholLimitGlass());
+//            user.setTags(modifiedProfile.getTags());
+//
+//            try {
+//                // 업로드된 프로필 이미지를 저장할 디렉토리 경로 설정
+//                String fileDir = filePath + "/" + userId;
+//                File directory = new File(fileDir);
+//
+//                // 상위 디렉토리가 없으면 생성
+//                createDirectory(directory);
+//
+//                // 업로드된 파일의 실제 경로 설정
+//                String uploadedFilePath = fileDir + "/" + file.getOriginalFilename();
+//                System.out.println("Uploaded File Path: " + uploadedFilePath);
+//
+//                // 파일 저장
+//                Files.copy(file.getInputStream(), Paths.get(uploadedFilePath), StandardCopyOption.REPLACE_EXISTING);
+//
+//                // 업로드된 프로필 이미지 경로를 UserModel에 설정
+//                user.setProfile(uploadedFilePath);
+//
+//                // UserRepository를 사용하여 업데이트된 사용자 정보를 저장
+//                userRepository.save(user);
+//
+//                return true;
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        return false;
+//    }
 
 
-    public boolean uploadProfileImage(Long userId, MultipartFile file, String filePath) {
+    public boolean uploadProfileImage(Long userId, MultipartFile file, String filePath, String profileImgUrl) {
         Optional<UserModel> userOptional = userRepository.findById(userId);
 
         if (userOptional.isPresent() && !file.isEmpty()) {
@@ -94,6 +124,7 @@ public class ProfileService {
             try {
                 // 업로드된 프로필 이미지를 저장할 디렉토리 경로 설정
                 String fileDir = filePath + "/" + userId;
+                String ImgUrl = profileImgUrl + "/" + userId + "/" + file.getOriginalFilename();
                 File directory = new File(fileDir);
 
                 System.out.println("directory = " + directory);
@@ -109,7 +140,7 @@ public class ProfileService {
                 Files.copy(file.getInputStream(), Paths.get(uploadedFilePath), StandardCopyOption.REPLACE_EXISTING);
 
                 // 업로드된 프로필 이미지 경로를 UserModel에 설정
-                user.setProfile(uploadedFilePath);
+                user.setProfile(ImgUrl);
 
                 // UserRepository를 사용하여 업데이트된 사용자 정보를 저장
                 userRepository.save(user);

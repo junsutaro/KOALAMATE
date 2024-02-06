@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Chatting from 'components/Chatting';
 import {
 	List,
@@ -11,7 +11,21 @@ import {
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 
+const getChatRooms = () => {
+	const chatRooms = sessionStorage.getItem('roomList');
+	return chatRooms ? JSON.parse(chatRooms) : [];
+};
+
 const Chattings = () => {
+	const [rooms, setRooms] = useState([]);
+
+	useEffect(() => {
+		const chatRooms = getChatRooms();
+		console.log(chatRooms);
+		setRooms(chatRooms);
+	}, []);
+
+	const chatRoomsObj = getChatRooms();
 	const chatRooms = [
 		{id: 1, participants: ['Alice', 'Bob']},
 		{id: 2, participants: ['Charlie', 'Dave']},
@@ -31,21 +45,23 @@ const Chattings = () => {
 		}
 	};
 
-	const [rooms, setRooms] = useState(chatRooms);
-
 	return (
 			<List component="nav">
 				{rooms.map((room) => (
 						<React.Fragment key={room.id}>
 							<ListItem button onClick={() => toggleExpand(room.id)}>
-								<ListItemText primary={`${room.participants.join(', ')}`}/>
+								<ListItemText
+									primary={room.users.map(user => user.nickname).join(', ')}
+									secondary={expandedRoomId !== room.id ? `${room.lastMessage.nickname}: ${room.lastMessage.content}` : ''}
+								/>
 								{expandedRoomId === room.id ? <ExpandLess /> : <ExpandMore />}
 							</ListItem>
-							<Collapse in={expandedRoomId === room.id} timeout="auto" unmountOnExit>
-								<Box sx={{bgcolor: 'background.paper'}}>
-									<Chatting roomNumber={room.id}/>
-								</Box>
-							</Collapse>
+							{expandedRoomId === room.id && <Chatting roomNumber={room.id}/>}
+							{/*<Collapse in={expandedRoomId === room.id} timeout="auto" unmountOnExit>*/}
+							{/*	<Box sx={{bgcolor: 'background.paper'}}>*/}
+							{/*		<Chatting roomNumber={room.id}/>*/}
+							{/*	</Box>*/}
+							{/*</Collapse>*/}
 						</React.Fragment>
 				))}
 			</List>

@@ -48,6 +48,7 @@ const Nav = () => {
 
 	const handleLogout = async () => {
 		try {
+			console.log(`${process.env.REACT_APP_API_URL}`);
 			await axios.post(`${process.env.REACT_APP_API_URL}/user/logout`, {}, {withCredentials: true});
 			dispatch(setLoginStatus(false));
 			disconnect();
@@ -60,10 +61,15 @@ const Nav = () => {
 
 const handleMyPage = async () => {
 	try {
+		const authHeader = localStorage.getItem('authHeader');
 		const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/myId`,
-				{}, {withCredentials: true});
+				{}, {
+			headers: {
+				'Authorization': authHeader,
+			},
+			withCredentials: true});
 		console.log(res);
-
+		navigate(`/user/${res.data}`);
 	} catch (error) {
 		console.log(error);
 	}

@@ -33,7 +33,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-//@Controller
+@Controller
 public class WebChatController {
     private final Map<String, String> sessionUserMap = new HashMap<>();
     private final MessageService messageService;
@@ -54,19 +54,20 @@ public class WebChatController {
         if (clientMessage.getRoomId() == -1) {  //최초 로그인
             sessionUserMap.put(clientMessage.getSessionId(), "init");
         } else if (clientMessage.getRoomId() == -2) {  //세션 종료 -> 마지막 메시지 저장 필요
-            //chatService.updateLastId(sessionUserMap.get(clientMessage.getSessionId())); // 마지막 메시지 저장
             System.out.println(sessionUserMap.get(clientMessage.getSessionId()));
+            chatService.updateLastId(sessionUserMap.get(clientMessage.getSessionId())); // 마지막 메시지 저장
+
             sessionUserMap.remove(clientMessage.getSessionId());
         } else {
             if (sessionUserMap.get(clientMessage.getSessionId()).equals("init")) { //이후 메시지 올 경우, sessionId -> nickname 맵핑
                 sessionUserMap.replace(clientMessage.getSessionId(), clientMessage.getNickname());
             }
-//            ChatroomModel chatroom = chatroomService.getChatroomById(clientMessage.getRoomId());
-//            MessageModel messageModel = new MessageModel();
-//            BeanUtils.copyProperties(clientMessage, messageModel);
-//            messageModel.setChatroom(chatroom);
-//            messageModel.setDate(LocalDateTime.now());
-//            messageService.saveMessage(messageModel);
+            ChatroomModel chatroom = chatroomService.getChatroomById(clientMessage.getRoomId());
+            MessageModel messageModel = new MessageModel();
+            BeanUtils.copyProperties(clientMessage, messageModel);
+            messageModel.setChatroom(chatroom);
+            messageModel.setDate(LocalDateTime.now());
+            messageService.saveMessage(messageModel);
         }
 
         return ResponseEntity.ok("Response");

@@ -51,18 +51,17 @@ public class WebChatController {
 
     @MessageMapping("/messages/{roomId}")
     @SendTo("/topic/messages/{roomId}")
-    public String sendMessage(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomId, String message) throws JsonProcessingException {
+    public MessageDto sendMessage(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomId, MessageDto messageDto) throws JsonProcessingException {
         String sessionId = headerAccessor.getSessionId();
 
-        MessageDto messageDto = objectMapper.readValue(message, MessageDto.class);
 
-        System.out.println(roomId + " " + message + " " + sessionId);
+        System.out.println(roomId + " " + messageDto + " " + sessionId);
 
         SocketMessageDto sockMessageDto = new SocketMessageDto();
         sockMessageDto.setSessionId(sessionId);
         sockMessageDto.setContent(messageDto.getContent());
         sockMessageDto.setRoomId(Long.parseLong(roomId));
-        sockMessageDto.setNickname("ssafy");
+        sockMessageDto.setNickname(messageDto.getNickname());
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -77,6 +76,6 @@ public class WebChatController {
         );
 
         // 메시지를 받아서 "/topic/messages"에 있는 모든 구독자에게 브로드캐스트합니다.
-        return message;
+        return messageDto;
     }
 }

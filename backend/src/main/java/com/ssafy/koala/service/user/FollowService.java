@@ -103,10 +103,12 @@ public class FollowService {
         for(UserModel um : list) {
             UserListDto dto = new UserListDto();
             dto.setId(um.getId());
+            dto.setEmail(um.getEmail());
             dto.setNickname(um.getNickname());
             dto.setBirthRange(um.getBirthRange());
             dto.setGender(um.getGender());
             dto.setProfile(um.getProfile());
+            dto.setIntroduction(um.getIntroduction());
             result.add(dto);
         }
         return result;

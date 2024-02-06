@@ -41,7 +41,9 @@ public class ChatroomController {
 
     @PostMapping("/roomlist")
     public ResponseEntity<List<ChatroomResponseDto>> getChatroomByUserId(HttpServletRequest request) {
+        System.out.println("getChatroomByUserId");
         String accessToken = authService.getAccessToken(request);
+        System.out.println(accessToken);
         long id = authService.extractUserFromToken(accessToken).getId();
         List<ChatroomResponseDto> list = chatService.getChatroomByUserId(id);
         return new ResponseEntity<>(list, HttpStatus.OK);

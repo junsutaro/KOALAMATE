@@ -40,15 +40,17 @@ export const WebSocketProvider = ({ children }) => {
 
 	const subscribe = (destination, callback) => {
 		if (stompClient && stompClient.connected) {
-			console.log("qwewaerawerwegadgaestetawetaewraewr")
-			stompClient.subscribe(destination, callback);
+			const subscription = stompClient.subscribe(destination, callback);
+			console.log("Subscribed to " + destination);
+			return subscription; // 구독 객체 반환
 		}
+		return null;
 	};
 
 	const sendMessage = (destination, body) => {
 		if (stompClient && stompClient.connected) {
 			stompClient.publish({
-				destination,
+				destination: destination,
 				body: body,
 			});
 		}

@@ -17,6 +17,8 @@ public interface ChatRepository extends JpaRepository<ChatModel, Long> {
     void deleteByUserEmailAndChatroomId(String userEmail, long chatroomId);
     List<ChatModel> findByUserId(long id);
 
+    List<ChatModel> findByChatroomId(long id);
+
     @Modifying
     @Query("UPDATE ChatModel c " +
             "SET c.lastId = (SELECT MAX(m.id) FROM MessageModel m WHERE m.chatroom.id = c.chatroom.id) " +

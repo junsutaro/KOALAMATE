@@ -30,8 +30,10 @@ import Chatting from '../components/Chatting';
 import MyPage from '../pages/MyPage';
 import FollowerList from '../pages/FollowerList';
 import FolloweeList from '../pages/FolloweeList';
+
 import Mate from '../pages/Mate';
 import UpdateMyPage from '../pages/UpdateMyPage';
+import VoiceChatRoom from '../components/VoiceChatRoom';
 
 const MainLayout = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -62,7 +64,7 @@ const MainLayout = () => {
 							</Toolbar>
 							<Divider />
 							<Box sx={{ width: 350 }} role="presentation">
-								<Chattings />
+								{isOpen && (<Chattings />)}
 							</Box>
 						</Drawer>
 				)}
@@ -80,11 +82,14 @@ const MainLayout = () => {
 					<Route path="/signup" element={<SignUp />} />
 					<Route path="/writeBoard" element={<WriteBoard />} />
 					<Route path="/:boardId/comments" element={<CommentList />} />
-					<Route path="chatting" element={<Chatting />} />
 					<Route path="/user/:userId" element={<MyPage />} />
 					<Route path="/user/:userId/update" element={<UpdateMyPage />} />
+
+					{/*<Route path="/user/:userId/update" element={<WriteMyPage />} />*/}
+
 					<Route path="/user/:userId/follower" element={<FollowerList />} />
 					<Route path="/user/:userId/followee" element={<FolloweeList />} />
+					<Route path="/voiceChat" element={<VoiceChatRoom />} />
 					{/* 다른 라우트들 */}
 				</Routes>
 				<Footer />
