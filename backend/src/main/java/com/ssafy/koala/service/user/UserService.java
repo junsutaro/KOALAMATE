@@ -212,6 +212,7 @@ public class UserService {
             double originalScore = storedScore * storedCnt;
             originalScore += score;
             user.get().setMannersScore(originalScore / ++storedCnt);
+            user.get().setEvaluateCnt(storedCnt);
             userRepository.save(user.get());
         }
     }
