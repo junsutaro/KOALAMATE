@@ -55,7 +55,7 @@ public class WebChatController {
             sessionUserMap.put(clientMessage.getSessionId(), "init");
         } else if (clientMessage.getRoomId() == -2) {  //세션 종료 -> 마지막 메시지 저장 필요
             System.out.println(sessionUserMap.get(clientMessage.getSessionId()));
-            //chatService.updateLastId(sessionUserMap.get(clientMessage.getSessionId())); // 마지막 메시지 저장
+            chatService.updateLastId(sessionUserMap.get(clientMessage.getSessionId())); // 마지막 메시지 저장
 
             sessionUserMap.remove(clientMessage.getSessionId());
         } else {

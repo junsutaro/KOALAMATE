@@ -64,6 +64,7 @@ public class ChatService {
         return chatRepository.findByUserId(id);
     }
 
+    @Transactional
     public void updateLastId(String nickname) {
         chatRepository.updateLastIdForChatByUserNickname(nickname);
         // ChatRepository를 사용하여 Chat 엔티티를 업데이트합니다.

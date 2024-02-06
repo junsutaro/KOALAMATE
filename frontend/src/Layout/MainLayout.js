@@ -31,6 +31,7 @@ import MyPage from '../pages/MyPage';
 import FollowerList from '../pages/FollowerList';
 import FolloweeList from '../pages/FolloweeList';
 import UpdateMyPage from '../pages/UpdateMyPage';
+import VoiceChatRoom from '../components/VoiceChatRoom';
 
 const MainLayout = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -84,6 +85,7 @@ const MainLayout = () => {
 					{/*<Route path="/user/:userId/update" element={<WriteMyPage />} />*/}
 					<Route path="/user/:userId/follower" element={<FollowerList />} />
 					<Route path="/user/:userId/followee" element={<FolloweeList />} />
+					<Route path="/voiceChat" element={<VoiceChatRoom />} />
 					{/* 다른 라우트들 */}
 				</Routes>
 				<Footer />
