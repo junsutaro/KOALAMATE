@@ -135,20 +135,20 @@ function Map() {
 			marker.setImage(normalImage);
 		});
 
-		// 커스텀 오버레이에 표출될 내용
-		var content = `<div class="${style.customoverlay}">` + // CSS 모듈의 클래스 이름 사용
-				'<a href="https://map.kakao.com/" target="_blank">' +
-				'<span class="title">닉네임</span>' + // 'title' 클래스도 CSS 모듈을 통해 관리해야 한다면 같은 방식으로 적용
-				'</a>' +
-				'</div>';
-
-		// 커스텀 오버레이를 생성합니다
-		var customOverlay = new window.kakao.maps.CustomOverlay({
-			map: map,
-			position: markerPosition,
-			content: content,
-			yAnchor: 1
-		});
+		// // 커스텀 오버레이에 표출될 내용
+		// var content = `<div class="${style.customoverlay}">` + // CSS 모듈의 클래스 이름 사용
+		// 		'<a href="https://map.kakao.com/" target="_blank">' +
+		// 		'<span class="title">닉네임</span>' + // 'title' 클래스도 CSS 모듈을 통해 관리해야 한다면 같은 방식으로 적용
+		// 		'</a>' +
+		// 		'</div>';
+		//
+		// // 커스텀 오버레이를 생성합니다
+		// var customOverlay = new window.kakao.maps.CustomOverlay({
+		// 	map: map,
+		// 	position: markerPosition,
+		// 	content: content,
+		// 	yAnchor: 1
+		// });
 	};
 
 	return <div ref={mapContainer} style={{ width: '100%', height: '600px' }} />;

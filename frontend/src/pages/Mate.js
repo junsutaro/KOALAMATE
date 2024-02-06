@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Map from 'components/FindMate/Map';
-import Matelist from 'components/FindMate/Matelist';
+import Matelist from 'components/FindMate/MapDrawer';
 
 const Mate = () => {
 	return (
