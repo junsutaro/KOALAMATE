@@ -12,6 +12,7 @@ import com.ssafy.koala.model.DrinkModel;
 import com.ssafy.koala.model.LikeModel;
 import com.ssafy.koala.model.user.UserModel;
 import com.ssafy.koala.repository.*;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +20,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,14 +39,23 @@ public class BoardService {
 	private final DrinkRepository drinkRepository;
 	private final CocktailRepository cocktailRepository;
 	private final LikeRepository likeRepository;
+
+	private final Path fileStorageLocation;
 	public BoardService(BoardRepository boardRepository, DrinkRepository drinkRepository, CocktailRepository cocktailRepository,
                         LikeRepository likeRepository) {
 		this.boardRepository = boardRepository;
 		this.drinkRepository = drinkRepository;
 		this.cocktailRepository = cocktailRepository;
 		this.likeRepository = likeRepository;
-    }
 
+
+		this.fileStorageLocation = Paths.get("frontend/public/BoardFileUploads").toAbsolutePath().normalize();
+		try {
+			Files.createDirectories(this.fileStorageLocation); // 디렉토리가 없다면 생성
+		} catch (Exception ex) {
+			throw new RuntimeException("Could not create the directory where the uploaded files will be stored.", ex);
+		}
+	}
 	public List<BoardDto> getAllEntities() {
 		List<BoardModel> entities = boardRepository.findAll();
 		return entities.stream()
@@ -54,31 +71,35 @@ public class BoardService {
 		List<ViewBoardResponseDto> result = entities.stream()
 				.map(board -> {
 					ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
-					BeanUtils.copyProperties(board, boardDto);
+					if (board != null) { // BoardModel이 null이 아닌지 확인
+						BeanUtils.copyProperties(board, boardDto);
 
-					List<CocktailWithDrinkDto> cocktails = board.getCocktails().stream()
-							.map(temp -> {
-								CocktailWithDrinkDto insert = new CocktailWithDrinkDto();
-								BeanUtils.copyProperties(temp, insert);
+						List<CocktailWithDrinkDto> cocktails = board.getCocktails() != null ? board.getCocktails().stream()
+								.map(cocktail -> {
+									CocktailWithDrinkDto cocktailDto = new CocktailWithDrinkDto();
+									if (cocktail != null && cocktail.getDrink() != null) { // cocktail과 drink가 null이 아닌지 확인
+										BeanUtils.copyProperties(cocktail, cocktailDto);
+										DrinkWithoutCocktailDto drinkDto = new DrinkWithoutCocktailDto();
+										BeanUtils.copyProperties(cocktail.getDrink(), drinkDto);
+										cocktailDto.setDrink(drinkDto);
+									}
+									return cocktailDto;
+								})
+								.collect(Collectors.toList()) : Collections.emptyList();
 
-								DrinkWithoutCocktailDto drinkDto = new DrinkWithoutCocktailDto();
-								BeanUtils.copyProperties(temp.getDrink(), drinkDto);
+						List<CommentDto> comments = board.getComments() != null ? board.getComments().stream()
+								.map(comment -> {
+									CommentDto commentDto = new CommentDto();
+									if (comment != null) { // comment가 null이 아닌지 확인
+										BeanUtils.copyProperties(comment, commentDto);
+									}
+									return commentDto;
+								})
+								.collect(Collectors.toList()) : Collections.emptyList();
 
-								insert.setDrink(drinkDto);
-								return insert;
-							})
-							.collect(Collectors.toList());
-
-					List<CommentDto> comments = board.getComments().stream()
-							.map(temp -> {
-								CommentDto insert = new CommentDto();
-								BeanUtils.copyProperties(temp, insert);
-								return insert;
-							})
-							.collect(Collectors.toList());
-
-					boardDto.setCocktails(cocktails);
-					boardDto.setComments(comments);
+						boardDto.setCocktails(cocktails);
+						boardDto.setComments(comments);
+					}
 					return boardDto;
 				})
 				.collect(Collectors.toList());
@@ -281,4 +302,24 @@ public class BoardService {
 		}
 		return null;
 	}
+
+
+	public String storeFile(MultipartFile file) throws IOException {
+
+		// 파일 이름 설정 (랜덤한 영어 10자리 + 원래 확장자)
+		String randomEnglish = RandomStringUtils.randomAlphabetic(10);
+		String originalFilename = file.getOriginalFilename();
+		String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+
+		String fileName = randomEnglish + extension;
+
+		// 파일 저장 경로 설정
+		Path targetLocation = this.fileStorageLocation.resolve(fileName);
+
+		// 파일 저장
+		Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+		return "BoardFileUploads/" + fileName;
+	}
+
 }

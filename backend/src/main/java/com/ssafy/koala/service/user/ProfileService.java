@@ -4,6 +4,7 @@ import com.ssafy.koala.dto.user.ProfileDto;
 import com.ssafy.koala.dto.user.ProfileModifyDto;
 import com.ssafy.koala.model.user.UserModel;
 import com.ssafy.koala.repository.UserRepository;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -113,6 +114,9 @@ public class ProfileService {
 //    }
 
 
+    private String getFileExtension(String filename) {
+        return filename.substring(filename.lastIndexOf("."));
+    }
     public boolean uploadProfileImage(Long userId, MultipartFile file, String filePath, String profileImgUrl) {
         Optional<UserModel> userOptional = userRepository.findById(userId);
 
@@ -122,9 +126,13 @@ public class ProfileService {
             System.out.println("호출 !");
 
             try {
+                String randomEnglish = RandomStringUtils.randomAlphabetic(10);
+                String uploadedFileName = randomEnglish + getFileExtension(file.getOriginalFilename());
+
+                System.out.println("uploadedFileName" + uploadedFileName);
                 // 업로드된 프로필 이미지를 저장할 디렉토리 경로 설정
                 String fileDir = filePath + "/" + userId;
-                String ImgUrl = profileImgUrl + "/" + userId + "/" + file.getOriginalFilename();
+                String ImgUrl = profileImgUrl + "/" + userId + "/" + uploadedFileName;
                 File directory = new File(fileDir);
 
                 System.out.println("directory = " + directory);
@@ -133,7 +141,7 @@ public class ProfileService {
                 createDirectory(directory);
 
                 // 업로드된 파일의 실제 경로 설정
-                String uploadedFilePath = fileDir + "/" + file.getOriginalFilename();
+                String uploadedFilePath = fileDir + "/" + uploadedFileName;
                 System.out.println("filePath = " + uploadedFilePath);
 
                 // 파일 저장

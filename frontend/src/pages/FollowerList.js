@@ -16,22 +16,23 @@ const FollowerList = () => {
         id: 0,
     });
 
-    useEffect(() => {
-        const getFollowerData = async () => {
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/${userId}/follower`);
-                const data = response.data;
-                setFollowerData({
-                    cnt: data.followCnt,
-                    list: data.list,
-                    user: data.nickname,
-                    id: data.id,
-                });
-            } catch (error) {
-                console.log(`팔로워 데이터를 가져오는 중 에러 발생: `, error);
-            }
-        };
 
+    const getFollowerData = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/${userId}/follower`);
+            const data = response.data;
+            setFollowerData({
+                cnt: data.followCnt,
+                list: data.list,
+                user: data.nickname,
+                id: data.id,
+            });
+        } catch (error) {
+            console.error(`팔로워 데이터를 가져오는 중 에러 발생: `, error);
+        }
+    };
+
+    useEffect(() => {
         getFollowerData();
     }, [userId]);
 

@@ -21,8 +21,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -137,5 +140,22 @@ public class BoardController {
 	public ResponseEntity<?> searchBoard(@RequestParam int page, @RequestParam int size, @RequestParam String keyword) {
 
 		return new ResponseEntity<>(boardService.searchAndPageBoards(keyword, page-1, size),HttpStatus.OK);
+	}
+
+	@PostMapping("/uploadBoardImage")
+	public ResponseEntity<?> uploadBoardImage(@RequestParam("file") MultipartFile file) {
+		if (file.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("파일을 첨부해주세요.");
+		}
+
+		try {
+			// 이미지 저장 로직 호출
+			String imageUrl = boardService.storeFile(file);
+
+			// 저장된 이미지 URL 반환
+			return ResponseEntity.ok().body(Map.of("imageUrl", imageUrl));
+		} catch (IOException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 업로드에 실패했습니다.");
+		}
 	}
 }

@@ -3,6 +3,7 @@ import { ListItem, Typography, Button, Grid,TextField  } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import {useSelector} from 'react-redux';
+import {format} from "date-fns";
 
 const CommentItem = ({ comment, onDeleteComment, onEditComment,  handleEditComment  }) => {
 	const [isEditing, setIsEditing] = useState(false)
@@ -62,7 +63,7 @@ const CommentItem = ({ comment, onDeleteComment, onEditComment,  handleEditComme
 										{comment.content}
 									</Typography>
 									<Typography variant="body2" sx={{ color: '#888' }}>
-										{comment.date}
+										{format(new Date(comment.date), 'yyyy년 MM월 dd일 HH:mm:ss')}
 									</Typography>
 								</>
 						)}
