@@ -69,7 +69,7 @@ public class WebChatController {
 
         HttpEntity<SocketMessageDto> requestEntity = new HttpEntity<>(sockMessageDto, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                "https://localhost:8085/socket/message",
+                "http://localhost:8085/socket/message",
                 HttpMethod.POST,
                 requestEntity,
                 String.class
