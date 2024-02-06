@@ -2,6 +2,7 @@ package com.ssafy.koala.controller;
 
 import com.ssafy.koala.dto.board.BoardWithoutCocktailDto;
 import com.ssafy.koala.dto.board.CreateBoardRequestDto;
+import com.ssafy.koala.dto.board.ViewBoardResponseDto;
 import com.ssafy.koala.dto.user.UserDto;
 import com.ssafy.koala.model.BoardModel;
 import com.ssafy.koala.model.CocktailModel;
@@ -17,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -49,7 +52,15 @@ public class BoardController {
 	public Object listBoard(@RequestParam int page, @RequestParam int size) {
 		ResponseEntity response = null;
 
-		response = new ResponseEntity<>(boardService.getPageEntities(page-1, size),HttpStatus.OK); //페이지 시작은 0부터
+		Page<ViewBoardResponseDto> pageEntities = boardService.getPageEntities(page - 1, size);
+		List<ViewBoardResponseDto> content = pageEntities.getContent();
+		int totalPages = ((Page<?>) pageEntities).getTotalPages();
+
+		Map<String, Object> responseBody = new HashMap<>();
+		responseBody.put("content", content);
+		responseBody.put("totalPages", totalPages);
+
+		response = new ResponseEntity<>(responseBody, HttpStatus.OK);
 		return response;
 	}
 

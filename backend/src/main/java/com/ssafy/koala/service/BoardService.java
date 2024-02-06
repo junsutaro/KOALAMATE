@@ -14,10 +14,7 @@ import com.ssafy.koala.model.user.UserModel;
 import com.ssafy.koala.repository.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,12 +60,12 @@ public class BoardService {
 				.collect(Collectors.toList());
 	}
 
-	public List<ViewBoardResponseDto> getPageEntities(int page, int size) {
+	public Page<ViewBoardResponseDto> getPageEntities(int page, int size) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page, size, sort);
 		Page<BoardModel> entities = boardRepository.findAll(pageable);
 
-		List<ViewBoardResponseDto> result = entities.stream()
+		List<ViewBoardResponseDto> result = entities.getContent().stream()
 				.map(board -> {
 					ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
 					if (board != null) { // BoardModel이 null이 아닌지 확인
@@ -104,7 +101,7 @@ public class BoardService {
 				})
 				.collect(Collectors.toList());
 
-		return result;
+		return new PageImpl<>(result, pageable, entities.getTotalElements());
 	}
 
 	public BoardDto getBoardDtoById(Long id) {
