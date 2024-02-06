@@ -56,11 +56,12 @@ const Chattings = () => {
 								/>
 								{expandedRoomId === room.id ? <ExpandLess /> : <ExpandMore />}
 							</ListItem>
-							<Collapse in={expandedRoomId === room.id} timeout="auto" unmountOnExit>
-								<Box sx={{bgcolor: 'background.paper'}}>
-									<Chatting roomNumber={room.id}/>
-								</Box>
-							</Collapse>
+							{expandedRoomId === room.id && <Chatting roomNumber={room.id}/>}
+							{/*<Collapse in={expandedRoomId === room.id} timeout="auto" unmountOnExit>*/}
+							{/*	<Box sx={{bgcolor: 'background.paper'}}>*/}
+							{/*		<Chatting roomNumber={room.id}/>*/}
+							{/*	</Box>*/}
+							{/*</Collapse>*/}
 						</React.Fragment>
 				))}
 			</List>

@@ -79,7 +79,6 @@ const MainLayout = () => {
 					<Route path="/signup" element={<SignUp />} />
 					<Route path="/writeBoard" element={<WriteBoard />} />
 					<Route path="/:boardId/comments" element={<CommentList />} />
-					<Route path="chatting" element={<Chatting />} />
 					<Route path="/user/:userId" element={<MyPage />} />
 					<Route path="/user/:userId/update" element={<UpdateMyPage />} />
 					{/*<Route path="/user/:userId/update" element={<WriteMyPage />} />*/}

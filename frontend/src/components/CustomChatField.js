@@ -19,14 +19,16 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
 	},
 }));
 
-const CustomChatField = () => {
+const CustomChatField = ({ value, onChange }) => {
 	return (
 		<CustomTextField
 			variant="outlined"
 			placeholder="메시지를 입력하세요"
 			fullWidth
+			value={value}
+			onChange={onChange}
 		/>
 	);
-}
+};
 
 export default CustomChatField;

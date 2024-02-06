@@ -40,10 +40,11 @@ export const WebSocketProvider = ({ children }) => {
 
 	const subscribe = (destination, callback) => {
 		if (stompClient && stompClient.connected) {
-			console.log("qwewaerawerwegadgaestetawetaewraewr")
-			console.log(destination);
-			stompClient.subscribe(destination, callback);
+			const subscription = stompClient.subscribe(destination, callback);
+			console.log("Subscribed to " + destination);
+			return subscription; // 구독 객체 반환
 		}
+		return null;
 	};
 
 	const sendMessage = (destination, body) => {
