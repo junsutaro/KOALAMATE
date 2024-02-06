@@ -19,7 +19,7 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
 	},
 }));
 
-const CustomChatField = ({ value, onChange }) => {
+const CustomChatField = ({ value, onChange, onKeyPress }) => {
 	return (
 		<CustomTextField
 			variant="outlined"
@@ -27,6 +27,7 @@ const CustomChatField = ({ value, onChange }) => {
 			fullWidth
 			value={value}
 			onChange={onChange}
+			onKeyPress={onKeyPress}
 		/>
 	);
 };

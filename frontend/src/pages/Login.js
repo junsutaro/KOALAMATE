@@ -59,7 +59,7 @@ const Login = () => {
 					console.log('Get Room List Failed: ', error);
 				});
 			dispatch(setLoginStatus({isLoggedIn: true, user: response.data}));
-			connect(`${process.env.REACT_APP_CHAT_URL}/chat`);
+			connect(`${process.env.REACT_APP_CHAT_URL}`);
 			console.log(response.data);
 			navigate('/');
 		}).catch((error) => {
