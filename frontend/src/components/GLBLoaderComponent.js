@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import {AnimationMixer, LoopRepeat, LoopOnce } from 'three';
 import LinearProgress from '@mui/material/LinearProgress';
 
-import refrigerator from 'assets/refrigerator.glb';
+import refrigerator from 'assets/refrigerator_prev.glb';
 import {Box, Typography} from '@mui/material';
 
 function LinearProgressWithLabel(props) {
