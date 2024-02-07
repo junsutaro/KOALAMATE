@@ -19,6 +19,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -93,18 +94,8 @@ public class BoardService {
 								})
 								.collect(Collectors.toList()) : Collections.emptyList();
 
-						List<CommentDto> comments = board.getComments() != null ? board.getComments().stream()
-								.map(comment -> {
-									CommentDto commentDto = new CommentDto();
-									if (comment != null) { // comment가 null이 아닌지 확인
-										BeanUtils.copyProperties(comment, commentDto);
-									}
-									return commentDto;
-								})
-								.collect(Collectors.toList()) : Collections.emptyList();
-
 						boardDto.setCocktails(cocktails);
-						boardDto.setComments(comments);
+						boardDto.setComments(null);
 					}
 					return boardDto;
 				})
@@ -267,16 +258,9 @@ public class BoardService {
 							})
 							.collect(Collectors.toList());
 
-					List<CommentDto> comments = board.getComments().stream()
-							.map(temp -> {
-								CommentDto insert = new CommentDto();
-								BeanUtils.copyProperties(temp, insert);
-								return insert;
-							})
-							.collect(Collectors.toList());
 
 					boardDto.setCocktails(cocktails);
-					boardDto.setComments(comments);
+					boardDto.setComments(null);
 					return boardDto;
 				})
 				.collect(Collectors.toList());
@@ -358,16 +342,9 @@ public class BoardService {
 							})
 							.collect(Collectors.toList());
 
-					List<CommentDto> comments = board.getComments().stream()
-							.map(temp -> {
-								CommentDto insert = new CommentDto();
-								BeanUtils.copyProperties(temp, insert);
-								return insert;
-							})
-							.collect(Collectors.toList());
 
 					boardDto.setCocktails(cocktails);
-					boardDto.setComments(comments);
+					boardDto.setComments(null);
 					return boardDto;
 				})
 				.collect(Collectors.toList());
@@ -403,32 +380,26 @@ public class BoardService {
 							})
 							.collect(Collectors.toList());
 
-					List<CommentDto> comments = board.getComments().stream()
-							.map(temp -> {
-								CommentDto insert = new CommentDto();
-								BeanUtils.copyProperties(temp, insert);
-								return insert;
-							})
-							.collect(Collectors.toList());
 
 					boardDto.setCocktails(cocktails);
-					boardDto.setComments(comments);
+					boardDto.setComments(null);
 					return boardDto;
 				})
 				.collect(Collectors.toList());
 
 		return new PageImpl<>(result, pageable, entities.getTotalElements());
 	}
-	
-	public List<ViewBoardResponseDto> searchBoardsByDrinkName(String drinkName, int page, int size) {
+
+	@Transactional
+	public Page<ViewBoardResponseDto> searchBoardsByDrinkName(String drinkName, int page, int size) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		PageRequest pageable = PageRequest.of(page, size, sort);
 
-		Specification<BoardModel> spec = BoardSpecifications.withDrinkName(drinkName);
-		Page<BoardModel> pageResult = boardRepository.findAll(spec, pageable);
+		//Specification<BoardModel> spec = BoardSpecifications.withDrinkName(drinkName);
+		Page<BoardModel> pageResult = boardRepository.findBoardByDrinkName(drinkName, pageable);
 
 		// 결과 매핑 로직은 동일하게 유지
-		return pageResult.getContent().stream()
+		List<ViewBoardResponseDto> result = pageResult.getContent().stream()
 				.map(board -> {
 					ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
 					BeanUtils.copyProperties(board, boardDto);
@@ -446,18 +417,12 @@ public class BoardService {
 							})
 							.collect(Collectors.toList());
 
-					List<CommentDto> comments = board.getComments().stream()
-							.map(temp -> {
-								CommentDto insert = new CommentDto();
-								BeanUtils.copyProperties(temp, insert);
-								return insert;
-							})
-							.collect(Collectors.toList());
-
 					boardDto.setCocktails(cocktails);
-					boardDto.setComments(comments);
+					boardDto.setComments(null);
 					return boardDto;
 				})
 				.collect(Collectors.toList());
+
+		return new PageImpl<>(result, pageable, pageResult.getTotalElements());
 	}
 }
