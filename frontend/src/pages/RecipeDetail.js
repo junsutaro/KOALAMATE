@@ -86,7 +86,7 @@ const RecipeDetail = () => {
                         {isLiked ? (
                             <FavoriteIcon sx={{fontSize: '2rem', color: '#FF9B9B'}}/>
                         ) : (
-                            <FavoriteTwoToneIcon sx={{fontSize: '2rem', color: 'black'}}/>
+                            <FavoriteTwoToneIcon sx={{fontSize: '2rem', color: '#e9e9e9'}}/>
                         )}
                     </Button>
                 </Box>
