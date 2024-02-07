@@ -129,7 +129,6 @@ public class BoardService {
 			long likeCount = likeRepository.countByBoard_Id(id);
 			boardDto.setLikeCount(likeCount);
 
-
 			List<CocktailWithDrinkDto> list = board.getCocktails().stream()
 					.map(temp -> {
 						CocktailWithDrinkDto insert = new CocktailWithDrinkDto();

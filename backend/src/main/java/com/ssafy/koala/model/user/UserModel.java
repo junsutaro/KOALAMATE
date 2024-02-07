@@ -46,11 +46,11 @@ public class UserModel {
 	private double alcoholLimit = 0; // 가라데이터
 	private double alcoholLimitBottle = 0; // 주량_병
 	private double alcoholLimitGlass = 0; // 주량_잔
-	private double mannersScore = 36.5;  // 매너점수
+	private double mannersScore = 0;  // 매너점수
 	private List<String> tags; // 태그들
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private List<LikeModel> likes;
 
-	private int evaluateCnt = 1; // 나를 평가한 사람 수
+	private int evaluateCnt = 0; // 나를 평가한 사람 수
 }
