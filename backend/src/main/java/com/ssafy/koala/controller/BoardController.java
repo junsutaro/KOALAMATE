@@ -2,6 +2,7 @@ package com.ssafy.koala.controller;
 
 import com.ssafy.koala.dto.board.BoardWithoutCocktailDto;
 import com.ssafy.koala.dto.board.CreateBoardRequestDto;
+import com.ssafy.koala.dto.board.ViewBoardResponseDto;
 import com.ssafy.koala.dto.user.UserDto;
 import com.ssafy.koala.model.BoardModel;
 import com.ssafy.koala.model.CocktailModel;
@@ -17,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,10 +49,20 @@ public class BoardController {
     }
 
 	@GetMapping("/list")
-	public Object listBoard(@RequestParam int page, @RequestParam int size) {
+	public Object listBoard(@RequestParam int page, @RequestParam int size, @RequestParam int option) {
 		ResponseEntity response = null;
 
-		response = new ResponseEntity<>(boardService.getPageEntities(page-1, size),HttpStatus.OK); //페이지 시작은 0부터
+		if(option > 3 || option <= 0) return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+
+		Page<ViewBoardResponseDto> pageEntities = boardService.getPageEntities(page - 1, size, option);
+		List<ViewBoardResponseDto> content = pageEntities.getContent();
+		int totalPages = ((Page<?>) pageEntities).getTotalPages();
+
+		Map<String, Object> responseBody = new HashMap<>();
+		responseBody.put("content", content);
+		responseBody.put("totalPages", totalPages);
+
+		response = new ResponseEntity<>(responseBody, HttpStatus.OK);
 		return response;
 	}
 
@@ -137,9 +150,25 @@ public class BoardController {
 	}
 
 	@GetMapping("/search")
-	public ResponseEntity<?> searchBoard(@RequestParam int page, @RequestParam int size, @RequestParam String keyword) {
+	public ResponseEntity<?> searchBoard(@RequestParam int page, @RequestParam int size, @RequestParam String keyword, @RequestParam int option) {
+		ResponseEntity response = null;
+		if(option > 3 || option <= 0) return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+		Page<ViewBoardResponseDto> pageEntities = boardService.searchAndPageBoards(keyword, page-1, size, option);
+		List<ViewBoardResponseDto> content = pageEntities.getContent();
+		int totalPages = ((Page<?>) pageEntities).getTotalPages();
 
-		return new ResponseEntity<>(boardService.searchAndPageBoards(keyword, page-1, size),HttpStatus.OK);
+		Map<String, Object> responseBody = new HashMap<>();
+		responseBody.put("content", content);
+		responseBody.put("totalPages", totalPages);
+
+
+		response = new ResponseEntity<>(responseBody, HttpStatus.OK);
+		return response;
+	}
+
+	@GetMapping("/searchByDrink")
+	public ResponseEntity<?> searchBoardByDrink(@RequestParam int page, @RequestParam int size, @RequestParam String drinkName) {
+		return new ResponseEntity<>(boardService.searchBoardsByDrinkName(drinkName, page-1, size), HttpStatus.OK);
 	}
 
 	@PostMapping("/uploadBoardImage")
@@ -165,8 +194,19 @@ public class BoardController {
 		String accessToken = authService.getAccessToken(request);
 		UserDto user = authService.extractUserFromToken(accessToken);
 
+		ResponseEntity response = null;
 		//페이지 시작은 0부터
-		return new ResponseEntity<>(boardService.getMyPageEntities(page-1, size, user.getNickname()),HttpStatus.OK);
+		Page<ViewBoardResponseDto> pageEntities = boardService.getMyPageEntities(page-1, size, user.getNickname());
+		List<ViewBoardResponseDto> content = pageEntities.getContent();
+		int totalPages = ((Page<?>) pageEntities).getTotalPages();
+
+		Map<String, Object> responseBody = new HashMap<>();
+		responseBody.put("content", content);
+		responseBody.put("totalPages", totalPages);
+
+
+		response = new ResponseEntity<>(responseBody, HttpStatus.OK);
+		return response;
 	}
 
 	// 내가 좋아요 한 게시글(레시피) 리스트
@@ -175,7 +215,18 @@ public class BoardController {
 		String accessToken = authService.getAccessToken(request);
 		UserDto user = authService.extractUserFromToken(accessToken);
 
+		ResponseEntity response = null;
 		//페이지 시작은 0부터
-		return new ResponseEntity<>(boardService.getLikedPageEntities(page-1, size, user.getId()),HttpStatus.OK);
+		Page<ViewBoardResponseDto> pageEntities = boardService.getLikedPageEntities(page-1, size, user.getId());
+		List<ViewBoardResponseDto> content = pageEntities.getContent();
+		int totalPages = ((Page<?>) pageEntities).getTotalPages();
+
+		Map<String, Object> responseBody = new HashMap<>();
+		responseBody.put("content", content);
+		responseBody.put("totalPages", totalPages);
+
+
+		response = new ResponseEntity<>(responseBody, HttpStatus.OK);
+		return response;
 	}
 }

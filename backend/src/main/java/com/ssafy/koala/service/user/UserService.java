@@ -6,13 +6,11 @@ import com.ssafy.koala.dto.user.TokenResponse;
 import com.ssafy.koala.dto.user.UserDto;
 import com.ssafy.koala.dto.user.UserResponseDto;
 import com.ssafy.koala.model.DrinkModel;
+import com.ssafy.koala.model.LikeModel;
 import com.ssafy.koala.model.RefrigeratorModel;
 import com.ssafy.koala.model.user.FollowModel;
 import com.ssafy.koala.model.user.UserModel;
-import com.ssafy.koala.repository.DrinkRepository;
-import com.ssafy.koala.repository.FollowRepository;
-import com.ssafy.koala.repository.RefrigeratorRepository;
-import com.ssafy.koala.repository.UserRepository;
+import com.ssafy.koala.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -34,6 +32,7 @@ public class UserService {
     private final RefrigeratorRepository refrigeratorRepository;
     private final FollowRepository followRepository;
     private final DrinkRepository drinkRepository;
+    private final LikeRepository likeRepository;
 
 
     public Optional<UserDto> findUserByEmailAndPassword(String email, String password) {
@@ -187,6 +186,9 @@ public class UserService {
                     break;
                 }
             }
+
+            int likeCnt = likeRepository.existsCommonBoardIdForUsers(id, user.getId());
+            tmp.setLikeCnt(likeCnt);
 
             List<DrinkModel> drinks = drinkRepository.findAllEntitiesByUserId(user.getId());
             List<DrinkWithoutCocktailDto> drinkList = new ArrayList<>();

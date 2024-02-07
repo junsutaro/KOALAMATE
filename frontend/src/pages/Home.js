@@ -4,7 +4,6 @@ import {NavLink} from 'react-router-dom';
 
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
-import refrigerator from 'assets/refrigerator_prev.glb';
 import GLBLoderComponent from 'components/GLBLoaderComponent';
 
 const Home = () => {

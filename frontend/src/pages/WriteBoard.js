@@ -3,8 +3,8 @@ import {useSelector} from 'react-redux';
 import axios from 'axios';
 import NoImage from 'assets/no_img.png';
 import CustomTextareaAutosize from 'components/CustomTextareaAutosize';
-import AddIngredient from "components/AddIngredient";
-import Ingredients from "components/Ingredients";
+import AddIngredient from "components/WriteBoard/AddIngredient";
+import Ingredients from "components/WriteBoard/Ingredients";
 import {Button, TextField, Typography, Box, TextareaAutosize, IconButton, Grid, Container} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {array} from "yup";
@@ -17,6 +17,9 @@ function BulletinBoard() {
     const [cocktails, setCocktails] = useState([]);
     const [selectedImageFile, setSelectedImageFile] = useState(null);
     const [imgUrl, setImgUrl] = useState('')
+
+    // 전부 입력되었는지 확인하기 위한 변수
+    const isFormValid = title && content && cocktails.length > 0 && selectedImageFile;
 
     const handleTitleChange = (event) => {
         setTitle(event.target.value);
@@ -94,21 +97,14 @@ function BulletinBoard() {
         }
     };
 
-    // // 이미지 업로드 및 게시글 저장을 담당하는 함수
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault(); // 폼 제출 기본 동작 방지
-    //     try {
-    //         const imageUrl = await saveRecipeImage(e); // 이미지 업로드 완료까지 기다림
-    //         await saveRecipe(imageUrl); // 업로드된 이미지 URL을 가지고 게시글 저장
-    //         alert('레시피가 성공적으로 저장되었습니다😊');
-    //     } catch (error) {
-    //         console.error('게시글 작성 중 오류 발생: ', error);
-    //     }
-    // };
-
     // 이미지 업로드 및 게시글 저장을 담당하는 함수
     const handleSubmit = async (e) => {
         e.preventDefault(); // 폼 제출 기본 동작 방지
+        // 폼 유효성 검사 추가
+        if (!isFormValid) {
+            alert('모든 필드를 채워주세요.');
+            return;
+        }
         try {
             const imageUrl = await saveRecipeImage(e); // 이미지 업로드 완료까지 기다림
             await saveRecipe(imageUrl); // 업로드된 이미지 URL을 가지고 게시글 저장
@@ -190,7 +186,7 @@ function BulletinBoard() {
                         <AddIngredient updateCocktails={setCocktails}/> {/* prop으로 상태 업데이트 함수 전달 */}
 
                         <Box display="flex" justifyContent="flex-end" mt={2}>
-                            <Button type="submit" variant="contained" color="primary" onClick={handleSubmit}>
+                            <Button type="submit" variant="contained" color="primary" onClick={handleSubmit} disabled={!isFormValid}>
                                 레시피 올리기
                             </Button>
                         </Box>

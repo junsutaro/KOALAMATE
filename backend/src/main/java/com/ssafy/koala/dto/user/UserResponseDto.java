@@ -18,4 +18,5 @@ public class UserResponseDto {
 
     List<DrinkWithoutCocktailDto> drinks;
     boolean isFollow;
+    int likeCnt;
 }
