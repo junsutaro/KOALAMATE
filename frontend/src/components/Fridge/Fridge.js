@@ -18,13 +18,13 @@ function Fridge() {
 
 	return (
 		<Box height='800px'>
-			<Canvas camera={{ position: [0, 0, 6] }} shadows shadowMap={{ type: THREE.PCFSoftShadowMap }}>
+			<Canvas camera={{ position: [0, 0, 6] }} shadows>
 				<ambientLight intensity={1}/>
 				<spotLight position={[10, 10, 10]} angle={0.15} penumbra={0.5}/>
 				<directionalLight ref={directionalLightRef} position={[10, 10, 10]} intensity={1} castShadow/>
 				<pointLight position={[5, 5, 5]}/>
 				<FridgeModel />
-				<MBTIModel />
+				<MBTIModel initialPosition={[4, 2, 0]}/>
 				<Rig/>
 			</Canvas>
 		</Box>

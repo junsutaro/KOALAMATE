@@ -88,7 +88,7 @@ const MainLayout = () => {
 					<Route path="/user/:userId/follower" element={<FollowerList />} />
 					<Route path="/user/:userId/followee" element={<FolloweeList />} />
 					<Route path="/fridge" element={<Fridge />} />
-					<Route path="/voiceChat" element={<VoiceChatRoom />} />
+					<Route path="/voiceChat/:roomId" element={<VoiceChatRoom />} />
 					{/* 다른 라우트들 */}
 				</Routes>
 				<Footer />
