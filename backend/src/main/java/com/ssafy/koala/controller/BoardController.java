@@ -153,6 +153,11 @@ public class BoardController {
 		return new ResponseEntity<>(boardService.searchAndPageBoards(keyword, page-1, size),HttpStatus.OK);
 	}
 
+	@GetMapping("/searchByDrink")
+	public ResponseEntity<?> searchBoardByDrink(@RequestParam int page, @RequestParam int size, @RequestParam String drinkName) {
+		return new ResponseEntity<>(boardService.searchBoardsByDrinkName(drinkName, page-1, size), HttpStatus.OK);
+	}
+
 	@PostMapping("/uploadBoardImage")
 	public ResponseEntity<?> uploadBoardImage(@RequestParam("file") MultipartFile file) {
 		if (file.isEmpty()) {

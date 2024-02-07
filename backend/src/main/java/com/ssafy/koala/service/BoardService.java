@@ -402,4 +402,45 @@ public class BoardService {
 
 		return result;
 	}
+
+	public List<ViewBoardResponseDto> searchBoardsByDrinkName(String drinkName, int page, int size) {
+		Sort sort = Sort.by(Sort.Direction.DESC, "id");
+		PageRequest pageable = PageRequest.of(page, size, sort);
+
+		Specification<BoardModel> spec = BoardSpecifications.withDrinkName(drinkName);
+		Page<BoardModel> pageResult = boardRepository.findAll(spec, pageable);
+
+		// 결과 매핑 로직은 동일하게 유지
+		return pageResult.getContent().stream()
+				.map(board -> {
+					ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
+					BeanUtils.copyProperties(board, boardDto);
+
+					List<CocktailWithDrinkDto> cocktails = board.getCocktails().stream()
+							.map(temp -> {
+								CocktailWithDrinkDto insert = new CocktailWithDrinkDto();
+								BeanUtils.copyProperties(temp, insert);
+
+								DrinkWithoutCocktailDto drinkDto = new DrinkWithoutCocktailDto();
+								BeanUtils.copyProperties(temp.getDrink(), drinkDto);
+
+								insert.setDrink(drinkDto);
+								return insert;
+							})
+							.collect(Collectors.toList());
+
+					List<CommentDto> comments = board.getComments().stream()
+							.map(temp -> {
+								CommentDto insert = new CommentDto();
+								BeanUtils.copyProperties(temp, insert);
+								return insert;
+							})
+							.collect(Collectors.toList());
+
+					boardDto.setCocktails(cocktails);
+					boardDto.setComments(comments);
+					return boardDto;
+				})
+				.collect(Collectors.toList());
+	}
 }
