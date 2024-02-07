@@ -17,4 +17,8 @@ public interface BoardRepository extends JpaRepository<BoardModel, Long>, JpaSpe
 
     @Query("select b from BoardModel b where b.nickname = :nickname")
     Page<BoardModel> findByNickname(@Param("nickname") String nickname, Pageable pageable);
+
+    @Query("select b from BoardModel b where b.nickname <> 'admin'")
+    Page<BoardModel> findUserBoard(Pageable pageable);
+
 }
