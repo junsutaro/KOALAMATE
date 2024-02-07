@@ -205,7 +205,7 @@ const UpdateMyPage = () => {
 
     return (
         <Container component="form">
-            <MyPageButton/>
+            <MyPageButton userId={userId}/>
             <Box
                 sx={{
                     display: 'flex',
