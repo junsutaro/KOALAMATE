@@ -75,7 +75,7 @@ public class UserController {
 		}
 	}
 
-	@PostMapping("/check-email")
+	@PostMapping("/checkEmail")
 	public ResponseEntity<?> checkEmailDuplicate(@RequestBody UserDto user) {
 		try {
 			String email = user.getEmail();
@@ -90,7 +90,7 @@ public class UserController {
 		}
 	}
 
-	@PostMapping("/check-nickname")
+	@PostMapping("/checkNickname")
 	public  ResponseEntity<?> checkNicknameDuplicate(@RequestBody UserDto user) {
 		try {
 			String nickname = user.getNickname();
