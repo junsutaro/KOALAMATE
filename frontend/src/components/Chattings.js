@@ -48,8 +48,8 @@ const Chattings = () => {
 		}
 	};
 
-	const voiceCall = (roomId) => {
-		navigate(`/voiceChat/${roomId}`);
+	const voiceCall = (roomId, users) => {
+		navigate(`/voiceChat/${roomId}`, { state: { users } });
 	}
 
 	return (
@@ -74,7 +74,7 @@ const Chattings = () => {
 								{/*/>*/}
 								{expandedRoomId === room.id ? <ExpandLess /> : <ExpandMore />}
 							</ListItem>
-							<Button onClick={() => voiceCall(room.id)}>asdasd</Button>
+							<Button onClick={() => voiceCall(room.id, room.users)}>asdasd</Button>
 							{expandedRoomId === room.id && <Chatting roomNumber={room.id}/>}
 							{/*<Collapse in={expandedRoomId === room.id} timeout="auto" unmountOnExit>*/}
 							{/*	<Box sx={{bgcolor: 'background.paper'}}>*/}

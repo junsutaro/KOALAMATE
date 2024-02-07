@@ -58,7 +58,10 @@ public class VoiceChatController {
         if (session == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
+        String userNickname = (String) params.get("customNickname");
+        ConnectionProperties properties = new ConnectionProperties.Builder()
+                .data("nickname=" + userNickname) // 메타데이터에 닉네임 저장
+                .build();
         Connection connection = session.createConnection(properties);
         return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
     }
