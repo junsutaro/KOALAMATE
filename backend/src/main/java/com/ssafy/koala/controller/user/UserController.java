@@ -177,7 +177,7 @@ public class UserController {
 				// 팔로우
 				followService.followUser(myUid, userId);
 			}
-			return new ResponseEntity<>("Follow for ID " + userId + " processed successfully.", HttpStatus.OK);
+			return new ResponseEntity<>(Map.of("isFollow", !isFollowed), HttpStatus.OK);
 		} catch (EmptyResultDataAccessException e) {
 			// 해당 ID에 해당하는 엔티티가 존재하지 않는 경우
 			return new ResponseEntity<>("Not found follow user", HttpStatus.NOT_FOUND);

@@ -16,7 +16,10 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -60,10 +63,17 @@ public class BoardService {
 				.collect(Collectors.toList());
 	}
 
-	public Page<ViewBoardResponseDto> getPageEntities(int page, int size) {
+	public Page<ViewBoardResponseDto> getPageEntities(int page, int size, int option) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page, size, sort);
-		Page<BoardModel> entities = boardRepository.findAll(pageable);
+
+		Page<BoardModel> entities;
+		switch(option) {
+			case 1: entities = boardRepository.findAll(pageable); break;    //전체
+			case 2: entities = boardRepository.findByNickname("admin",pageable); break;  //관리자
+			default: entities = boardRepository.findUserBoard(pageable);   //유저
+		}
+
 
 		List<ViewBoardResponseDto> result = entities.getContent().stream()
 				.map(board -> {
@@ -84,18 +94,8 @@ public class BoardService {
 								})
 								.collect(Collectors.toList()) : Collections.emptyList();
 
-						List<CommentDto> comments = board.getComments() != null ? board.getComments().stream()
-								.map(comment -> {
-									CommentDto commentDto = new CommentDto();
-									if (comment != null) { // comment가 null이 아닌지 확인
-										BeanUtils.copyProperties(comment, commentDto);
-									}
-									return commentDto;
-								})
-								.collect(Collectors.toList()) : Collections.emptyList();
-
 						boardDto.setCocktails(cocktails);
-						boardDto.setComments(comments);
+						boardDto.setComments(null);
 					}
 					return boardDto;
 				})
@@ -125,7 +125,6 @@ public class BoardService {
 			// 좋아요 수 확인
 			long likeCount = likeRepository.countByBoard_Id(id);
 			boardDto.setLikeCount(likeCount);
-
 
 			List<CocktailWithDrinkDto> list = board.getCocktails().stream()
 					.map(temp -> {
@@ -226,15 +225,21 @@ public class BoardService {
 		return board;
 	}
 
-	public List<ViewBoardResponseDto> searchAndPageBoards(String keyword, int page, int size) {
+	public Page<ViewBoardResponseDto> searchAndPageBoards(String keyword, int page, int size, int option) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		PageRequest pageable = PageRequest.of(page, size, sort);
 
 		// 검색 및 페이징을 위한 Specification을 사용
-		Specification<BoardModel> spec = BoardSpecifications.search(keyword);
+		Specification<BoardModel> spec;
+		switch(option) {
+			case 1: spec = BoardSpecifications.search(keyword); break;  //전체
+			case 2: spec = BoardSpecifications.search(keyword, "admin", 1); break;  //관리자
+			default : spec = BoardSpecifications.search(keyword, "admin", -1); break;  //유저
+		}
+
 		Page<BoardModel> pageResult = boardRepository.findAll(spec, pageable);
 
-		return pageResult.getContent().stream()
+		List<ViewBoardResponseDto> result = pageResult.getContent().stream()
 				.map(board -> {
 					ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
 					BeanUtils.copyProperties(board, boardDto);
@@ -252,19 +257,14 @@ public class BoardService {
 							})
 							.collect(Collectors.toList());
 
-					List<CommentDto> comments = board.getComments().stream()
-							.map(temp -> {
-								CommentDto insert = new CommentDto();
-								BeanUtils.copyProperties(temp, insert);
-								return insert;
-							})
-							.collect(Collectors.toList());
 
 					boardDto.setCocktails(cocktails);
-					boardDto.setComments(comments);
+					boardDto.setComments(null);
 					return boardDto;
 				})
 				.collect(Collectors.toList());
+
+		return new PageImpl<>(result, pageable, pageResult.getTotalElements());
 	}
 
 	public ViewBoardResponseDto getBoardByIdWithoutLike(Long id) {
@@ -318,7 +318,7 @@ public class BoardService {
 		return "BoardFileUploads/" + fileName;
 	}
 
-	public List<ViewBoardResponseDto> getMyPageEntities(int page, int size, String nickname) {
+	public Page<ViewBoardResponseDto> getMyPageEntities(int page, int size, String nickname) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page, size, sort);
 		Page<BoardModel> entities = boardRepository.findByNickname(nickname, pageable);
@@ -341,24 +341,17 @@ public class BoardService {
 							})
 							.collect(Collectors.toList());
 
-					List<CommentDto> comments = board.getComments().stream()
-							.map(temp -> {
-								CommentDto insert = new CommentDto();
-								BeanUtils.copyProperties(temp, insert);
-								return insert;
-							})
-							.collect(Collectors.toList());
 
 					boardDto.setCocktails(cocktails);
-					boardDto.setComments(comments);
+					boardDto.setComments(null);
 					return boardDto;
 				})
 				.collect(Collectors.toList());
 
-		return result;
+		return new PageImpl<>(result, pageable, entities.getTotalElements());
 	}
 
-	public List<ViewBoardResponseDto> getLikedPageEntities(int page, int size, Long userId) {
+	public Page<ViewBoardResponseDto> getLikedPageEntities(int page, int size, Long userId) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page, size, sort);
 
@@ -386,32 +379,26 @@ public class BoardService {
 							})
 							.collect(Collectors.toList());
 
-					List<CommentDto> comments = board.getComments().stream()
-							.map(temp -> {
-								CommentDto insert = new CommentDto();
-								BeanUtils.copyProperties(temp, insert);
-								return insert;
-							})
-							.collect(Collectors.toList());
 
 					boardDto.setCocktails(cocktails);
-					boardDto.setComments(comments);
+					boardDto.setComments(null);
 					return boardDto;
 				})
 				.collect(Collectors.toList());
 
-		return result;
+		return new PageImpl<>(result, pageable, entities.getTotalElements());
 	}
 
-	public List<ViewBoardResponseDto> searchBoardsByDrinkName(String drinkName, int page, int size) {
+	@Transactional
+	public Page<ViewBoardResponseDto> searchBoardsByDrinkName(String drinkName, int page, int size) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		PageRequest pageable = PageRequest.of(page, size, sort);
 
-		Specification<BoardModel> spec = BoardSpecifications.withDrinkName(drinkName);
-		Page<BoardModel> pageResult = boardRepository.findAll(spec, pageable);
+		//Specification<BoardModel> spec = BoardSpecifications.withDrinkName(drinkName);
+		Page<BoardModel> pageResult = boardRepository.findBoardByDrinkName(drinkName, pageable);
 
 		// 결과 매핑 로직은 동일하게 유지
-		return pageResult.getContent().stream()
+		List<ViewBoardResponseDto> result = pageResult.getContent().stream()
 				.map(board -> {
 					ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
 					BeanUtils.copyProperties(board, boardDto);
@@ -429,18 +416,12 @@ public class BoardService {
 							})
 							.collect(Collectors.toList());
 
-					List<CommentDto> comments = board.getComments().stream()
-							.map(temp -> {
-								CommentDto insert = new CommentDto();
-								BeanUtils.copyProperties(temp, insert);
-								return insert;
-							})
-							.collect(Collectors.toList());
-
 					boardDto.setCocktails(cocktails);
-					boardDto.setComments(comments);
+					boardDto.setComments(null);
 					return boardDto;
 				})
 				.collect(Collectors.toList());
+
+		return new PageImpl<>(result, pageable, pageResult.getTotalElements());
 	}
 }

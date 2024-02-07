@@ -211,7 +211,7 @@ public class UserService {
         if(user.isPresent()) {
             double storedScore = user.get().getMannersScore(); // 기존 평점
             int storedCnt = user.get().getEvaluateCnt(); // 기존 평가한 사람 수
-            double originalScore = storedScore * storedCnt;
+            double originalScore = storedScore * (storedCnt);
             originalScore += score;
             user.get().setMannersScore(originalScore / ++storedCnt);
             user.get().setEvaluateCnt(storedCnt);

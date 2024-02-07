@@ -20,13 +20,40 @@ public class BoardSpecifications {
 
             if (StringUtils.hasText(keyword)) {
                 predicates.add(criteriaBuilder.like(root.get("title"), "%" + keyword + "%"));
-                predicates.add(criteriaBuilder.like(root.get("nickname"), "%" + keyword + "%"));
+                //predicates.add(criteriaBuilder.like(root.get("nickname"), "%" + keyword + "%"));
                 predicates.add(criteriaBuilder.like(root.get("content"), "%" + keyword + "%"));
             }
 
             return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
         };
     }
+
+    public static Specification<BoardModel> search(String keyword, String nickname, int option) {
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (StringUtils.hasText(keyword)) {
+                Predicate keywordPredicate = criteriaBuilder.or(
+                        criteriaBuilder.like(root.get("title"), "%" + keyword + "%"),
+                        criteriaBuilder.like(root.get("content"), "%" + keyword + "%")
+                );
+                predicates.add(keywordPredicate);
+            }
+
+            if (StringUtils.hasText(nickname)) {
+                Predicate nicknamePredicate;
+                if (option == 1) {
+                    nicknamePredicate = criteriaBuilder.equal(root.get("nickname"), "admin");
+                } else {
+                    nicknamePredicate = criteriaBuilder.notEqual(root.get("nickname"), "admin");
+                }
+                predicates.add(nicknamePredicate);
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
 
     public static Specification<BoardModel> boardIsLikedByUser(List<Long> boardIds) {
         return (root, query, criteriaBuilder) -> {
