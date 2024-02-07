@@ -168,7 +168,18 @@ public class BoardController {
 
 	@GetMapping("/searchByDrink")
 	public ResponseEntity<?> searchBoardByDrink(@RequestParam int page, @RequestParam int size, @RequestParam String drinkName) {
-		return new ResponseEntity<>(boardService.searchBoardsByDrinkName(drinkName, page-1, size), HttpStatus.OK);
+		ResponseEntity response = null;
+
+		Page<ViewBoardResponseDto> pageEntities = boardService.searchBoardsByDrinkName(drinkName, page-1, size);
+		List<ViewBoardResponseDto> content = pageEntities.getContent();
+		int totalPages = ((Page<?>) pageEntities).getTotalPages();
+
+		Map<String, Object> responseBody = new HashMap<>();
+		responseBody.put("content", content);
+		responseBody.put("totalPages", totalPages);
+
+		response = new ResponseEntity<>(responseBody, HttpStatus.OK);
+		return response;
 	}
 
 	@PostMapping("/uploadBoardImage")
