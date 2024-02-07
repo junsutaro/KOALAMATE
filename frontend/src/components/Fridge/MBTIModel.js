@@ -27,70 +27,29 @@ export default function MBTIModel ({ initialPosition }) {
 		}
 		const existingModel = models.find(model => model.object.uuid === modelScene.uuid);
 		if (existingModel) {
-			setDraggedModel({...existingModel, isNew: false});
+			console.log('existing model added');
+			setDraggedModel({object: existingModel.object, isNew: false});
 		} else {
+			const clonedObject = modelScene.clone();
 			setDraggedModel({
-				object: modelScene.clone(),
+				object: clonedObject,
 				index: index,
 				position: [initialPosition.x, initialPosition.y, 1.4],
 				isNew: true,
 			});
+			scene.add(clonedObject);
+			console.log("제발");
 		}
-
 	};
-
-	useEffect(() => {
-		const handlePointerDown = (event) => {
-			const raycaster = new THREE.Raycaster();
-			raycaster.setFromCamera(pointer, camera);
-			const intersects = raycaster.intersectObjects(scene.children, true);
-
-			if (intersects.length > 0) {
-				const firstIntersectedObject = intersects[0].object;
-
-				// 이미 배치된 모델을 찾아서 드래그 중인 모델로 설정합니다.
-				const existingModel = models.find(model => model.object.uuid === firstIntersectedObject.uuid);
-				if (existingModel) {
-					setDraggedModel({...existingModel, isNew: false});
-				} else {
-					// 새로운 모델을 복제하여 드래그하는 경우
-					const clonedObject = firstIntersectedObject.clone();
-					scene.add(clonedObject);
-					setDraggedModel({
-						object: clonedObject,
-						position: [initialPosition.x, initialPosition.y, 1.4],
-						isNew: true
-					});
-
-				}
-			}
-	};
-		window.addEventListener('pointerdown', handlePointerDown);
-
-		return () => {
-			window.removeEventListener('pointerdown', handlePointerDown);
-		};
-	}, [models, pointer, camera, scene.children]);
 
 	useFrame(() => {
 		if (draggedModel) {
+			console.log('draggedModel');
 			const normalizedPosition = new THREE.Vector3(pointer.x, pointer.y, 0.5);
 			const worldPosition = normalizedPosition.unproject(camera);
 			const dir = worldPosition.sub(camera.position).normalize();
 			const distance = (1.4 - camera.position.z) / dir.z;
 			const finalPosition = camera.position.clone().add(dir.multiplyScalar(distance));
-			// const vector = new THREE.Vector3(pointer.x, pointer.y, 0.5);
-			// vector.unproject(camera);
-			// const dir = vector.sub(camera.position).normalize();
-			// const distance = -camera.position.z / dir.z;
-			// const pos = camera.position.clone().add(dir.multiplyScalar(distance));
-
-			// const newPosition = [finalPosition.x, finalPosition.y, draggedModel.position[2]];
-			//
-			// setDraggedModel({
-			// 	...draggedModel,
-			// 	position: newPosition,
-			// });
 
 			draggedModel.object.position.set(finalPosition.x, finalPosition.y, 1.4);
 		}
@@ -98,8 +57,10 @@ export default function MBTIModel ({ initialPosition }) {
 
 	useEffect(() => {
 		const handlePointerUp = () => {
+			console.log(draggedModel);
 			if (draggedModel) {
 				if (draggedModel.isNew) {
+					console.log('new model added');
 					setModels([...models, {
 						object: draggedModel.object,
 						position: draggedModel.object.position.toArray()
@@ -113,15 +74,7 @@ export default function MBTIModel ({ initialPosition }) {
 					));
 				}
 				setDraggedModel(null);
-				// 드래그가 완료되면 모델의 위치를 업데이트합니다.
-				// setModels(models.map(model => model.object.uuid === draggedModel.object.uuid ? { ...model, position: draggedModel.object.position.toArray() } : model));
-				// setDraggedModel(null);
 			}
-			// if (draggedModel) {
-			// 	console.log(draggedModel);
-			// 	setModels([...models, draggedModel]);
-			// 	setDraggedModel(null);
-			// }
 		};
 		window.addEventListener('pointerup', handlePointerUp);
 
@@ -129,6 +82,14 @@ export default function MBTIModel ({ initialPosition }) {
 			window.removeEventListener('pointerup', handlePointerUp);
 		};
 	}, [draggedModel, models]);
+
+	useEffect(() => {
+		console.log(models);
+		models.forEach((model, index) => {
+			console.log(model);
+		});
+	}, [models]);
+
 
 	return (
 		<>
@@ -145,11 +106,8 @@ export default function MBTIModel ({ initialPosition }) {
 				           onPointerDown={() => onModelClick(E_scene)}/>
 			</group>
 			{models.map((model, index) => (
-				<primitive object={model.object} key={index} position={model.position}/>
+				<primitive object={model.object} key={index} position={model.position} onPointerDown={() => onModelClick(model.object)}/>
 			))}
-			{draggedModel && (
-				<primitive object={draggedModel.object} position={draggedModel.position}/>
-			)}
 		</>
 	);
 }
