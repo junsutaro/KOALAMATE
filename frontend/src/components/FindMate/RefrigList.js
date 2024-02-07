@@ -177,6 +177,7 @@ const RefrigList = () => {
 
     console.log(authHeader);
 
+
     const getUserData = async () => {
         if (!authHeader) {
             console.error('Authorization token is missing');
@@ -205,7 +206,8 @@ const RefrigList = () => {
    }, []);
 
 
-
+// 이미지 URL을 절대 경로로 변환
+//     const profile = profile ? `http://localhost:3000/${profile}` : '/assets/profile.jpg';
 
     return (
         <Box sx={{ alignItems: 'flex-start' }}>
@@ -216,8 +218,9 @@ const RefrigList = () => {
                     <React.Fragment key={index}>
                         <ListItem>
                             <ListItemAvatar>
-                                <Avatar src={user.profile}>
-                                    <ImageIcon />
+                                <Avatar src={user.profile ? `${process.env.REACT_APP_API_URL}/${user.profile}` : '/assets/profile.jpg'}>
+
+                                {/*<ImageIcon />*/}
                                 </Avatar>
                             </ListItemAvatar>
                             <ListItemText
