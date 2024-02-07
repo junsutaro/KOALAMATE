@@ -26,7 +26,7 @@ function RecipeList() {
                 author: item.nickname,              // 작성자
                 imageUrl: item.image,               // 레시피 사진 URL
                 ingredients: item.cocktails || [],  // 재료들
-                comments: item.comments || [],      // 댓글
+                // comments: item.comments || [],      // 댓글
                 likeCount: item.likeCount || 0,     // 좋아요 수
                 liked: item.liked || false          // 좋아요 여부
             })));

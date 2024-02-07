@@ -4,6 +4,7 @@ import {Avatar, Typography, Box, Chip, Button} from '@mui/material';
 import Brightness1Icon from '@mui/icons-material/Brightness1'; // Import the correct icon
 // import standardImg from 'assets/profile.jpg'
 import {NavLink} from 'react-router-dom';
+import FollowMiniBox from "../Follow/FollowMiniBox";
 
 const standardImgPath = '/assets/profile.jpg';
 
@@ -54,20 +55,8 @@ const Profile = ({img, nickname, gender, age, follower, followee, userId}) => {
                           sx={{backgroundColor: '#FF9B9B'}}/>
                 </div>
 
-                <Box style={{
-                    display: 'flex',
-                    marginTop: '10px',
-                    marginBottom: '10px',
-                    // gap: 10,
-                }}>
-
-                    <Button m={1} p={1} component={NavLink}
-                            to={`/user/${userId}/follower`}>팔로워 {followerCnt}</Button>
-                    <Button m={1} p={1} component={NavLink}
-                            to={`/user/${userId}/followee`}>팔로우 {followeeCnt}</Button>
-
-                </Box>
-
+                <FollowMiniBox userId={userId} followerCnt={followerCnt} followeeCnt={followeeCnt} />
+                {/*<FollowBtn userId={userId} targetUserId={targetUserId} />*/}
             </Box>
         </>
     )
