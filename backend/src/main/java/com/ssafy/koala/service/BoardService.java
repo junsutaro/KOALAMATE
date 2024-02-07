@@ -192,7 +192,7 @@ public class BoardService {
 		boardRepository.deleteById(id);
 	}
 
-	public void likeBoard(Long id, Long myId) {
+	public boolean likeBoard(Long id, Long myId) {
 		UserModel user = new UserModel();
 		user.setId(myId);
 		BoardModel board = new BoardModel();
@@ -202,12 +202,14 @@ public class BoardService {
 		if(exists) {
 			// 좋아요 취소
 			likeRepository.deleteByUserAndBoard(user, board);
+			return false;
 		} else {
 			// 좋아요 수행
 			LikeModel like = new LikeModel();
 			like.setUser(user);
 			like.setBoard(board);
 			likeRepository.save(like);
+			return true;
 		}
 	}
 
@@ -318,7 +320,7 @@ public class BoardService {
 		return "BoardFileUploads/" + fileName;
 	}
 
-	public Page<ViewBoardResponseDto> getMyPageEntities(int page, int size, String nickname) {
+	public Page<ViewBoardResponseDto> getMyPageEntities(int page, int size, String nickname, Long userId) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page, size, sort);
 		Page<BoardModel> entities = boardRepository.findByNickname(nickname, pageable);
@@ -344,6 +346,9 @@ public class BoardService {
 
 					boardDto.setCocktails(cocktails);
 					boardDto.setComments(null);
+					// 좋아요 여부 확인
+					boardDto.setLiked(board.getLikes().stream()
+							.anyMatch(like -> like.getUser().getId().equals(userId)));
 					return boardDto;
 				})
 				.collect(Collectors.toList());
@@ -365,6 +370,7 @@ public class BoardService {
 				.map(board -> {
 					ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
 					BeanUtils.copyProperties(board, boardDto);
+					boardDto.setLiked(true);
 
 					List<CocktailWithDrinkDto> cocktails = board.getCocktails().stream()
 							.map(temp -> {
@@ -418,6 +424,96 @@ public class BoardService {
 
 					boardDto.setCocktails(cocktails);
 					boardDto.setComments(null);
+					return boardDto;
+				})
+				.collect(Collectors.toList());
+
+		return new PageImpl<>(result, pageable, pageResult.getTotalElements());
+	}
+
+	// 로그인 했을 시, 본인의 좋아요 여부 반영한 전체 게시글 목록 출력
+	public Page<ViewBoardResponseDto> getPageEntities(int page, int size, int option, Long userId) {
+		Sort sort = Sort.by(Sort.Direction.DESC, "id");
+		Pageable pageable = PageRequest.of(page, size, sort);
+
+		Page<BoardModel> entities;
+		switch(option) {
+			case 1: entities = boardRepository.findAll(pageable); break;    //전체
+			case 2: entities = boardRepository.findByNickname("admin",pageable); break;  //관리자
+			default: entities = boardRepository.findUserBoard(pageable);   //유저
+		}
+
+
+		List<ViewBoardResponseDto> result = entities.getContent().stream()
+				.map(board -> {
+					ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
+					if (board != null) { // BoardModel이 null이 아닌지 확인
+						BeanUtils.copyProperties(board, boardDto);
+
+						List<CocktailWithDrinkDto> cocktails = board.getCocktails() != null ? board.getCocktails().stream()
+								.map(cocktail -> {
+									CocktailWithDrinkDto cocktailDto = new CocktailWithDrinkDto();
+									if (cocktail != null && cocktail.getDrink() != null) { // cocktail과 drink가 null이 아닌지 확인
+										BeanUtils.copyProperties(cocktail, cocktailDto);
+										DrinkWithoutCocktailDto drinkDto = new DrinkWithoutCocktailDto();
+										BeanUtils.copyProperties(cocktail.getDrink(), drinkDto);
+										cocktailDto.setDrink(drinkDto);
+									}
+									return cocktailDto;
+								})
+								.collect(Collectors.toList()) : Collections.emptyList();
+
+						boardDto.setCocktails(cocktails);
+						boardDto.setComments(null);
+						// 좋아요 여부 확인
+						boardDto.setLiked(board.getLikes().stream()
+								.anyMatch(like -> like.getUser().getId().equals(userId)));
+					}
+					return boardDto;
+				})
+				.collect(Collectors.toList());
+
+		return new PageImpl<>(result, pageable, entities.getTotalElements());
+	}
+
+	// 로그인 했을 때, 유저의 좋아요 여부가 반영된 검색 결과
+	public Page<ViewBoardResponseDto> searchAndPageBoards(String keyword, int page, int size, int option, Long userId) {
+		Sort sort = Sort.by(Sort.Direction.DESC, "id");
+		PageRequest pageable = PageRequest.of(page, size, sort);
+
+		// 검색 및 페이징을 위한 Specification을 사용
+		Specification<BoardModel> spec;
+		switch(option) {
+			case 1: spec = BoardSpecifications.search(keyword); break;  //전체
+			case 2: spec = BoardSpecifications.search(keyword, "admin", 1); break;  //관리자
+			default : spec = BoardSpecifications.search(keyword, "admin", -1); break;  //유저
+		}
+
+		Page<BoardModel> pageResult = boardRepository.findAll(spec, pageable);
+
+		List<ViewBoardResponseDto> result = pageResult.getContent().stream()
+				.map(board -> {
+					ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
+					BeanUtils.copyProperties(board, boardDto);
+
+					List<CocktailWithDrinkDto> cocktails = board.getCocktails().stream()
+							.map(temp -> {
+								CocktailWithDrinkDto insert = new CocktailWithDrinkDto();
+								BeanUtils.copyProperties(temp, insert);
+
+								DrinkWithoutCocktailDto drinkDto = new DrinkWithoutCocktailDto();
+								BeanUtils.copyProperties(temp.getDrink(), drinkDto);
+
+								insert.setDrink(drinkDto);
+								return insert;
+							})
+							.collect(Collectors.toList());
+
+
+					boardDto.setCocktails(cocktails);
+					boardDto.setComments(null);
+					boardDto.setLiked(board.getLikes().stream()
+							.anyMatch(like -> like.getUser().getId().equals(userId)));
 					return boardDto;
 				})
 				.collect(Collectors.toList());

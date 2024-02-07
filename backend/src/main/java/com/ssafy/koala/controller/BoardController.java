@@ -49,12 +49,23 @@ public class BoardController {
     }
 
 	@GetMapping("/list")
-	public Object listBoard(@RequestParam int page, @RequestParam int size, @RequestParam int option) {
+	public Object listBoard(@RequestParam int page, @RequestParam int size, @RequestParam int option, HttpServletRequest request) {
 		ResponseEntity response = null;
 
 		if(option > 3 || option <= 0) return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
 
-		Page<ViewBoardResponseDto> pageEntities = boardService.getPageEntities(page - 1, size, option);
+		Page<ViewBoardResponseDto> pageEntities = null;
+
+		// 로그인 했을 때만 좋아요 여부 출력
+		if(request.getHeader("Authorization") != null) {
+			String accessToken = authService.getAccessToken(request);
+			UserDto user = authService.extractUserFromToken(accessToken);
+			pageEntities = boardService.getPageEntities(page - 1, size, option, user.getId());
+		}
+		// 로그인 안했을 때는 좋아요 여부 출력 안되는 리스트 출력
+		else {
+			pageEntities = boardService.getPageEntities(page - 1, size, option);
+		}
 		List<ViewBoardResponseDto> content = pageEntities.getContent();
 		int totalPages = ((Page<?>) pageEntities).getTotalPages();
 
@@ -138,8 +149,8 @@ public class BoardController {
 		try{
 			long board_id = dto.getId();
 			String accessToken = authService.getAccessToken(request);
-			boardService.likeBoard(board_id, authService.extractUserFromToken(accessToken).getId());
-			return new ResponseEntity<>("like request processed successfully.", HttpStatus.OK);
+			boolean isLike = boardService.likeBoard(board_id, authService.extractUserFromToken(accessToken).getId());
+			return new ResponseEntity<>(Map.of("isLike", isLike), HttpStatus.OK);
 		} catch (EmptyResultDataAccessException e) {
 			// 해당 ID에 해당하는 엔티티가 존재하지 않는 경우
 			return new ResponseEntity<>("Not found board", HttpStatus.NOT_FOUND);
@@ -150,10 +161,21 @@ public class BoardController {
 	}
 
 	@GetMapping("/search")
-	public ResponseEntity<?> searchBoard(@RequestParam int page, @RequestParam int size, @RequestParam String keyword, @RequestParam int option) {
+	public ResponseEntity<?> searchBoard(@RequestParam int page, @RequestParam int size, @RequestParam String keyword, @RequestParam int option,
+		HttpServletRequest request) {
 		ResponseEntity response = null;
+		Page<ViewBoardResponseDto> pageEntities = null;
 		if(option > 3 || option <= 0) return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
-		Page<ViewBoardResponseDto> pageEntities = boardService.searchAndPageBoards(keyword, page-1, size, option);
+		if(request.getHeader("Authorization") == null) {
+			// 로그인 안했을 경우
+			pageEntities = boardService.searchAndPageBoards(keyword, page-1, size, option);
+		}
+		else {
+			// 로그인 했을 경우 좋아요 여부 반영
+			String accessToken = authService.getAccessToken(request);
+			UserDto user = authService.extractUserFromToken(accessToken);
+			pageEntities = boardService.searchAndPageBoards(keyword, page-1, size, option, user.getId());
+		}
 		List<ViewBoardResponseDto> content = pageEntities.getContent();
 		int totalPages = ((Page<?>) pageEntities).getTotalPages();
 
@@ -207,7 +229,7 @@ public class BoardController {
 
 		ResponseEntity response = null;
 		//페이지 시작은 0부터
-		Page<ViewBoardResponseDto> pageEntities = boardService.getMyPageEntities(page-1, size, user.getNickname());
+		Page<ViewBoardResponseDto> pageEntities = boardService.getMyPageEntities(page-1, size, user.getNickname(), user.getId());
 		List<ViewBoardResponseDto> content = pageEntities.getContent();
 		int totalPages = ((Page<?>) pageEntities).getTotalPages();
 
