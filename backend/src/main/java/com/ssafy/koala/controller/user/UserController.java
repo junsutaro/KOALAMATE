@@ -75,7 +75,7 @@ public class UserController {
 		}
 	}
 
-	@PostMapping("/check-email")
+	@PostMapping("/checkEmail")
 	public ResponseEntity<?> checkEmailDuplicate(@RequestBody UserDto user) {
 		try {
 			String email = user.getEmail();
@@ -90,7 +90,7 @@ public class UserController {
 		}
 	}
 
-	@PostMapping("/check-nickname")
+	@PostMapping("/checkNickname")
 	public  ResponseEntity<?> checkNicknameDuplicate(@RequestBody UserDto user) {
 		try {
 			String nickname = user.getNickname();
@@ -218,4 +218,18 @@ public class UserController {
 		}
 	}
 
+	// param으로 요청한 유저와 내가 팔로우 되어있는지 확인
+	@GetMapping("/followCheck")
+	public ResponseEntity<?> checkFollow(@RequestParam Long userId, HttpServletRequest request) {
+		try {
+			String accessToken = authService.getAccessToken(request);
+			UserDto user = authService.extractUserFromToken(accessToken);
+			boolean result = followService.checkFollow(user.getId(), userId);
+			return new ResponseEntity<>(Map.of("isFollow", result), HttpStatus.OK);
+		} catch(EmptyResultDataAccessException e) {
+			return new ResponseEntity<>("Not found user", HttpStatus.NOT_FOUND);
+		} catch(Exception e) {
+			return new ResponseEntity<>("Error evaluate manner score", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }
