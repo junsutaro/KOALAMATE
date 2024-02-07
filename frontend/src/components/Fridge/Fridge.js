@@ -1,13 +1,15 @@
-import React, { useEffect, useRef } from 'react';
+import React, { Suspense, useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
 import { Canvas } from '@react-three/fiber';
 import FridgeModel from './FridgeModel';
 import Rig from './Rig';
 import MBTIModel from './MBTIModel';
 import * as THREE from 'three';
+import Loader from './Loader';
 
 function Fridge() {
 	const directionalLightRef = useRef();
+	const [fridgeUuid, setFridgeUuid] = React.useState(null);
 
 	useEffect(() => {
 		if (directionalLightRef.current) {
@@ -23,8 +25,10 @@ function Fridge() {
 				<spotLight position={[10, 10, 10]} angle={0.15} penumbra={0.5}/>
 				<directionalLight ref={directionalLightRef} position={[10, 10, 10]} intensity={1} castShadow/>
 				<pointLight position={[5, 5, 5]}/>
-				<FridgeModel />
-				<MBTIModel initialPosition={[4, 2, 0]}/>
+				<Suspense fallback={<Loader/>}>
+					<FridgeModel setUuid={setFridgeUuid}/>
+				</Suspense>
+				<MBTIModel initialPosition={[3, 2, 0]} fridgeUuid={fridgeUuid}/>
 				<Rig/>
 			</Canvas>
 		</Box>

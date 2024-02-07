@@ -5,10 +5,13 @@ import N_URL from 'assets/N.glb';
 import F_URL from 'assets/F.glb';
 import P_URL from 'assets/P.glb';
 import E_URL from 'assets/E.glb';
+import S_URL from 'assets/S.glb';
+import T_URL from 'assets/T.glb';
+import J_URL from 'assets/J.glb';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
-export default function MBTIModel ({ initialPosition }) {
+export default function MBTIModel ({ initialPosition, fridgeUuid }) {
 	const { camera, pointer, scene } = useThree();
 	const [models, setModels] = useState([]);
 	const [draggedModel, setDraggedModel] = useState(null);
@@ -18,6 +21,9 @@ export default function MBTIModel ({ initialPosition }) {
 	const { scene: F_scene } = useGLTF(F_URL);
 	const { scene: P_scene } = useGLTF(P_URL);
 	const { scene: E_scene } = useGLTF(E_URL);
+	const { scene: S_scene } = useGLTF(S_URL);
+	const { scene: T_scene } = useGLTF(T_URL);
+	const { scene: J_scene } = useGLTF(J_URL);
 
 	const onModelClick = (modelScene, index) => {
 		console.log('model clicked');
@@ -25,10 +31,11 @@ export default function MBTIModel ({ initialPosition }) {
 			console.log('Model is not loaded yet');
 			return;
 		}
-		const existingModel = models.find(model => model.object.uuid === modelScene.uuid);
+		const existingModel = models.find(
+			model => model.object.uuid === modelScene.uuid);
 		if (existingModel) {
 			console.log('existing model added');
-			setDraggedModel({object: existingModel.object, isNew: false});
+			setDraggedModel({ object: existingModel.object, isNew: false });
 		} else {
 			const clonedObject = modelScene.clone();
 			setDraggedModel({
@@ -38,7 +45,7 @@ export default function MBTIModel ({ initialPosition }) {
 				isNew: true,
 			});
 			scene.add(clonedObject);
-			console.log("제발");
+			console.log('제발');
 		}
 	};
 
@@ -49,7 +56,8 @@ export default function MBTIModel ({ initialPosition }) {
 			const worldPosition = normalizedPosition.unproject(camera);
 			const dir = worldPosition.sub(camera.position).normalize();
 			const distance = (1.4 - camera.position.z) / dir.z;
-			const finalPosition = camera.position.clone().add(dir.multiplyScalar(distance));
+			const finalPosition = camera.position.clone()
+				.add(dir.multiplyScalar(distance));
 
 			draggedModel.object.position.set(finalPosition.x, finalPosition.y, 1.4);
 		}
@@ -57,23 +65,41 @@ export default function MBTIModel ({ initialPosition }) {
 
 	useEffect(() => {
 		const handlePointerUp = () => {
+			if (!draggedModel) return;
 			console.log(draggedModel);
-			if (draggedModel) {
-				if (draggedModel.isNew) {
-					console.log('new model added');
-					setModels([...models, {
-						object: draggedModel.object,
-						position: draggedModel.object.position.toArray()
-					}]);
+
+			const raycaster = new THREE.Raycaster();
+			raycaster.setFromCamera(pointer, camera);
+
+			const fridge = scene.getObjectByProperty('uuid', fridgeUuid);
+
+			if (fridge) {
+				const intersects = raycaster.intersectObject(fridge, true);
+				if (intersects.length === 0) {
+					if (!draggedModel.isNew) {
+						console.log('existing model removed');
+						setModels(models.filter(model => model.object.uuid !== draggedModel.object.uuid));
+					}
+					scene.remove(draggedModel.object);
+					setDraggedModel(null);
 				} else {
-					// 드래그가 완료되면 모델의 위치를 업데이트합니다.
-					setModels(models.map(model =>
-						model.object.uuid === draggedModel.object.uuid
-							? { ...model, position: draggedModel.object.position.toArray() }
-							: model
-					));
+					if (draggedModel.isNew) {
+						console.log('new model added');
+						setModels([
+							...models, {
+								object: draggedModel.object,
+								position: draggedModel.object.position.toArray(),
+							}]);
+					} else {
+						// 드래그가 완료되면 모델의 위치를 업데이트합니다.
+						setModels(models.map(model =>
+							model.object.uuid === draggedModel.object.uuid
+								? { ...model, position: draggedModel.object.position.toArray() }
+								: model,
+						));
+					}
+					setDraggedModel(null);
 				}
-				setDraggedModel(null);
 			}
 		};
 		window.addEventListener('pointerup', handlePointerUp);
@@ -90,7 +116,6 @@ export default function MBTIModel ({ initialPosition }) {
 		});
 	}, [models]);
 
-
 	return (
 		<>
 			<group position={initialPosition}>
@@ -102,11 +127,18 @@ export default function MBTIModel ({ initialPosition }) {
 				           onPointerDown={() => onModelClick(F_scene)}/>
 				<primitive object={P_scene} position={[0, -3, 1.4]}
 				           onPointerDown={() => onModelClick(P_scene)}/>
-				<primitive object={E_scene} position={[0, -4, 1.4]}
+				<primitive object={E_scene} position={[1, 0, 1.4]}
 				           onPointerDown={() => onModelClick(E_scene)}/>
+				<primitive object={S_scene} position={[1, -1, 1.4]}
+				           onPointerDown={() => onModelClick(S_scene)}/>
+				<primitive object={T_scene} position={[1, -2, 1.4]}
+				           onPointerDown={() => onModelClick(T_scene)}/>
+				<primitive object={J_scene} position={[1, -3, 1.4]}
+				           onPointerDown={() => onModelClick(J_scene)}/>
 			</group>
 			{models.map((model, index) => (
-				<primitive object={model.object} key={index} position={model.position} onPointerDown={() => onModelClick(model.object)}/>
+				<primitive object={model.object} key={index} position={model.position}
+				           onPointerDown={() => onModelClick(model.object)}/>
 			))}
 		</>
 	);
