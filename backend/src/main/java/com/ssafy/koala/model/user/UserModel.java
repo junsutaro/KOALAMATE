@@ -51,4 +51,6 @@ public class UserModel {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private List<LikeModel> likes;
+
+	private int evaluateCnt=0;
 }
