@@ -6,10 +6,12 @@ import {
 	ListItemText,
 	Collapse,
 	Box,
-	Typography,
+	Typography, Button, Divider,
 } from '@mui/material';
+import {useNavigate} from "react-router-dom";
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import axios from "axios";
 
 const getChatRooms = () => {
 	const chatRooms = sessionStorage.getItem('roomList');
@@ -18,6 +20,7 @@ const getChatRooms = () => {
 
 const Chattings = () => {
 	const [rooms, setRooms] = useState([]);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const chatRooms = getChatRooms();
@@ -45,23 +48,40 @@ const Chattings = () => {
 		}
 	};
 
+	const voiceCall = (roomId) => {
+		navigate(`/voiceChat/${roomId}`);
+	}
+
 	return (
 			<List component="nav">
 				{rooms.map((room) => (
 						<React.Fragment key={room.id}>
 							<ListItem button onClick={() => toggleExpand(room.id)}>
-								<ListItemText
-									primary={room.users.map(user => user.nickname).join(', ')}
-									secondary={expandedRoomId !== room.id ? `${room.lastMessage.nickname}: ${room.lastMessage.content}` : ''}
-								/>
+								{room.lastMessage !== null ?
+									<ListItemText
+										primary={room.users.map(user => user.nickname).join(', ')}
+										secondary={expandedRoomId !== room.id ? `${room.lastMessage.nickname}: ${room.lastMessage.content}` : ''}
+									/>
+									:
+									<ListItemText
+										primary={room.users.map(user => user.nickname).join(', ')}
+										// secondary={expandedRoomId !== room.id ? `${room.lastMessage.nickname}: ${room.lastMessage.content}` : ''}
+									/>
+								}
+								{/*<ListItemText*/}
+								{/*	primary={room.users.map(user => user.nickname).join(', ')}*/}
+								{/*	secondary={expandedRoomId !== room.id ? `${room.lastMessage.nickname}: ${room.lastMessage.content}` : ''}*/}
+								{/*/>*/}
 								{expandedRoomId === room.id ? <ExpandLess /> : <ExpandMore />}
 							</ListItem>
+							<Button onClick={() => voiceCall(room.id)}>asdasd</Button>
 							{expandedRoomId === room.id && <Chatting roomNumber={room.id}/>}
 							{/*<Collapse in={expandedRoomId === room.id} timeout="auto" unmountOnExit>*/}
 							{/*	<Box sx={{bgcolor: 'background.paper'}}>*/}
 							{/*		<Chatting roomNumber={room.id}/>*/}
 							{/*	</Box>*/}
 							{/*</Collapse>*/}
+							<Divider />
 						</React.Fragment>
 				))}
 			</List>

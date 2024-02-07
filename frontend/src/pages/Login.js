@@ -5,6 +5,7 @@ import {useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import {setLoading, setLoginStatus} from '../store/authSlice';
 import {useWebSocket} from 'context/WebSocketContext';
+import {useVoiceSocket} from 'context/VoiceSocketContext';
 
 const Login = () => {
 	const [email, setEmail] = React.useState('');
@@ -12,6 +13,7 @@ const Login = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const {connect} = useWebSocket();
+	const {connectVoice} = useVoiceSocket();
 
 	const login = async (email, password) => {
 		try {
@@ -62,6 +64,9 @@ const Login = () => {
 			dispatch(setLoginStatus({isLoggedIn: true, user: response.data}));
 			connect(`${process.env.REACT_APP_CHAT_URL}`);
 			console.log(response.data);
+
+			connectVoice();
+
 			navigate('/');
 		}).catch((error) => {
 			console.log('Login Failed: ', error);

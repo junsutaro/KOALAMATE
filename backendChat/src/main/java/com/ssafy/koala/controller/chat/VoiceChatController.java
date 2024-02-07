@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/rtc")
 @Component
-@CrossOrigin(origins = "https://i10d212.p.ssafy.io")
+@CrossOrigin(origins = {"https://i10d212.p.ssafy.io", "http://localhost:3000"})
 public class VoiceChatController {
 
     @Value("${OPENVIDU_URL}")
