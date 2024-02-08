@@ -1,85 +1,77 @@
-import React, { useEffect, useState } from 'react';
-import { OpenVidu } from 'openvidu-browser';
-import { Box, Paper, Typography } from '@mui/material';
+import React, { useEffect } from 'react';
+import { useVoiceSocket } from 'context/VoiceSocketContext';
 import axios from 'axios';
+import {useParams, useLocation} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {Paper} from "@mui/material";
+import VideoChatControls from './VideoChatControls'; // VideoChatControls 컴포넌트를 임포트
 
-const BACKEND_URL = `${process.env.REACT_APP_VOICE_URL}`;
+const BACKEND_URL = process.env.REACT_APP_VOICE_URL;
 
-async function createSession() {
-	try {
-		const response = await axios.post(`${BACKEND_URL}/sessions`, {customSessionId: '1'});
-		return response.data; // 세션 ID 반환
-	} catch (error) {
-		console.error('세션 생성 실패:', error);
-		throw error;
-	}
-}
+const VoiceChatRoom = () => {
+    const { roomId } = useParams();
+    const location = useLocation();
+    // location 객체에서 state 속성을 통해 전달된 데이터를 읽음
+    const { users } = location.state;
+    const { connectToSession, disconnectSession, participants, setParticipants, publisher } = useVoiceSocket();
+    // ... useEffect 등 기존 로직
+    const curUser = useSelector(state => state.auth.user);
 
-async function createToken(sessionId) {
-	try {
-		const response = await axios.post(`${BACKEND_URL}/sessions/${sessionId}/connections`);
-		return response.data; // 토큰 반환
-	} catch (error) {
-		console.error('토큰 생성 실패:', error);
-		throw error;
-	}
-}
+    useEffect(() => {
+        console.log(curUser);
+        (async () => {
+            try {
+                // 세션 생성
+                const sessionIdResponse = await axios.post(`${BACKEND_URL}/sessions`, {customSessionId: roomId });
+                const sessionId = sessionIdResponse.data;
+                const tokenResponse = await axios.post(`${BACKEND_URL}/sessions/${sessionId}/connections`, {customNickname: curUser.nickname});
+                //console.log(tokenResponse);
+                const token = tokenResponse.data;
+                //console.log(token);
+                //console.log(users);
+                connectToSession(token);
 
-function VideoChat() {
-	const [OV, setOV] = useState(null);
-	const [session, setSession] = useState(null);
+                //setParticipants(users);
+            } catch (error) {
+                console.error('Error setting up voice chat:', error);
+            }
+        })();
+        //return () => disconnectSession(); // Cleanup on component unmount
+    }, [roomId]);
 
-	useEffect(() => {
-		(async () => {
-			try {
-				// 세션 생성
-				const sessionId = await createSession();
-				// 토큰 생성
-				const token = await createToken(sessionId);
+    useEffect(() => {
+        const subscriberDiv = document.getElementById('userList');
+        subscriberDiv.innerHTML = ''; // 기존 내용을 초기화
 
-				// OpenVidu 세션 초기화
-				const ov = new OpenVidu();
-				const session = ov.initSession();
+        users.forEach(user => {
+            const userDiv = document.createElement('div');
+            userDiv.innerText = user.nickname; // 닉네임 표시
+            userDiv.style.border = '2px solid grey'; // 기본 회색 테두리
+            userDiv.style.margin = '10px';
+            userDiv.style.padding = '10px';
 
-				// 스트림 생성 이벤트 리스너 등록
-				session.on('streamCreated', (event) => {
-					session.subscribe(event.stream, 'video-container');
-				});
+            // 접속한 사용자와 일치하는지 확인
+            if (participants.some(p => p.nickname === user.nickname) || user.nickname === curUser.nickname) {
+                userDiv.style.border = '2px solid blue'; // 접속한 사용자는 파란색 테두리
+            }
 
-				// 세션 연결
-				await session.connect(token);
+            subscriberDiv.appendChild(userDiv);
+        });
+    }, [participants, users]); // participants 또는 users가 변경될 때마다 실행
 
-				// 발행자(Publisher) 초기화 및 발행
-				const publisher = ov.initPublisher('publisher-container');
-				session.publish(publisher);
+    return (
+        <div>
+            <h2>Voice Chat Room: {roomId}</h2>
+            <Paper elevation={3} style={{ width: '80%', height: 500, mb: 2, position: 'relative' }}>
+                <div id='userList'>
+                    {/* 여기에 VideoChatControls 컴포넌트 추가 */}
+                    {publisher && <VideoChatControls publisher={publisher} />}
+                    <div id="subscriberDiv" style={{width: '100%', height: '100%'}}/>
+                    <div id="publisher-container" style={{position: 'absolute', bottom: 10, right: 10, zIndex: 10}}/>
+                </div>
+            </Paper>
+        </div>
+    );
+};
 
-				setOV(ov);
-				setSession(session);
-			} catch (error) {
-				console.error('화상 채팅 설정 실패:', error);
-			}
-		})();
-	}, []);
-
-	useEffect(() => {
-		return () => {
-			// 컴포넌트 언마운트 시 세션 연결 해제
-			session && session.disconnect();
-			OV && OV.disconnect();
-		};
-	}, [session, OV]);
-
-	return (
-		<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2 }}>
-			<Typography variant="h4" gutterBottom>
-				화상 채팅
-			</Typography>
-			<Paper elevation={3} sx={{ width: '80%', height: 500, mb: 2, position: 'relative' }}>
-				<div id="publisher-container" style={{ position: 'absolute', bottom: 10, right: 10, zIndex: 10 }} />
-				<div id="video-container" style={{ width: '100%', height: '100%' }} />
-			</Paper>
-		</Box>
-	);
-}
-
-export default VideoChat;
+export default VoiceChatRoom;

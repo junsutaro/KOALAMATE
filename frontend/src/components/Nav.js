@@ -17,6 +17,7 @@ import {setLoginStatus} from '../store/authSlice';
 import logoImage from 'assets/logo.png';
 import axios from 'axios';
 import {useWebSocket} from 'context/WebSocketContext';
+import {useVoiceSocket} from 'context/VoiceSocketContext';
 import {styled} from '@mui/material/styles';
 
 const Nav = () => {
@@ -28,7 +29,7 @@ const Nav = () => {
 	const [anchorElUser, setAnchorElUser] = useState(null); // 유저 메뉴 상태 관리
 	const open = Boolean(anchorEl);
 	const [menuOpen, setMenuOpen] = useState(false);
-
+	const {disconnectSession} = useVoiceSocket();
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
 		setMenuOpen(!menuOpen);
@@ -52,6 +53,7 @@ const Nav = () => {
 			await axios.post(`${process.env.REACT_APP_API_URL}/user/logout`, {}, {withCredentials: true});
 			dispatch(setLoginStatus(false));
 			disconnect();
+			disconnectSession();
 			navigate('/');
 			handleClose();
 			localStorage.removeItem('authHeader');
