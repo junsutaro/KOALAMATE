@@ -90,6 +90,7 @@ const Chatting = ({ roomNumber , users}) => {
 			chatRoom.forEach((room) => {
 				if (room.id === roomNumber) {
 					room.lastMessage = receivedMessage;
+					room.confirmMessageId = receivedMessage.id;
 				}
 			});
 			sessionStorage.setItem('roomList', JSON.stringify(chatRoom));

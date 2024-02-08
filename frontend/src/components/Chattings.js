@@ -44,7 +44,8 @@ const Chattings = () => {
 		sessionStorage.setItem('activeCall', JSON.stringify(activeCall));
 	}, [activeCall]);
 
-	const toggleExpand = (roomId) => {
+	const toggleExpand = (roomId, room) => {
+		room.confirmMessageId = room.lastMessage.id;
 		setExpandedRoomId(expandedRoomId === roomId ? null : roomId);
 	};
 
@@ -63,7 +64,7 @@ const Chattings = () => {
 		<List component="nav">
 			{rooms.map((room) => (
 				<React.Fragment key={room.id}>
-					<ListItem button onClick={() => toggleExpand(room.id)}>
+					<ListItem button onClick={() => toggleExpand(room.id, room)}>
 						<ListItemText
 							primary={room.users.map(user => user.nickname).join(', ')}
 							secondary={expandedRoomId !== room.id ? room.lastMessage && `${room.lastMessage.nickname}: ${room.lastMessage.content}` : ''}
