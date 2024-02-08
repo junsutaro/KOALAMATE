@@ -1,9 +1,12 @@
 import React, {createContext, useContext, useState, useCallback, useEffect} from 'react';
-import { OpenVidu } from 'openvidu-browser';
+import {OpenVidu} from 'openvidu-browser';
+import Avatar from '@mui/material/Avatar';
+import UserVoiceComponent from '../components/UserVoiceComponent';
+
 
 const VoiceSocketContext = createContext();
 
-export const VoiceSocketProvider = ({ children }) => {
+export const VoiceSocketProvider = ({children}) => {
     const [session, setSession] = useState(null);
     const [OV, setOV] = useState(new OpenVidu());
     const [participants, setParticipants] = useState([]);
@@ -12,27 +15,35 @@ export const VoiceSocketProvider = ({ children }) => {
     const [isCameraEnabled, setIsCameraEnabled] = useState(true); // 카메라 상태 관리
     const [isMicrophoneEnabled, setIsMicrophoneEnabled] = useState(true); // 마이크 상태 관리
 
-    const [users,setUsers] = useState(null);
-    const [curUser,setCurUser] = useState(null);
+    const [users, setUsers] = useState(null);
+    const [curUser, setCurUser] = useState(null);
+
+    const [streams, setStreams] = useState({}); // 스트림 목록 상태
 
     const connectToSession = useCallback(async (token) => {
         if (session) session.disconnect(); // 기존 세션 연결 해제
 
         const newSession = OV.initSession();
         newSession.on('streamCreated', event => {
-            const nickname = event.stream.connection.data.split("=")[1];
-            const subscriberDivId = `subscriber-${nickname}`; // 각 구독자별 고유 ID 생성
-            const subscriberDiv = document.createElement('div');
-            subscriberDiv.id = subscriberDivId;
-            document.getElementById('userList').appendChild(subscriberDiv); // 이 부분은 조정이 필요할 수 있습니다.
-
-            const subscriber = newSession.subscribe(event.stream, subscriberDivId);
-            setParticipants(prevParticipants => [...prevParticipants, { subscriber, nickname, subscriberDivId }]);
-            console.log(participants);
+            // const nickname = event.stream.connection.data.split("=")[1];
+            // const existingDiv = document.getElementById(`subscriber-${nickname}`);
+            // if (existingDiv) {
+            //     existingDiv.parentNode.removeChild(existingDiv); // 기존 div 제거
+            // }
+            //
+            // const subscriber = newSession.subscribe(event.stream, subscriberDivId);
+            // setParticipants(prevParticipants => [...prevParticipants, {subscriber, nickname, subscriberDivId}]);
+            // console.log(participants);
+            setStreams(prevStreams => ({ ...prevStreams, [event.stream.connection.connectionId]: event.stream }));
         });
         newSession.on('streamDestroyed', event => {
-            const nickname = event.stream.connection.data.split("=")[1];
-            setParticipants(prev => prev.filter(participant => participant.nickname !== nickname));
+            // const nickname = event.stream.connection.data.split("=")[1];
+            // setParticipants(prev => prev.filter(participant => participant.nickname !== nickname));
+            setStreams(prevStreams => {
+                const newStreams = { ...prevStreams };
+                delete newStreams[event.stream.connection.connectionId];
+                return newStreams;
+            });
         });
         await newSession.connect(token);
 
@@ -57,39 +68,50 @@ export const VoiceSocketProvider = ({ children }) => {
         }
     }, [session]);
 
-    useEffect(() => {
-        if(users) {
-            console.log(users);
-            const userListDiv = document.getElementById('userList');
-            userListDiv.innerHTML = ''; // 기존 내용을 초기화
-            if(session) {
-                users.forEach(user => {
-                    const userDiv = document.createElement('div');
-                    userDiv.innerText = user.nickname; // 닉네임 표시
-                    userDiv.style.border = '2px solid grey'; // 스타일 설정
-                    userDiv.style.margin = '10px';
-                    userDiv.style.padding = '10px';
+    // useEffect(() => {
+    //     if (users && curUser) {
+    //         const userListDiv = document.getElementById('userList');
+    //         userListDiv.innerHTML = ''; // 기존 내용을 초기화
+    //         userListDiv.style.display = 'flex';
+    //         userListDiv.style.flexWrap = 'wrap';
+    //         userListDiv.style.justifyContent = 'center';
+    //
+    //         users.forEach(user => {
+    //             let userDiv = document.createElement('div');
+    //             userDiv.id = `subscriber-${user.nickname}`;
+    //             userDiv.style.margin = '10px';
+    //             userDiv.style.display = 'flex';
+    //             userDiv.style.flexDirection = 'column';
+    //             userDiv.style.alignItems = 'center';
+    //             userDiv.style.border = `2px solid ${user.nickname === curUser.nickname ? 'blue' : 'grey'}`;
+    //             userDiv.style.borderRadius = '10px';
+    //             userDiv.style.padding = '10px';
+    //
+    //             // Avatar로 변경
+    //             let profileImg;
+    //             if (user.nickname === curUser.nickname) {
+    //                 profileImg = document.getElementById('publisher-container');
+    //                 if (!profileImg) {
+    //                     profileImg = document.createElement('div');
+    //                     profileImg.id = 'publisher-container';
+    //                 }
+    //                 userDiv.appendChild(profileImg);
+    //             } else {
+    //                 profileImg = new Avatar({ src: user?.profile || 'default_profile_picture_url', sx: { width: 100, height: 100 } });
+    //                 profileImg.onerror = () => profileImg.src = 'alternative_path_if_error'; // 이미지 로드 실패 시 대체 이미지
+    //                 userDiv.appendChild(profileImg);
+    //             }
+    //
+    //             const nicknameText = document.createElement('div');
+    //             nicknameText.innerText = user.nickname;
+    //             nicknameText.style.marginTop = '5px';
+    //
+    //             userDiv.appendChild(nicknameText);
+    //             userListDiv.appendChild(userDiv);
+    //         });
+    //     }
+    // }, [users, curUser, participants]);
 
-                    userListDiv.appendChild(userDiv);
-
-                    if (user.nickname === curUser.nickname) {
-                        // 현재 사용자인 경우 publisher-container를 이동
-                        userDiv.appendChild(document.getElementById('publisher-container'));
-                        userDiv.style.border = '2px solid blue'; // 현재 사용자 표시
-                    } else {
-                        // 나머지 사용자들은 subscriberDiv를 해당 위치로 이동
-                        const participant = participants.find(p => p.nickname === user.nickname);
-                        if (participant) {
-                            const subscriberDiv = document.getElementById(participant.subscriberDivId);
-                            if (subscriberDiv) {
-                                userDiv.appendChild(subscriberDiv);
-                            }
-                        }
-                    }
-                });
-            }
-        }
-    }, [participants, users]); // participants 또는 users가 변경될 때마다 실행
 
     const toggleCamera = useCallback(() => {
         if (publisher) {
@@ -121,10 +143,16 @@ export const VoiceSocketProvider = ({ children }) => {
         }}>
             {children}
 
-            <div id='userList'>
-                <div id='subscriberDiv'></div>
+            <div>
+                {users?.map(user => (
+                    <UserVoiceComponent
+                        key={user.nickname}
+                        user={user}
+                        isCurrent={curUser.nickname === user.nickname}
+                        stream={streams[user.connectionId]} // 스트림이 있으면 전달
+                    />
+                ))}
             </div>
-            <div id='publisher-container'></div>
             <button onClick={toggleCamera}>{isCameraEnabled ? '카메라 끄기' : '카메라 켜기'}</button>
             <button onClick={toggleMicrophone}>{isMicrophoneEnabled ? '마이크 끄기' : '마이크 켜기'}</button>
 

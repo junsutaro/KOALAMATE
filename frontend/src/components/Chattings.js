@@ -12,6 +12,8 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import PhoneIcon from '@mui/icons-material/Phone';
 import CallEndIcon from '@mui/icons-material/CallEnd';
+import Badge from '@mui/material/Badge';
+import MailIcon from '@mui/icons-material/Mail';
 
 import { useVoiceSocket } from 'context/VoiceSocketContext';
 
@@ -68,16 +70,26 @@ const Chattings = () => {
 						/>
 						{expandedRoomId === room.id ? <ExpandLess /> : <ExpandMore />}
 					</ListItem>
-					<div>
-						<IconButton color="primary" onClick={() => voiceCall(room.id, room.users)} disabled={activeCall === room.id}>
-							<PhoneIcon />
+					<div style={{display: 'flex', alignItems: 'center'}}>
+						<IconButton color="primary" onClick={() => voiceCall(room.id, room.users)}
+									disabled={activeCall === room.id}>
+							<PhoneIcon/>
 						</IconButton>
-						<IconButton color="secondary" onClick={() => disconnectCall()} disabled={activeCall !== room.id}>
-							<CallEndIcon />
+						<IconButton color="secondary" onClick={() => disconnectCall()}
+									disabled={activeCall !== room.id}>
+							<CallEndIcon/>
 						</IconButton>
+						{/* Badge를 오른쪽으로 정렬하기 위한 컨테이너 */}
+						<div style={{marginLeft: 'auto', marginRight:'20px'}}>
+							<Badge color="secondary" variant="dot"
+								   invisible={room.lastMessage.id === room.confirmMessageId}>
+								<MailIcon
+									color={room.lastMessage.id === room.confirmMessageId ? "disabled" : "action"}/>
+							</Badge>
+						</div>
 					</div>
 					{expandedRoomId === room.id && <Chatting roomNumber={room.id} users={room.users}/>}
-					<Divider />
+					<Divider/>
 				</React.Fragment>
 			))}
 		</List>
