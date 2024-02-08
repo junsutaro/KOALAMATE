@@ -263,42 +263,6 @@ public class UserController {
 		return new ResponseEntity<>("user not found", HttpStatus.NOT_FOUND);
 	}
 
-	// 내가 작성한 게시글(레시피) 리스트
-	@GetMapping("/myPosts")
-	public ResponseEntity<?> listMyBoard(@RequestParam int page, @RequestParam int size, HttpServletRequest request) {
-		String accessToken = authService.getAccessToken(request);
-		UserDto user = authService.extractUserFromToken(accessToken);
-
-		//페이지 시작은 0부터
-		Page<ViewBoardResponseDto> pageEntities = boardService.getMyPageEntities(page-1, size, user.getNickname(), user.getId());
-		List<ViewBoardResponseDto> content = pageEntities.getContent();
-		int totalPages = ((Page<?>) pageEntities).getTotalPages();
-
-		Map<String, Object> responseBody = new HashMap<>();
-		responseBody.put("content", content);
-		responseBody.put("totalPages", totalPages);
-
-		return new ResponseEntity<>(responseBody, HttpStatus.OK);
-	}
-
-	// 내가 좋아요 한 게시글(레시피) 리스트
-	@GetMapping("/myLikes")
-	public ResponseEntity<?> listLikeBoard(@RequestParam int page, @RequestParam int size, HttpServletRequest request) {
-		String accessToken = authService.getAccessToken(request);
-		UserDto user = authService.extractUserFromToken(accessToken);
-
-		//페이지 시작은 0부터
-		Page<ViewBoardResponseDto> pageEntities = boardService.getLikedPageEntities(page-1, size, user.getId());
-		List<ViewBoardResponseDto> content = pageEntities.getContent();
-		int totalPages = ((Page<?>) pageEntities).getTotalPages();
-
-		Map<String, Object> responseBody = new HashMap<>();
-		responseBody.put("content", content);
-		responseBody.put("totalPages", totalPages);
-
-		return new ResponseEntity<>(responseBody, HttpStatus.OK);
-	}
-
 	// 내가 팔로우하는 유저 목록
 	@GetMapping("/myFollowee")
 	public ResponseEntity<?> getMyFolloweeList(HttpServletRequest request) {
