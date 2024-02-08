@@ -58,7 +58,8 @@ const SignUp = () => {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/checkEmail`,
                 {email})
             console.log(response.data)
-            setIsEmailAvailable(response.data);
+            setIsEmailAvailable(response.data.available);
+            console.log("이메일 중복 확인", response.data.available)
         } catch (error) {
             console.error('이메일 가용성 확인 중 오류 발생', error);
         }
@@ -69,6 +70,7 @@ const SignUp = () => {
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/checkNickname`,
                 {nickname})
+            console.log("닉네임 중복 확인", response.data.available)
             setIsNicknameAvailable(response.data.available);
         } catch (error) {
             console.error('닉네임 가용성 확인 중 오류 발생', error);
