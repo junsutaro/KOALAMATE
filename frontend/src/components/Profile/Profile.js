@@ -4,6 +4,7 @@ import {Avatar, Typography, Box, Chip, Button} from '@mui/material';
 import Brightness1Icon from '@mui/icons-material/Brightness1'; // Import the correct icon
 import FollowMiniBox from "../Follow/FollowMiniBox";
 import FollowBtn from "../Follow/FollowBtn";
+import GenderBirthRange from "../GenderBirthRange";
 
 const standardImgPath = '/assets/profile.jpg';
 
@@ -53,18 +54,18 @@ const Profile = ({img, nickname, gender, age, follower, followee, userId}) => {
                                 variant="h5">{nickname}</Typography>
                 </div>
 
-                <div style={{display: 'flex', marginTop: '10px', gap: 10}}>
-                    <Chip label={`${age}대`} variant="Filled"
-                          sx={{backgroundColor: '#CDFAD5'}}/>
-                    <Chip label={gender} variant="Filled"
-                          sx={{backgroundColor: '#FF9B9B'}}/>
-                </div>
+                {/*<div style={{display: 'flex', marginTop: '10px', gap: 10}}>*/}
+                {/*    <Chip label={`${age}대`} variant="Filled"*/}
+                {/*          sx={{backgroundColor: '#CDFAD5'}}/>*/}
+                {/*    <Chip label={gender} variant="Filled"*/}
+                {/*          sx={{backgroundColor: '#FF9B9B'}}/>*/}
+                {/*</div>*/}
+
+                <GenderBirthRange gender={gender} birthRange={age} />
                 {nickname === userNickname ?
                     <FollowMiniBox userId={userId} followerCnt={followerCnt} followeeCnt={followeeCnt}/> :
                     <FollowBtn targetUserId={userId}/>
                 }
-
-
             </Box>
         </>
     )

@@ -14,7 +14,7 @@ import {
 
 const MyPage = () => {
     const {userId} = useParams();
-    console.log(userId)
+    // console.log(userId)
     // const {user} = useSelector((state) => state.auth);
     // const userNickname = user.nickname;
 
@@ -105,7 +105,7 @@ const MyPage = () => {
 
     return (
         <Container>
-            <MyPageButton userId={userId}/>
+            <MyPageButton userId={userId} nickname={profileData.nickname}/>
 
             <Box
                 p={3}

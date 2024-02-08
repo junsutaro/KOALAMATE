@@ -41,7 +41,7 @@ const FollowerList = () => {
 
     return (
         <>
-            <MyPageButton/>
+            <MyPageButton userId={userId}/>
             <Box sx={{display: 'flex', justifyContent: 'center'}}>
                 <h3>{followerData.user}님의 팔로워 목록 {followerData.cnt}</h3>
                 <ul>

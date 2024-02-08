@@ -14,6 +14,7 @@ import TagsInput from "../components/Profile/Update/TagsInput";
 import ProfileImageUploader from "../components/Profile/Update/ProfileImageUploader";
 import DrinkingAmountInput from "../components/Profile/Update/DrinkingAmountInput";
 import IntroductionInput from "../components/Profile/Update/IntroductionInput";
+import GenderBirthRange from "../components/GenderBirthRange";
 
 const UpdateMyPage = () => {
     const {userId} = useParams();
@@ -205,7 +206,7 @@ const UpdateMyPage = () => {
 
     return (
         <Container component="form">
-            <MyPageButton userId={userId}/>
+            <MyPageButton userId={userId} nickname={profileData.nickname}/>
             <Box
                 sx={{
                     display: 'flex',
@@ -243,11 +244,7 @@ const UpdateMyPage = () => {
                             <Typography sx={{fontWeight: 'bold'}} variant="h5">
                                 {profileData.nickname}
                             </Typography>
-                            <div style={{display: 'flex', marginTop: '10px', gap: 10}}>
-                                <Chip label={`${profileData.birthRange}대`} variant="Filled"
-                                      sx={{backgroundColor: '#CDFAD5'}}/>
-                                <Chip label={profileData.gender} variant="Filled" sx={{backgroundColor: '#FF9B9B'}}/>
-                            </div>
+                            <GenderBirthRange gender={profileData.gender} birthRange={profileData.birthRange} />
                         </Box>
                     </Box>
                 </>

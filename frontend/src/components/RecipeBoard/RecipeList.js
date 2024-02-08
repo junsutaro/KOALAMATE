@@ -9,11 +9,12 @@ function RecipeList() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const sizeNum = 8
+    const optionNum = 1  // 옵션 숫자 1: 전체 레시피 조회, 2: 관리자(admin) 레시피 조회, 3: 유저 레시피 조회
     const [cardData, setCardData] = useState([])
 
     const getCardData = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/board/list?page=${currentPage}&size=${sizeNum}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/board/list?page=${currentPage}&size=${sizeNum}&option=${optionNum}`);
             const data = response.data.content;         // data는 레시피 목록을 포함하는 배열
             setTotalPages(response.data.totalPages)     // 총 페이지 수
 

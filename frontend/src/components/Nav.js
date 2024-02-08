@@ -54,6 +54,7 @@ const Nav = () => {
 			disconnect();
 			navigate('/');
 			handleClose();
+			localStorage.removeItem('authHeader');
 		} catch (error) {
 			console.log(error);
 		}
