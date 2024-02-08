@@ -76,15 +76,15 @@ export const VoiceSocketProvider = ({ children }) => {
             setParticipants,
             toggleCamera,
             toggleMicrophone,
+            isMicrophoneEnabled,
             setUsers,
             setCurUser
         }}>
             {children}
 
-            <div id='subscriberDiv'></div>
-            {/*<div id='publisher-container'></div>*/}
-            <button onClick={toggleCamera}>{isCameraEnabled ? '카메라 끄기' : '카메라 켜기'}</button>
-            <button onClick={toggleMicrophone}>{isMicrophoneEnabled ? '마이크 끄기' : '마이크 켜기'}</button>
+            <div id='subscriberDiv' style={{display:'none'}}></div>
+            <div id='publisher-container' style={{display:'none'}}></div>
+
 
         </VoiceSocketContext.Provider>
     );

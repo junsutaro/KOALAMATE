@@ -4,6 +4,12 @@ import axios from 'axios';
 import {useParams, useLocation} from "react-router-dom";
 import {useSelector} from "react-redux";
 import { Paper, Avatar, Grid, Typography } from "@mui/material";
+import Box from '@mui/material/Box';
+
+import MicIcon from '@mui/icons-material/Mic';
+import MicOffIcon from '@mui/icons-material/MicOff';
+import IconButton from '@mui/material/IconButton';
+
 
 
 const BACKEND_URL = process.env.REACT_APP_VOICE_URL;
@@ -13,11 +19,19 @@ const VoiceChatRoom = () => {
     const location = useLocation();
     // location 객체에서 state 속성을 통해 전달된 데이터를 읽음
     const { users } = location.state;
-    const { connectToSession, disconnectSession, participants, setParticipants, publisher } = useVoiceSocket();
+    const { connectToSession, disconnectSession, participants, setParticipants, publisher, toggleMicrophone, isMicrophoneEnabled } = useVoiceSocket();
+
     // ... useEffect 등 기존 로직
     const curUser = useSelector(state => state.auth.user);
 
     useEffect(() => {
+        const shouldConnectSession = location.state?.shouldConnectSession;
+
+        if (shouldConnectSession === false) {
+            console.log("세션 연결 생략");
+            return; // 세션 연결을 건너뛰고 useEffect 종료
+        }
+
         console.log(curUser);
         console.log(users);
         (async () => {
@@ -38,12 +52,12 @@ const VoiceChatRoom = () => {
             }
         })();
         //return () => disconnectSession(); // Cleanup on component unmount
-    }, [roomId]);
+    }, [roomId, location.state]);
 
 
     return (
         <div>
-            <h2>Voice Chat Room: {roomId}</h2>
+            <h2>Voice Chat Room</h2>
             <Paper elevation={3} style={{ width: '80%', margin: 'auto', height: 500, position: 'relative', overflowY: 'scroll' }}>
                 <Grid container spacing={2} justifyContent="center" style={{ padding: 20 }}>
                     {users.map(user => (
@@ -56,6 +70,16 @@ const VoiceChatRoom = () => {
                     ))}
                 </Grid>
             </Paper>
+            <Box display="flex" justifyContent="center" marginTop={2}>
+                <IconButton
+                    onClick={toggleMicrophone}
+                    color="primary"
+                    aria-label="toggle microphone"
+                    sx={{ width: 56, height: 56, "& .MuiSvgIcon-root": { fontSize: 40 } }} // 버튼과 아이콘 크기 조정
+                >
+                    {isMicrophoneEnabled ? <MicIcon /> : <MicOffIcon />}
+                </IconButton>
+            </Box>
         </div>
     );
 };

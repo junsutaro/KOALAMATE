@@ -14,6 +14,8 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import CallEndIcon from '@mui/icons-material/CallEnd';
 import Badge from '@mui/material/Badge';
 import MailIcon from '@mui/icons-material/Mail';
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
+
 
 import { useVoiceSocket } from 'context/VoiceSocketContext';
 
@@ -50,6 +52,10 @@ const Chattings = () => {
 		setExpandedRoomId(expandedRoomId === roomId ? null : roomId);
 	};
 
+	const enterRoom = (roomId, users) => {
+		navigate(`/voiceChat/${roomId}`, { state:{ users, shouldConnectSession: false } });
+	}
+
 	const voiceCall = (roomId, users) => {
 		setActiveCall(roomId);
 		disconnectSession();
@@ -85,6 +91,13 @@ const Chattings = () => {
 									disabled={activeCall !== room.id}>
 							<CallEndIcon/>
 						</IconButton>
+
+						{activeCall === room.id && (
+							<IconButton color="primary" sx={{ ml: 'auto' }} onClick={() => enterRoom(room.id, room.users)}>
+								<MeetingRoomIcon />
+							</IconButton>
+						)}
+
 						{/* Badge를 오른쪽으로 정렬하기 위한 컨테이너 */}
 						<div style={{marginLeft: 'auto', marginRight:'20px'}}>
 							<Badge color="secondary" variant="dot"
