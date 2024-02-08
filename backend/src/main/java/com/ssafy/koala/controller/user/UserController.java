@@ -308,6 +308,21 @@ public class UserController {
 		return new ResponseEntity<>(responseBody, HttpStatus.OK);
 	}
 
+	@GetMapping("/myLikesWithoutPageable")
+	public ResponseEntity<?> listLikeBoardIds(HttpServletRequest request) {
+		String accessToken = authService.getAccessToken(request);
+		UserDto user = authService.extractUserFromToken(accessToken);
+
+		// BoardService를 통해 사용자가 좋아요 한 모든 게시글의 ID 목록을 조회
+		List<Long> likedBoardIds = boardService.findAllLikedBoardIdsByUserId(user.getId());
+
+		if (likedBoardIds.isEmpty()) {
+			return new ResponseEntity<>("No liked boards found.", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(likedBoardIds, HttpStatus.OK);
+		}
+	}
+
 	// 내가 팔로우하는 유저 목록
 	@GetMapping("/myFollowee")
 	public ResponseEntity<?> getMyFolloweeList(HttpServletRequest request) {
