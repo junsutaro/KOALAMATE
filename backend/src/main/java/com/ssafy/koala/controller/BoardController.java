@@ -220,46 +220,4 @@ public class BoardController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 업로드에 실패했습니다.");
 		}
 	}
-
-	// 내가 작성한 게시글(레시피) 리스트
-	@GetMapping("/mylist")
-	public ResponseEntity<?> listMyBoard(@RequestParam int page, @RequestParam int size, HttpServletRequest request) {
-		String accessToken = authService.getAccessToken(request);
-		UserDto user = authService.extractUserFromToken(accessToken);
-
-		ResponseEntity response = null;
-		//페이지 시작은 0부터
-		Page<ViewBoardResponseDto> pageEntities = boardService.getMyPageEntities(page-1, size, user.getNickname(), user.getId());
-		List<ViewBoardResponseDto> content = pageEntities.getContent();
-		int totalPages = ((Page<?>) pageEntities).getTotalPages();
-
-		Map<String, Object> responseBody = new HashMap<>();
-		responseBody.put("content", content);
-		responseBody.put("totalPages", totalPages);
-
-
-		response = new ResponseEntity<>(responseBody, HttpStatus.OK);
-		return response;
-	}
-
-	// 내가 좋아요 한 게시글(레시피) 리스트
-	@GetMapping("/likelist")
-	public ResponseEntity<?> listLikeBoard(@RequestParam int page, @RequestParam int size, HttpServletRequest request) {
-		String accessToken = authService.getAccessToken(request);
-		UserDto user = authService.extractUserFromToken(accessToken);
-
-		ResponseEntity response = null;
-		//페이지 시작은 0부터
-		Page<ViewBoardResponseDto> pageEntities = boardService.getLikedPageEntities(page-1, size, user.getId());
-		List<ViewBoardResponseDto> content = pageEntities.getContent();
-		int totalPages = ((Page<?>) pageEntities).getTotalPages();
-
-		Map<String, Object> responseBody = new HashMap<>();
-		responseBody.put("content", content);
-		responseBody.put("totalPages", totalPages);
-
-
-		response = new ResponseEntity<>(responseBody, HttpStatus.OK);
-		return response;
-	}
 }
