@@ -36,4 +36,13 @@ public class FindMateController {
         }
     }
 
+    // 상대방의 유저 정보, 음료 정보, 팔로우 정보 반환
+    @GetMapping("/listMate")
+    public ResponseEntity<?> getUserList(HttpServletRequest request) {
+        String accessToken = authService.getAccessToken(request);
+        UserDto user = authService.extractUserFromToken(accessToken);
+
+        return new ResponseEntity<>(userService.findAllUser(user.getId()), HttpStatus.OK);
+    }
+
 }
