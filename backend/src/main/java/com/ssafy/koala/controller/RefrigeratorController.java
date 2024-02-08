@@ -3,7 +3,11 @@ package com.ssafy.koala.controller;
 import com.ssafy.koala.dto.RefrigeratorCustomobjDTO;
 import com.ssafy.koala.dto.RefrigeratorDTO;
 import com.ssafy.koala.dto.RefrigeratorDrinkDTO;
+import com.ssafy.koala.dto.user.UserDto;
+import com.ssafy.koala.service.AuthService;
 import com.ssafy.koala.service.RefrigeratorService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,10 +22,13 @@ import java.util.Optional;
 public class RefrigeratorController {
 
     private final RefrigeratorService refrigeratorService;
+    private final AuthService authService;
+
 
     @Autowired
-    public RefrigeratorController(RefrigeratorService refrigeratorService) {
+    public RefrigeratorController(AuthService authService, RefrigeratorService refrigeratorService) {
         this.refrigeratorService = refrigeratorService;
+        this.authService = authService;
     }
 
 
@@ -34,31 +41,48 @@ public class RefrigeratorController {
     }
 
     // 냉장고 외부 수정
-    @PutMapping("/{userId}/modify")
-    public ResponseEntity<RefrigeratorDTO> modifyRefrigerator(@PathVariable Long userId, @RequestBody RefrigeratorDTO updatedRefrigeratorDTO) {
+    @PutMapping("/modify")
+    public ResponseEntity<RefrigeratorDTO> modifyRefrigerator(
+            @RequestBody RefrigeratorDTO updatedRefrigeratorDTO,
+            HttpServletRequest request) {
+
+        String accessToken = authService.getAccessToken(request);
+        UserDto userDto = authService.extractUserFromToken(accessToken);
+        Long userId = userDto.getId(); // UserDto에서 id를 가져와야 함
+
         RefrigeratorDTO modifiedRefrigerator = refrigeratorService.modifyRefrigeratorByUserId(userId, updatedRefrigeratorDTO);
         return modifiedRefrigerator != null ? ResponseEntity.ok(modifiedRefrigerator) : ResponseEntity.notFound().build();
     }
 
-    // 냉장고 내용물 확인
+    // 냉장고 내용물(Drinks) 확인
     @GetMapping("/{userId}/open")
     public ResponseEntity<List<RefrigeratorCustomobjDTO>> getRefrigeratorContents(@PathVariable Long userId) {
         List<RefrigeratorCustomobjDTO> customobjDTOs = refrigeratorService.getRefrigeratorContentsByUserId(userId);
         return ResponseEntity.ok(customobjDTOs);
     }
 
-    // 냉장고 내용물 수정
-    @PutMapping("/{userId}/open/modify")
-    public ResponseEntity<List<RefrigeratorCustomobjDTO>> modifyRefrigeratorContents(@PathVariable Long userId, @RequestBody List<RefrigeratorCustomobjDTO> updatedContentsDTO) {
+    // 냉장고 자석 수정
+    @PutMapping("/modifyCustoms")
+    public ResponseEntity<List<RefrigeratorCustomobjDTO>> modifyRefrigeratorContents(@RequestBody List<RefrigeratorCustomobjDTO> updatedContentsDTO, HttpServletRequest request) {
+
+        String accessToken = authService.getAccessToken(request);
+        UserDto userDto = authService.extractUserFromToken(accessToken);
+        Long userId = userDto.getId(); // UserDto에서 id를 가져와야 함
+
         List<RefrigeratorCustomobjDTO> modifiedContents = refrigeratorService.modifyRefrigeratorContentsByUserId(userId, updatedContentsDTO);
         return ResponseEntity.ok(modifiedContents);
     }
 
 
-    @PutMapping("/{userId}/addCustomobjs")
+    @PutMapping("/addCustomobjs")
     public ResponseEntity<List<RefrigeratorCustomobjDTO>> addCustomobjsToRefrigerator(
-            @PathVariable Long userId,
-            @RequestBody List<RefrigeratorCustomobjDTO> customobjDTOs) {
+            @RequestBody List<RefrigeratorCustomobjDTO> customobjDTOs,
+            HttpServletRequest request) {
+
+        String accessToken = authService.getAccessToken(request);
+        UserDto userDto = authService.extractUserFromToken(accessToken);
+        Long userId = userDto.getId(); // UserDto에서 id를 가져와야 함
+
         System.out.println(userId);
         List<RefrigeratorCustomobjDTO> modifiedRefrigeratorContents = refrigeratorService.addCustomobjsToRefrigerator(userId, customobjDTOs);
         System.out.println(userId);
@@ -66,11 +90,16 @@ public class RefrigeratorController {
     }
 
 
-    @PutMapping("/{userId}/addDrinks")
+    @Transactional
+    @PutMapping("/addDrinks")
     public ResponseEntity<List<RefrigeratorDrinkDTO>> addDrinksToRefrigerator(
-            @PathVariable Long userId,
-            @RequestBody List<Long> drinkIds) {
+            @RequestBody List<Long> drinkIds,
+            HttpServletRequest request) {
 
+
+        String accessToken = authService.getAccessToken(request);
+        UserDto userDto = authService.extractUserFromToken(accessToken);
+        Long userId = userDto.getId(); // UserDto에서 id를 가져와야 함
 
         List<RefrigeratorDrinkDTO> modifiedRefrigeratorContents = refrigeratorService.addDrinksToRefrigerator(userId, drinkIds);
         System.out.println(userId);

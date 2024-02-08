@@ -120,6 +120,8 @@ const handleMyPage = async () => {
 					</Box>
 					<Box sx={{display: {xs: 'none', md: 'flex'}, ...(isLoggedIn && { flexGrow: 1})}}>
 						<NavButton color="inherit" component={NavLink}
+						           to="/mate" sx={{ mr: 2 }}>Mate</NavButton>
+						<NavButton color="inherit" component={NavLink}
 						        to="/1/comments" sx={{ mr: 2 }}>Comments</NavButton>
 						<NavButton color="inherit" component={NavLink}
 						        to="/recipe" sx={{ mr: 2 }}>레시피</NavButton>
@@ -228,8 +230,8 @@ const handleMyPage = async () => {
 								alignItems: 'center',
 								pb: 2,
 							}}>
-								<NavButton color="inherit" component={NavLink} to="/about"
-								        onClick={() => setMenuOpen(false)}>About</NavButton>
+								<NavButton color="inherit" component={NavLink} to="/mate"
+								        onClick={() => setMenuOpen(false)}>Mate</NavButton>
 								<NavButton color="inherit" component={NavLink} to="/1/comments"
 								        onClick={() => setMenuOpen(false)}>Comments</NavButton>
 								<NavButton color="inherit" component={NavLink} to="/recipe"

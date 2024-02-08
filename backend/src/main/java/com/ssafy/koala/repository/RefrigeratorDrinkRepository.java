@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface RefrigeratorDrinkRepository extends JpaRepository<RefrigeratorDrinkModel, Long> {
 
+    void deleteByRefrigeratorId(Long refrigeratorId);
 }

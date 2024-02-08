@@ -105,6 +105,9 @@ public class RefrigeratorService {
         if (refrigeratorOptional.isPresent()) {
             RefrigeratorModel refrigerator = refrigeratorOptional.get();
 
+            // 기존 음료 다 날리고 업데이트 할거에요~ 날리는 단계입니다~
+            refrigeratorDrinkRepository.deleteByRefrigeratorId(refrigerator.getId());
+
             List<RefrigeratorDrinkModel> refrigeratorDrinkModels = new ArrayList<>();
 
             for (Long drinkId : drinkIds) {
@@ -116,8 +119,11 @@ public class RefrigeratorService {
                     refrigeratorDrinkModel.setRefrigerator(refrigerator);
                     refrigeratorDrinkModel.setDrink(drink);
 
-                    // 현재 저장된 음료 개수를 기반으로 posIdx 설정
-                    int posIdx = refrigerator.getRefrigeratorDrinkModels().size() + 1;
+                    // 음료 추가 시 posIdx 재설정 필요 없으므로, 0 또는 1부터 시작하도록 설정
+                    // 이전 음료가 삭제되었으므로, 여기서는 간단하게 리스트의 크기를 사용
+                    int posIdx = refrigeratorDrinkModels.size() + 1;
+                    // setPosIdx를 여기서 하면 여러 개 올릴 때 idx가 같은값으로 여러개가 올라감
+                    // 그냥 사용자가 냉장고 + 버튼 눌러서 지정하도록 합시다~
                     refrigeratorDrinkModel.setPosIdx(posIdx);
 
                     refrigeratorDrinkModels.add(refrigeratorDrinkModel);
@@ -136,6 +142,7 @@ public class RefrigeratorService {
 
         return Collections.emptyList(); // 해당 유저의 냉장고나 Drink가 존재하지 않을 경우
     }
+
 
     // 메서드 이름 변경
     public List<RefrigeratorCustomobjDTO> addCustomobjsToRefrigerator(Long userId, List<RefrigeratorCustomobjDTO> customobjDTOs) {
