@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {useParams, useNavigate } from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import MyPageButton from '../components/Profile/MyPageButton';
 import NoImage from 'assets/profile.jpg';
@@ -17,8 +17,31 @@ import IntroductionInput from "../components/Profile/Update/IntroductionInput";
 import GenderBirthRange from "../components/GenderBirthRange";
 
 const UpdateMyPage = () => {
-    const {userId} = useParams();
-    const imageInputRef = useRef(null);
+    // 인증 헤더를 가져오는 함수
+    const getAuthHeader = () => {
+        const authHeader = localStorage.getItem('authHeader');
+        return authHeader ? {Authorization: authHeader} : {};
+    };
+
+    const [myId, setMyId] = useState(null); // 사용자 ID를 저장할 상태
+    const getMyId = async () => {
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/myId`,
+                {}, { headers: getAuthHeader(), // 인증 헤더 추가
+                });
+            // API 응답 구조에 맞게 수정할 것
+            setMyId(response.data); // 가정: 응답이 { userId: '...' } 구조를 가짐
+        } catch (error) {
+            console.error('내 아이디 가지고 오는 중 에러 발생: ', error);
+        }
+    };
+
+    // 컴포넌트 마운트 시 사용자 ID 가져오기
+    useEffect(() => {
+        getMyId();
+    }, []);
+
+    // const imageInputRef = useRef(null);
 
 
     // state
@@ -51,13 +74,13 @@ const UpdateMyPage = () => {
     // selectedImageFile 상태를 관리하기 위한 useState
     const [selectedImageFile, setSelectedImageFile] = useState(null);
 
-    const navigate  = useNavigate ()
+    const navigate = useNavigate()
 
     // user 프로필 정보를 가져오는 함수
     useEffect(() => {
         const getProfileData = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_API_URL}/profile/${userId}`);
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/profile/${myId}`);
                 const data = response.data;
 
                 setProfileData({
@@ -83,7 +106,7 @@ const UpdateMyPage = () => {
         };
 
         getProfileData();
-    }, [userId]);
+    }, [myId]);
 
 
     // 프로필 이미지 변경 함수
@@ -161,7 +184,9 @@ const UpdateMyPage = () => {
             formData.append("file", selectedImageFile);
 
             // Axios를 사용하여 이미지를 업로드하는 요청 보냄
-            const response = await axios.put(`${process.env.REACT_APP_API_URL}/profile/${userId}/uploadProfileImage`, formData);
+            const response = await axios.put(`${process.env.REACT_APP_API_URL}/profile/uploadProfileImage`, {formData}, {
+                headers: getAuthHeader(), // 인증 헤더 추가
+            });
 
             // 응답에 따른 처리 (여기서는 콘솔에 출력)
             console.log(response.data);
@@ -175,7 +200,7 @@ const UpdateMyPage = () => {
         try {
             // 서버에 요청 보내기
             const response = await axios.put(
-                `${process.env.REACT_APP_API_URL}/profile/${userId}/modify`,
+                `${process.env.REACT_APP_API_URL}/profile/modify`,
                 {
                     nickname: profileData.nickname,
                     birthRange: profileData.birthRange,
@@ -184,13 +209,15 @@ const UpdateMyPage = () => {
                     alcoholLimitBottle: sojuBottleCount,
                     alcoholLimitGlass: sojuCupCount,
                     tags: selectedTags,
+                }, {
+                    headers: getAuthHeader(), // 인증 헤더 추가
                 });
             console.log('프로필 저장 성공:', response.data);
 
             // 프로필 저장 완료 확인 창
             alert('프로필이 성공적으로 변경되었습니다😊')
             // 프로필 저장이 완료되면 사용자를 해당 페이지로 이동
-            navigate(`/user/${userId}`);
+            navigate(`/user/${myId}`);
 
         } catch (error) {
             console.log('프로필 저장 중 에러 발생:', error);
@@ -206,7 +233,7 @@ const UpdateMyPage = () => {
 
     return (
         <Container component="form">
-            <MyPageButton userId={userId} nickname={profileData.nickname}/>
+            <MyPageButton />
             <Box
                 sx={{
                     display: 'flex',
@@ -225,7 +252,7 @@ const UpdateMyPage = () => {
                         }}
                     >
                         <ProfileImageUploader
-                            userId={userId}
+                            userId={myId}
                             imagePreview={imagePreview}
                             handleImageChange={handleImageChange}
                             handleCancelImage={handleCancelImage}
@@ -244,7 +271,7 @@ const UpdateMyPage = () => {
                             <Typography sx={{fontWeight: 'bold'}} variant="h5">
                                 {profileData.nickname}
                             </Typography>
-                            <GenderBirthRange gender={profileData.gender} birthRange={profileData.birthRange} />
+                            <GenderBirthRange gender={profileData.gender} birthRange={profileData.birthRange}/>
                         </Box>
                     </Box>
                 </>

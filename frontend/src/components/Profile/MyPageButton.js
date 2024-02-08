@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, ButtonGroup } from '@mui/material';
-import { NavLink } from 'react-router-dom';
+import {NavLink, useParams} from 'react-router-dom';
 import axios from "axios";
 
-const MyPageButton = ({ userId, nickname }) => {
+const MyPageButton = () => {
+	let userId = useParams()
 	const [myId, setMyId] = useState(null); // 사용자 ID를 저장할 상태
 
 	// 인증 헤더를 가져오는 함수
@@ -37,18 +38,18 @@ const MyPageButton = ({ userId, nickname }) => {
 		getMyId();
 	}, []);
 
-	// myId 상태가 업데이트된 후 확인하기 위한 useEffect
-	useEffect(() => {
-		console.log(`내 아이디 업데이트: ${myId}`);
-		console.log(`유저 아이디 ${userId}`)
-	}, [myId]);
+	if (!userId.userId){
+		userId = myId
+	} else {
+		userId = userId.userId
+	}
 
 	return (
 		<>
 			{myId == userId ? (
 				<ButtonGroup variant="outlined" aria-label="outlined button group" sx={{ margin: '10px' }}>
 					<Button component={NavLink} to={`/user/${userId}`}>내 프로필 가기</Button>
-					<Button component={NavLink} to={`/user/${userId}/update`}>프로필 수정</Button>
+					<Button component={NavLink} to={`/user/update`}>프로필 수정</Button>
 					<Button component={NavLink} to={`/user/${userId}/follower`}>팔로워</Button>
 					<Button component={NavLink} to={`/user/${userId}/followee`}>팔로잉</Button>
 				</ButtonGroup>

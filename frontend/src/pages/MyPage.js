@@ -105,7 +105,7 @@ const MyPage = () => {
 
     return (
         <Container>
-            <MyPageButton userId={userId} nickname={profileData.nickname}/>
+            <MyPageButton />
 
             <Box
                 p={3}
