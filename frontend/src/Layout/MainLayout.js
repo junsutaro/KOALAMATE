@@ -30,7 +30,6 @@ import Chatting from '../components/Chatting';
 import MyPage from '../pages/MyPage';
 import FollowerList from '../pages/FollowerList';
 import FolloweeList from '../pages/FolloweeList';
-
 import Mate from '../pages/Mate';
 import UpdateMyPage from '../pages/UpdateMyPage';
 import VoiceChatRoom from '../components/VoiceChatRoom';

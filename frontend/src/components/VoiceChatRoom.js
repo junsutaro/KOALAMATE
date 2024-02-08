@@ -3,8 +3,14 @@ import { useVoiceSocket } from 'context/VoiceSocketContext';
 import axios from 'axios';
 import {useParams, useLocation} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {Paper} from "@mui/material";
-import VideoChatControls from './VideoChatControls'; // VideoChatControls 컴포넌트를 임포트
+import { Paper, Avatar, Grid, Typography } from "@mui/material";
+import Box from '@mui/material/Box';
+
+import MicIcon from '@mui/icons-material/Mic';
+import MicOffIcon from '@mui/icons-material/MicOff';
+import IconButton from '@mui/material/IconButton';
+
+
 
 const BACKEND_URL = process.env.REACT_APP_VOICE_URL;
 
@@ -13,12 +19,21 @@ const VoiceChatRoom = () => {
     const location = useLocation();
     // location 객체에서 state 속성을 통해 전달된 데이터를 읽음
     const { users } = location.state;
-    const { connectToSession, disconnectSession, participants, setParticipants, publisher } = useVoiceSocket();
+    const { connectToSession, disconnectSession, participants, setParticipants, publisher, toggleMicrophone, isMicrophoneEnabled } = useVoiceSocket();
+
     // ... useEffect 등 기존 로직
     const curUser = useSelector(state => state.auth.user);
 
     useEffect(() => {
+        const shouldConnectSession = location.state?.shouldConnectSession;
+
+        if (shouldConnectSession === false) {
+            console.log("세션 연결 생략");
+            return; // 세션 연결을 건너뛰고 useEffect 종료
+        }
+
         console.log(curUser);
+        console.log(users);
         (async () => {
             try {
                 // 세션 생성
@@ -37,39 +52,34 @@ const VoiceChatRoom = () => {
             }
         })();
         //return () => disconnectSession(); // Cleanup on component unmount
-    }, [roomId]);
+    }, [roomId, location.state]);
 
-    useEffect(() => {
-        const subscriberDiv = document.getElementById('userList');
-        subscriberDiv.innerHTML = ''; // 기존 내용을 초기화
-
-        users.forEach(user => {
-            const userDiv = document.createElement('div');
-            userDiv.innerText = user.nickname; // 닉네임 표시
-            userDiv.style.border = '2px solid grey'; // 기본 회색 테두리
-            userDiv.style.margin = '10px';
-            userDiv.style.padding = '10px';
-
-            // 접속한 사용자와 일치하는지 확인
-            if (participants.some(p => p.nickname === user.nickname) || user.nickname === curUser.nickname) {
-                userDiv.style.border = '2px solid blue'; // 접속한 사용자는 파란색 테두리
-            }
-
-            subscriberDiv.appendChild(userDiv);
-        });
-    }, [participants, users]); // participants 또는 users가 변경될 때마다 실행
 
     return (
         <div>
-            <h2>Voice Chat Room: {roomId}</h2>
-            <Paper elevation={3} style={{ width: '80%', height: 500, mb: 2, position: 'relative' }}>
-                <div id='userList'>
-                    {/* 여기에 VideoChatControls 컴포넌트 추가 */}
-                    {publisher && <VideoChatControls publisher={publisher} />}
-                    <div id="subscriberDiv" style={{width: '100%', height: '100%'}}/>
-                    <div id="publisher-container" style={{position: 'absolute', bottom: 10, right: 10, zIndex: 10}}/>
-                </div>
+            <h2>Voice Chat Room</h2>
+            <Paper elevation={3} style={{ width: '80%', margin: 'auto', height: 500, position: 'relative', overflowY: 'scroll' }}>
+                <Grid container spacing={2} justifyContent="center" style={{ padding: 20 }}>
+                    {users.map(user => (
+                        <Grid item xs={12} sm={6} md={4} lg={3} key={user.nickname} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <Avatar src={user?.profile ? `${process.env.REACT_APP_IMAGE_URL}/${user.profile}` : 'default_profile_picture_url'} sx={{ width: 100, height: 100, border: `2px solid ${participants.some(p => p.nickname === user.nickname) || user.nickname === curUser.nickname ? 'blue' : 'grey'}` }} />
+                            <Typography variant="subtitle1" style={{ marginTop: '10px' }}>
+                                {user.nickname}
+                            </Typography>
+                        </Grid>
+                    ))}
+                </Grid>
             </Paper>
+            <Box display="flex" justifyContent="center" marginTop={2}>
+                <IconButton
+                    onClick={toggleMicrophone}
+                    color="primary"
+                    aria-label="toggle microphone"
+                    sx={{ width: 56, height: 56, "& .MuiSvgIcon-root": { fontSize: 40 } }} // 버튼과 아이콘 크기 조정
+                >
+                    {isMicrophoneEnabled ? <MicIcon /> : <MicOffIcon />}
+                </IconButton>
+            </Box>
         </div>
     );
 };
