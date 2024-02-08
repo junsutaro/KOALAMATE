@@ -1,5 +1,6 @@
 package com.ssafy.koala.controller.user;
 
+import com.ssafy.koala.dto.board.ViewBoardResponseDto;
 import com.ssafy.koala.dto.user.*;
 import com.ssafy.koala.model.user.UserModel;
 import com.ssafy.koala.service.AuthService;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -231,5 +233,125 @@ public class UserController {
 		} catch(Exception e) {
 			return new ResponseEntity<>("Error evaluate manner score", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	//유저 작성 글 목록
+	@GetMapping("/{user_id}/posts")
+	public ResponseEntity<?> listUserBoard(@PathVariable Long user_id, @RequestParam int page, @RequestParam int size){
+		Optional<UserModel> user = userService.findById(user_id);
+		if(user.isPresent()) {
+			//페이지 시작은 0부터
+			Page<ViewBoardResponseDto> pageEntities = boardService.getMyPageEntities(page-1, size, user.get().getNickname(), user_id);
+			List<ViewBoardResponseDto> content = pageEntities.getContent();
+			int totalPages = ((Page<?>) pageEntities).getTotalPages();
+
+			Map<String, Object> responseBody = new HashMap<>();
+			responseBody.put("content", content);
+			responseBody.put("totalPages", totalPages);
+
+			return new ResponseEntity<>(responseBody, HttpStatus.OK);
+		}
+		return new ResponseEntity<>("user not found", HttpStatus.NOT_FOUND);
+	}
+
+	// 유저 좋아요 글 목록
+	@GetMapping("/{user_id}/likes")
+	public ResponseEntity<?> listLikeBoard(@PathVariable Long user_id, @RequestParam int page, @RequestParam int size) {
+		if(userService.findById(user_id).isPresent()){
+			//페이지 시작은 0부터
+			Page<ViewBoardResponseDto> pageEntities = boardService.getLikedPageEntities(page-1, size, user_id);
+			List<ViewBoardResponseDto> content = pageEntities.getContent();
+			int totalPages = ((Page<?>) pageEntities).getTotalPages();
+
+			Map<String, Object> responseBody = new HashMap<>();
+			responseBody.put("content", content);
+			responseBody.put("totalPages", totalPages);
+
+			return new ResponseEntity<>(responseBody, HttpStatus.OK);
+		}
+		return new ResponseEntity<>("user not found", HttpStatus.NOT_FOUND);
+	}
+
+	// 내가 작성한 게시글(레시피) 리스트
+	@GetMapping("/myPosts")
+	public ResponseEntity<?> listMyBoard(@RequestParam int page, @RequestParam int size, HttpServletRequest request) {
+		String accessToken = authService.getAccessToken(request);
+		UserDto user = authService.extractUserFromToken(accessToken);
+
+		//페이지 시작은 0부터
+		Page<ViewBoardResponseDto> pageEntities = boardService.getMyPageEntities(page-1, size, user.getNickname(), user.getId());
+		List<ViewBoardResponseDto> content = pageEntities.getContent();
+		int totalPages = ((Page<?>) pageEntities).getTotalPages();
+
+		Map<String, Object> responseBody = new HashMap<>();
+		responseBody.put("content", content);
+		responseBody.put("totalPages", totalPages);
+
+		return new ResponseEntity<>(responseBody, HttpStatus.OK);
+	}
+
+	// 내가 좋아요 한 게시글(레시피) 리스트
+	@GetMapping("/myLikes")
+	public ResponseEntity<?> listLikeBoard(@RequestParam int page, @RequestParam int size, HttpServletRequest request) {
+		String accessToken = authService.getAccessToken(request);
+		UserDto user = authService.extractUserFromToken(accessToken);
+
+		//페이지 시작은 0부터
+		Page<ViewBoardResponseDto> pageEntities = boardService.getLikedPageEntities(page-1, size, user.getId());
+		List<ViewBoardResponseDto> content = pageEntities.getContent();
+		int totalPages = ((Page<?>) pageEntities).getTotalPages();
+
+		Map<String, Object> responseBody = new HashMap<>();
+		responseBody.put("content", content);
+		responseBody.put("totalPages", totalPages);
+
+		return new ResponseEntity<>(responseBody, HttpStatus.OK);
+	}
+
+	// 내가 팔로우하는 유저 목록
+	@GetMapping("/myFollowee")
+	public ResponseEntity<?> getMyFolloweeList(HttpServletRequest request) {
+		String accessToken = authService.getAccessToken(request);
+		UserDto userDto = authService.extractUserFromToken(accessToken);
+
+		List<UserListDto> followeeList = followService.findFolloweeById(userDto.getId());
+		long cnt = followService.countByFollowee_Id(userDto.getId());
+		// DTO에 팔로우 수랑 유저가 팔로우 하는 리스트 담아서 리턴
+		FollowResponseDto dto = new FollowResponseDto();
+		dto.setFollowCnt(cnt);
+		dto.setList(followeeList);
+
+		// 해당 id의 userId, nickname Optional로(필요없긴함) 같이 넘겨요
+		Optional<UserModel> userOpt = userService.findById(userDto.getId()); // userService에 findById 메소드가 있다고 가정
+		if (userOpt.isPresent()) {
+			UserModel user = userOpt.get();
+			dto.setId(user.getId());
+			dto.setNickname(user.getNickname());
+		}
+
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+
+	// 나를 팔로우하는 유저 목록
+	@GetMapping("/myFollower")
+	public ResponseEntity<?> getMyFollowerList(HttpServletRequest request) {
+		String accessToken = authService.getAccessToken(request);
+		UserDto userDto = authService.extractUserFromToken(accessToken);
+
+		List<UserListDto> followerList = followService.findFollowerById(userDto.getId());
+		long cnt = followService.countByFollower_Id(userDto.getId());
+		// DTO에 팔로워 수랑 유저를 팔로우 하는 리스트 담아서 리턴
+		FollowResponseDto dto = new FollowResponseDto();
+		dto.setFollowCnt(cnt);
+		dto.setList(followerList);
+
+		// 해당 id의 userId, nickname Optional로(필요없긴함) 같이 넘겨요
+		Optional<UserModel> userOpt = userService.findById(userDto.getId()); // userService에 findById 메소드가 있다고 가정
+		if (userOpt.isPresent()) {
+			UserModel user = userOpt.get();
+			dto.setId(user.getId());
+			dto.setNickname(user.getNickname());
+		}
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 }
