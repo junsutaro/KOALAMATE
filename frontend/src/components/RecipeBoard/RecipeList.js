@@ -6,13 +6,34 @@ import PaginationComponent from 'components/PaginationComponent'
 
 
 function RecipeList({optionNum}) {
-    const [currentPage, setCurrentPage] = useState(1);
+    // 페이지네이션에 필요한 상태 및 상수
     const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     const sizeNum = 8
-    const [cardData, setCardData] = useState([])
-    console.log(optionNum)
 
-    const getCardData = async () => {
+    const [cardData, setCardData] = useState([])
+    const [likedRecipes, setLikedRecipes] = useState([]);
+
+    // 인증 토큰 가져오기
+    const getAuthHeader = () => {
+        const authHeader = localStorage.getItem('authHeader');
+        return authHeader ? {Authorization: authHeader} : {};
+    };
+
+    // 사용자가 좋아요한 레시피 목록 불러오기 (마운트될 때만 실행)
+    useEffect(() => {
+        const fetchLikedRecipes = async () => {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/myLikesWithoutPageable`, {
+                headers: getAuthHeader(), // 인증 헤더 추가
+            });
+            const data = response.data  // 빈 배열 또는 좋아요한 레시피 아이디가 있는 배열
+            setLikedRecipes(data)
+            getCardData(data)          // 레시피 목록을 불러오는 동시에, 각 레시피가 좋아요한 목록에 속하는지를 확인하여 liked 상태를 결정
+        }
+        fetchLikedRecipes();
+    }, []);
+
+    const getCardData = async (likedRecipes) => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/board/list?page=${currentPage}&size=${sizeNum}&option=${optionNum}`);
             const data = response.data.content;         // data는 레시피 목록을 포함하는 배열
@@ -20,16 +41,14 @@ function RecipeList({optionNum}) {
 
             // 배열 데이터를 받아온 그대로 상태에 설정
             setCardData(data.map(item => ({
-                boradId: item.id,                   // 레시피 id
-                title: item.title,                  // 레시피 이름
-                content: item.content,              // 레시피 내용
-                date: item.date,                    // 작성일자
-                author: item.nickname,              // 작성자
-                imageUrl: item.image,               // 레시피 사진 URL
-                ingredients: item.cocktails || [],  // 재료들
-                // comments: item.comments || [],      // 댓글
-                likeCount: item.likeCount || 0,     // 좋아요 수
-                liked: item.liked || false          // 좋아요 여부
+                boardId: item.id,                       // 레시피 id
+                title: item.title,                      // 레시피 이름
+                content: item.content,                  // 레시피 내용
+                date: item.date,                        // 작성일자
+                author: item.nickname,                  // 작성자
+                imageUrl: item.image,                   // 레시피 사진 URL
+                ingredients: item.cocktails || [],      // 재료들
+                liked: likedRecipes.includes(item.id)   // 좋아요 여부
             })));
         } catch (error) {
             console.error('데이터를 가져오는 중 에러 발생: ', error);
@@ -37,11 +56,16 @@ function RecipeList({optionNum}) {
     };
 
     useEffect(() => {
-        getCardData()
-    }, [currentPage, optionNum]);
+        getCardData(likedRecipes);
+    }, [currentPage, optionNum, likedRecipes]);
 
     const handlePageChange = (event, value) => {
         setCurrentPage(value);
+    };
+    const toggleLikedState = async (boardId) => {
+        const isLiked = likedRecipes.includes(boardId);
+        const newLikedRecipes = isLiked ? likedRecipes.filter(id => id !== boardId) : [...likedRecipes, boardId];
+        setLikedRecipes(newLikedRecipes);
     };
 
     return (
@@ -49,13 +73,15 @@ function RecipeList({optionNum}) {
             <div className={style.cardList}>
                 {cardData.map(card => (
                     <RecipeItem
-                        key={card.boradId}                // key는 각 요소를 고유하게 식별하기 위해 사용
-                        boradId={card.boradId}
+                        key={card.boardId}                // key는 각 요소를 고유하게 식별하기 위해 사용
+                        boardId={card.boardId}
                         imageUrl={card.imageUrl}
                         title={card.title}
                         author={card.author}
                         tags={[]}
                         liked={card.liked}
+                        toggleLiked={() => toggleLikedState(card.boardId)}
+                        // liked={likedRecipes.includes(card.id)}
                     />
                 ))}
 

@@ -1,57 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 import style from "components/RecipeBoard/RecipeItem.module.css";
 import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import axios from "axios";
-import { useSelector, useDispatch } from 'react-redux';
-import { setLoginStatus } from '../../store/authSlice';
+import {useSelector} from 'react-redux';
 
-function RecipeItem({ boradId, imageUrl, title, author, tags, liked }) {
+function RecipeItem({boardId, imageUrl, title, author, tags, liked, toggleLiked}) {
     const img = `http://localhost:3000/${imageUrl}`
     const navigate = useNavigate();
-
     const [isLiked, setIsLiked] = useState(liked);
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
-    const refreshToken = useSelector(state => state.auth.refreshToken); // 리프레시 토큰을 가져옵니다.
 
+    const authHeader = localStorage.getItem('authHeader'); // 인증 토큰 가져오기
 
-
-    // 클릭 핸들러 함수
+    // 레시피 상세 페이지로 이동
     const handleCardClick = () => {
-        navigate(`/recipe/${boradId}`); // 레시피 상세 페이지로 이동
+        navigate(`/recipe/${boardId}`);
     };
 
     // 로그인 여부를 확인하여 로그인한 사용자에게만 좋아요 기능 활성화
     const handleLikeClick = async (e) => {
         e.stopPropagation(); // 이벤트 버블링 방지
 
-        const authHeader = localStorage.getItem('authHeader'); // 인증 토큰 가져오기
-        if (!authHeader) {
-            console.error('Authorization token is missing');
+        // 로그인한 경우에만 좋아요 기능 활성화
+        if (!isLoggedIn) {
+            alert('좋아요를 누르려면 로그인을 하셔야 합니다. 로그인 해주세요.');
             return;
         }
 
-        if (isLoggedIn) { // 로그인한 경우에만 좋아요 기능 활성화
+        // if (isLoggedIn) {
             const newLikedState = !isLiked;
             setIsLiked(newLikedState);
-            try {
-                await axios.post(`${process.env.REACT_APP_API_URL}/board/like`, {
-                    id: boradId}, {
-                    headers: {
-                        'Authorization': authHeader // 요청 헤더에 인증 토큰 추가
-                    }
-                })
-                console.log('좋아요 상태 변경 성공');
-            } catch (error) {
-                console.error('좋아요 상태 변경 실패', error);
-                setIsLiked(!newLikedState);    // 에러가 발생하면 좋아요 상태를 원래대로 되돌림
-            }
-        } else {
-            // 로그인하지 않은 경우에는 로그인 페이지로 이동하도록 메시지를 띄웁니다.
-            alert('좋아요를 누르려면 로그인을 하셔야 합니다. 로그인 해주세요.');
-
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/like`, {id: boardId}, {
+                headers: {'Authorization': authHeader}  // 요청 헤더에 인증 토큰 추가
+            })
+            console.log('좋아요 상태 변경 성공');
+            toggleLiked(boardId, !isLiked);  // 상태 업데이트 성공 시, 상위 컴포넌트의 상태도 업데이트
+        } catch (error) {
+            console.error('좋아요 상태 변경 실패', error);
+            setIsLiked(!newLikedState);    // 에러가 발생하면 좋아요 상태를 원래대로 되돌림
         }
+
     };
 
     return (
@@ -67,7 +58,6 @@ function RecipeItem({ boradId, imageUrl, title, author, tags, liked }) {
                 </div>
             </div>
             <button className={style.likeButton} onClick={handleLikeClick}>
-                {console.log(`liked: ${isLiked}`)}
                 {isLiked ? (
                     <FavoriteIcon sx={{fontSize: '2rem', color: '#FF9B9B'}}/>
                 ) : (
