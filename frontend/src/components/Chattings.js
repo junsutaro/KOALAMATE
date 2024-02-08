@@ -7,7 +7,7 @@ import {
 	Divider,
 	IconButton,
 } from '@mui/material';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -28,6 +28,7 @@ const Chattings = () => {
 	const [expandedRoomId, setExpandedRoomId] = useState(null);
 	const navigate = useNavigate();
 	const { disconnectSession } = useVoiceSocket();
+	const location = useLocation(); // 현재 위치 정보를 가져옵니다.
 
 	useEffect(() => {
 		const chatRooms = getChatRooms();
@@ -58,6 +59,10 @@ const Chattings = () => {
 	const disconnectCall = () => {
 		setActiveCall(null);
 		disconnectSession();
+
+		if (/^\/voiceChat\/\d+$/.test(location.pathname)) {
+			navigate('/'); // 조건이 충족되면 홈 화면으로 이동합니다.
+		}
 	};
 
 	return (

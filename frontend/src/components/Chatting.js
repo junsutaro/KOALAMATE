@@ -194,7 +194,7 @@ const Chatting = ({ roomNumber , users}) => {
 						}}>
 							{showAvatar && (
 								<Avatar
-									src={messageUser?.profile || 'default_profile_picture_url'}
+									src={messageUser?.profile ? `${process.env.REACT_APP_IMAGE_URL}/${messageUser.profile}` : 'default_profile_picture_url'}
 									sx={{ width: 48, height: 48, margin: isCurrentUserMessage ? '0' : '0 8px 0 0' }}
 									onClick={() => messageUser?.id ? handleAvatarClick(messageUser.id) : null} // 유저 ID가 있을 때만 이벤트 리스너 추가
 								/>

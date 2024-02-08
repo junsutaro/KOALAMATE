@@ -40,8 +40,6 @@ export const VoiceSocketProvider = ({ children }) => {
 
         setPublisher(newPublisher);
         setSession(newSession);
-
-        setSession(newSession);
     }, [OV, session]);
 
     const disconnectSession = useCallback(() => {
@@ -83,10 +81,8 @@ export const VoiceSocketProvider = ({ children }) => {
         }}>
             {children}
 
-            <div id='userList'>
-                <div id='subscriberDiv'></div>
-            </div>
-            <div id='publisher-container'></div>
+            <div id='subscriberDiv'></div>
+            {/*<div id='publisher-container'></div>*/}
             <button onClick={toggleCamera}>{isCameraEnabled ? '카메라 끄기' : '카메라 켜기'}</button>
             <button onClick={toggleMicrophone}>{isMicrophoneEnabled ? '마이크 끄기' : '마이크 켜기'}</button>
 
