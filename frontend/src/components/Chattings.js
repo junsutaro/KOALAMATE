@@ -93,7 +93,7 @@ const Chattings = () => {
 						</IconButton>
 
 						{activeCall === room.id && (
-							<IconButton color="primary" sx={{ ml: 'auto' }} onClick={() => enterRoom(room.id, room.users)}>
+							<IconButton color="primary"  onClick={() => enterRoom(room.id, room.users)}>
 								<MeetingRoomIcon />
 							</IconButton>
 						)}
