@@ -30,7 +30,7 @@ export default function SlideIn() {
 				sx={{
 					'& .MuiDrawer-paper': {
 						marginTop: '70px', // 네비게이션 바의 높이만큼 상단 마진 설정
-						height: `calc(100% - 70px)` // 전체 높이에서 네비게이션 바의 높이를 뺀 높이 설정
+						height: `calc(100% - 70px)`,// 전체 높이에서 네비게이션 바의 높이를 뺀 높이 설정
 					},
 				}}
 			>
