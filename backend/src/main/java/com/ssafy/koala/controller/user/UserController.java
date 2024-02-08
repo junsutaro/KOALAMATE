@@ -232,7 +232,7 @@ public class UserController {
 		Optional<UserModel> user = userService.findById(user_id);
 		if(user.isPresent()) {
 			//페이지 시작은 0부터
-			Page<ViewBoardResponseDto> pageEntities = boardService.getMyPageEntities(page-1, size, user.get().getNickname(), user_id);
+			Page<ViewBoardResponseDto> pageEntities = boardService.getMyPageEntities(page-1, size, user_id);
 			List<ViewBoardResponseDto> content = pageEntities.getContent();
 			int totalPages = ((Page<?>) pageEntities).getTotalPages();
 

@@ -92,7 +92,12 @@ public class BoardController {
 
 	@Transactional
 	@PostMapping("/write")
-	public Object writeBoard(@RequestBody CreateBoardRequestDto board) {
+	public Object writeBoard(@RequestBody CreateBoardRequestDto board, HttpServletRequest request) {
+		String accessToken = authService.getAccessToken(request);
+		UserDto userDto = authService.extractUserFromToken(accessToken);
+
+		board.setUserId(userDto.getId());
+		board.setNickname(userDto.getNickname());
 		BoardModel boardModel = new BoardModel();
 		BeanUtils.copyProperties(board, boardModel);
 		boardService.createBoard(boardModel);
@@ -228,7 +233,7 @@ public class BoardController {
 		UserDto user = authService.extractUserFromToken(accessToken);
 
 		//페이지 시작은 0부터
-		Page<ViewBoardResponseDto> pageEntities = boardService.getMyPageEntities(page-1, size, user.getNickname(), user.getId());
+		Page<ViewBoardResponseDto> pageEntities = boardService.getMyPageEntities(page-1, size, user.getId());
 		List<ViewBoardResponseDto> content = pageEntities.getContent();
 		int totalPages = ((Page<?>) pageEntities).getTotalPages();
 

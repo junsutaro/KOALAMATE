@@ -17,4 +17,5 @@ public class CreateBoardRequestDto {
     private String nickname;
     private String image;
     private List<CocktailWithDrinkDto> cocktails;
+    private Long userId;
 }
