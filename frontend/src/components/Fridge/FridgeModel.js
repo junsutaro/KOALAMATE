@@ -8,6 +8,7 @@ export default function FridgeModel({setUuid}) {
 
 	useEffect(() => {
 		setUuid(scene.uuid);
+		console.log(scene);
 		scene.traverse((obj) => {
 			if (obj.isMesh) {
 				obj.castShadow = true;
