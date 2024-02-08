@@ -42,7 +42,9 @@ public class RefrigeratorController {
 
     // 냉장고 외부 수정
     @PutMapping("/modify")
-    public ResponseEntity<RefrigeratorDTO> modifyRefrigerator(@RequestBody RefrigeratorDTO updatedRefrigeratorDTO, HttpServletRequest request) {
+    public ResponseEntity<RefrigeratorDTO> modifyRefrigerator(
+            @RequestBody RefrigeratorDTO updatedRefrigeratorDTO,
+            HttpServletRequest request) {
 
         String accessToken = authService.getAccessToken(request);
         UserDto userDto = authService.extractUserFromToken(accessToken);
