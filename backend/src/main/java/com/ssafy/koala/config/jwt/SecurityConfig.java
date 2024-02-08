@@ -26,7 +26,7 @@ public class SecurityConfig {
 			"/api/v1/member/**", "/swagger-ui/**", "/api-docs", "/swagger-ui-custom.html",
 			"/v3/api-docs/**", "/api-docs/**", "/swagger-ui.html", "/api/v1/auth/**", "/user/**", "/board/**",
 			"/comment/**","/drink/**","/recipe/**","/cocktail/**", "/chat/**", "/auth/**", "/customobj/**",
-			"/refrigerator/**", "/profile/**", "/chatroom/**", "/message/**", "/socket/**", "/findmate/**"
+			"/refrigerator/**", "/profile/**", "/chatroom/**", "/message/**", "/socket/**", "/findmate/**", "/error/**"
 
 	};
 
