@@ -57,7 +57,7 @@ const SignUp = () => {
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/checkEmail`,
                 {email})
-            console.log(response.data)
+
             setIsEmailAvailable(response.data.available);
             console.log("이메일 중복 확인", response.data.available)
         } catch (error) {

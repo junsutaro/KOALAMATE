@@ -5,12 +5,12 @@ import axios from 'axios';
 import PaginationComponent from 'components/PaginationComponent'
 
 
-function RecipeList() {
+function RecipeList({optionNum}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const sizeNum = 8
-    const optionNum = 1  // 옵션 숫자 1: 전체 레시피 조회, 2: 관리자(admin) 레시피 조회, 3: 유저 레시피 조회
     const [cardData, setCardData] = useState([])
+    console.log(optionNum)
 
     const getCardData = async () => {
         try {
@@ -38,7 +38,7 @@ function RecipeList() {
 
     useEffect(() => {
         getCardData()
-    }, [currentPage]);
+    }, [currentPage, optionNum]);
 
     const handlePageChange = (event, value) => {
         setCurrentPage(value);
