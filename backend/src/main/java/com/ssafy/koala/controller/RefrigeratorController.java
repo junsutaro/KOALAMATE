@@ -4,6 +4,7 @@ import com.ssafy.koala.dto.RefrigeratorCustomobjDTO;
 import com.ssafy.koala.dto.RefrigeratorDTO;
 import com.ssafy.koala.dto.RefrigeratorDrinkDTO;
 import com.ssafy.koala.service.RefrigeratorService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -40,15 +41,15 @@ public class RefrigeratorController {
         return modifiedRefrigerator != null ? ResponseEntity.ok(modifiedRefrigerator) : ResponseEntity.notFound().build();
     }
 
-    // 냉장고 내용물 확인
+    // 냉장고 내용물(Drinks) 확인
     @GetMapping("/{userId}/open")
     public ResponseEntity<List<RefrigeratorCustomobjDTO>> getRefrigeratorContents(@PathVariable Long userId) {
         List<RefrigeratorCustomobjDTO> customobjDTOs = refrigeratorService.getRefrigeratorContentsByUserId(userId);
         return ResponseEntity.ok(customobjDTOs);
     }
 
-    // 냉장고 내용물 수정
-    @PutMapping("/{userId}/open/modify")
+    // 냉장고 자석 수정
+    @PutMapping("/{userId}/modifyCustoms")
     public ResponseEntity<List<RefrigeratorCustomobjDTO>> modifyRefrigeratorContents(@PathVariable Long userId, @RequestBody List<RefrigeratorCustomobjDTO> updatedContentsDTO) {
         List<RefrigeratorCustomobjDTO> modifiedContents = refrigeratorService.modifyRefrigeratorContentsByUserId(userId, updatedContentsDTO);
         return ResponseEntity.ok(modifiedContents);
@@ -66,6 +67,7 @@ public class RefrigeratorController {
     }
 
 
+    @Transactional
     @PutMapping("/{userId}/addDrinks")
     public ResponseEntity<List<RefrigeratorDrinkDTO>> addDrinksToRefrigerator(
             @PathVariable Long userId,

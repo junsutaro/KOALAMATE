@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface RefrigeratorRepository extends JpaRepository<RefrigeratorModel, Long> {
 
         Optional<RefrigeratorModel> findByUserId(Long userId);
+
 }
