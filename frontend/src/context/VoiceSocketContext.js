@@ -15,11 +15,13 @@ export const VoiceSocketProvider = ({ children }) => {
         newSession.on('streamCreated', event => {
             const subscriber = newSession.subscribe(event.stream, 'subscriberDiv');
             const nickname = event.stream.connection.data.split("=")[1];
-            console.log(nickname);
-            setParticipants(prev => [...prev, {subscriber,nickname}]);
+            // 이전 상태를 기반으로 새 상태를 계산
+            setParticipants(prevParticipants => [...prevParticipants, { subscriber, nickname }]);
+            console.log(participants);
         });
         newSession.on('streamDestroyed', event => {
-            setParticipants(prev => prev.filter(subscriber => subscriber.stream !== event.stream));
+            const nickname = event.stream.connection.data.split("=")[1];
+            setParticipants(prev => prev.filter(participant => participant.nickname !== nickname));
         });
         await newSession.connect(token);
 
@@ -31,6 +33,7 @@ export const VoiceSocketProvider = ({ children }) => {
 
     const disconnectSession = useCallback(() => {
         if (session) {
+            console.log(session);
             session.disconnect();
             setSession(null);
             setParticipants([]);
@@ -41,6 +44,7 @@ export const VoiceSocketProvider = ({ children }) => {
         <VoiceSocketContext.Provider value={{ session, participants, connectToSession, disconnectSession, setParticipants }}>
             {children}
             <div id='subscriberDiv'></div>
+            {/*<div id='publisher-container'></div>*/}
         </VoiceSocketContext.Provider>
     );
 };

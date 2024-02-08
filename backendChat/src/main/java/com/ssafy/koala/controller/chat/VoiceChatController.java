@@ -53,7 +53,7 @@ public class VoiceChatController {
     public ResponseEntity<String> createConnection(@PathVariable("sessionId") String sessionId,
                                                    @RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
-        System.out.println("in conntection");
+        System.out.println("in conntection " + params.get("customNickname"));
         Session session = openvidu.getActiveSession(sessionId);
         if (session == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
