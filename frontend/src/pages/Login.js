@@ -12,7 +12,7 @@ const Login = () => {
 	const [password, setPassword] = React.useState('');
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const {connect} = useWebSocket();
+	const {connect, setRoomStatus} = useWebSocket();
 	//const {connectVoice} = useVoiceSocket();
 
 	const login = async (email, password) => {
@@ -54,9 +54,10 @@ const Login = () => {
 			const authHeader = response.headers['authorization'];
 			if (!authHeader) throw new Error('No Authorization Header');
 			localStorage.setItem('authHeader', authHeader);
-			const roomList = getRoomList()
+			getRoomList()
 				.then((response) => {
 					console.log("asdfasdf: ",response.data);
+					setRoomStatus(response.data);
 					sessionStorage.setItem('roomList', JSON.stringify(response.data));
 				}).catch((error) => {
 					console.log('Get Room List Failed: ', error);

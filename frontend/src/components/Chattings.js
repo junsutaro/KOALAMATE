@@ -4,41 +4,25 @@ import {
 	List,
 	ListItem,
 	ListItemText,
-	Collapse,
-	Box,
-	Typography, Button, Divider,
+	Button,
+	Divider,
 } from '@mui/material';
 import {useNavigate} from "react-router-dom";
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 
 import {useVoiceSocket} from 'context/VoiceSocketContext';
-import axios from "axios";
-
-const getChatRooms = () => {
-	const chatRooms = sessionStorage.getItem('roomList');
-	return chatRooms ? JSON.parse(chatRooms) : [];
-};
+import { useWebSocket } from '../context/WebSocketContext';
 
 const Chattings = () => {
-	const [rooms, setRooms] = useState([]);
+	// const [rooms, setRooms] = useState([]);
 	const navigate = useNavigate();
 	const {disconnectSession} = useVoiceSocket();
+	const {roomStatus} = useWebSocket();
 
 	useEffect(() => {
-		const chatRooms = getChatRooms();
-		console.log(chatRooms);
-		setRooms(chatRooms);
-	}, []);
-
-	const chatRoomsObj = getChatRooms();
-	const chatRooms = [
-		{id: 1, participants: ['Alice', 'Bob']},
-		{id: 2, participants: ['Charlie', 'Dave']},
-		{id: 3, participants: ['Eve', 'Frank']},
-		{id: 4, participants: ['Grace', 'Hank']},
-		// 추가 채팅방 데이터...
-	];
+		console.log('roomStatus: ', roomStatus);
+	}, [roomStatus]);
 
 	const [expandedRoomId, setExpandedRoomId] = useState(null);
 	const toggleExpand = (roomId) => {
@@ -62,7 +46,7 @@ const Chattings = () => {
 
 	return (
 			<List component="nav">
-				{rooms.map((room) => (
+				{roomStatus.map((room) => (
 						<React.Fragment key={room.id}>
 							<ListItem button onClick={() => toggleExpand(room.id)}>
 								{room.lastMessage !== null ?
@@ -73,25 +57,15 @@ const Chattings = () => {
 									:
 									<ListItemText
 										primary={room.users.map(user => user.nickname).join(', ')}
-										// secondary={expandedRoomId !== room.id ? `${room.lastMessage.nickname}: ${room.lastMessage.content}` : ''}
 									/>
 								}
-								{/*<ListItemText*/}
-								{/*	primary={room.users.map(user => user.nickname).join(', ')}*/}
-								{/*	secondary={expandedRoomId !== room.id ? `${room.lastMessage.nickname}: ${room.lastMessage.content}` : ''}*/}
-								{/*/>*/}
 								{expandedRoomId === room.id ? <ExpandLess /> : <ExpandMore />}
 							</ListItem>
 							<div>
 								<Button onClick={() => voiceCall(room.id, room.users)}>asdasd</Button>
 								<Button onClick={() => disconnectCall()}>disconnect</Button>
 							</div>
-							{expandedRoomId === room.id && <Chatting roomNumber={room.id}/>}
-							{/*<Collapse in={expandedRoomId === room.id} timeout="auto" unmountOnExit>*/}
-							{/*	<Box sx={{bgcolor: 'background.paper'}}>*/}
-							{/*		<Chatting roomNumber={room.id}/>*/}
-							{/*	</Box>*/}
-							{/*</Collapse>*/}
+							{expandedRoomId === room.id && <Chatting roomNumber={room.id} lastMessage={room.lastMessage}/>}
 							<Divider />
 						</React.Fragment>
 				))}

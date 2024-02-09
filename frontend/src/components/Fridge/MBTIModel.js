@@ -45,13 +45,12 @@ export default function MBTIModel ({ initialPosition, fridgeUuid }) {
 				isNew: true,
 			});
 			scene.add(clonedObject);
-			console.log('제발');
 		}
 	};
 
 	useFrame(() => {
 		if (draggedModel) {
-			console.log('draggedModel');
+			document.body.style.cursor = 'grabbing';
 			const normalizedPosition = new THREE.Vector3(pointer.x, pointer.y, 0.5);
 			const worldPosition = normalizedPosition.unproject(camera);
 			const dir = worldPosition.sub(camera.position).normalize();
@@ -65,6 +64,8 @@ export default function MBTIModel ({ initialPosition, fridgeUuid }) {
 
 	useEffect(() => {
 		const handlePointerUp = () => {
+			console.log('pointer up')
+			document.body.style.cursor = 'auto';
 			if (!draggedModel) return;
 			console.log(draggedModel);
 
@@ -110,6 +111,12 @@ export default function MBTIModel ({ initialPosition, fridgeUuid }) {
 	}, [draggedModel, models]);
 
 	useEffect(() => {
+		scene.traverse((obj) => {
+			if (obj.isMesh) {
+				obj.castShadow = true;
+				// obj.receiveShadow = true;
+			}
+		});
 		console.log(models);
 		models.forEach((model, index) => {
 			console.log(model);
@@ -120,25 +127,52 @@ export default function MBTIModel ({ initialPosition, fridgeUuid }) {
 		<>
 			<group position={initialPosition}>
 				<primitive object={I_scene} position={[0, 0, 1.4]}
-				           onPointerDown={() => onModelClick(I_scene)}/>
+				           onPointerDown={() => onModelClick(I_scene)}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 				<primitive object={N_scene} position={[0, -1, 1.4]}
-				           onPointerDown={() => onModelClick(N_scene)}/>
+				           onPointerDown={() => onModelClick(N_scene)}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 				<primitive object={F_scene} position={[0, -2, 1.4]}
-				           onPointerDown={() => onModelClick(F_scene)}/>
+				           onPointerDown={() => onModelClick(F_scene)}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 				<primitive object={P_scene} position={[0, -3, 1.4]}
-				           onPointerDown={() => onModelClick(P_scene)}/>
+				           onPointerDown={() => onModelClick(P_scene)}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 				<primitive object={E_scene} position={[1, 0, 1.4]}
-				           onPointerDown={() => onModelClick(E_scene)}/>
+				           onPointerDown={() => onModelClick(E_scene)}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 				<primitive object={S_scene} position={[1, -1, 1.4]}
-				           onPointerDown={() => onModelClick(S_scene)}/>
+				           onPointerDown={() => onModelClick(S_scene)}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 				<primitive object={T_scene} position={[1, -2, 1.4]}
-				           onPointerDown={() => onModelClick(T_scene)}/>
+				           onPointerDown={() => onModelClick(T_scene)}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 				<primitive object={J_scene} position={[1, -3, 1.4]}
-				           onPointerDown={() => onModelClick(J_scene)}/>
+				           onPointerDown={() => onModelClick(J_scene)}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 			</group>
 			{models.map((model, index) => (
 				<primitive object={model.object} key={index} position={model.position}
-				           onPointerDown={() => onModelClick(model.object)}/>
+				           onPointerDown={() => onModelClick(model.object)}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 			))}
 		</>
 	);
