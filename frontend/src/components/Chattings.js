@@ -16,12 +16,12 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import PhoneIcon from '@mui/icons-material/Phone';
 import CallEndIcon from '@mui/icons-material/CallEnd';
 import Badge from '@mui/material/Badge';
-import MailIcon from '@mui/icons-material/Mail';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import ChatIcon from '@mui/icons-material/Chat'; // 채팅 아이콘 추가
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 import FollowList from 'components/FollowList';
-
+import InvitePopup from 'components/InvitePopup';
 
 import {useVoiceSocket} from 'context/VoiceSocketContext';
 
@@ -42,6 +42,10 @@ const Chattings = () => {
     const [scrollPosition, setScrollPosition] = useState(0);
 
 	const [tabValue, setTabValue] = useState(1); // 탭 상태 추가
+
+    const [invitePopupOpen, setInvitePopupOpen] = useState(false);
+    const [invitableUsers, setInvitableUsers] = useState([]);
+
 
     useEffect(() => {
         const chatRooms = getChatRooms();
@@ -91,6 +95,20 @@ const Chattings = () => {
         }
     };
 
+    const getAuthHeader = () => {
+        const authHeader = localStorage.getItem('authHeader');
+        return authHeader ? { Authorization: authHeader } : {};
+    };
+
+    const handleOpenInvitePopup = (roomId) => {
+        // 팝업창 열기
+        setInvitePopupOpen(true);
+
+        // 여기서 follow하는 유저 중 현재 채팅방에 없는 유저들의 목록을 가져오는 로직을 구현
+        // 예시 코드는 이 부분을 구체적으로 구현한 것이 아니므로, 실제 API 호출 등을 통해 목록을 구해야 함
+        // setInvitableUsers([...]);
+    };
+
     return (
         <Box sx={{width: '100%'}}>
             <Tabs value={tabValue} onChange={handleTabChange} centered>
@@ -128,6 +146,9 @@ const Chattings = () => {
 
                                 {/* Badge를 오른쪽으로 정렬하기 위한 컨테이너 */}
                                 <div style={{marginLeft: 'auto', marginRight: '20px'}}>
+                                    <IconButton onClick={() => handleOpenInvitePopup(room.id)}>
+                                        <PersonAddIcon/>
+                                    </IconButton>
                                     <Badge color="secondary" variant="dot"
                                            invisible={room.lastMessage?.id === room.confirmMessageId}>
                                         <ChatIcon
@@ -136,6 +157,16 @@ const Chattings = () => {
                                 </div>
                             </div>
                             {expandedRoomId === room.id && <Chatting roomNumber={room.id} users={room.users}/>}
+
+                            {invitePopupOpen && (
+                                <InvitePopup
+                                    open={invitePopupOpen}
+                                    onClose={() => setInvitePopupOpen(false)}
+                                    users={invitableUsers}
+                                    onInvite={(user) => console.log("초대하기:", user)} // 실제 초대 로직 구현 필요
+                                />
+                            )}
+
                             <Divider/>
                         </React.Fragment>
                     ))}
