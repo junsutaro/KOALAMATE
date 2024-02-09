@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {NavLink, useNavigate} from 'react-router-dom';
 import {
 	AppBar,
@@ -8,7 +8,7 @@ import {
 	Box,
 	IconButton,
 	Menu,
-	Tooltip, MenuItem, Avatar,
+	Tooltip, MenuItem, Avatar, createTheme,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Collapse from '@mui/material/Collapse';
@@ -27,9 +27,29 @@ const Nav = () => {
 	const {disconnect} = useWebSocket();
 	const [anchorEl, setAnchorEl] = useState(null); // 메뉴 상태 관리
 	const [anchorElUser, setAnchorElUser] = useState(null); // 유저 메뉴 상태 관리
-	const open = Boolean(anchorEl);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const {disconnectSession} = useVoiceSocket();
+	const [isWide, setIsWide] = useState(false);
+	const theme = createTheme();
+	const ref = React.useRef(null);
+
+	useEffect(() => {
+		const checkWidth = () => {
+			if (ref.current) {
+				setIsWide(ref.current.offsetWidth >= theme.breakpoints.values.md)
+			}
+		}
+		const resizeObserver = new ResizeObserver(checkWidth);
+		if (ref.current) {
+			resizeObserver.observe(ref.current);
+		}
+		checkWidth();
+
+		return () => resizeObserver.disconnect();
+	}, [ref]);
+
+
+
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
 		setMenuOpen(!menuOpen);
@@ -97,8 +117,8 @@ const handleMyPage = async () => {
 	];
 
 	return (
-			<AppBar position="static" sx={{backgroundColor: '#fff'}}>
-				<Toolbar sx={{display: {xs: 'none', md: 'flex'}}}>
+			<AppBar position="static" sx={{backgroundColor: '#fff'}} ref={ref}>
+				<Toolbar sx={{display: isWide ? 'flex' : 'none' /*{xs: 'none', md: 'flex'}*/}}>
 					<Box sx={{
 						flexGrow: 1,
 						display: {xs: 'none', md: 'flex'},
@@ -120,7 +140,7 @@ const handleMyPage = async () => {
 							{/*</Box>*/}
 						</NavLink>
 					</Box>
-					<Box sx={{display: {xs: 'none', md: 'flex'}, ...(isLoggedIn && { flexGrow: 1})}}>
+					<Box sx={{display: 'flex', ...(isLoggedIn && { flexGrow: 1})}}>
 						<NavButton color="inherit" component={NavLink}
 						           to="/mate" sx={{ mr: 2 }}>Mate</NavButton>
 						<NavButton color="inherit" component={NavLink}
@@ -193,11 +213,11 @@ const handleMyPage = async () => {
 					}
 
 				</Toolbar>
-				<Toolbar sx={{display: {xs: 'flex', md: 'none'}}}>
-					<Box sx={{display: {xs: 'flex', md: 'none'}}}>
+				<Toolbar sx={{display: isWide ? 'none' : 'flex' /*{xs: 'none', md: 'flex'}*/}}>
+					<Box sx={{display: 'flex'}}>
 						<Box sx={{
 							flexGrow: 1,
-							display: {xs: 'flex', md: 'none'},
+							display: 'flex',
 							alignItems: 'center',
 							color: 'inherit',
 							textDecoration: 'inherit',
@@ -227,7 +247,7 @@ const handleMyPage = async () => {
 						</IconButton>
 						<Collapse in={menuOpen}>
 							<Box sx={{
-								display: {xs: 'flex', md: 'none'},
+								display: 'flex',
 								flexDirection: 'column',
 								alignItems: 'center',
 								pb: 2,
