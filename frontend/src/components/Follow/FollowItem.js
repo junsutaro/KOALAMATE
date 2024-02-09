@@ -6,7 +6,7 @@ import GenderBirthRange from "../GenderBirthRange";
 const standardImgPath = '/assets/profile.jpg';
 const FollowItem = ({id, nickname, birthRange, gender, img, intro}) => {
     // 이미지 URL을 절대 경로로 변환
-    const profileImage = img ? `http://localhost:3000/${img}` : '/assets/profile.jpg';
+    const profileImage = img ? `${process.env.REACT_APP_IMAGE_URL}/${img}` : '/assets/profile.jpg';
     const navigate = useNavigate()
     const handleClick = () => {
         navigate(`/user/${id}`);

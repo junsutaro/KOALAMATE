@@ -9,6 +9,9 @@ import Box from '@mui/material/Box';
 import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
 import IconButton from '@mui/material/IconButton';
+import { useNavigate } from 'react-router-dom'; // useNavigate import
+
+
 
 
 
@@ -20,6 +23,7 @@ const VoiceChatRoom = () => {
     // location 객체에서 state 속성을 통해 전달된 데이터를 읽음
     const { users } = location.state;
     const { connectToSession, disconnectSession, participants, setParticipants, publisher, toggleMicrophone, isMicrophoneEnabled } = useVoiceSocket();
+    const navigate = useNavigate(); // useNavigate 훅 사용
 
     // ... useEffect 등 기존 로직
     const curUser = useSelector(state => state.auth.user);
@@ -54,6 +58,10 @@ const VoiceChatRoom = () => {
         //return () => disconnectSession(); // Cleanup on component unmount
     }, [roomId, location.state]);
 
+    const handleAvatarClick = (userId) => {
+        navigate(`/user/${userId}`); // 프로그래매틱 네비게이션
+    };
+
 
     return (
         <div>
@@ -62,7 +70,9 @@ const VoiceChatRoom = () => {
                 <Grid container spacing={2} justifyContent="center" style={{ padding: 20 }}>
                     {users.map(user => (
                         <Grid item xs={12} sm={6} md={4} lg={3} key={user.nickname} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <Avatar src={user?.profile ? `${process.env.REACT_APP_IMAGE_URL}/${user.profile}` : 'default_profile_picture_url'} sx={{ width: 100, height: 100, border: `2px solid ${participants.some(p => p.nickname === user.nickname) || user.nickname === curUser.nickname ? 'blue' : 'grey'}` }} />
+                            <Avatar
+                                onClick={() => user?.id ? handleAvatarClick(user.id) : null}
+                                src={user?.profile ? `${process.env.REACT_APP_IMAGE_URL}/${user.profile}` : 'default_profile_picture_url'} sx={{ width: 100, height: 100, border: `2px solid ${participants.some(p => p.nickname === user.nickname) || user.nickname === curUser.nickname ? 'blue' : 'grey'}` }} />
                             <Typography variant="subtitle1" style={{ marginTop: '10px' }}>
                                 {user.nickname}
                             </Typography>
