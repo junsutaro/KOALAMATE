@@ -43,8 +43,7 @@ const Chattings = () => {
 
 	const [tabValue, setTabValue] = useState(1); // 탭 상태 추가
 
-    const [invitePopupOpen, setInvitePopupOpen] = useState(false);
-    const [invitableUsers, setInvitableUsers] = useState([]);
+    const [invitePopupOpen, setInvitePopupOpen] = useState(null); // 초기값을 null로 설정
 
 
     useEffect(() => {
@@ -95,19 +94,32 @@ const Chattings = () => {
         }
     };
 
-    const getAuthHeader = () => {
-        const authHeader = localStorage.getItem('authHeader');
-        return authHeader ? { Authorization: authHeader } : {};
-    };
-
     const handleOpenInvitePopup = (roomId) => {
-        // 팝업창 열기
-        setInvitePopupOpen(true);
-
-        // 여기서 follow하는 유저 중 현재 채팅방에 없는 유저들의 목록을 가져오는 로직을 구현
-        // 예시 코드는 이 부분을 구체적으로 구현한 것이 아니므로, 실제 API 호출 등을 통해 목록을 구해야 함
-        // setInvitableUsers([...]);
+        // 팝업창을 열 때 해당 채팅방 ID로 설정
+        setInvitePopupOpen(roomId);
     };
+
+    useEffect(() => {
+        const updateRooms = () => {
+            const chatRooms = getChatRooms(); // getChatRooms 함수는 sessionStorage에서 roomList를 가져오는 함수
+            setRooms(chatRooms);
+        };
+
+        updateRooms();
+
+        // sessionStorage의 'roomList' 변경 감지를 위한 이벤트 리스너 추가
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'roomList') {
+                updateRooms();
+            }
+        });
+
+        // 컴포넌트 언마운트 시 이벤트 리스너 제거
+        return () => {
+            window.removeEventListener('storage', updateRooms);
+        };
+    }, []);
+
 
     return (
         <Box sx={{width: '100%'}}>
@@ -158,12 +170,12 @@ const Chattings = () => {
                             </div>
                             {expandedRoomId === room.id && <Chatting roomNumber={room.id} users={room.users}/>}
 
-                            {invitePopupOpen && (
+                            {invitePopupOpen === room.id && (
                                 <InvitePopup
-                                    open={invitePopupOpen}
-                                    onClose={() => setInvitePopupOpen(false)}
-                                    users={invitableUsers}
-                                    onInvite={(user) => console.log("초대하기:", user)} // 실제 초대 로직 구현 필요
+                                    open={Boolean(invitePopupOpen)} // open 속성을 Boolean으로 변환하여 팝업의 열림/닫힘 상태 결정
+                                    onClose={() => setInvitePopupOpen(null)} // 팝업을 닫을 때 invitePopupOpen을 null로 설정하여 모든 팝업 닫기
+                                    users={room.users}
+                                    roomId = {room.id}
                                 />
                             )}
 
