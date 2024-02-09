@@ -16,6 +16,7 @@ import DefaultImg from 'assets/profile.jpg'
 
 const authHeader = localStorage.getItem('authHeader');
 
+
 const RefrigList = () => {
 
     const [UserData, setUserData] = useState([]); //초기값은 빈 배열
