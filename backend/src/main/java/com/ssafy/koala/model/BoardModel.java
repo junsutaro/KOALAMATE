@@ -32,6 +32,8 @@ public class BoardModel {
 	private String nickname;
 	private String image;
 	private double dosu = 0;
+	@Column(name="user_id")
+	private Long userId;
 	//Like
 //	@OneToMany
 //	private List<UserModel> users = new ArrayList<>();

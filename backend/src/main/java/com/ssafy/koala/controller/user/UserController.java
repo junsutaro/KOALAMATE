@@ -196,15 +196,6 @@ public class UserController {
 		return new ResponseEntity<>(user.getId(), HttpStatus.OK);
 	}
 
-	// 상대방의 유저 정보, 음료 정보, 팔로우 정보 반환 (메이트 찾기에서 사용)
-	@GetMapping("/list")
-	public ResponseEntity<?> getUserList(HttpServletRequest request) {
-		String accessToken = authService.getAccessToken(request);
-		UserDto user = authService.extractUserFromToken(accessToken);
-
-		return new ResponseEntity<>(userService.findAllUser(user.getId()), HttpStatus.OK);
-	}
-
 	// 유저의 매너 점수 갱신
 	@PostMapping("/score")
 	public ResponseEntity<?> evaluateMannerScore(@RequestBody ScoreDto evaluateData) {
