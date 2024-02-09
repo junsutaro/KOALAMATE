@@ -41,11 +41,11 @@ const Chatting = ({ roomNumber , users}) => {
 	};
 
 	const scrollToBottom = () => {
-		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block:'center' });
 	};
 
 	const scrollToBottomDirect = () => {
-		messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
+		messagesEndRef.current?.scrollIntoView({ behavior: 'auto', lock:'center' });
 	};
 
 	const user = useSelector(state => state.auth.user);
