@@ -3,6 +3,7 @@ package com.ssafy.koala.controller.chat;
 import com.ssafy.koala.dto.chat.ChatroomDto;
 import com.ssafy.koala.dto.chat.ChatroomResponseDto;
 import com.ssafy.koala.dto.chat.RequestDto;
+import com.ssafy.koala.dto.chat.createRequestDto;
 import com.ssafy.koala.service.AuthService;
 import com.ssafy.koala.service.chat.ChatService;
 import com.ssafy.koala.service.chat.ChatroomService;
@@ -31,10 +32,14 @@ public class ChatroomController {
     }
 
     @PostMapping("/createRoom")
-    public ResponseEntity<ChatroomDto> createRoom(@RequestBody String otherUserEmail, HttpServletRequest request) {
+    public ResponseEntity<ChatroomResponseDto> createRoom(@RequestBody createRequestDto requestDto, HttpServletRequest request) {
         String accessToken = authService.getAccessToken(request);
         String email = authService.extractUserFromToken(accessToken).getEmail();
-        ChatroomDto chatroom = chatroomService.createRoom(email, otherUserEmail);
+
+        String otherUserEmail = requestDto.getOtherUserEmail();
+        System.out.println(otherUserEmail);
+
+        ChatroomResponseDto chatroom = chatroomService.createRoom(email, otherUserEmail);
 
         return new ResponseEntity<>(chatroom,HttpStatus.OK);
     }
