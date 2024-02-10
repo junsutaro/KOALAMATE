@@ -75,7 +75,8 @@ const RefrigList = () => {
                                 secondary={
                                     <Box display="flex" gap={1}>
                                         <Chip label={`${user.gender}`} sx={{
-                                            bgcolor: user.gender === '여자' ? '#F8BBD0' : '#BBDEFB', // 여성일 때 핑크, 남성일 때 파란색
+                                            // bgcolor: user.gender === '여자' ? '#F8BBD0' : '#BBDEFB', // 여성일 때 핑크, 남성일 때 파란색
+                                            bgcolor : (user.gender === '여자' || user.gender === '여성') ? '#F8BBD0' : '#BBDEFB',
                                         }}
                                         />
                                         <Chip label={`${user.birthRange}대`} sx={{ bgcolor: '#CDFAD5' }} />
