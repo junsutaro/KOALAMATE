@@ -30,7 +30,6 @@ import Chatting from '../components/Chatting';
 import MyPage from '../pages/MyPage';
 import FollowerList from '../pages/FollowerList';
 import FolloweeList from '../pages/FolloweeList';
-
 import Mate from '../pages/Mate';
 import UpdateMyPage from '../pages/UpdateMyPage';
 import VoiceChatRoom from '../components/VoiceChatRoom';
@@ -46,57 +45,56 @@ const MainLayout = () => {
 	};
 
 	return (
-			<Box sx={{ transition: 'margin 0.3s ease-out', marginRight: isLoggedIn && isOpen ? '350px' : 0 }}>
-				{isLoggedIn && !isOpen && (
-						<IconButton onClick={() => toggleDrawer(true)} sx={{ position: 'fixed', right: 16, bottom: 16, zIndex: 1300 }}>
-							<ChatIcon />
+		<Box sx={{ transition: 'margin 0.3s ease-out', marginRight: isLoggedIn && isOpen ? '350px' : 0 }}>
+			{isLoggedIn && !isOpen && (
+				<IconButton onClick={() => toggleDrawer(true)} sx={{ position: 'fixed', right: 16, bottom: 16, zIndex: 1300 }}>
+					<ChatIcon />
+				</IconButton>
+			)}
+
+			{isLoggedIn && (
+				<Drawer variant={'persistent'} anchor="right" open={isOpen} onClose={() => toggleDrawer(false)} >
+					<Toolbar>
+						<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+							Chattings
+						</Typography>
+						<IconButton onClick={() => toggleDrawer(false)} >
+							<CloseIcon />
 						</IconButton>
-				)}
+					</Toolbar>
+					<Divider />
+					<Box sx={{ width: 350 }} role="presentation">
+						{isOpen && (<Chattings />)}
+					</Box>
+				</Drawer>
+			)}
 
-				{isLoggedIn && (
-						<Drawer variant={'persistent'} anchor="right" open={isOpen} onClose={() => toggleDrawer(false)} >
-							<Toolbar>
-								<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-									Chattings
-								</Typography>
-								<IconButton onClick={() => toggleDrawer(false)} >
-									<CloseIcon />
-								</IconButton>
-							</Toolbar>
-							<Divider />
-							<Box sx={{ width: 350 }} role="presentation">
-								{isOpen && (<Chattings />)}
-							</Box>
-						</Drawer>
-				)}
+			<Nav />
+			<Routes>
+				<Route path="/" element={<Home />} />
+				<Route path="/mate" element={<Mate />} />
 
-				<Nav />
-				<Routes>
-					<Route path="/" element={<Home />} />
-					<Route path="/mate" element={<Mate />} />
+				<Route path="/recipe" element={<Recipe/>} />
+				{/*<Route path="/recipe/search" element={<Search/>}/>*/}
+				<Route path="/recipe/:boardId" element={<RecipeDetail /> } />
 
-					<Route path="/recipe" element={<Recipe/>} />
-					{/*<Route path="/recipe/search" element={<Search/>}/>*/}
-					<Route path="/recipe/:boardId" element={<RecipeDetail /> } />
+				<Route path="/login" element={<Login />} />
+				<Route path="/signup" element={<SignUp />} />
+				<Route path="/writeBoard" element={<WriteBoard />} />
+				<Route path="/:boardId/comments" element={<CommentList />} />
+				<Route path="/user/:userId" element={<MyPage />} />
+				<Route path="/user/update" element={<UpdateMyPage />} />
 
+				{/*<Route path="/user/:userId/update" element={<WriteMyPage />} />*/}
 
-					<Route path="/login" element={<Login />} />
-					<Route path="/signup" element={<SignUp />} />
-					<Route path="/writeBoard" element={<WriteBoard />} />
-					<Route path="/:boardId/comments" element={<CommentList />} />
-					<Route path="/user/:userId" element={<MyPage />} />
-					<Route path="/user/:userId/update" element={<UpdateMyPage />} />
-
-					{/*<Route path="/user/:userId/update" element={<WriteMyPage />} />*/}
-
-					<Route path="/user/:userId/follower" element={<FollowerList />} />
-					<Route path="/user/:userId/followee" element={<FolloweeList />} />
-					<Route path="/fridge" element={<Fridge />} />
-					<Route path="/voiceChat" element={<VoiceChatRoom />} />
-					{/* 다른 라우트들 */}
-				</Routes>
-				<Footer />
-			</Box>
+				<Route path="/user/:userId/follower" element={<FollowerList />} />
+				<Route path="/user/:userId/followee" element={<FolloweeList />} />
+				<Route path="/fridge" element={<Fridge />} />
+				<Route path="/voiceChat/:roomId" element={<VoiceChatRoom />} />
+				{/* 다른 라우트들 */}
+			</Routes>
+			<Footer />
+		</Box>
 	);
 };
 

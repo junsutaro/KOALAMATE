@@ -196,15 +196,6 @@ public class UserController {
 		return new ResponseEntity<>(user.getId(), HttpStatus.OK);
 	}
 
-	// 상대방의 유저 정보, 음료 정보, 팔로우 정보 반환 (메이트 찾기에서 사용)
-	@GetMapping("/list")
-	public ResponseEntity<?> getUserList(HttpServletRequest request) {
-		String accessToken = authService.getAccessToken(request);
-		UserDto user = authService.extractUserFromToken(accessToken);
-
-		return new ResponseEntity<>(userService.findAllUser(user.getId()), HttpStatus.OK);
-	}
-
 	// 유저의 매너 점수 갱신
 	@PostMapping("/score")
 	public ResponseEntity<?> evaluateMannerScore(@RequestBody ScoreDto evaluateData) {
@@ -306,6 +297,21 @@ public class UserController {
 		responseBody.put("totalPages", totalPages);
 
 		return new ResponseEntity<>(responseBody, HttpStatus.OK);
+	}
+
+	@GetMapping("/myLikesWithoutPageable")
+	public ResponseEntity<?> listLikeBoardIds(HttpServletRequest request) {
+		String accessToken = authService.getAccessToken(request);
+		UserDto user = authService.extractUserFromToken(accessToken);
+
+		// BoardService를 통해 사용자가 좋아요 한 모든 게시글의 ID 목록을 조회
+		List<Long> likedBoardIds = boardService.findAllLikedBoardIdsByUserId(user.getId());
+
+		if (likedBoardIds.isEmpty()) {
+			return new ResponseEntity<>("No liked boards found.", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(likedBoardIds, HttpStatus.OK);
+		}
 	}
 
 	// 내가 팔로우하는 유저 목록

@@ -42,7 +42,7 @@ const RecipeDetail = () => {
                 content: data.content,
                 date: format(new Date(data.date), 'yyyy년 MM월 dd일 HH:mm:ss'),
                 views: data.views,
-                image: `http://localhost:3000/${data.image}` ,
+                image: `${process.env.REACT_APP_IMAGE_URL}/${data.image}` ,
                 nickname: data.nickname,
                 comments: data.comments || [],
                 likeCount: data.likeCount,
@@ -86,7 +86,7 @@ const RecipeDetail = () => {
                         {isLiked ? (
                             <FavoriteIcon sx={{fontSize: '2rem', color: '#FF9B9B'}}/>
                         ) : (
-                            <FavoriteTwoToneIcon sx={{fontSize: '2rem', color: 'black'}}/>
+                            <FavoriteTwoToneIcon sx={{fontSize: '2rem', color: '#e9e9e9'}}/>
                         )}
                     </Button>
                 </Box>

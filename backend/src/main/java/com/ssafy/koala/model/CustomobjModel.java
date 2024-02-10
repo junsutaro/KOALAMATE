@@ -16,8 +16,15 @@ public class CustomobjModel {
     private Long id;
 
     private String src;
+    private double posX;
+    private double posY;
 
-    @OneToMany(mappedBy = "customobj")
-    private List<RefrigeratorCustomobjModel> refrigeratorCustomobjModels;
+    @ManyToOne
+    @JoinColumn(name = "refrigerator_id")
+    private RefrigeratorModel refrigerator;
+
+
+//    @OneToMany(mappedBy = "customobj")
+//    private List<RefrigeratorCustomobjModel> refrigeratorCustomobjModels;
 
 }

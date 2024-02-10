@@ -323,7 +323,8 @@ public class BoardService {
 	public Page<ViewBoardResponseDto> getMyPageEntities(int page, int size, String nickname, Long userId) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page, size, sort);
-		Page<BoardModel> entities = boardRepository.findByNickname(nickname, pageable);
+		Page<BoardModel> entities = boardRepository.findBoardById(userId, pageable);
+
 
 		List<ViewBoardResponseDto> result = entities.stream()
 				.map(board -> {
@@ -363,6 +364,10 @@ public class BoardService {
 		// 사용자가 좋아요 한 board_id 리스트를 가져온다.
 		List<Long> likedBoardIds = likeRepository.findLikedBoardIdsByUserId(userId);
 
+		// (추가) 좋아요 없으면 빈 페이지 반환하십쇼
+		if (likedBoardIds.isEmpty()) {
+			return new PageImpl<>(Collections.emptyList(), pageable, 0);
+		}
 		// Specification을 사용하여 조건에 맞는 BoardModel 조회
 		Page<BoardModel> entities = boardRepository.findAll(BoardSpecifications.boardIsLikedByUser(likedBoardIds), pageable);
 
@@ -519,5 +524,9 @@ public class BoardService {
 				.collect(Collectors.toList());
 
 		return new PageImpl<>(result, pageable, pageResult.getTotalElements());
+	}
+
+	public List<Long> findAllLikedBoardIdsByUserId(Long userId) {
+		return likeRepository.findAllLikedBoardIdsByUserId(userId);
 	}
 }

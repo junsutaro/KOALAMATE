@@ -20,6 +20,7 @@ const FollowerList = () => {
     const getFollowerData = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/${userId}/follower`);
+            console.log(response)
             const data = response.data;
             setFollowerData({
                 cnt: data.followCnt,
@@ -40,7 +41,7 @@ const FollowerList = () => {
 
     return (
         <>
-            <MyPageButton/>
+            <MyPageButton userId={userId}/>
             <Box sx={{display: 'flex', justifyContent: 'center'}}>
                 <h3>{followerData.user}님의 팔로워 목록 {followerData.cnt}</h3>
                 <ul>

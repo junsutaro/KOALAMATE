@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/rtc")
 @Component
-@CrossOrigin(origins = "https://i10d212.p.ssafy.io")
+@CrossOrigin(origins = {"https://i10d212.p.ssafy.io", "http://localhost:3000"})
 public class VoiceChatController {
 
     @Value("${OPENVIDU_URL}")
@@ -53,12 +53,15 @@ public class VoiceChatController {
     public ResponseEntity<String> createConnection(@PathVariable("sessionId") String sessionId,
                                                    @RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
-        System.out.println("in conntection");
+        System.out.println("in conntection " + params.get("customNickname"));
         Session session = openvidu.getActiveSession(sessionId);
         if (session == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
+        String userNickname = (String) params.get("customNickname");
+        ConnectionProperties properties = new ConnectionProperties.Builder()
+                .data("nickname=" + userNickname) // 메타데이터에 닉네임 저장
+                .build();
         Connection connection = session.createConnection(properties);
         return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
     }
