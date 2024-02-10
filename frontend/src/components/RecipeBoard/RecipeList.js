@@ -22,15 +22,20 @@ function RecipeList({optionNum}) {
 
     // 사용자가 좋아요한 레시피 목록 불러오기 (마운트될 때만 실행)
     useEffect(() => {
-        const fetchLikedRecipes = async () => {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/myLikesWithoutPageable`, {
-                headers: getAuthHeader(), // 인증 헤더 추가
-            });
-            const data = response.data  // 빈 배열 또는 좋아요한 레시피 아이디가 있는 배열
-            setLikedRecipes(data)
-            getCardData(data)          // 레시피 목록을 불러오는 동시에, 각 레시피가 좋아요한 목록에 속하는지를 확인하여 liked 상태를 결정
+        if (localStorage.getItem('authHeader')) {
+            const fetchLikedRecipes = async () => {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/myLikesWithoutPageable`, {
+                    headers: getAuthHeader(), // 인증 헤더 추가
+                });
+                const data = response.data  // 빈 배열 또는 좋아요한 레시피 아이디가 있는 배열
+                setLikedRecipes(data)
+                getCardData(data)          // 레시피 목록을 불러오는 동시에, 각 레시피가 좋아요한 목록에 속하는지를 확인하여 liked 상태를 결정
+            }
+            fetchLikedRecipes();
+        } else {
+            // 로그인하지 않은 사용자는 likedRecipes를 빈 배열로 설정하여 getCardData 호출
+            getCardData([]);
         }
-        fetchLikedRecipes();
     }, []);
 
     const getCardData = async (likedRecipes) => {

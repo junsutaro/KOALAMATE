@@ -12,19 +12,19 @@ const Recipe = () => {
 	const [optionNum, setOptionNum] = useState(1)
 
 	return (
-			<div>
-				<h1>레시피 조회 페이지</h1>
-				<p></p>
-				<div className={style.topContainer}>
-					<RecipeButton setOptionNum={setOptionNum} />
-					<Searchbar />
-				</div>
-				<hr/>
-				<PopularRecipes />
-				<RecipeFilter />
-				{/*<RecipeList recipe={recipe}/>*/}
-				<RecipeList optionNum={optionNum} />
+		<div>
+			<h1>레시피 조회 페이지</h1>
+			<p></p>
+			<div className={style.topContainer}>
+				<RecipeButton setOptionNum={setOptionNum} />
+				<Searchbar />
 			</div>
+			<hr/>
+			<PopularRecipes />
+			<RecipeFilter />
+			{/*<RecipeList recipe={recipe}/>*/}
+			<RecipeList optionNum={optionNum} />
+		</div>
 
 	);
 };
