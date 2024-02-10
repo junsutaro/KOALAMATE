@@ -32,7 +32,8 @@ const RefrigList = () => {
         }
 
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/list`,
+            // const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/list`,
+            const response = await axios.get(`http://localhost:8085/findmate/listMate`,
                 {
                     headers: {
                         'Authorization': authHeader // 요청 헤더에 인증 토큰 추가
