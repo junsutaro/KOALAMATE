@@ -1,7 +1,6 @@
 package com.ssafy.koala.controller;
 
 import com.ssafy.koala.dto.CustomobjDto;
-//import com.ssafy.koala.dto.RefrigeratorCustomobjDTO;
 import com.ssafy.koala.dto.RefrigeratorDTO;
 import com.ssafy.koala.dto.RefrigeratorDrinkDTO;
 import com.ssafy.koala.dto.RefrigeratorWithObjDto;
@@ -11,15 +10,11 @@ import com.ssafy.koala.service.RefrigeratorService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -98,15 +93,6 @@ public class RefrigeratorController {
         } catch(Exception e) {
             return new ResponseEntity<>("error processing add custom objs", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-//        String accessToken = authService.getAccessToken(request);
-//        UserDto userDto = authService.extractUserFromToken(accessToken);
-//        Long userId = userDto.getId(); // UserDto에서 id를 가져와야 함
-//
-//        System.out.println(userId);
-//        refrigeratorService.addCustomobjsToRefrigerator(userId, customobjDTOs);
-////        List<RefrigeratorCustomobjDTO> modifiedRefrigeratorContents = refrigeratorService.addCustomobjsToRefrigerator(userId, customobjDTOs);
-//        System.out.println(userId);
-//        return ResponseEntity.ok(modifiedRefrigeratorContents);
     }
 
 
@@ -135,6 +121,18 @@ public class RefrigeratorController {
             return new ResponseEntity<>(new RefrigeratorWithObjDto(refrigerator.get(), objs), HttpStatus.OK);
         }
         return new ResponseEntity<>("not found refrigerator", HttpStatus.NOT_FOUND);
+    }
+
+    // 냉장고 자석 수정
+    @PutMapping("/modifyCustomObjs")
+    public ResponseEntity<List<CustomobjDto>> modifyRefrigeratorContents(@RequestBody List<CustomobjDto> updatedContentsDTO, HttpServletRequest request) {
+
+        String accessToken = authService.getAccessToken(request);
+        UserDto userDto = authService.extractUserFromToken(accessToken);
+        Long userId = userDto.getId(); // UserDto에서 id를 가져와야 함
+
+        List<CustomobjDto> modifiedContents = refrigeratorService.modifyRefrigeratorObjectsByUserId(userId, updatedContentsDTO);
+        return ResponseEntity.ok(modifiedContents);
     }
 
 }
