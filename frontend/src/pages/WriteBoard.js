@@ -101,7 +101,7 @@ function BulletinBoard() {
                 content: content,
                 cocktails: cocktails,
                 image: imageUrl // 인자로 받은 이미지 URL 사용
-            });
+            }, {headers: getAuthHeader()});
 
             console.log('게시글 작성 완료: ', response.data);
         } catch (error) {
@@ -199,7 +199,8 @@ function BulletinBoard() {
                         <AddIngredient updateCocktails={setCocktails}/> {/* prop으로 상태 업데이트 함수 전달 */}
 
                         <Box display="flex" justifyContent="flex-end" mt={2}>
-                            <Button type="submit" variant="contained" color="primary" onClick={handleSubmit} disabled={!isFormValid}>
+                            <Button type="submit" variant="contained" color="primary" onClick={handleSubmit}
+                                    disabled={!isFormValid}>
                                 레시피 올리기
                             </Button>
                         </Box>
