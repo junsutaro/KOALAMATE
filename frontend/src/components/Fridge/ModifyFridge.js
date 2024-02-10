@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useRef } from 'react';
+import React, {Suspense, useEffect, useRef, useState} from 'react';
 import { Box } from '@mui/material';
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
 import FridgeModel from './FridgeModel';
@@ -11,10 +11,10 @@ import ENV_URL from 'assets/brown_photostudio_02_4k.exr';
 import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader';
 import { OrbitControls } from '@react-three/drei';
 import { useWebSocket } from '../../context/WebSocketContext';
+
 function Environment() {
 	const { scene } = useThree();
 	const exrTexture = useLoader(EXRLoader, ENV_URL);
-	const [models, setModels] = React.useState([]);
 
 
 	useEffect(() => {
@@ -26,10 +26,12 @@ function Environment() {
 	return null;
 }
 
-function Fridge() {
+function ModifyFridge() {
 	const pointLightRef = useRef();
 	const [fridgeUuid, setFridgeUuid] = React.useState(null);
-	const {roomStatus } = useWebSocket();
+	const { roomStatus } = useWebSocket();
+	const [models, setModels] = useState([]);
+
 	useEffect(() => {
 		console.log(roomStatus);
 		console.log(pointLightRef.current);
@@ -55,9 +57,16 @@ function Fridge() {
 					<Rig/>
 					<Environment />
 				</Suspense>
+				{/*{models.map((model, index) => (*/}
+				{/*	<primitive object={model.object} key={index} position={model.position}*/}
+				{/*			   onPointerDown={() => onModelClick(model.object)}*/}
+				{/*			   onPointerOver={() => (document.body.style.cursor = 'pointer')}*/}
+				{/*			   onPointerOut={() => (document.body.style.cursor = 'auto')}*/}
+				{/*	/>*/}
+				{/*))}*/}
 			</Canvas>
 		</Box>
 	)
 }
 
-export default Fridge;
+export default ModifyFridge;

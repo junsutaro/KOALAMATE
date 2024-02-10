@@ -25,7 +25,7 @@ export default function MBTIModel ({ initialPosition, fridgeUuid }) {
 	const { scene: T_scene } = useGLTF(T_URL);
 	const { scene: J_scene } = useGLTF(J_URL);
 
-	const onModelClick = (modelScene, index) => {
+	const onModelClick = (modelScene, url) => {
 		console.log('model clicked');
 		if (!modelScene) {
 			console.log('Model is not loaded yet');
@@ -40,7 +40,7 @@ export default function MBTIModel ({ initialPosition, fridgeUuid }) {
 			const clonedObject = modelScene.clone();
 			setDraggedModel({
 				object: clonedObject,
-				index: index,
+				url: url,
 				position: [initialPosition.x, initialPosition.y, 1.4],
 				isNew: true,
 			});
