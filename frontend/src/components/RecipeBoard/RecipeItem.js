@@ -9,6 +9,7 @@ import { setLoginStatus } from '../../store/authSlice';
 
 function RecipeItem({ boradId, imageUrl, title, author, tags, liked }) {
     const img = `${process.env.REACT_APP_IMAGE_URL}/${imageUrl}`
+    // const img = `http://localhost:3000/${imageUrl}`
     const navigate = useNavigate();
 
     const [isLiked, setIsLiked] = useState(liked);
