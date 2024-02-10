@@ -14,7 +14,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Collapse from '@mui/material/Collapse';
 import {useDispatch, useSelector} from 'react-redux';
 import {setLoginStatus} from '../store/authSlice';
-import logoImage from 'assets/logo.png';
+import logoImage from 'assets/logo3.png';
 import axios from 'axios';
 import {useWebSocket} from 'context/WebSocketContext';
 import {useVoiceSocket} from 'context/VoiceSocketContext';
@@ -132,7 +132,7 @@ const handleMyPage = async () => {
 							color: 'inherit',
 							textDecoration: 'inherit',
 						}}>
-							<img src={logoImage} alt="Logo" style={{maxHeight: '70px'}}/>
+							<img src={logoImage} alt="Logo" style={{maxHeight: '60px'}}/>
 							{/*<Box sx={{ flexGrow: 0, flexShrink: 0, display: { xs: 'none', lg: 'flex' } }}>*/}
 							{/*	<Typography variant="h6" noWrap sx={{ ml: 2, fontWeight: 700, letterSpacing: '.2rem' }}>*/}
 							{/*		코알라 친구찾기*/}
