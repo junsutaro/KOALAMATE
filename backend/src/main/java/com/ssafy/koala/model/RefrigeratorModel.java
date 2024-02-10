@@ -24,7 +24,10 @@ public class RefrigeratorModel {
     private String color = "#ffffff";
 
     @OneToMany(mappedBy = "refrigerator")
-    private List<RefrigeratorCustomobjModel> refrigeratorCustomobjs;
+    private List<CustomobjModel> customobjModels;
+
+//    @OneToMany(mappedBy = "refrigerator")
+//    private List<RefrigeratorCustomobjModel> refrigeratorCustomobjs;
 
     @OneToMany(mappedBy = "refrigerator")
     private List<RefrigeratorDrinkModel> refrigeratorDrinkModels;
