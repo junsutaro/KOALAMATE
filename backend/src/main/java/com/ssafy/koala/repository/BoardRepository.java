@@ -24,4 +24,7 @@ public interface BoardRepository extends JpaRepository<BoardModel, Long>, JpaSpe
     @Query("select b from BoardModel b where b.id in (select c.board.id from CocktailModel c where c.drink.name like '%' || :name || '%')")
     Page<BoardModel> findBoardByDrinkName(@Param("name") String name, Pageable pageable);
 
+    @Query("select b from BoardModel b where b.userId = :userId")
+    Page<BoardModel> findBoardById(@Param("userId") Long userId, Pageable pageable);
+
 }

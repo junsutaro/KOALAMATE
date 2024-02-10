@@ -323,7 +323,8 @@ public class BoardService {
 	public Page<ViewBoardResponseDto> getMyPageEntities(int page, int size, String nickname, Long userId) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page, size, sort);
-		Page<BoardModel> entities = boardRepository.findByNickname(nickname, pageable);
+		Page<BoardModel> entities = boardRepository.findBoardById(userId, pageable);
+
 
 		List<ViewBoardResponseDto> result = entities.stream()
 				.map(board -> {

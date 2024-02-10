@@ -33,7 +33,7 @@ export const VoiceSocketProvider = ({ children }) => {
         await newSession.connect(token);
 
         const newPublisher = OV.initPublisher('publisher-container', {
-            videoSource: true, // 카메라 사용
+            videoSource: false, // 카메라 사용
             audioSource: true, // 마이크 사용
         });
         await newSession.publish(newPublisher);

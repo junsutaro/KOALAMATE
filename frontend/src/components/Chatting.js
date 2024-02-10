@@ -30,6 +30,9 @@ const Chatting = ({ roomNumber , users}) => {
 	const navigate = useNavigate(); // useNavigate 훅 사용
 
 
+	const chatBoxRef = useRef(null); // chatBox를 위한 ref
+
+
 	const handleBottomDetect = (e) => {
 		console.log(e.target.scrollTop,
 			e.target.scrollHeight - e.target.clientHeight);
@@ -38,11 +41,11 @@ const Chatting = ({ roomNumber , users}) => {
 	};
 
 	const scrollToBottom = () => {
-		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block:'center' });
 	};
 
 	const scrollToBottomDirect = () => {
-		messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
+		messagesEndRef.current?.scrollIntoView({ behavior: 'auto', lock:'center' });
 	};
 
 	const user = useSelector(state => state.auth.user);
@@ -53,10 +56,10 @@ const Chatting = ({ roomNumber , users}) => {
 	};
 
 	useEffect(() => {
-		const watch = () => {
-			window.addEventListener('scroll', handleBottomDetect);
-		};
-		watch();
+		// const watch = () => {
+		// 	//window.addEventListener('scroll', handleBottomDetect);
+		// };
+		// watch();
 		axios.post(`${process.env.REACT_APP_API_URL}/message/enter`, roomNumber, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -106,7 +109,7 @@ const Chatting = ({ roomNumber , users}) => {
 				console.log('Unsubscribed from ' + messageDestination);
 				subscription.unsubscribe();
 			}
-			window.removeEventListener('scroll', handleBottomDetect);
+			//window.removeEventListener('scroll', handleBottomDetect);
 		};
 	}, [messageDestination]);
 
@@ -143,6 +146,7 @@ const Chatting = ({ roomNumber , users}) => {
 		};
 	}, [isUserScrolledUp, messageDestination, user.nickname]);
 
+
 	const handleSendMessage = () => {
 		if (inputMessage.trim() !== '') {
 			const messageToSend = JSON.stringify(
@@ -162,9 +166,9 @@ const Chatting = ({ roomNumber , users}) => {
 	};
 
 	return (
-		<Box sx={{ maxWidth: 500, margin: '0 auto', textAlign: 'center', position: 'relative' }}> {/* 이 부분에 position: 'relative' 추가 */}
+		<Box sx={{ maxWidth: 500, margin: '0 auto', textAlign: 'center', position: 'relative' }}>
 			<Box
-				id="chatBox" // 스크롤 이벤트를 위한 ID 추가
+				id="chatBox"
 				onScroll={handleBottomDetect}
 				sx={{
 					position: 'relative',
