@@ -210,7 +210,11 @@ public class BoardController {
 	}
 
 	@PostMapping("/uploadBoardImage")
-	public ResponseEntity<?> uploadBoardImage(@RequestParam("file") MultipartFile file) {
+	public ResponseEntity<?> uploadBoardImage(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+
+		String accessToken = authService.getAccessToken(request);
+		UserDto userDto = authService.extractUserFromToken(accessToken);
+
 		if (file.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("파일을 첨부해주세요.");
 		}

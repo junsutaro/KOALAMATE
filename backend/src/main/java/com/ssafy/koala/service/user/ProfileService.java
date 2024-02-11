@@ -52,6 +52,8 @@ public class ProfileService {
             user.setAlcoholLimitBottle(modifiedProfile.getAlcoholLimitBottle());
             user.setAlcoholLimitGlass(modifiedProfile.getAlcoholLimitGlass());
             user.setTags(modifiedProfile.getTags());
+            user.setLatitude(modifiedProfile.getLatitude());
+            user.setLongitude(modifiedProfile.getLongitude());
 
             userRepository.save(user);
 
