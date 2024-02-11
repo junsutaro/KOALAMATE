@@ -74,7 +74,7 @@ public class RefrigeratorController {
 //    }
 
 
-    // 냉장고에 자석(custom objects) 추가
+    // 냉장고에 자석(custom objects) 추가(기존 오브젝트는 모두 삭제)
     @PutMapping("/addCustomobjs")
     public ResponseEntity<?> addCustomobjsToRefrigerator(
             @RequestBody List<CustomobjDto> customobjDTOs,
@@ -121,18 +121,6 @@ public class RefrigeratorController {
             return new ResponseEntity<>(new RefrigeratorWithObjDto(refrigerator.get(), objs), HttpStatus.OK);
         }
         return new ResponseEntity<>("not found refrigerator", HttpStatus.NOT_FOUND);
-    }
-
-    // 냉장고 자석 수정
-    @PutMapping("/modifyCustomObjs")
-    public ResponseEntity<List<CustomobjDto>> modifyRefrigeratorContents(@RequestBody List<CustomobjDto> updatedContentsDTO, HttpServletRequest request) {
-
-        String accessToken = authService.getAccessToken(request);
-        UserDto userDto = authService.extractUserFromToken(accessToken);
-        Long userId = userDto.getId(); // UserDto에서 id를 가져와야 함
-
-        List<CustomobjDto> modifiedContents = refrigeratorService.modifyRefrigeratorObjectsByUserId(userId, updatedContentsDTO);
-        return ResponseEntity.ok(modifiedContents);
     }
 
 }
