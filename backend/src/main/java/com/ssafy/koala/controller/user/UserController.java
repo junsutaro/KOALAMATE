@@ -235,10 +235,13 @@ public class UserController {
 			Page<ViewBoardResponseDto> pageEntities = boardService.getMyPageEntities(page-1, size, user.get().getNickname(), user_id);
 			List<ViewBoardResponseDto> content = pageEntities.getContent();
 			int totalPages = ((Page<?>) pageEntities).getTotalPages();
+			long totalElements = pageEntities.getTotalElements(); // 전체 게시글 수를 가져옵니다.
 
 			Map<String, Object> responseBody = new HashMap<>();
 			responseBody.put("content", content);
 			responseBody.put("totalPages", totalPages);
+			responseBody.put("totalElements", totalElements); // 전체 게시글 수를 응답 본문에 추가합니다.
+
 
 			return new ResponseEntity<>(responseBody, HttpStatus.OK);
 		}
