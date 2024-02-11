@@ -153,6 +153,10 @@ public class RefrigeratorService {
         if (refrigeratorOptional.isPresent()) {
             RefrigeratorModel refrigerator = refrigeratorOptional.get();
 
+            // 기존에 추가된 오브젝트가 있다면 모두 삭제 후 새로운 오브젝트 추가
+            customobjRepository.deleteByRefrigeratorId(refrigerator.getId());
+            System.out.println("삭제 완료");
+
             // 여러 개의 DTO를 처리하기 위한 반복문
             List<CustomobjModel> newCustomobjs = new ArrayList<>();
             for (CustomobjDto customobjDTO : customobjDTOs) {
