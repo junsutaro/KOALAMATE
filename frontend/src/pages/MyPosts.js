@@ -18,6 +18,7 @@ const MyPosts = () => {
 
     const [recipeData, setRecipeData] = useState([])
     const [likedRecipes, setLikedRecipes] = useState([]);
+    const [totalNum, setTotalNum] = useState(0)
 
 
     // 인증 헤더를 가져오는 함수
@@ -34,6 +35,7 @@ const MyPosts = () => {
                 })
             const data = response.data.content
             setTotalPages(response.data.totalPages)
+            setTotalNum(response.data.totalElements)
 
             // 배열 데이터를 받아온 그대로 상태에 설정
             setRecipeData(data.map(item => ({
@@ -75,7 +77,7 @@ const MyPosts = () => {
                 <Typography sx={{fontWeight: 'bold'}} variant="h5">
                     레시피</Typography>
                 <Typography sx={{fontWeight: 'bold', color: '#ff9b9b'}}
-                            variant="h5">{recipeData.length}</Typography>
+                            variant="h5">{totalNum}</Typography>
             </Box>
 
             <Box sx={{display: 'flex'}}>

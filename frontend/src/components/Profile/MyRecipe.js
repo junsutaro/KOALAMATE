@@ -20,6 +20,7 @@ const MyRecipe = ({nickname, userId}) => {
     const pageNum = 1
     const sizeNum = 3;
     const [recipeData, setRecipeData] = useState([])
+    const [totalNum, setTotalNum] = useState(0)
 
     const getRecipeData = async () => {
         try {
@@ -28,6 +29,7 @@ const MyRecipe = ({nickname, userId}) => {
                     headers: getAuthHeader(), // 인증 헤더 추가
                 })
             const data = response.data.content
+            setTotalNum(response.data.totalElements)
 
             // 배열 데이터를 받아온 그대로 상태에 설정
             setRecipeData(data.map(item => ({
@@ -62,7 +64,7 @@ const MyRecipe = ({nickname, userId}) => {
                     <Typography sx={{fontWeight: 'bold'}} variant="h5">나만의
                         레시피</Typography>
                     <Typography sx={{fontWeight: 'bold', color: '#ff9b9b'}}
-                                variant="h5">{sizeNum}</Typography>
+                                variant="h5">{totalNum}</Typography>
                 </Box>
                 <Box sx={{display: 'flex', gap: 1}}>
                     <Typography sx={{flexGrow: 1}}>{nickname}님의 칵테일 레시피예요🍸</Typography>
