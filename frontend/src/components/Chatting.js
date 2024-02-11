@@ -162,6 +162,7 @@ const Chatting = ({ roomNumber, users, lastMessage }) => {
 		if (inputMessage.trim() !== '') {
 			const messageToSend = JSON.stringify(
 				{ content: inputMessage, nickname: user.nickname });
+			console.log(sendDestination);
 			sendMessage(sendDestination, messageToSend);
 			setInputMessage('');
 			console.log('Message sent');
