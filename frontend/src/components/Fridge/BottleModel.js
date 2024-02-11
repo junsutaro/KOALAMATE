@@ -2,12 +2,14 @@ import React, {useEffect} from 'react';
 import { useGLTF } from '@react-three/drei';
 import BOTTLE_URL from 'assets/bottle.glb';
 
-const BottleModel = ({ models }) => {
+const BottleModel = ({ models, onBottleClick }) => {
     const { scene } = useGLTF(BOTTLE_URL);
 
     useEffect(() => {
         scene.traverse((child) => {
             if (child.isMesh) {
+                // child.castShadow = true;
+                // child.receiveShadow = true;
                 // 투명한 객체인 경우 renderOrder를 조정
                 if (child.material.transparent) {
                     child.renderOrder = 2;
@@ -27,7 +29,10 @@ const BottleModel = ({ models }) => {
                 const position = [column * 0.45 - 0.7, row * -0.86 + 1.3, -0.6]; // X, Y, Z 위치
 
                 return (
-                    <primitive key={index} object={scene.clone()} position={position} scale={[0.1, 0.1, 0.1]} />
+                    <primitive key={index} object={scene.clone()} position={position} scale={[0.1, 0.1, 0.1]} onClick={() => onBottleClick(index)}
+                               onPointerOver={() => (document.body.style.cursor = 'pointer')}
+                               onPointerOut={() => (document.body.style.cursor = 'auto')}
+                    />
                 );
             })}
         </>

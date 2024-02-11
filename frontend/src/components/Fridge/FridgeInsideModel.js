@@ -7,7 +7,7 @@ export default function FridgeModel({setUuid}) {
 	const { scene } = useGLTF(FRIDGE_INSIDE_URL);
 
 	useEffect(() => {
-		setUuid(scene.uuid);
+		// setUuid(scene.uuid);
 		console.log(scene);
 		scene.traverse((obj) => {
 			if (obj.isMesh) {

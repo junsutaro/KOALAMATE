@@ -184,6 +184,22 @@ public class RefrigeratorService {
         return result;
     }
 
+    public List<RefrigeratorDrinkDTO> getDrinksByUserId(Long userId) {
+        Optional<RefrigeratorModel> refrigeratorOptional = refrigeratorRepository.findByUserId(userId);
+        if (refrigeratorOptional.isPresent()) {
+            RefrigeratorModel refrigerator = refrigeratorOptional.get();
+            List<RefrigeratorDrinkModel> refrigeratorDrinkModels = refrigerator.getRefrigeratorDrinkModels();
+
+            // Drink를 DTO로 변환하여 리턴
+            List<RefrigeratorDrinkDTO> modifiedContents = refrigeratorDrinkModels.stream()
+                    .map(RefrigeratorDrinkDTO::fromEntity)
+                    .collect(Collectors.toList());
+
+            return modifiedContents;
+        }
+        return Collections.emptyList(); // 해당 유저의 냉장고나 Drink가 존재하지 않을 경우
+    }
+
     // 냉장고 오브젝트 수정
     public List<CustomobjDto> modifyRefrigeratorObjectsByUserId(Long userId, List<CustomobjDto> updatedContentsDTO) {
         Optional<RefrigeratorModel> refrigeratorOptional = refrigeratorRepository.findByUserId(userId);

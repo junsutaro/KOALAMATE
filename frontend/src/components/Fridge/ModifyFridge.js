@@ -1,5 +1,5 @@
 import React, {Suspense, useEffect, useRef, useState} from 'react';
-import {Box, Button} from '@mui/material';
+import {Alert, Box, Button, DialogActions, DialogContent, DialogContentText, Snackbar} from '@mui/material';
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
 import FridgeModel from './FridgeModel';
 import Rig from './Rig';
@@ -14,6 +14,7 @@ import { useWebSocket } from '../../context/WebSocketContext';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
+import Dialog from "@mui/material/Dialog";
 
 function Environment() {
 	const { scene } = useThree();
@@ -34,6 +35,8 @@ function ModifyFridge() {
 	const [fridgeUuid, setFridgeUuid] = React.useState(null);
 	const { roomStatus } = useWebSocket();
 	const [models, setModels] = useState([]);
+	const [isSaved, setIsSaved] = useState(true);
+	const [openDialog, setOpenDialog] = useState(false);
 	const navigate = useNavigate();
 
 	const handleSave = () => {
@@ -52,13 +55,21 @@ function ModifyFridge() {
 			})
 				.then(() => {
 					console.log('custom object added');
-					navigate(-1);
+					setIsSaved(true);
 				})
 				.catch((err) => {
 					console.log(err);
 				});
 		}
 		// axios.post(`${process.env.REACT_APP_API_URL}/refrigerator/addCustomobjs`, {})
+	}
+
+	const handleInsideWithSave = () => {
+		handleSave();
+		navigate('/fridgeInside');
+	}
+	const handleInsideWithoutSave = () => {
+		navigate('/fridgeInside');
 	}
 
 	useEffect(() => {
@@ -109,15 +120,44 @@ function ModifyFridge() {
 				<pointLight ref={pointLightRef} position={[5, 5, 5]} intensity={100} castShadow/>
 				<Suspense fallback={<Loader/>}>
 					<FridgeModel setUuid={setFridgeUuid}/>
-					<TrashcanModel initialPosition={[-2.5, -1.5, 1]} setModels={setModels}/>
-					<MBTIModel initialPosition={[2, 1.7, 0]} fridgeUuid={fridgeUuid} models={models} setModels={setModels}/>
+					<TrashcanModel initialPosition={[-2.5, -1.5, 1]} setModels={setModels} models={models} setIsSaved={setIsSaved}/>
+					<MBTIModel initialPosition={[2, 1.7, 0]} fridgeUuid={fridgeUuid} models={models} setModels={setModels} setIsSaved={setIsSaved}/>
 					<Rig/>
 					<Environment />
 				</Suspense>
 			</Canvas>
-			<Box>
-				<Button sx={{position: 'absolute', top: '90%', left: '90%', transform: 'translate(-50%, -50%)', padding: '20px'}} onClick={handleSave}>저장</Button>
+			<Box sx={{width: '200px', position: 'absolute', top: '90%', left: '90%', transform: 'translate(-50%, -50%)', padding: '20px'}}>
+				<Button onClick={handleSave}>저장</Button>
+				<Button onClick={() => {
+					if (isSaved) navigate('/fridgeInside');
+					setOpenDialog(true);
+				}}>내부로 이동</Button>
 			</Box>
+			<Snackbar
+				anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+				open={isSaved}
+				autoHideDuration={3000}
+				onClose={() => setIsSaved(false)}
+			>
+				<Alert
+					onClose={() => setIsSaved(false)}
+					severity="success"
+					variant="filled"
+				>저장 완료!</Alert>
+			</Snackbar>
+			<Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+				<DialogContent>
+					<DialogContentText id="alert-dialog-description">
+						내부로 이동하기 전에 저장하시겠습니까?
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleInsideWithSave}>네</Button>
+					<Button onClick={handleInsideWithoutSave} autoFocus>
+						아니오
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</Box>
 	)
 }

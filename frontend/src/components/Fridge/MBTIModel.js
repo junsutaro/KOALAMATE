@@ -11,7 +11,7 @@ import J_URL from 'assets/J.glb';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
-export default function MBTIModel ({ initialPosition, fridgeUuid, models, setModels }) {
+export default function MBTIModel ({ initialPosition, fridgeUuid, models, setModels, setIsSaved }) {
 	const { camera, pointer, scene } = useThree();
 	// const [models, setModels] = useState([]);
 	const [draggedModel, setDraggedModel] = useState(null);
@@ -85,6 +85,7 @@ export default function MBTIModel ({ initialPosition, fridgeUuid, models, setMod
 					if (!draggedModel.isNew) {
 						console.log('existing model removed');
 						setModels(models.filter(model => model.object.uuid !== draggedModel.object.uuid));
+						setIsSaved(false);
 					}
 					scene.remove(draggedModel.object);
 					setDraggedModel(null);
@@ -96,6 +97,7 @@ export default function MBTIModel ({ initialPosition, fridgeUuid, models, setMod
 							...models,
 							{...draggedModel},
 						]);
+						setIsSaved(false);
 					} else {
 						// 드래그가 완료되면 모델의 위치를 업데이트합니다.
 						setModels(models.map(model =>
@@ -103,6 +105,7 @@ export default function MBTIModel ({ initialPosition, fridgeUuid, models, setMod
 								? { ...model}
 								: model,
 						));
+						setIsSaved(false);
 					}
 					setDraggedModel(null);
 				}
