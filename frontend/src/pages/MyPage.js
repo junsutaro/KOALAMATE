@@ -14,16 +14,19 @@ import {
 
 const MyPage = () => {
     const {userId} = useParams();
-    // console.log(userId)
+    // 인증 헤더를 가져오는 함수
+    const getAuthHeader = () => {
+        const authHeader = localStorage.getItem('authHeader');
+        return authHeader ? {Authorization: authHeader} : {};
+    };    // console.log(userId)
     // const {user} = useSelector((state) => state.auth);
     // const userNickname = user.nickname;
 
-    const [ profileImageUrl, setProfileImageUrl] = useState()
+    const [profileImageUrl, setProfileImageUrl] = useState()
     const [profileData, setProfileData] = useState({
         nickname: '',
         birthRange: 0,
         gender: '',
-        profile: '',
         introduction: '',
         alcoholLimitBottle: 0,
         alcoholLimitGlass: 0,
@@ -55,7 +58,6 @@ const MyPage = () => {
                 nickname: data.nickname,
                 birthRange: data.birthRange,
                 gender: data.gender,
-                // profile: data.profile,
                 intro: data.introduction || '',
                 alcoholLimitBottle: data.alcoholLimitBottle,
                 alcoholLimitGlass: data.alcoholLimitGlass,
@@ -105,7 +107,7 @@ const MyPage = () => {
 
     return (
         <Container>
-            <MyPageButton />
+            <MyPageButton/>
 
             <Box
                 p={3}
@@ -139,7 +141,7 @@ const MyPage = () => {
                     tags={profileData.tags}
                 />
             </Box>
-            <MyRecipe nickname={profileData.nickname}/>
+            <MyRecipe nickname={profileData.nickname} userId={userId}/>
             <LikeRecipe nickname={profileData.nickname}/>
 
         </Container>

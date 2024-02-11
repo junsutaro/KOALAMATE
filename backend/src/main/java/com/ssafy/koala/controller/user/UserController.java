@@ -318,11 +318,8 @@ public class UserController {
 		// BoardService를 통해 사용자가 좋아요 한 모든 게시글의 ID 목록을 조회
 		List<Long> likedBoardIds = boardService.findAllLikedBoardIdsByUserId(user.getId());
 
-		if (likedBoardIds.isEmpty()) {
-			return new ResponseEntity<>("No liked boards found.", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(likedBoardIds, HttpStatus.OK);
-		}
+		return new ResponseEntity<>(likedBoardIds, HttpStatus.OK);
+
 	}
 
 	// 내가 팔로우하는 유저 목록

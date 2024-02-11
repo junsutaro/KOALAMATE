@@ -35,7 +35,6 @@ const SignUp = () => {
     // 위치 설정
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
-    // const [message, setMessage] = useState('');
 
     // Yup 스키마 정의
     const schema = yup.object().shape({
@@ -99,18 +98,6 @@ const SignUp = () => {
         }
     };
 
-    // const getCurrentPosition = () => {
-    //     navigator.geolocation.getCurrentPosition(
-    //         position => {
-    //             setLatitude(position.coords.latitude);
-    //             setLongitude(position.coords.longitude);
-    //             setMessage('현재 위치 등록 완료');
-    //         },
-    //         error => {
-    //             console.error('위치 정보를 가져오는 중 오류 발생', error);
-    //         }
-    //     );
-    // };
 
     // 폼 제출 처리 함수
     const onSubmit = (data) => {
@@ -118,7 +105,12 @@ const SignUp = () => {
         console.log('회원가입 데이터:', data);
 
 // 중복 확인 여부를 검사하여 회원가입 처리
-        if ((isEmailAvailable && isNicknameAvailable) && (isNicknameChecked && isEmailChecked)) {
+        if ((isEmailAvailable && isNicknameAvailable) && (isEmailChecked && isNicknameChecked)) {
+            setIsEmailAvailable(false)
+            setIsNicknameAvailable(false)
+            setIsEmailChecked(false)
+            setIsNicknameChecked(false)
+
             axios.post(`${process.env.REACT_APP_API_URL}/user/signup`,
                 {email, password, nickname, birthRange, gender, latitude, longitude}).then(response => {
                 console.log('회원가입 성공', response.data);
@@ -261,13 +253,6 @@ const SignUp = () => {
                                     </Typography>
                                 )}
                             </FormControl>
-
-                            {/*<Button variant="contained" onClick={getCurrentPosition}>현재 위치 등록</Button>*/}
-                            {/*{message && (*/}
-                            {/*    <Typography variant="body2" color="textSecondary" mt={1} sx={{color: 'green'}}>*/}
-                            {/*        {message}*/}
-                            {/*    </Typography>*/}
-                            {/*)}*/}
 
                             <GetMyPosition setLatitude={setLatitude} setLongitude={setLongitude} />
 

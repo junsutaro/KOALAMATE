@@ -31,6 +31,7 @@ import UpdateMyPage from '../pages/UpdateMyPage';
 import VoiceChatRoom from '../components/VoiceChatRoom';
 import ModifyFridge from '../components/Fridge/ModifyFridge';
 import ModifyFridgeInside from '../components/Fridge/ModifyFridgeInside';
+import MyPosts from "../pages/MyPosts";
 
 const CustomScrollBox = styled(Box)(({ theme }) => ({
 	overflowY: 'auto', // 세로 스크롤바 활성화
@@ -107,6 +108,7 @@ const MainLayout = () => {
 
 				<Route path="/user/:userId/follower" element={<FollowerList />} />
 				<Route path="/user/:userId/followee" element={<FolloweeList />} />
+				<Route path="/user/:userId/posts" element={<MyPosts />} />
 				<Route path="/fridge" element={<ModifyFridge />} />
 				<Route path="/fridgeInside" element={<ModifyFridgeInside />} />
 				<Route path="/voiceChat/:roomId" element={<VoiceChatRoom />} />
