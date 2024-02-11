@@ -55,7 +55,7 @@ const MyPage = () => {
                 nickname: data.nickname,
                 birthRange: data.birthRange,
                 gender: data.gender,
-                profile: data.profile,
+                // profile: data.profile,
                 intro: data.introduction || '',
                 alcoholLimitBottle: data.alcoholLimitBottle,
                 alcoholLimitGlass: data.alcoholLimitGlass,
