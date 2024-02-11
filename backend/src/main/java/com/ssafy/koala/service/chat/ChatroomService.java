@@ -1,6 +1,9 @@
 package com.ssafy.koala.service.chat;
 
 import com.ssafy.koala.dto.chat.ChatroomDto;
+import com.ssafy.koala.dto.chat.ChatroomResponseDto;
+import com.ssafy.koala.dto.chat.MessageDto;
+import com.ssafy.koala.dto.user.UserListDto;
 import com.ssafy.koala.model.chat.ChatModel;
 import com.ssafy.koala.model.chat.ChatroomModel;
 import com.ssafy.koala.model.user.UserModel;
@@ -23,7 +26,7 @@ public class ChatroomService {
     private final UserRepository userRepository;
     private final ChatRepository chatRepository;
 
-    public ChatroomDto createRoom(String user1_email, String user2_email) {
+    public ChatroomResponseDto createRoom(String user1_email, String user2_email) {
         Optional<UserModel> user1 = userRepository.findByEmail(user1_email);
         Optional<UserModel> user2 = userRepository.findByEmail(user2_email);
 
@@ -43,8 +46,26 @@ public class ChatroomService {
 
         chatRepository.saveAll(chatModels);
 
-        ChatroomDto result = new ChatroomDto();
+        ChatroomResponseDto result = new ChatroomResponseDto();
         BeanUtils.copyProperties(chatroom, result);
+
+        result.setConfirmMessageId(0);
+        MessageDto initMessage = new MessageDto();
+        initMessage.setId(-1);
+        initMessage.setNickname(user1.get().getNickname());
+        initMessage.setContent("초대합니다");
+        result.setLastMessage(initMessage);
+        List<UserListDto> users = new ArrayList<>();
+
+        UserListDto userDto1 = new UserListDto();
+        BeanUtils.copyProperties(user1.get(),userDto1);
+        UserListDto userDto2 = new UserListDto();
+        BeanUtils.copyProperties(user2.get(),userDto2);
+        users.add(userDto1);
+        users.add(userDto2);
+
+        result.setUsers(users);
+
         return result;
     }
 

@@ -8,15 +8,22 @@ import {
     Box,
     Container,
     Chip,
-    Button,
+    Button, Grid,
 } from '@mui/material';
 import TagsInput from "../components/Profile/Update/TagsInput";
 import ProfileImageUploader from "../components/Profile/Update/ProfileImageUploader";
 import DrinkingAmountInput from "../components/Profile/Update/DrinkingAmountInput";
 import IntroductionInput from "../components/Profile/Update/IntroductionInput";
 import GenderBirthRange from "../components/GenderBirthRange";
+import GetMyPosition from "../components/GetMyPosition";
 
 const UpdateMyPage = () => {
+
+    // 위치 설정
+    const [latitude, setLatitude] = useState(0);
+    const [longitude, setLongitude] = useState(0);
+
+
     // 인증 헤더를 가져오는 함수
     const getAuthHeader = () => {
         const authHeader = localStorage.getItem('authHeader');
@@ -27,7 +34,8 @@ const UpdateMyPage = () => {
     const getMyId = async () => {
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/myId`,
-                {}, { headers: getAuthHeader(), // 인증 헤더 추가
+                {}, {
+                    headers: getAuthHeader(), // 인증 헤더 추가
                 });
             // API 응답 구조에 맞게 수정할 것
             setMyId(response.data); // 가정: 응답이 { userId: '...' } 구조를 가짐
@@ -183,8 +191,9 @@ const UpdateMyPage = () => {
             const formData = new FormData();
             formData.append("file", selectedImageFile);
 
+
             // Axios를 사용하여 이미지를 업로드하는 요청 보냄
-            const response = await axios.put(`${process.env.REACT_APP_API_URL}/profile/uploadProfileImage`, {formData}, {
+            const response = await axios.put(`${process.env.REACT_APP_API_URL}/profile/uploadProfileImage`, formData, {
                 headers: getAuthHeader(), // 인증 헤더 추가
             });
 
@@ -209,6 +218,8 @@ const UpdateMyPage = () => {
                     alcoholLimitBottle: sojuBottleCount,
                     alcoholLimitGlass: sojuCupCount,
                     tags: selectedTags,
+                    latitude: latitude,
+                    longitude: longitude,
                 }, {
                     headers: getAuthHeader(), // 인증 헤더 추가
                 });
@@ -233,7 +244,7 @@ const UpdateMyPage = () => {
 
     return (
         <Container component="form">
-            <MyPageButton />
+            <MyPageButton/>
             <Box
                 sx={{
                     display: 'flex',
@@ -259,6 +270,8 @@ const UpdateMyPage = () => {
                             selectedImageFile={selectedImageFile}
                             saveProfileImage={SaveProfileImage}
                         />
+
+
                         <Box
                             m={3}
                             sx={{
@@ -273,6 +286,7 @@ const UpdateMyPage = () => {
                             </Typography>
                             <GenderBirthRange gender={profileData.gender} birthRange={profileData.birthRange}/>
                         </Box>
+                        <GetMyPosition setLatitude={setLatitude} setLongitude={setLongitude}/>
                     </Box>
                 </>
                 <Box sx={{display: 'flex', flexDirection: 'column'}}>

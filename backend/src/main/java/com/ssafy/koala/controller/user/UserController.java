@@ -196,15 +196,6 @@ public class UserController {
 		return new ResponseEntity<>(user.getId(), HttpStatus.OK);
 	}
 
-	// 상대방의 유저 정보, 음료 정보, 팔로우 정보 반환 (메이트 찾기에서 사용)
-	@GetMapping("/list")
-	public ResponseEntity<?> getUserList(HttpServletRequest request) {
-		String accessToken = authService.getAccessToken(request);
-		UserDto user = authService.extractUserFromToken(accessToken);
-
-		return new ResponseEntity<>(userService.findAllUser(user.getId()), HttpStatus.OK);
-	}
-
 	// 유저의 매너 점수 갱신
 	@PostMapping("/score")
 	public ResponseEntity<?> evaluateMannerScore(@RequestBody ScoreDto evaluateData) {
@@ -244,10 +235,13 @@ public class UserController {
 			Page<ViewBoardResponseDto> pageEntities = boardService.getMyPageEntities(page-1, size, user.get().getNickname(), user_id);
 			List<ViewBoardResponseDto> content = pageEntities.getContent();
 			int totalPages = ((Page<?>) pageEntities).getTotalPages();
+			long totalElements = pageEntities.getTotalElements();
 
 			Map<String, Object> responseBody = new HashMap<>();
 			responseBody.put("content", content);
 			responseBody.put("totalPages", totalPages);
+			responseBody.put("totalElements", totalElements);
+
 
 			return new ResponseEntity<>(responseBody, HttpStatus.OK);
 		}
@@ -262,10 +256,14 @@ public class UserController {
 			Page<ViewBoardResponseDto> pageEntities = boardService.getLikedPageEntities(page-1, size, user_id);
 			List<ViewBoardResponseDto> content = pageEntities.getContent();
 			int totalPages = ((Page<?>) pageEntities).getTotalPages();
+			long totalElements = pageEntities.getTotalElements();
+
 
 			Map<String, Object> responseBody = new HashMap<>();
 			responseBody.put("content", content);
 			responseBody.put("totalPages", totalPages);
+			responseBody.put("totalElements", totalElements);
+
 
 			return new ResponseEntity<>(responseBody, HttpStatus.OK);
 		}
@@ -282,10 +280,12 @@ public class UserController {
 		Page<ViewBoardResponseDto> pageEntities = boardService.getMyPageEntities(page-1, size, user.getNickname(), user.getId());
 		List<ViewBoardResponseDto> content = pageEntities.getContent();
 		int totalPages = ((Page<?>) pageEntities).getTotalPages();
+		long totalElements = pageEntities.getTotalElements();
 
 		Map<String, Object> responseBody = new HashMap<>();
 		responseBody.put("content", content);
 		responseBody.put("totalPages", totalPages);
+		responseBody.put("totalElements", totalElements);
 
 		return new ResponseEntity<>(responseBody, HttpStatus.OK);
 	}
@@ -299,13 +299,27 @@ public class UserController {
 		//페이지 시작은 0부터
 		Page<ViewBoardResponseDto> pageEntities = boardService.getLikedPageEntities(page-1, size, user.getId());
 		List<ViewBoardResponseDto> content = pageEntities.getContent();
+		long totalElements = pageEntities.getTotalElements();
 		int totalPages = ((Page<?>) pageEntities).getTotalPages();
 
 		Map<String, Object> responseBody = new HashMap<>();
 		responseBody.put("content", content);
+		responseBody.put("totalElements", totalElements);
 		responseBody.put("totalPages", totalPages);
 
 		return new ResponseEntity<>(responseBody, HttpStatus.OK);
+	}
+
+	@GetMapping("/myLikesWithoutPageable")
+	public ResponseEntity<?> listLikeBoardIds(HttpServletRequest request) {
+		String accessToken = authService.getAccessToken(request);
+		UserDto user = authService.extractUserFromToken(accessToken);
+
+		// BoardService를 통해 사용자가 좋아요 한 모든 게시글의 ID 목록을 조회
+		List<Long> likedBoardIds = boardService.findAllLikedBoardIdsByUserId(user.getId());
+
+		return new ResponseEntity<>(likedBoardIds, HttpStatus.OK);
+
 	}
 
 	// 내가 팔로우하는 유저 목록

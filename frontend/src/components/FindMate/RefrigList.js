@@ -65,7 +65,7 @@ const RefrigList = () => {
                             <ListItemAvatar>
                                 {/*<Avatar src={profileImage}/>*/}
                                 {/*<Avatar src={user.profile ? `${process.env.REACT_APP_API_URL}/${user.profile}` : '/assets/profile.jpg'}>*/}
-                                <Avatar src={user.profile ? `http://localhost:3000/${user.profile}` : DefaultImg}>
+                                <Avatar src={user.profile ? `${process.env.REACT_APP_IMAGE_URL}/${user.profile}` : DefaultImg}>
                                     {/*<ImageIcon />*/}
                                 </Avatar>
                             </ListItemAvatar>

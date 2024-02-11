@@ -7,5 +7,7 @@ public class CustomobjDto {
 
     private Long id;
     private String src;
+    private double posX;
+    private double posY;
 
 }

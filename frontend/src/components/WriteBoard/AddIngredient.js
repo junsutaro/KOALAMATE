@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {
-    Box, Typography, TextField, Button, InputLabel, Select, MenuItem, FormControl, List, ListItem, ListItemText
+    Box, Typography, TextField, Button, InputLabel, Select, MenuItem, FormControl
 } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
-import Ingredients from "./Ingredients";
 
 const AddIngredient = ({updateCocktails}) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -32,9 +31,11 @@ const AddIngredient = ({updateCocktails}) => {
     };
 
     const handleAddIngredient = () => {
-        if (selectedIngredient && proportion >= 1 && unit) {
+        // proportion을 숫자로 명시적 변환
+        const numericProportion = parseFloat(proportion);
+        if (selectedIngredient && numericProportion >= 1 && unit) {
             const newIngredient = {
-                proportion: parseFloat(proportion),
+                proportion: numericProportion,
                 unit: unit,
                 drink: {
                     id: selectedIngredient.id,
@@ -44,18 +45,16 @@ const AddIngredient = ({updateCocktails}) => {
             };
             updateCocktails((prevCocktails) => {
                 const updatedCocktails = [...prevCocktails, newIngredient];
-                // console.log('Updated cocktails:', updatedCocktails); 확인용
                 return updatedCocktails;
-            })
-            setSearchTerm('')
+            });
+            setSearchTerm('');
             setSelectedIngredient(null);
             setProportion('');
             setUnit('');
-        }  else {
+        } else {
             alert('용량은 1 이상이어야 합니다.');
         }
     };
-
 
     return (
         <Box m={1} p={4} sx={{
@@ -66,7 +65,7 @@ const AddIngredient = ({updateCocktails}) => {
             borderRadius: 2,
             borderColor: 'lightGray'
         }}>
-            <Typography>재료</Typography>
+            <Typography>재료 추가</Typography>
             <Autocomplete
                 freeSolo
                 options={searchResults.map((option) => option.name)}
@@ -86,16 +85,13 @@ const AddIngredient = ({updateCocktails}) => {
                         label="용량"
                         type='number'
                         value={proportion}
-                        onChange={(e) => setProportion(e.target.value)}
                         onChange={(e) => {
-                            const value = e.target.value;
-                            if (value >= 0) {
+                            const value = e.target.value ? parseFloat(e.target.value) : '';
+                            if (!value || value >= 1) {
                                 setProportion(value);
                             }
                         }}
-                        inputProps={{
-                            min: 1      // 최솟값을 1으로 설정
-                        }}
+                        inputProps={{ min: 1 }}
                     />
                 </FormControl>
                 <FormControl fullWidth>
@@ -119,7 +115,6 @@ const AddIngredient = ({updateCocktails}) => {
                 </FormControl>
             </Box>
             <Button variant="outlined" onClick={handleAddIngredient} sx={{ alignSelf: 'flex-end' }}>재료 추가</Button>
-
         </Box>
     );
 }

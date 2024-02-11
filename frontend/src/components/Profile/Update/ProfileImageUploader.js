@@ -17,7 +17,7 @@ const ProfileImageUploader = ({userId, imagePreview, handleImageChange, handleCa
                 alt="프로필 사진"
             />
             <div style={{display: 'flex', justifyContent: 'flex-end', width: '100%'}}>
-                <Button variant="contained" component="label" fullWidth>
+                <Button sx={{backgroundColor: '#ff9b9b'}} variant="contained" component="label" fullWidth>
                     프로필 이미지 변경
                     <input type="file" hidden onChange={(e) => {
                         handleImageChange(e);

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
 import NoImage from 'assets/no_img.png';
@@ -20,6 +20,18 @@ function BulletinBoard() {
 
     // 전부 입력되었는지 확인하기 위한 변수
     const isFormValid = title && content && cocktails.length > 0 && selectedImageFile;
+
+    // 인증 헤더를 가져오는 함수
+    const getAuthHeader = () => {
+        const authHeader = localStorage.getItem('authHeader');
+        return authHeader ? {Authorization: authHeader} : {};
+    };
+
+    // 컴포넌트 마운트 시 사용자 ID 가져오기
+    useEffect(() => {
+        getAuthHeader();
+    }, []);
+
 
     const handleTitleChange = (event) => {
         setTitle(event.target.value);
@@ -67,7 +79,11 @@ function BulletinBoard() {
             formData.append("file", selectedImageFile);
 
             // Axios를 사용하여 이미지를 업로드하는 요청 보냄
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/uploadBoardImage`, formData);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/uploadBoardImage`,
+                formData,
+                {
+                    headers: getAuthHeader()
+                });
 
             // 이미지 업로드 완료 후 URL을 반환
             return response.data.imageUrl;
@@ -88,7 +104,10 @@ function BulletinBoard() {
                 content: content,
                 cocktails: cocktails,
                 image: imageUrl // 인자로 받은 이미지 URL 사용
-            });
+            },
+                {
+                    headers: getAuthHeader()
+                });
 
             console.log('게시글 작성 완료: ', response.data);
         } catch (error) {
@@ -186,7 +205,8 @@ function BulletinBoard() {
                         <AddIngredient updateCocktails={setCocktails}/> {/* prop으로 상태 업데이트 함수 전달 */}
 
                         <Box display="flex" justifyContent="flex-end" mt={2}>
-                            <Button type="submit" variant="contained" color="primary" onClick={handleSubmit} disabled={!isFormValid}>
+                            <Button type="submit" variant="contained" color="primary" onClick={handleSubmit}
+                                    disabled={!isFormValid}>
                                 레시피 올리기
                             </Button>
                         </Box>
