@@ -1,7 +1,7 @@
 import React, {Suspense, useEffect, useRef, useState} from 'react';
 import { Box } from '@mui/material';
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
-import FridgeModel from './FridgeModel';
+import FridgeInsideModel from './FridgeInsideModel';
 import Rig from './Rig';
 import MBTIModel from './MBTIModel';
 import * as THREE from 'three';
@@ -45,16 +45,16 @@ function ModifyFridge() {
 	return (
 		<Box height='800px'>
 			<Canvas camera={{ position: [0, 0, 6], fov: 60 }} shadows antialias='true' colorManagement={true} shadowMap={{ type: THREE.VSMShadowMap }}>
-				{/*<OrbitControls />*/}
+				<OrbitControls />
 				{/*<ambientLight intensity={0.5}/>*/}
 				{/*<spotLight position={[-3, 3, 3]} angle={0.15} penumbra={0.5} castShadow/>*/}
 				{/*<directionalLight ref={directionalLightRef} position={[10, 5, 5]} intensity={5} castShadow/>*/}
 				<pointLight ref={pointLightRef} position={[5, 5, 5]} intensity={100} castShadow/>
 				<Suspense fallback={<Loader/>}>
-					<FridgeModel setUuid={setFridgeUuid}/>
+					<FridgeInsideModel setUuid={setFridgeUuid}/>
 					<TrashcanModel initialPosition={[-2.5, -1.5, 1]} setModels={setModels}/>
 					<MBTIModel initialPosition={[2, 1.7, 0]} fridgeUuid={fridgeUuid} models={models} setModels={setModels}/>
-					<Rig/>
+					{/*<Rig/>*/}
 					<Environment />
 				</Suspense>
 			</Canvas>

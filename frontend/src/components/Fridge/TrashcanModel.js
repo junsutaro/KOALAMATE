@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
 import TRASHCAN_URL from 'assets/trashcan.glb';
 
-export default function TrashcanModel({ initialPosition }) {
+export default function TrashcanModel({ initialPosition, setModels }) {
 	const { scene, animations } = useGLTF(TRASHCAN_URL);
 	const mixerRef = useRef(new THREE.AnimationMixer(scene));
 	const [openAction, setOpenAction] = useState(null);
@@ -39,5 +39,9 @@ export default function TrashcanModel({ initialPosition }) {
 		openAction.stop();
 	};
 
-	return <primitive object={scene} position={initialPosition} scale={[0.4, 0.4, 0.4]} onPointerOver={handlePointerOver} onPointerOut={handlePointerOut} />;
+	const handlePointerDown = () => {
+		setModels([]);
+	};
+
+	return <primitive object={scene} position={initialPosition} scale={[0.4, 0.4, 0.4]} onPointerOver={handlePointerOver} onPointerOut={handlePointerOut} onPointerDown={handlePointerDown}/>;
 }

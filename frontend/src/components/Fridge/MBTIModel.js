@@ -11,9 +11,9 @@ import J_URL from 'assets/J.glb';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
-export default function MBTIModel ({ initialPosition, fridgeUuid }) {
+export default function MBTIModel ({ initialPosition, fridgeUuid, models, setModels }) {
 	const { camera, pointer, scene } = useThree();
-	const [models, setModels] = useState([]);
+	// const [models, setModels] = useState([]);
 	const [draggedModel, setDraggedModel] = useState(null);
 
 	const { scene: I_scene } = useGLTF(I_URL);
@@ -89,13 +89,12 @@ export default function MBTIModel ({ initialPosition, fridgeUuid }) {
 						setModels([
 							...models, {
 								object: draggedModel.object,
-								position: draggedModel.object.position.toArray(),
 							}]);
 					} else {
 						// 드래그가 완료되면 모델의 위치를 업데이트합니다.
 						setModels(models.map(model =>
 							model.object.uuid === draggedModel.object.uuid
-								? { ...model, position: draggedModel.object.position.toArray() }
+								? { ...model}
 								: model,
 						));
 					}
@@ -167,8 +166,8 @@ export default function MBTIModel ({ initialPosition, fridgeUuid }) {
 				           onPointerOut={() => (document.body.style.cursor = 'auto')}
 				/>
 			</group>
-			{models.map((model, index) => (
-				<primitive object={model.object} key={index} position={model.position}
+			{models.map((model) => (
+				<primitive object={model.object} key={model.object.uuid} position={model.position}
 				           onPointerDown={() => onModelClick(model.object)}
 				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
 				           onPointerOut={() => (document.body.style.cursor = 'auto')}
