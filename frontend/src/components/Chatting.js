@@ -16,8 +16,8 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import Avatar from '@mui/material/Avatar';
 import { useNavigate } from 'react-router-dom'; // useNavigate import
 
-const Chatting = ({ roomNumber , users}) => {
-	const { sendMessage, subscribe } = useWebSocket();
+const Chatting = ({ roomNumber, users, lastMessage }) => {
+	const { sendMessage, subscribe, roomStatus } = useWebSocket();
 	const [messages, setMessages] = useState([]);
 	const [inputMessage, setInputMessage] = useState('');
 	const [isUserScrolledUp, setIsUserScrolledUp] = useState(false);
@@ -34,8 +34,6 @@ const Chatting = ({ roomNumber , users}) => {
 
 
 	const handleBottomDetect = (e) => {
-		console.log(e.target.scrollTop,
-			e.target.scrollHeight - e.target.clientHeight);
 		setScrollY(
 			e.target.scrollTop - (e.target.scrollHeight - e.target.clientHeight));
 	};
@@ -45,7 +43,7 @@ const Chatting = ({ roomNumber , users}) => {
 	};
 
 	const scrollToBottomDirect = () => {
-		messagesEndRef.current?.scrollIntoView({ behavior: 'auto', lock:'center' });
+		messagesEndRef.current?.scrollIntoView({ behavior: 'auto', block:'center' });
 	};
 
 	const user = useSelector(state => state.auth.user);
@@ -54,6 +52,19 @@ const Chatting = ({ roomNumber , users}) => {
 		const chatRooms = sessionStorage.getItem('roomList');
 		return chatRooms ? JSON.parse(chatRooms) : [];
 	};
+
+
+	useEffect(() => {
+		console.log('lastMessage: ', lastMessage);
+		if (lastMessage) {
+			console.log('lastMessage: ', lastMessage);
+			setMessages((prevMessages) => [...prevMessages, lastMessage]);
+				if (lastMessage.nickname === user.nickname) {
+					console.log('my message')
+					setTimeout(scrollToBottom, 100);
+				}
+		}
+	}, [lastMessage]);
 
 	useEffect(() => {
 		// const watch = () => {
@@ -81,35 +92,35 @@ const Chatting = ({ roomNumber , users}) => {
 			});
 
 		// 메시지 수신 구독
-		const subscription = subscribe(messageDestination, (message) => {
-			console.log('Message received');
-			const receivedMessage = JSON.parse(message.body);
-			setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-			if (receivedMessage.nickname === user.nickname) {
-				console.log('my message')
-				setTimeout(scrollToBottom, 100);
-			}
-			const chatRoom = getChatRooms();
-			chatRoom.forEach((room) => {
-				if (room.id === roomNumber) {
-					room.lastMessage = receivedMessage;
-					room.confirmMessageId = receivedMessage.id;
-				}
-			});
-			sessionStorage.setItem('roomList', JSON.stringify(chatRoom));
-
-
-		});
-		console.log(subscription);
+		// const subscription = subscribe(messageDestination, (message) => {
+		// 	console.log('Message received');
+		// 	const receivedMessage = JSON.parse(message.body);
+		// 	setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+		// 	if (receivedMessage.nickname === user.nickname) {
+		// 		console.log('my message')
+		// 		setTimeout(scrollToBottom, 100);
+		// 	}
+		// 	const chatRoom = getChatRooms();
+		// 	chatRoom.forEach((room) => {
+		// 		if (room.id === roomNumber) {
+		// 			room.lastMessage = receivedMessage;
+		// 		}
+		// 	});
+		// 	sessionStorage.setItem('roomList', JSON.stringify(chatRoom));
+		// 	setRoomStatus(chatRoom);
+		//
+		//
+		// });
+		// console.log(subscription);
 
 		// 컴포넌트 언마운트 시 연결 해제
 		return () => {
 			console.log('asdfasdf');
-			if (subscription) {
-				console.log('Unsubscribed from ' + messageDestination);
-				subscription.unsubscribe();
-			}
-			//window.removeEventListener('scroll', handleBottomDetect);
+			// if (subscription) {
+			// 	console.log('Unsubscribed from ' + messageDestination);
+			// 	subscription.unsubscribe();
+			// }
+			window.removeEventListener('scroll', handleBottomDetect);
 		};
 	}, [messageDestination]);
 

@@ -24,7 +24,7 @@ const Nav = () => {
 	const {isLoggedIn} = useSelector(state => state.auth);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const {disconnect} = useWebSocket();
+	const {disconnect, setRoomStatus} = useWebSocket();
 	const [anchorEl, setAnchorEl] = useState(null); // 메뉴 상태 관리
 	const [anchorElUser, setAnchorElUser] = useState(null); // 유저 메뉴 상태 관리
 	const [menuOpen, setMenuOpen] = useState(false);
@@ -73,6 +73,7 @@ const Nav = () => {
 			await axios.post(`${process.env.REACT_APP_API_URL}/user/logout`, {}, {withCredentials: true});
 			dispatch(setLoginStatus(false));
 			disconnect();
+			setRoomStatus();
 			disconnectSession();
 			navigate('/');
 			handleClose();
@@ -96,6 +97,11 @@ const handleMyPage = async () => {
 	} catch (error) {
 		console.log(error);
 	}
+}
+
+const handleToolbarFocus = () => {
+	console.log("asdf");
+	setMenuOpen(true);
 }
 
 	const NavButton = styled(Button)({
@@ -213,11 +219,11 @@ const handleMyPage = async () => {
 					}
 
 				</Toolbar>
-				<Toolbar sx={{display: isWide ? 'none' : 'flex' /*{xs: 'none', md: 'flex'}*/}}>
-					<Box sx={{display: 'flex'}}>
-						<Box sx={{
+				<Toolbar sx={{display: isWide ? 'none' : 'flex'}} onMouseEnter={() => setMenuOpen(true)} onMouseLeave={() => setMenuOpen(false)} >
+					<Box sx={{
 							flexGrow: 1,
 							display: 'flex',
+						justifyContent: 'space-between',
 							alignItems: 'center',
 							color: 'inherit',
 							textDecoration: 'inherit',
@@ -229,22 +235,15 @@ const handleMyPage = async () => {
 								textDecoration: 'inherit',
 							}}>
 								<img src={logoImage} alt="Logo" style={{maxHeight: '50px'}}/>
-								<Typography variant="h6" noWrap sx={{
-									ml: 2,
-									display: {xs: 'none', lg: 'flex'},
-									fontWeight: 700,
-									letterSpacing: '.2rem',
-								}}>
-									코알라 친구찾기
-								</Typography>
 							</NavLink>
-						</Box>
-						<IconButton size="large" aria-label="menu"
-						            aria-controls="menu-appbar"
-						            aria-haspopup="true" onClick={handleMenu}
-						            color="inherit">
+						<Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+							<IconButton size="large" aria-label="menu"
+						                 aria-controls="menu-appbar"
+						                 aria-haspopup="true" onClick={handleMenu}>
 							<MenuIcon/>
 						</IconButton>
+						</Box>
+					</Box>
 						<Collapse in={menuOpen}>
 							<Box sx={{
 								display: 'flex',
@@ -292,7 +291,6 @@ const handleMyPage = async () => {
 						{/*			</>*/}
 						{/*	)}*/}
 						{/*</Menu>*/}
-					</Box>
 				</Toolbar>
 			</AppBar>
 	);
