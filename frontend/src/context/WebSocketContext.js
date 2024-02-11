@@ -32,7 +32,7 @@ export const WebSocketProvider = ({ children }) => {
 		setIsRefresh(true);
 		// 새로고침 했을 때도 roomList를 가져오기 위해
 		console.log('isLoggedIn: ', isLoggedIn);
-		if (roomStatus) setRoomStatus([]);
+		// if (roomStatus) setRoomStatus([]);
 		if (isLoggedIn) {
 			getRoomList()
 				.then((response) => {

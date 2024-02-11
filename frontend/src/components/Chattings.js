@@ -44,8 +44,6 @@ const Chattings = () => {
 	const {roomStatus} = useWebSocket();
 
     useEffect(() => {
-        const chatRooms = getChatRooms();
-        setRooms(chatRooms);
         // sessionStorage에서 activeCall 상태 복원
         const storedActiveCall = sessionStorage.getItem('activeCall');
         if (storedActiveCall) {
