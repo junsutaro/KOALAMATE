@@ -13,6 +13,9 @@ export default function FridgeModel({setUuid}) {
 			if (obj.isMesh) {
 				// obj.castShadow = true;
 				// obj.receiveShadow = true;
+				if (obj.material.transparent) {
+					obj.renderOrder = 2;
+				}
 			}
 		});
 	}, [scene]);
