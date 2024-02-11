@@ -235,12 +235,12 @@ public class UserController {
 			Page<ViewBoardResponseDto> pageEntities = boardService.getMyPageEntities(page-1, size, user.get().getNickname(), user_id);
 			List<ViewBoardResponseDto> content = pageEntities.getContent();
 			int totalPages = ((Page<?>) pageEntities).getTotalPages();
-			long totalElements = pageEntities.getTotalElements(); // 전체 게시글 수를 가져옵니다.
+			long totalElements = pageEntities.getTotalElements();
 
 			Map<String, Object> responseBody = new HashMap<>();
 			responseBody.put("content", content);
 			responseBody.put("totalPages", totalPages);
-			responseBody.put("totalElements", totalElements); // 전체 게시글 수를 응답 본문에 추가합니다.
+			responseBody.put("totalElements", totalElements);
 
 
 			return new ResponseEntity<>(responseBody, HttpStatus.OK);
@@ -256,10 +256,14 @@ public class UserController {
 			Page<ViewBoardResponseDto> pageEntities = boardService.getLikedPageEntities(page-1, size, user_id);
 			List<ViewBoardResponseDto> content = pageEntities.getContent();
 			int totalPages = ((Page<?>) pageEntities).getTotalPages();
+			long totalElements = pageEntities.getTotalElements();
+
 
 			Map<String, Object> responseBody = new HashMap<>();
 			responseBody.put("content", content);
 			responseBody.put("totalPages", totalPages);
+			responseBody.put("totalElements", totalElements);
+
 
 			return new ResponseEntity<>(responseBody, HttpStatus.OK);
 		}
@@ -276,10 +280,12 @@ public class UserController {
 		Page<ViewBoardResponseDto> pageEntities = boardService.getMyPageEntities(page-1, size, user.getNickname(), user.getId());
 		List<ViewBoardResponseDto> content = pageEntities.getContent();
 		int totalPages = ((Page<?>) pageEntities).getTotalPages();
+		long totalElements = pageEntities.getTotalElements();
 
 		Map<String, Object> responseBody = new HashMap<>();
 		responseBody.put("content", content);
 		responseBody.put("totalPages", totalPages);
+		responseBody.put("totalElements", totalElements);
 
 		return new ResponseEntity<>(responseBody, HttpStatus.OK);
 	}
@@ -293,10 +299,12 @@ public class UserController {
 		//페이지 시작은 0부터
 		Page<ViewBoardResponseDto> pageEntities = boardService.getLikedPageEntities(page-1, size, user.getId());
 		List<ViewBoardResponseDto> content = pageEntities.getContent();
+		long totalElements = pageEntities.getTotalElements();
 		int totalPages = ((Page<?>) pageEntities).getTotalPages();
 
 		Map<String, Object> responseBody = new HashMap<>();
 		responseBody.put("content", content);
+		responseBody.put("totalElements", totalElements);
 		responseBody.put("totalPages", totalPages);
 
 		return new ResponseEntity<>(responseBody, HttpStatus.OK);
