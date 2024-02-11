@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useWebSocket } from './context/WebSocketContext';
 
-import styles from './App.module.css'
+import styles from './App.css'
 
 // 다른 페이지 컴포넌트들을 임포트
 
