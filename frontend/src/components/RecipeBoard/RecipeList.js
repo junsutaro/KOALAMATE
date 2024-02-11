@@ -6,7 +6,6 @@ import PaginationComponent from 'components/PaginationComponent'
 
 
 function RecipeList({optionNum}) {
-    // 페이지네이션에 필요한 상태 및 상수
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const sizeNum = 8

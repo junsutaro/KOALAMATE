@@ -34,6 +34,7 @@ import Mate from '../pages/Mate';
 import UpdateMyPage from '../pages/UpdateMyPage';
 import VoiceChatRoom from '../components/VoiceChatRoom';
 import Fridge from '../components/Fridge/Fridge';
+import MyPosts from "../pages/MyPosts";
 
 const MainLayout = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -89,6 +90,8 @@ const MainLayout = () => {
 
 				<Route path="/user/:userId/follower" element={<FollowerList />} />
 				<Route path="/user/:userId/followee" element={<FolloweeList />} />
+				<Route path="/user/:userId/posts" element={<MyPosts />} />
+
 				<Route path="/fridge" element={<Fridge />} />
 				<Route path="/voiceChat/:roomId" element={<VoiceChatRoom />} />
 				{/* 다른 라우트들 */}
