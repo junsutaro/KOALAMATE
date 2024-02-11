@@ -123,4 +123,10 @@ public class RefrigeratorController {
         return new ResponseEntity<>("not found refrigerator", HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/drink/{userId}")
+    public ResponseEntity<?> getDrinks(@PathVariable Long userId) {
+        List<RefrigeratorDrinkDTO> drinks = refrigeratorService.getDrinksByUserId(userId);
+        return new ResponseEntity<>(drinks, HttpStatus.OK);
+    }
+
 }

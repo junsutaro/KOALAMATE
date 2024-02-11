@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
 import TRASHCAN_URL from 'assets/trashcan.glb';
 
-export default function TrashcanModel({ initialPosition, setModels }) {
+export default function TrashcanModel({ initialPosition, setModels, models, setIsSaved }) {
 	const { scene, animations } = useGLTF(TRASHCAN_URL);
 	const mixerRef = useRef(new THREE.AnimationMixer(scene));
 	const [openAction, setOpenAction] = useState(null);
@@ -40,6 +40,9 @@ export default function TrashcanModel({ initialPosition, setModels }) {
 	};
 
 	const handlePointerDown = () => {
+		if (models.length > 0) {
+			setIsSaved(false);
+		}
 		setModels([]);
 	};
 
