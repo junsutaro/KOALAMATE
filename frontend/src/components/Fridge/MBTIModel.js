@@ -11,9 +11,9 @@ import J_URL from 'assets/J.glb';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
-export default function MBTIModel ({ initialPosition, fridgeUuid }) {
+export default function MBTIModel ({ initialPosition, fridgeUuid, models, setModels, setIsSaved }) {
 	const { camera, pointer, scene } = useThree();
-	const [models, setModels] = useState([]);
+	// const [models, setModels] = useState([]);
 	const [draggedModel, setDraggedModel] = useState(null);
 
 	const { scene: I_scene } = useGLTF(I_URL);
@@ -25,7 +25,7 @@ export default function MBTIModel ({ initialPosition, fridgeUuid }) {
 	const { scene: T_scene } = useGLTF(T_URL);
 	const { scene: J_scene } = useGLTF(J_URL);
 
-	const onModelClick = (modelScene, index) => {
+	const onModelClick = (modelScene, url) => {
 		console.log('model clicked');
 		if (!modelScene) {
 			console.log('Model is not loaded yet');
@@ -35,23 +35,26 @@ export default function MBTIModel ({ initialPosition, fridgeUuid }) {
 			model => model.object.uuid === modelScene.uuid);
 		if (existingModel) {
 			console.log('existing model added');
-			setDraggedModel({ object: existingModel.object, isNew: false });
+			setDraggedModel({ ...existingModel, isNew: false });
 		} else {
 			const clonedObject = modelScene.clone();
 			setDraggedModel({
 				object: clonedObject,
-				index: index,
+				url: url,
 				position: [initialPosition.x, initialPosition.y, 1.4],
 				isNew: true,
 			});
 			scene.add(clonedObject);
-			console.log('제발');
 		}
 	};
 
+	useEffect(() => {
+		console.log(draggedModel);
+	}, [draggedModel])
+
 	useFrame(() => {
 		if (draggedModel) {
-			console.log('draggedModel');
+			document.body.style.cursor = 'grabbing';
 			const normalizedPosition = new THREE.Vector3(pointer.x, pointer.y, 0.5);
 			const worldPosition = normalizedPosition.unproject(camera);
 			const dir = worldPosition.sub(camera.position).normalize();
@@ -60,11 +63,14 @@ export default function MBTIModel ({ initialPosition, fridgeUuid }) {
 				.add(dir.multiplyScalar(distance));
 
 			draggedModel.object.position.set(finalPosition.x, finalPosition.y, 1.4);
+			draggedModel.position = [finalPosition.x, finalPosition.y, 1.4]
 		}
 	});
 
 	useEffect(() => {
 		const handlePointerUp = () => {
+			console.log('pointer up')
+			document.body.style.cursor = 'auto';
 			if (!draggedModel) return;
 			console.log(draggedModel);
 
@@ -79,24 +85,27 @@ export default function MBTIModel ({ initialPosition, fridgeUuid }) {
 					if (!draggedModel.isNew) {
 						console.log('existing model removed');
 						setModels(models.filter(model => model.object.uuid !== draggedModel.object.uuid));
+						setIsSaved(false);
 					}
 					scene.remove(draggedModel.object);
 					setDraggedModel(null);
 				} else {
 					if (draggedModel.isNew) {
 						console.log('new model added');
+						console.log(draggedModel);
 						setModels([
-							...models, {
-								object: draggedModel.object,
-								position: draggedModel.object.position.toArray(),
-							}]);
+							...models,
+							{...draggedModel},
+						]);
+						setIsSaved(false);
 					} else {
 						// 드래그가 완료되면 모델의 위치를 업데이트합니다.
 						setModels(models.map(model =>
 							model.object.uuid === draggedModel.object.uuid
-								? { ...model, position: draggedModel.object.position.toArray() }
+								? { ...model}
 								: model,
 						));
+						setIsSaved(false);
 					}
 					setDraggedModel(null);
 				}
@@ -111,6 +120,13 @@ export default function MBTIModel ({ initialPosition, fridgeUuid }) {
 
 	useEffect(() => {
 		console.log(models);
+		scene.traverse((obj) => {
+			if (obj.isMesh) {
+				obj.castShadow = true;
+				// obj.receiveShadow = true;
+			}
+		});
+		console.log(models);
 		models.forEach((model, index) => {
 			console.log(model);
 		});
@@ -120,25 +136,52 @@ export default function MBTIModel ({ initialPosition, fridgeUuid }) {
 		<>
 			<group position={initialPosition}>
 				<primitive object={I_scene} position={[0, 0, 1.4]}
-				           onPointerDown={() => onModelClick(I_scene)}/>
+				           onPointerDown={() => onModelClick(I_scene, 'assets/I.glb')}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 				<primitive object={N_scene} position={[0, -1, 1.4]}
-				           onPointerDown={() => onModelClick(N_scene)}/>
+				           onPointerDown={() => onModelClick(N_scene, 'assets/N.glb')}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 				<primitive object={F_scene} position={[0, -2, 1.4]}
-				           onPointerDown={() => onModelClick(F_scene)}/>
+				           onPointerDown={() => onModelClick(F_scene, 'assets/F.glb')}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 				<primitive object={P_scene} position={[0, -3, 1.4]}
-				           onPointerDown={() => onModelClick(P_scene)}/>
+				           onPointerDown={() => onModelClick(P_scene, 'assets/P.glb')}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 				<primitive object={E_scene} position={[1, 0, 1.4]}
-				           onPointerDown={() => onModelClick(E_scene)}/>
+				           onPointerDown={() => onModelClick(E_scene, 'assets/E.glb')}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 				<primitive object={S_scene} position={[1, -1, 1.4]}
-				           onPointerDown={() => onModelClick(S_scene)}/>
+				           onPointerDown={() => onModelClick(S_scene, 'assets/S.glb')}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 				<primitive object={T_scene} position={[1, -2, 1.4]}
-				           onPointerDown={() => onModelClick(T_scene)}/>
+				           onPointerDown={() => onModelClick(T_scene, 'assets/T.glb')}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 				<primitive object={J_scene} position={[1, -3, 1.4]}
-				           onPointerDown={() => onModelClick(J_scene)}/>
+				           onPointerDown={() => onModelClick(J_scene, 'assets/J.glb')}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 			</group>
-			{models.map((model, index) => (
-				<primitive object={model.object} key={index} position={model.position}
-				           onPointerDown={() => onModelClick(model.object)}/>
+			{models.map((model) => (
+				<primitive object={model.object} key={model.object.uuid} position={model.position}
+				           onPointerDown={() => onModelClick(model.object)}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
 			))}
 		</>
 	);

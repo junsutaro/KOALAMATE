@@ -1,22 +1,22 @@
 package com.ssafy.koala.service;
 
 import com.ssafy.koala.dto.CustomobjDto;
-//import com.ssafy.koala.dto.RefrigeratorCustomobjDTO;
 import com.ssafy.koala.dto.RefrigeratorDTO;
 import com.ssafy.koala.dto.RefrigeratorDrinkDTO;
-import com.ssafy.koala.model.*;
-import com.ssafy.koala.repository.*;
+import com.ssafy.koala.model.CustomobjModel;
+import com.ssafy.koala.model.DrinkModel;
+import com.ssafy.koala.model.RefrigeratorDrinkModel;
+import com.ssafy.koala.model.RefrigeratorModel;
+import com.ssafy.koala.repository.CustomobjRepository;
+import com.ssafy.koala.repository.DrinkRepository;
+import com.ssafy.koala.repository.RefrigeratorDrinkRepository;
+import com.ssafy.koala.repository.RefrigeratorRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.ssafy.koala.dto.RefrigeratorDTO.mapToDTO;
 
 @Service
 public class RefrigeratorService {
@@ -146,56 +146,33 @@ public class RefrigeratorService {
     }
 
 
-    // 메서드 이름 변경
+    // 냉장고에 커스텀 오브젝트 추가
     public boolean addCustomobjsToRefrigerator(Long userId, List<CustomobjDto> customobjDTOs) {
         Optional<RefrigeratorModel> refrigeratorOptional = refrigeratorRepository.findByUserId(userId);
 
         if (refrigeratorOptional.isPresent()) {
             RefrigeratorModel refrigerator = refrigeratorOptional.get();
-            List<CustomobjModel> newCustomobjs = new ArrayList<>();
+
+            // 기존에 추가된 오브젝트가 있다면 모두 삭제 후 새로운 오브젝트 추가
+            customobjRepository.deleteByRefrigeratorId(refrigerator.getId());
 
             // 여러 개의 DTO를 처리하기 위한 반복문
-            List<CustomobjModel> customobjModels = new ArrayList<>();
+            List<CustomobjModel> newCustomobjs = new ArrayList<>();
             for (CustomobjDto customobjDTO : customobjDTOs) {
-//                Optional<CustomobjModel> customobjOptional = customobjRepository.findById(customobjDTO.getCustomobjId());
-
-//                if (customobjOptional.isPresent()) {
-//                    CustomobjModel customobj = customobjOptional.get();
-//
-//                    RefrigeratorCustomobjModel refrigeratorCustomobj = new RefrigeratorCustomobjModel();
-//                    refrigeratorCustomobj.setRefrigerator(refrigerator);
-//                    refrigeratorCustomobj.setCustomobj(customobj);
-//                    refrigeratorCustomobj.setPosX(customobjDTO.getPosX());
-//                    refrigeratorCustomobj.setPosY(customobjDTO.getPosY());
-//
-//                    newCustomobjs.add(refrigeratorCustomobj);
-//                }
                 CustomobjModel customobjModel = new CustomobjModel();
                 BeanUtils.copyProperties(customobjDTO, customobjModel);
                 customobjModel.setRefrigerator(refrigerator);
-                customobjModels.add(customobjModel);
+                newCustomobjs.add(customobjModel);
             }
-            customobjRepository.saveAll(customobjModels);
+            customobjRepository.saveAll(newCustomobjs);
             return true;
-
-            // saveAll을 통해 여러 개의 엔터티를 한 번에 저장
-//            refrigeratorCustomobjRepository.saveAll(newCustomobjs);
-
-            // Customobjs를 DTO로 변환하여 리턴
-//            List<RefrigeratorCustomobjDTO> modifiedContents = refrigerator.getRefrigeratorCustomobjs().stream()
-//                    .map(RefrigeratorCustomobjDTO::fromEntity)
-//                    .collect(Collectors.toList());
-
-//            return modifiedContents;
         }
-
-//        return Collections.emptyList(); // 해당 유저의 냉장고나 Customobjs가 존재하지 않을 경우
+        // 해당 유저의 냉장고가 존재하지 않을 경우
         return false;
     }
 
     // 냉장고 자석 오브젝트 반환
     public List<CustomobjDto> getObjectsByRefrigeratorId(Long refrigeratorId) {
-        // 2. 해당 냉장고에 해당하는 object들 모두 들고와서 List 반환하면 됨
         List<CustomobjDto> result = new ArrayList<>();
         List<CustomobjModel> queryResult = customobjRepository.findByRefrigeratorId(refrigeratorId);
         for(CustomobjModel cm : queryResult) {
@@ -204,5 +181,21 @@ public class RefrigeratorService {
             result.add(dto);
         }
         return result;
+    }
+
+    public List<RefrigeratorDrinkDTO> getDrinksByUserId(Long userId) {
+        Optional<RefrigeratorModel> refrigeratorOptional = refrigeratorRepository.findByUserId(userId);
+        if (refrigeratorOptional.isPresent()) {
+            RefrigeratorModel refrigerator = refrigeratorOptional.get();
+            List<RefrigeratorDrinkModel> refrigeratorDrinkModels = refrigerator.getRefrigeratorDrinkModels();
+
+            // Drink를 DTO로 변환하여 리턴
+            List<RefrigeratorDrinkDTO> modifiedContents = refrigeratorDrinkModels.stream()
+                    .map(RefrigeratorDrinkDTO::fromEntity)
+                    .collect(Collectors.toList());
+
+            return modifiedContents;
+        }
+        return Collections.emptyList(); // 해당 유저의 냉장고나 Drink가 존재하지 않을 경우
     }
 }

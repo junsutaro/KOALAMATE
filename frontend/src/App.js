@@ -7,14 +7,18 @@ import { setLoginStatus } from './store/authSlice';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useWebSocket } from './context/WebSocketContext';
+import { useSelector } from 'react-redux';
 
 import styles from './App.css'
 
 // 다른 페이지 컴포넌트들을 임포트
 
+
+
 function App () {
-	const {connect} = useWebSocket();
+	const { connect, setRoomStatus } = useWebSocket();
 	const dispatch = useDispatch();
+
 	useEffect(() => {
 		// 로컬 스토리지에 로그인 정보가 있으면 벡에 유효성 검증 요청
 		const authHeader = localStorage.getItem('authHeader');
@@ -37,6 +41,7 @@ function App () {
 					dispatch(setLoginStatus({ isLoggedIn: false, user: null }));
 				});
 		}
+
 	}, []);
 	return (
 		<CssBaseline>

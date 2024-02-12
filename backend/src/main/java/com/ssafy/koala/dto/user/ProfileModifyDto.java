@@ -18,4 +18,6 @@ public class ProfileModifyDto {
     private double alcoholLimitBottle;
     private double alcoholLimitGlass;
     private List<String> tags;
+    private double latitude;
+    private double longitude;
 }

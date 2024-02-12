@@ -11,11 +11,11 @@ export default function FridgeModel({setUuid}) {
 		console.log(scene);
 		scene.traverse((obj) => {
 			if (obj.isMesh) {
-				obj.castShadow = true;
-				obj.receiveShadow = true;
+				// obj.castShadow = true;
+				// obj.receiveShadow = true;
 			}
 		});
-	}, []);
+	}, [scene]);
 
 	return <primitive object={scene}/>;
 }

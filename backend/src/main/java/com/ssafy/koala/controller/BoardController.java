@@ -210,7 +210,11 @@ public class BoardController {
 	}
 
 	@PostMapping("/uploadBoardImage")
-	public ResponseEntity<?> uploadBoardImage(@RequestParam("file") MultipartFile file) {
+	public ResponseEntity<?> uploadBoardImage(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+
+		String accessToken = authService.getAccessToken(request);
+		UserDto userDto = authService.extractUserFromToken(accessToken);
+
 		if (file.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("파일을 첨부해주세요.");
 		}
@@ -232,17 +236,20 @@ public class BoardController {
 		String accessToken = authService.getAccessToken(request);
 		UserDto user = authService.extractUserFromToken(accessToken);
 
-		//페이지 시작은 0부터
+		// 페이지 시작은 0부터
 		Page<ViewBoardResponseDto> pageEntities = boardService.getMyPageEntities(page-1, size, user.getNickname(), user.getId());
 		List<ViewBoardResponseDto> content = pageEntities.getContent();
-		int totalPages = ((Page<?>) pageEntities).getTotalPages();
+		int totalPages = pageEntities.getTotalPages();
+		long totalElements = pageEntities.getTotalElements(); // 전체 게시글 수를 가져옵니다.
 
 		Map<String, Object> responseBody = new HashMap<>();
 		responseBody.put("content", content);
 		responseBody.put("totalPages", totalPages);
+		responseBody.put("totalElements", totalElements); // 전체 게시글 수를 응답 본문에 추가합니다.
 
 		return new ResponseEntity<>(responseBody, HttpStatus.OK);
 	}
+
 
 	// 내가 좋아요 한 게시글(레시피) 리스트
 	@GetMapping("/likelist")

@@ -28,6 +28,7 @@ const CustomChatField = ({ value, onChange, onKeyPress }) => {
 			value={value}
 			onChange={onChange}
 			onKeyPress={onKeyPress}
+			autoComplete="off"
 		/>
 	);
 };

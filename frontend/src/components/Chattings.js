@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import Chatting from 'components/Chatting';
 import {
-    List,
-    ListItem,
-    ListItemText,
-    Divider,
+	List,
+	ListItem,
+	ListItemText,
+	Button,
+	Divider,
     IconButton,
 	Tabs,
 	Tab,
@@ -24,15 +25,10 @@ import FollowList from 'components/FollowList';
 import InvitePopup from 'components/InvitePopup';
 
 import {useVoiceSocket} from 'context/VoiceSocketContext';
-
-const getChatRooms = () => {
-    const chatRooms = sessionStorage.getItem('roomList');
-    return chatRooms ? JSON.parse(chatRooms) : [];
-};
+import { useWebSocket } from 'context/WebSocketContext';
 
 const Chattings = () => {
 
-    const [rooms, setRooms] = useState([]);
     const [activeCall, setActiveCall] = useState(null);
     const [expandedRoomId, setExpandedRoomId] = useState(null);
     const navigate = useNavigate();
@@ -45,10 +41,9 @@ const Chattings = () => {
 
     const [invitePopupOpen, setInvitePopupOpen] = useState(null); // 초기값을 null로 설정
 
+	const {roomStatus} = useWebSocket();
 
     useEffect(() => {
-        const chatRooms = getChatRooms();
-        setRooms(chatRooms);
         // sessionStorage에서 activeCall 상태 복원
         const storedActiveCall = sessionStorage.getItem('activeCall');
         if (storedActiveCall) {
@@ -64,6 +59,10 @@ const Chattings = () => {
     useEffect(() => {
         window.scrollTo(0, scrollPosition); // 스크롤 위치를 이전 위치로 설정
     }, [expandedRoomId]);
+
+    useEffect(() => {
+        console.log('roomStatus: ', roomStatus);
+    }, [roomStatus]);
 
 	// 탭 변경 핸들러
 	const handleTabChange = (event, newValue) => {
@@ -99,26 +98,26 @@ const Chattings = () => {
         setInvitePopupOpen(roomId);
     };
 
-    useEffect(() => {
-        const updateRooms = () => {
-            const chatRooms = getChatRooms(); // getChatRooms 함수는 sessionStorage에서 roomList를 가져오는 함수
-            setRooms(chatRooms);
-        };
-
-        updateRooms();
-
-        // sessionStorage의 'roomList' 변경 감지를 위한 이벤트 리스너 추가
-        window.addEventListener('storage', (event) => {
-            if (event.key === 'roomList') {
-                updateRooms();
-            }
-        });
-
-        // 컴포넌트 언마운트 시 이벤트 리스너 제거
-        return () => {
-            window.removeEventListener('storage', updateRooms);
-        };
-    }, []);
+    // useEffect(() => {
+    //     const updateRooms = () => {
+    //         const chatRooms = getChatRooms(); // getChatRooms 함수는 sessionStorage에서 roomList를 가져오는 함수
+    //         setRooms(chatRooms);
+    //     };
+    //
+    //     updateRooms();
+    //
+    //     // sessionStorage의 'roomList' 변경 감지를 위한 이벤트 리스너 추가
+    //     window.addEventListener('storage', (event) => {
+    //         if (event.key === 'roomList') {
+    //             updateRooms();
+    //         }
+    //     });
+    //
+    //     // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    //     return () => {
+    //         window.removeEventListener('storage', updateRooms);
+    //     };
+    // }, []);
 
 
     return (
@@ -131,7 +130,7 @@ const Chattings = () => {
             {tabValue === 1 && (
 
                 <List component="nav">
-                    {rooms.map((room) => (
+                    {roomStatus.map((room) => (
                         <React.Fragment key={room.id}>
                             <ListItem button onClick={() => toggleExpand(room.id, room)}>
                                 <ListItemText
@@ -168,7 +167,7 @@ const Chattings = () => {
                                     </Badge>
                                 </div>
                             </div>
-                            {expandedRoomId === room.id && <Chatting roomNumber={room.id} users={room.users}/>}
+                            {expandedRoomId === room.id && <Chatting roomNumber={room.id} users={room.users} lastMessage={room.lastMessage}/>}
 
                             {invitePopupOpen === room.id && (
                                 <InvitePopup

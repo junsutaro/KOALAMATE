@@ -20,6 +20,7 @@ import {
     Grid,
     Container, colors,
 } from '@mui/material';
+import GetMyPosition from "../components/GetMyPosition";
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -30,6 +31,10 @@ const SignUp = () => {
     // 이메일 닉네임 중복검사 여부 확인
     const [isEmailChecked, setIsEmailChecked] = useState(false);
     const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+
+    // 위치 설정
+    const [latitude, setLatitude] = useState('');
+    const [longitude, setLongitude] = useState('');
 
     // Yup 스키마 정의
     const schema = yup.object().shape({
@@ -57,7 +62,7 @@ const SignUp = () => {
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/checkEmail`,
                 {email})
-            console.log(response.data)
+
             setIsEmailAvailable(response.data.available);
             console.log("이메일 중복 확인", response.data.available)
         } catch (error) {
@@ -93,15 +98,21 @@ const SignUp = () => {
         }
     };
 
+
     // 폼 제출 처리 함수
     const onSubmit = (data) => {
         const {email, password, nickname, birthRange, gender} = data;
         console.log('회원가입 데이터:', data);
 
 // 중복 확인 여부를 검사하여 회원가입 처리
-        if (/*isEmailChecked && isNicknameChecked*/true) {
+        if ((isEmailAvailable && isNicknameAvailable) && (isEmailChecked && isNicknameChecked)) {
+            setIsEmailAvailable(false)
+            setIsNicknameAvailable(false)
+            setIsEmailChecked(false)
+            setIsNicknameChecked(false)
+
             axios.post(`${process.env.REACT_APP_API_URL}/user/signup`,
-                {email, password, nickname, birthRange, gender}).then(response => {
+                {email, password, nickname, birthRange, gender, latitude, longitude}).then(response => {
                 console.log('회원가입 성공', response.data);
                 navigate('/'); // 회원가입이 성공하면 '/'로 이동
             }).catch(error => {
@@ -109,7 +120,7 @@ const SignUp = () => {
                 // 실패했을 때의 처리를 여기에 추가
             });
         } else {
-            console.log('이메일 또는 닉네임 중복 확인을 해주세요.');
+            alert('이메일 또는 닉네임 중복 확인을 해주세요.');
         }
     };
 
@@ -143,18 +154,18 @@ const SignUp = () => {
                                 fullWidth
                                 margin="normal"
                             />
-                            <Grid container justifyContent="flex-end">
-                                <Button variant="outlined" onClick={() => handleEmailCheck(getValues('email'))}>중복
-                                    확인</Button>
-                            </Grid>
-                            {isNicknameChecked && isNicknameAvailable && (
+                            {isEmailChecked && isEmailAvailable && (
                                 <Typography
                                     variant="caption"
                                     sx={{color: 'green'}}
                                 >
-                                    사용 가능한 닉네임입니다.
+                                    사용 가능한 이메일입니다.
                                 </Typography>
                             )}
+                            <Grid container justifyContent="flex-end">
+                                <Button variant="outlined" onClick={() => handleEmailCheck(getValues('email'))}>중복
+                                    확인</Button>
+                            </Grid>
 
 
                             <TextField
@@ -190,6 +201,14 @@ const SignUp = () => {
                                 fullWidth
                                 margin="normal"
                             />
+                            {isNicknameChecked && isNicknameAvailable && (
+                                <Typography
+                                    variant="caption"
+                                    sx={{color: 'green'}}
+                                >
+                                    사용 가능한 닉네임입니다.
+                                </Typography>
+                            )}
                             <Grid container justifyContent="flex-end">
                                 <Button variant="outlined" onClick={() => handleNicknameCheck(getValues('nickname'))}>중복
                                     확인</Button>
@@ -234,6 +253,8 @@ const SignUp = () => {
                                     </Typography>
                                 )}
                             </FormControl>
+
+                            <GetMyPosition setLatitude={setLatitude} setLongitude={setLongitude} />
 
                             <Button
                                 type="submit"

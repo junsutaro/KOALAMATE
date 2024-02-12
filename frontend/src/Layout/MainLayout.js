@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
 import {
 	Drawer,
-	Button,
-	List,
-	ListItem,
-	ListItemText,
 	Box,
-	IconButton,
-	Divider,
+	IconButton, styled,
 } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import ChatIcon from '@mui/icons-material/Chat';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
@@ -33,7 +29,29 @@ import FolloweeList from '../pages/FolloweeList';
 import Mate from '../pages/Mate';
 import UpdateMyPage from '../pages/UpdateMyPage';
 import VoiceChatRoom from '../components/VoiceChatRoom';
-import Fridge from '../components/Fridge/Fridge';
+import ModifyFridge from '../components/Fridge/ModifyFridge';
+import ModifyFridgeInside from '../components/Fridge/ModifyFridgeInside';
+import MyPosts from "../pages/MyPosts";
+import ShowFridge from "../components/Fridge/ShowFridge";
+import ShowFridgeInside from "../components/Fridge/ShowFridgeInside";
+
+const CustomScrollBox = styled(Box)(({ theme }) => ({
+	overflowY: 'auto', // 세로 스크롤바 활성화
+	maxHeight: '100%', // 높이 제한 설정
+	'&::-webkit-scrollbar': {
+		width: '10px', // 스크롤바 너비 설정
+	},
+	'&::-webkit-scrollbar-track': {
+		backgroundColor: theme.palette.grey[200], // 스크롤바 트랙 색상 설정
+	},
+	'&::-webkit-scrollbar-thumb': {
+		backgroundColor: theme.palette.grey[400], // 스크롤바 썸(이동하는 부분) 색상 설정
+		borderRadius: '5px', // 스크롤바 썸의 모서리 둥글게 설정
+	},
+	'&::-webkit-scrollbar-thumb:hover': {
+		backgroundColor: theme.palette.grey[500] // 스크롤바 썸 호버 시 색상 변경 (분홍색)
+	},
+}));
 
 const MainLayout = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -54,18 +72,21 @@ const MainLayout = () => {
 
 			{isLoggedIn && (
 				<Drawer variant={'persistent'} anchor="right" open={isOpen} onClose={() => toggleDrawer(false)} >
-					<Toolbar>
-						<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-							Chattings
-						</Typography>
-						<IconButton onClick={() => toggleDrawer(false)} >
-							<CloseIcon />
-						</IconButton>
-					</Toolbar>
-					<Divider />
-					<Box sx={{ width: 350 }} role="presentation">
-						{isOpen && (<Chattings />)}
-					</Box>
+					<CustomScrollBox>
+						{/*<Box sx={{ height: '100%', overflow: 'auto' }}> /!* Drawer의 내용이 스크롤될 수 있도록 설정 *!/*/}
+							<Toolbar sx={{ position: 'sticky', top: 0, zIndex: 1100, backgroundColor: grey[200] }}>
+								<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+									채팅방
+								</Typography>
+								<IconButton onClick={() => toggleDrawer(false)} >
+									<CloseIcon />
+								</IconButton>
+							</Toolbar>
+							<Box sx={{ width: 350 }} role="presentation">
+								{isOpen && (<Chattings />)}
+							</Box>
+						{/*</Box>*/}
+					</CustomScrollBox>
 				</Drawer>
 			)}
 
@@ -89,7 +110,11 @@ const MainLayout = () => {
 
 				<Route path="/user/:userId/follower" element={<FollowerList />} />
 				<Route path="/user/:userId/followee" element={<FolloweeList />} />
-				<Route path="/fridge" element={<Fridge />} />
+				<Route path="/user/:userId/posts" element={<MyPosts />} />
+				<Route path="/fridge" element={<ModifyFridge />} />
+				<Route path="/fridge/:userId" element={<ShowFridge />} />
+				<Route path="/fridgeInside" element={<ModifyFridgeInside />} />
+				<Route path="/fridgeInside/:userId" element={<ShowFridgeInside />} />
 				<Route path="/voiceChat/:roomId" element={<VoiceChatRoom />} />
 				{/* 다른 라우트들 */}
 			</Routes>
