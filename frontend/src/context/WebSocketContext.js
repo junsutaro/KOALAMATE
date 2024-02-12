@@ -103,6 +103,22 @@ export const WebSocketProvider = ({children}) => {
             });
 
             setStompClient(newClient);
+
+            if (isRefresh) {
+                // 받아온 roomList의 roomId로 구독하기
+                roomStatus.forEach((room) => {
+                    console.log(room);
+                    subscribe(`/topic/messages/${room.id}`, (message) => {
+                        console.log('Message received');
+                        setRoomStatus(prevStatus =>
+                            prevStatus.map(r =>
+                                r.id === room.id ? {...room, lastMessage: JSON.parse(message.body)} : r
+                            )
+                        );
+                    });
+                });
+                setIsRefresh(false);
+            }
         }
     };
 
