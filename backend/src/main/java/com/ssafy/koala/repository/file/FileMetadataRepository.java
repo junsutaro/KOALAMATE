@@ -5,6 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FileMetadataRepository extends JpaRepository<FileMetadata, Long> {
     FileMetadata findByFileName(String fileName);
-    FileMetadata findByFileId(Long fileId);
-    void deleteByFileId(Long fileId);
 }
