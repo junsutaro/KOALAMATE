@@ -153,6 +153,9 @@ public class RefrigeratorService {
         if (refrigeratorOptional.isPresent()) {
             RefrigeratorModel refrigerator = refrigeratorOptional.get();
 
+            // 기존에 추가된 오브젝트가 있다면 모두 삭제 후 새로운 오브젝트 추가
+            customobjRepository.deleteByRefrigeratorId(refrigerator.getId());
+
             // 여러 개의 DTO를 처리하기 위한 반복문
             List<CustomobjModel> newCustomobjs = new ArrayList<>();
             for (CustomobjDto customobjDTO : customobjDTOs) {
@@ -180,52 +183,19 @@ public class RefrigeratorService {
         return result;
     }
 
-    // 냉장고 오브젝트 수정
-    public List<CustomobjDto> modifyRefrigeratorObjectsByUserId(Long userId, List<CustomobjDto> updatedContentsDTO) {
+    public List<RefrigeratorDrinkDTO> getDrinksByUserId(Long userId) {
         Optional<RefrigeratorModel> refrigeratorOptional = refrigeratorRepository.findByUserId(userId);
         if (refrigeratorOptional.isPresent()) {
             RefrigeratorModel refrigerator = refrigeratorOptional.get();
-            List<CustomobjModel> customobjs = refrigerator.getCustomobjModels();
+            List<RefrigeratorDrinkModel> refrigeratorDrinkModels = refrigerator.getRefrigeratorDrinkModels();
 
-            // updatedContentsDTO에 따라 customobjs를 업데이트(기존값과 달라진 부분만 바꾸기)
-            // 1. 업데이트, 추가해야 할 부분들
-            for (CustomobjDto updatedContent : updatedContentsDTO) {
-                CustomobjModel matchingCustomobj = customobjs.stream()
-                        .filter(c -> c.getId().equals(updatedContent.getId()))
-                        .findFirst()
-                        .orElseGet(() -> {
-                            CustomobjModel newCustomobj = new CustomobjModel();
-                            newCustomobj.setRefrigerator(refrigerator); // 연관관계 설정
-                            customobjs.add(newCustomobj); // 새 항목 추가
-                            return newCustomobj;
-                        });
-                // DTO -> 엔티티로 값 복사
-                matchingCustomobj.setSrc(updatedContent.getSrc());
-                matchingCustomobj.setPosX(updatedContent.getPosX());
-                matchingCustomobj.setPosY(updatedContent.getPosY());
-            }
-            // 2. 기존 데이터에서 삭제해야 할 부분들
-            // (냉장고에 붙이는 object 개수가 줄어드는 경우에 사용할듯)
-            Iterator<CustomobjModel> iterator = customobjs.iterator();
-            while (iterator.hasNext()) {
-                CustomobjModel existingCustomobj = iterator.next();
-                if (updatedContentsDTO.stream().noneMatch(dto -> dto.getId().equals(existingCustomobj.getId()))) {
-                    iterator.remove(); // 리스트에서 제거
-                    // 데이터베이스에서도 삭제
-                    customobjRepository.delete(existingCustomobj);
-                }
-            }
-            refrigeratorRepository.save(refrigerator); // 업데이트된 엔터티 저장
-
-            // Customobj model -> dto 리스트 바꾸고 리턴
-            return customobjs.stream()
-                    .map(customobj -> {
-                        CustomobjDto dto = new CustomobjDto();
-                        BeanUtils.copyProperties(customobj, dto);
-                        return dto;
-                    })
+            // Drink를 DTO로 변환하여 리턴
+            List<RefrigeratorDrinkDTO> modifiedContents = refrigeratorDrinkModels.stream()
+                    .map(RefrigeratorDrinkDTO::fromEntity)
                     .collect(Collectors.toList());
+
+            return modifiedContents;
         }
-        return Collections.emptyList(); // 해당 유저의 냉장고가 존재하지 않을 경우
+        return Collections.emptyList(); // 해당 유저의 냉장고나 Drink가 존재하지 않을 경우
     }
 }

@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface RefrigeratorDrinkRepository extends JpaRepository<RefrigeratorDrinkModel, Long> {
 
+    List<RefrigeratorDrinkModel> findByRefrigeratorId(Long refrigeratorId);
     void deleteByRefrigeratorId(Long refrigeratorId);
 }
