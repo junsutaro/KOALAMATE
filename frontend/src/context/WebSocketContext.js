@@ -69,6 +69,7 @@ export const WebSocketProvider = ({children}) => {
     const connect = (url) => {
         const client = getStompClient(url);
         setStompClient(client);
+        stompClient.activate();
     };
 
     const disconnect = () => {

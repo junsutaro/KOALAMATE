@@ -436,6 +436,42 @@ public class BoardService {
 		return new PageImpl<>(result, pageable, pageResult.getTotalElements());
 	}
 
+	@Transactional
+	public Page<ViewBoardResponseDto> searchBoardsByDrinkCategory(int category, int page, int size) {
+		Sort sort = Sort.by(Sort.Direction.DESC, "id");
+		PageRequest pageable = PageRequest.of(page, size, sort);
+
+		//Specification<BoardModel> spec = BoardSpecifications.withDrinkName(drinkName);
+		Page<BoardModel> pageResult = boardRepository.findBoardByDrinkCategory(category, pageable);
+
+		// 결과 매핑 로직은 동일하게 유지
+		List<ViewBoardResponseDto> result = pageResult.getContent().stream()
+				.map(board -> {
+					ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
+					BeanUtils.copyProperties(board, boardDto);
+
+					List<CocktailWithDrinkDto> cocktails = board.getCocktails().stream()
+							.map(temp -> {
+								CocktailWithDrinkDto insert = new CocktailWithDrinkDto();
+								BeanUtils.copyProperties(temp, insert);
+
+								DrinkWithoutCocktailDto drinkDto = new DrinkWithoutCocktailDto();
+								BeanUtils.copyProperties(temp.getDrink(), drinkDto);
+
+								insert.setDrink(drinkDto);
+								return insert;
+							})
+							.collect(Collectors.toList());
+
+					boardDto.setCocktails(cocktails);
+					boardDto.setComments(null);
+					return boardDto;
+				})
+				.collect(Collectors.toList());
+
+		return new PageImpl<>(result, pageable, pageResult.getTotalElements());
+	}
+
 	// 로그인 했을 시, 본인의 좋아요 여부 반영한 전체 게시글 목록 출력
 	public Page<ViewBoardResponseDto> getPageEntities(int page, int size, int option, Long userId) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
