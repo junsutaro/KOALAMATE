@@ -11,6 +11,7 @@ import com.ssafy.koala.service.AuthService;
 import com.ssafy.koala.service.BoardService;
 import com.ssafy.koala.service.CocktailService;
 import com.ssafy.koala.service.DrinkService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -165,6 +166,8 @@ public class BoardController {
 		}
 	}
 
+
+	@Operation(summary = "게시글 검색", description = "제목, 내용에 키워드 포함되면 전부")
 	@GetMapping("/search")
 	public ResponseEntity<?> searchBoard(@RequestParam int page, @RequestParam int size, @RequestParam String keyword, @RequestParam int option,
 		HttpServletRequest request) {
@@ -193,11 +196,29 @@ public class BoardController {
 		return response;
 	}
 
+	@Operation(summary = "재료 이름으로 검색", description = "해당 글자 포함된 재료 다")
 	@GetMapping("/searchByDrink")
 	public ResponseEntity<?> searchBoardByDrink(@RequestParam int page, @RequestParam int size, @RequestParam String drinkName) {
 		ResponseEntity response = null;
 
 		Page<ViewBoardResponseDto> pageEntities = boardService.searchBoardsByDrinkName(drinkName, page-1, size);
+		List<ViewBoardResponseDto> content = pageEntities.getContent();
+		int totalPages = ((Page<?>) pageEntities).getTotalPages();
+
+		Map<String, Object> responseBody = new HashMap<>();
+		responseBody.put("content", content);
+		responseBody.put("totalPages", totalPages);
+
+		response = new ResponseEntity<>(responseBody, HttpStatus.OK);
+		return response;
+	}
+
+	@Operation(summary = "재료 카테고리로 검색", description = "해당 카테고리 재료 포함된 레시피 다")
+	@GetMapping("/searchByDrinkCategory")
+	public ResponseEntity<?> searchBoardByDrinkCategory(@RequestParam int page, @RequestParam int size, @RequestParam int category) {
+		ResponseEntity response = null;
+
+		Page<ViewBoardResponseDto> pageEntities = boardService.searchBoardsByDrinkCategory(category, page-1, size);
 		List<ViewBoardResponseDto> content = pageEntities.getContent();
 		int totalPages = ((Page<?>) pageEntities).getTotalPages();
 
