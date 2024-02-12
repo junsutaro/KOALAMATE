@@ -15,6 +15,10 @@ function RecipeItem({boardId, imageUrl, title, author, tags, liked, toggleLiked}
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
 
     const authHeader = localStorage.getItem('authHeader'); // 인증 토큰 가져오기
+    
+    if (author === 'admin'){
+        author = '레시피 백과사전'
+    }
 
     // 레시피 상세 페이지로 이동
     const handleCardClick = () => {

@@ -17,10 +17,16 @@ const Recipe = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [isSearch, setIsSearch] = useState(false)
 
+    const [category, setCategory] = useState(null);
+
     const handleSearchResults = (result, pages) => {
         setSearchResults(result);     // 검색 결과를 저장
         setTotalPages(pages);
         setIsSearch(true);      // 검색이 수행되었음을 표시
+    };
+
+    const handleCategoryChange = (selectedCategory) => {
+        setCategory(selectedCategory);
     };
 
     return (
@@ -38,8 +44,8 @@ const Recipe = () => {
             {isSearch ?
                 <SearchResult searchResults={searchResults} totalPages={totalPages} setIsSearch={setIsSearch}/> :
                 <>
-                    <RecipeFilter/>
-                    <RecipeList optionNum={optionNum} searchResults={searchResults}/>
+                    <RecipeFilter onCategoryChange={handleCategoryChange} />
+                    <RecipeList optionNum={optionNum} category={category} searchResults={searchResults}/>
                 </>
             }
 

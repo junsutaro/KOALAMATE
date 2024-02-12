@@ -5,7 +5,7 @@ import axios from 'axios';
 import PaginationComponent from 'components/PaginationComponent'
 
 
-function RecipeList({optionNum}) {
+function RecipeList({ optionNum, category }) {
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const sizeNum = 8
@@ -38,8 +38,13 @@ function RecipeList({optionNum}) {
     }, []);
 
     const getCardData = async (likedRecipes) => {
+        // 카테고리에 따라 URL을 조정하여 API 호출
+        let url = `${process.env.REACT_APP_API_URL}/board/list?page=${currentPage}&size=${sizeNum}&option=${optionNum}`
+        if (category !== null) {
+            url = `${process.env.REACT_APP_API_URL}/board/searchByDrinkCategory?page=${currentPage}&size=${sizeNum}&category=${category}`
+        }
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/board/list?page=${currentPage}&size=${sizeNum}&option=${optionNum}`);
+            const response = await axios.get(url);
             const data = response.data.content;         // data는 레시피 목록을 포함하는 배열
             setTotalPages(response.data.totalPages)     // 총 페이지 수
 
@@ -61,7 +66,7 @@ function RecipeList({optionNum}) {
 
     useEffect(() => {
         getCardData(likedRecipes);
-    }, [currentPage, optionNum, likedRecipes]);
+    }, [currentPage, optionNum, likedRecipes,  category]);
 
     const handlePageChange = (event, value) => {
         setCurrentPage(value);
