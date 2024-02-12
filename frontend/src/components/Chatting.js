@@ -262,8 +262,8 @@ const Chatting = ({ roomNumber, users, lastMessage }) => {
 				</IconButton>
 			)}
 			{/* 메시지 입력창 및 기타 UI 컴포넌트 */}
-			<Grid container alignItems="center" border={1} borderColor="grey.500"
-				  borderRadius={4}>
+			<Grid container alignItems="center"
+				  borderRadius={3}>
 				<Grid item xs={10}>
 					<CustomChatField value={inputMessage}
 									 onChange={handleInputMessageChange}
