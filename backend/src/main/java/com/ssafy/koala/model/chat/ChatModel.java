@@ -10,8 +10,8 @@ public class ChatModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int theme;
-    private long lastId;
+    private int theme = 0;
+    private long lastId = 0;
 
     @ManyToOne
     @JoinColumn(name = "chatroom_id")
