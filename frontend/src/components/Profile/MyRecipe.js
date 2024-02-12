@@ -2,14 +2,15 @@ import React, {useState, useEffect} from 'react';
 import {Typography, Box, Container, Button} from '@mui/material';
 import QueueIcon from '@mui/icons-material/Queue';
 import { NavLink, useNavigate } from 'react-router-dom';
-import RecipeList from '../RecipeBoard/RecipeList';
+import { useSelector } from 'react-redux';
 import style from '../RecipeBoard/RecipeList.module.css';
 import RecipeItem from '../RecipeBoard/RecipeItem';
 import axios from "axios";
 
 const MyRecipe = ({nickname, userId}) => {
-
-    const navigate = useNavigate(); // useNavigate 훅을 사용하여 navigate 함수 초기화
+    const navigate = useNavigate();
+    const {user, isLoggedIn} = useSelector(state => state.auth);
+    const isCurrentUser = isLoggedIn && user.nickname === nickname;    // 현재 사용자의 닉네임과 비교
 
     // 인증 헤더를 가져오는 함수
     const getAuthHeader = () => {
@@ -18,8 +19,9 @@ const MyRecipe = ({nickname, userId}) => {
     };
 
     const pageNum = 1
-    const sizeNum = 3;
+    const sizeNum = isCurrentUser ? 3 : 4
     const [recipeData, setRecipeData] = useState([])
+    const [likedRecipes, setLikedRecipes] = useState([]);
     const [totalNum, setTotalNum] = useState(0)
 
     const getRecipeData = async () => {
@@ -31,7 +33,6 @@ const MyRecipe = ({nickname, userId}) => {
             const data = response.data.content
             setTotalNum(response.data.totalElements)
 
-            // 배열 데이터를 받아온 그대로 상태에 설정
             setRecipeData(data.map(item => ({
                 boardId: item.id,                       // 레시피 id
                 title: item.title,                      // 레시피 이름
@@ -44,25 +45,31 @@ const MyRecipe = ({nickname, userId}) => {
             })));
 
         } catch (error) {
-            console.error('데이터를 가져오는 중 에러 발생: ', error)
+            console.error('유저가 작성한 레시피 데이터를 가져오는 중 에러 발생: ', error)
         }
     }
 
-    // 컴포넌트가 마운트될 때 데이터 가져오기
     useEffect(() => {
-        getRecipeData();
-    }, []);
+        // console.log('isLoggedIn:', isLoggedIn, 'user.nickname:', user.nickname, 'nickname:', nickname, 'isCurrentUser:', isCurrentUser, 'sizeNum:', sizeNum);
+        getRecipeData()
+    }, [sizeNum, userId]);
 
     const handleViewAllClick = () => {
-        navigate(`/user/${userId}/posts`); // 사용자 정의 경로로 이동
+        navigate(`/user/${userId}/posts`);
     };
 
+    const toggleLikedState = async (boardId) => {
+        const isLiked = likedRecipes.includes(boardId);
+        const newLikedRecipes = isLiked ? likedRecipes.filter(id => id !== boardId) : [...likedRecipes, boardId];
+        setLikedRecipes(newLikedRecipes);
+    };
 
     return (
             <Container sx={{marginTop: '30px'}}>
                 <Box sx={{display: 'inline-flex', gap: 1}}>
-                    <Typography sx={{fontWeight: 'bold'}} variant="h5">나만의
-                        레시피</Typography>
+                    <Typography sx={{fontWeight: 'bold'}} variant="h5">
+                        {isCurrentUser ? '나만의' : `${nickname}의`} 레시피
+                    </Typography>
                     <Typography sx={{fontWeight: 'bold', color: '#ff9b9b'}}
                                 variant="h5">{totalNum}</Typography>
                 </Box>
@@ -75,36 +82,36 @@ const MyRecipe = ({nickname, userId}) => {
                     <div className={style.cardList}>
                         {recipeData.map(recipe => (
                             <RecipeItem
-                                key={recipe.boardId}                // key는 각 요소를 고유하게 식별하기 위해 사용
+                                key={recipe.boardId}
                                 boardId={recipe.boardId}
                                 imageUrl={recipe.imageUrl}
                                 title={recipe.title}
                                 author={recipe.author}
                                 tags={[]}
                                 liked={recipe.liked}
+                                toggleLiked={() => toggleLikedState(recipe.boardId)}
                                 // liked={likedRecipes.includes(card.id)}
                             />
                         ))}
                     </div>
 
-                    <NavLink
-                        to="/writeBoard"
-                        style={{
+                    {isCurrentUser && (
+                        <NavLink to="/writeBoard" style={{
                             textDecoration: 'none',
                             color: 'inherit',
                             margin: '20px auto',
-                            width: '240px', // 크기 설정
-                            height: '240px', // 크기 설정
-                            backgroundColor: 'transparent', // 배경색을 투명으로 설정
-                            border: '2px solid #ff9b9b', // 테두리 추가
-                            borderRadius: '15px', // 테두리의 둥근 정도
+                            width: '240px',
+                            height: '240px',
+                            backgroundColor: 'transparent',
+                            border: '2px solid #ff9b9b',
+                            borderRadius: '15px',
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                        }}
-                    >
-                        <QueueIcon sx={{fontSize: 48, color: '#ff9b9b'}}/>
-                    </NavLink>
+                        }}>
+                            <QueueIcon sx={{fontSize: 48, color: '#ff9b9b'}}/>
+                        </NavLink>
+                    )}
                 </Box>
             </Container>
         );

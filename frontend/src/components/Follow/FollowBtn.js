@@ -6,8 +6,6 @@ import {useSelector} from "react-redux";
 const FollowBtn = ({targetUserId}) => {
 
     const [isFollow, setIsFollow] = useState(false)
-    const [errorMsg, setErrorMsg] = useState('');
-
 
     // 인증 헤더를 가져오는 함수
     const getAuthHeader = () => {
@@ -22,7 +20,6 @@ const FollowBtn = ({targetUserId}) => {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/followCheck?userId=${targetUserId}`, {
                 headers: getAuthHeader(), // 인증 헤더 추가
             })
-            console.log(response.data)
             setIsFollow(response.data.isFollow);
         } catch (error) {
             console.error('팔로우 상태 확인 에러', error);
@@ -41,7 +38,6 @@ const FollowBtn = ({targetUserId}) => {
             setIsFollow(response.data.isFollow)
         } catch (error) {
             console.error('팔로우/언팔로우 요청 에러', error);
-            setErrorMsg('팔로우/언팔로우 요청 중 오류가 발생했습니다.'); // 사용자에게 보여줄 메시지
         }
     }
 
@@ -62,7 +58,6 @@ const FollowBtn = ({targetUserId}) => {
                     }}>
                 {isFollow ? '언팔로우' : '팔로우'}
             </Button>
-            {/*{errorMsg && <div style={{color: 'red', marginTop: '10px'}}>{errorMsg}</div>}*/}
         </Box>
     )
 }

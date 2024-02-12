@@ -7,7 +7,6 @@ import {Box} from '@mui/material';
 
 const FollowerList = () => {
     const {userId} = useParams();
-    console.log(userId);
 
     const [followerData, setFollowerData] = useState({
         cnt: 0,
@@ -20,7 +19,6 @@ const FollowerList = () => {
     const getFollowerData = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/${userId}/follower`);
-            console.log(response)
             const data = response.data;
             setFollowerData({
                 cnt: data.followCnt,
@@ -37,7 +35,6 @@ const FollowerList = () => {
         getFollowerData();
     }, [userId]);
 
-    console.log(followerData);
 
     return (
         <>
