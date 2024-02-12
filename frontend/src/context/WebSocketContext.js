@@ -150,6 +150,7 @@ export const WebSocketProvider = ({children}) => {
 
     const sendMessage = (destination, body) => {
         if (stompClient && stompClient.connected) {
+            console.log("in sendMessage " + destination);
             stompClient.publish({
                 destination: destination,
                 body: body,
