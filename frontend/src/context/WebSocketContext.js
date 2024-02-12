@@ -66,7 +66,7 @@ export const WebSocketProvider = ({children}) => {
             setIsRefresh(false);
         }
         console.log(roomStatus);
-    }, [roomStatus, stompClient]);
+    }, [roomStatus]);
 
 
 
