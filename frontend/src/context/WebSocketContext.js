@@ -3,8 +3,6 @@ import React, {createContext, useContext, useEffect, useState} from 'react';
 import {disconnectStompClient, getStompClient} from './WebSocketService';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
-import {Client} from "@stomp/stompjs";
-import SockJS from "sockjs-client";
 
 const WebSocketContext = createContext(null);
 
@@ -69,29 +67,13 @@ export const WebSocketProvider = ({children}) => {
     }, [roomStatus]);
 
     const connect = (url) => {
-        setStompClient(new Client({
-            webSocketFactory: () => new SockJS(url),
-            onConnect: () => {
-                console.log('Connected to WebSocket server');
-            },
-            onStompError: (frame) => {
-                console.error('Broker reported error: ' + frame.headers['message']);
-                console.error('Additional details: ' + frame.body);
-            },
-        }));
-
+        const client = getStompClient(url);
+        setStompClient(client);
         stompClient.activate();
-        // client.activate();
-        // setStompClient(client);
     };
 
     const disconnect = () => {
-        // disconnectStompClient();
-        if (stompClient && stompClient.connected) {
-            stompClient.deactivate();
-            setStompClient(null); // 연결 해제 후 인스턴스 참조 제거
-            console.log('Disconnected from WebSocket server');
-        }
+        disconnectStompClient();
     };
 
     const subscribe = (destination, callback) => {
