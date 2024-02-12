@@ -140,6 +140,8 @@ export const WebSocketProvider = ({children}) => {
 
 
     const subscribe = (destination, callback) => {
+        console.log(stompClient);
+        console.log(stompClient.connected);
         if (stompClient && stompClient.connected) {
             const subscription = stompClient.subscribe(destination, callback);
             console.log("Subscribed to " + destination);
