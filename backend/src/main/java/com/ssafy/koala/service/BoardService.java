@@ -632,7 +632,6 @@ public class BoardService {
 				})
 				.collect(Collectors.toList());
 	}
-
 	public Page<ViewBoardResponseDto> searchBoardsByDrinkCountAndCategory(int minDrinks, int maxDrinks, int category, int page, int size, Long userId) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		PageRequest pageable = PageRequest.of(page, size, sort);
