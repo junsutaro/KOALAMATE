@@ -33,7 +33,12 @@ const AddIngredient = ({updateCocktails}) => {
     const handleAddIngredient = () => {
         // proportion을 숫자로 명시적 변환
         const numericProportion = parseFloat(proportion);
+
         // selectedIngredient 얘가 null일 때 오류 남
+        console.log(numericProportion);
+        console.log(selectedIngredient)
+        console.log(unit);
+
         if (selectedIngredient && numericProportion >= 1 && unit) {
             const newIngredient = {
                 proportion: numericProportion,
@@ -88,6 +93,7 @@ const AddIngredient = ({updateCocktails}) => {
                         value={proportion}
                         onChange={(e) => {
                             const value = e.target.value ? parseFloat(e.target.value) : '';
+                            console.log(value);
                             if (!value || value >= 1) {
                                 setProportion(value);
                             }

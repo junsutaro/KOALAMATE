@@ -565,4 +565,73 @@ public class BoardService {
 	public List<Long> findAllLikedBoardIdsByUserId(Long userId) {
 		return likeRepository.findAllLikedBoardIdsByUserId(userId);
 	}
+
+
+
+	//프론트 요청
+		public Page<ViewBoardResponseDto> searchForFront(String keyword, int page, int size, int option, Long userId) {
+			Sort sort = Sort.by(Sort.Direction.DESC, "id");
+			PageRequest pageable = PageRequest.of(page, size, sort);
+
+			Specification<BoardModel> spec;
+			switch (option) {
+				case 1:
+					// 공식 레시피에서 검색
+					spec = BoardSpecifications.searchOnlyTitle(keyword).and(BoardSpecifications.searchByNickname("admin"));
+					break;
+				case 2:
+					// 일반 유저가 쓴 글에서 검색
+					spec = BoardSpecifications.searchOnlyTitle(keyword).and(BoardSpecifications.searchByNickname("admin", false));
+					break;
+//				case 3:
+//					// Option 3: Search all drinks' names
+//					spec = BoardSpecifications.withDrinkName(keyword);
+//					break;
+				case 3:
+					// 공식 레시피중 해당 재료 포함된 레시피
+					spec = BoardSpecifications.withDrinkName(keyword).and(BoardSpecifications.searchByNickname("admin"));
+					break;
+				default:
+					throw new IllegalArgumentException("Invalid search option");
+			}
+
+			Page<BoardModel> pageResult = boardRepository.findAll(spec, pageable);
+			List<ViewBoardResponseDto> result = mapBoardModelToDto(pageResult, userId); // Assuming this method maps BoardModel to ViewBoardResponseDto
+
+			return new PageImpl<>(result, pageable, pageResult.getTotalElements());
+		}
+
+
+
+	private List<ViewBoardResponseDto> mapBoardModelToDto(Page<BoardModel> pageResult, Long userId) {
+		return pageResult.getContent().stream()
+				.map(board -> {
+					ViewBoardResponseDto dto = new ViewBoardResponseDto();
+					BeanUtils.copyProperties(board, dto);
+
+					// 'cocktails' 정보를 처리합니다.
+					List<CocktailWithDrinkDto> cocktailDtos = board.getCocktails().stream().map(cocktail -> {
+						CocktailWithDrinkDto cocktailDto = new CocktailWithDrinkDto();
+						BeanUtils.copyProperties(cocktail, cocktailDto);
+
+						DrinkWithoutCocktailDto drinkDto = new DrinkWithoutCocktailDto();
+						BeanUtils.copyProperties(cocktail.getDrink(), drinkDto);
+						cocktailDto.setDrink(drinkDto);
+
+						return cocktailDto;
+					}).collect(Collectors.toList());
+
+					dto.setCocktails(cocktailDtos);
+
+					// 유저가 좋아요 한 게시글 여부를 확인
+					boolean isLiked = board.getLikes().stream()
+							.anyMatch(like -> like.getUser().getId().equals(userId));
+					dto.setLiked(isLiked);
+
+					return dto;
+				})
+				.collect(Collectors.toList());
+	}
+
+
 }

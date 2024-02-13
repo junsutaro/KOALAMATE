@@ -167,7 +167,7 @@ public class BoardController {
 	}
 
 
-	@Operation(summary = "게시글 검색", description = "제목, 내용에 키워드 포함되면 전부")
+	@Operation(summary = "게시글 제목에서 검색", description = "")
 	@GetMapping("/search")
 	public ResponseEntity<?> searchBoard(@RequestParam int page, @RequestParam int size, @RequestParam String keyword, @RequestParam int option,
 		HttpServletRequest request) {
@@ -204,10 +204,13 @@ public class BoardController {
 		Page<ViewBoardResponseDto> pageEntities = boardService.searchBoardsByDrinkName(drinkName, page-1, size);
 		List<ViewBoardResponseDto> content = pageEntities.getContent();
 		int totalPages = ((Page<?>) pageEntities).getTotalPages();
+		long totalElements = pageEntities.getTotalElements(); // 전체 게시글 수를 가져옵니다.
+
 
 		Map<String, Object> responseBody = new HashMap<>();
 		responseBody.put("content", content);
 		responseBody.put("totalPages", totalPages);
+		responseBody.put("totalElements", totalElements); // 전체 게시글 수를 응답 본문에 추가합니다.
 
 		response = new ResponseEntity<>(responseBody, HttpStatus.OK);
 		return response;
@@ -221,10 +224,13 @@ public class BoardController {
 		Page<ViewBoardResponseDto> pageEntities = boardService.searchBoardsByDrinkCategory(category, page-1, size);
 		List<ViewBoardResponseDto> content = pageEntities.getContent();
 		int totalPages = ((Page<?>) pageEntities).getTotalPages();
+		long totalElements = pageEntities.getTotalElements(); // 전체 게시글 수를 가져옵니다.
+
 
 		Map<String, Object> responseBody = new HashMap<>();
 		responseBody.put("content", content);
 		responseBody.put("totalPages", totalPages);
+		responseBody.put("totalElements", totalElements); // 전체 게시글 수를 응답 본문에 추가합니다.
 
 		response = new ResponseEntity<>(responseBody, HttpStatus.OK);
 		return response;
@@ -289,4 +295,47 @@ public class BoardController {
 
 		return new ResponseEntity<>(responseBody, HttpStatus.OK);
 	}
+
+
+	// 프론트 요청
+	@Operation(summary = "게시글 검색 옵션 넣어서",
+			description = "게시글 검색 옵션에 따라 다른 검색 로직 적용, " +
+					"1 : 공식레시피, 제목으로 검색, " +
+					"2 : 유저레시피, 제목으로 검색, " +
+					"3 : 공식레시피, 포함된 재료 이름으로 검색 ")
+	@GetMapping("/searchForFront")
+	public ResponseEntity<?> searchBoardForFront(@RequestParam int page, @RequestParam int size, @RequestParam String keyword, @RequestParam int option,
+												 HttpServletRequest request) {
+		ResponseEntity<?> response;
+		if (option > 3 || option <= 0) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+
+		Page<ViewBoardResponseDto> pageEntities;
+		if (request.getHeader("Authorization") == null) {
+			// 로그인 안 했을 경우
+			pageEntities = boardService.searchForFront(keyword, page - 1, size, option, null);
+		} else {
+			// 로그인 했을 경우 좋아요 여부 반영
+			String accessToken = authService.getAccessToken(request);
+			UserDto userDto = authService.extractUserFromToken(accessToken);
+			Long userId = userDto.getId();
+
+			pageEntities = boardService.searchForFront(keyword, page - 1, size, option, userId);
+		}
+
+		List<ViewBoardResponseDto> content = pageEntities.getContent();
+		int totalPages = pageEntities.getTotalPages();
+		long totalElements = pageEntities.getTotalElements();
+
+		Map<String, Object> responseBody = new HashMap<>();
+		responseBody.put("content", content);
+		responseBody.put("totalPages", totalPages);
+		responseBody.put("totalElements", totalElements);
+
+		response = new ResponseEntity<>(responseBody, HttpStatus.OK);
+		return response;
+	}
+
+
 }

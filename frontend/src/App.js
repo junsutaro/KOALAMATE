@@ -2,20 +2,23 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import MainLayout from './Layout/MainLayout';
-import { CssBaseline } from '@mui/material';
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import { setLoginStatus } from './store/authSlice';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useWebSocket } from './context/WebSocketContext';
 import { useSelector } from 'react-redux';
-
-// 다른 페이지 컴포넌트들을 임포트
-
-
+import getLPTheme from './getLPTheme';
 
 function App () {
 	const { connect, setRoomStatus } = useWebSocket();
 	const dispatch = useDispatch();
+	const [mode, setMode] = React.useState('light');
+	const LPtheme = createTheme(getLPTheme(mode));
+
+	const toggleColorMode = () => {
+		setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
+	};
 
 	useEffect(() => {
 		// 로컬 스토리지에 로그인 정보가 있으면 벡에 유효성 검증 요청
@@ -42,13 +45,15 @@ function App () {
 
 	}, []);
 	return (
-		<CssBaseline>
-			<Router>
-				<div className="App">
-					<MainLayout/>
-				</div>
-			</Router>
-		</CssBaseline>
+		<ThemeProvider theme={LPtheme}>
+			<CssBaseline>
+				<Router>
+					<div className="App">
+						<MainLayout/>
+					</div>
+				</Router>
+			</CssBaseline>
+		</ThemeProvider>
 	);
 }
 

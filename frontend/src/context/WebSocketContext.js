@@ -50,7 +50,7 @@ export const WebSocketProvider = ({children}) => {
 
     useEffect(() => {
         console.log('roomStatus changed');
-        if (isRefresh) {
+        if (isRefresh && connected) {
             // 받아온 roomList의 roomId로 구독하기
             roomStatus.forEach((room) => {
                 console.log(room);
@@ -66,7 +66,7 @@ export const WebSocketProvider = ({children}) => {
             setIsRefresh(false);
         }
         console.log(roomStatus);
-    }, [roomStatus]);
+    }, [roomStatus, connected]);
 
 
 
@@ -140,6 +140,8 @@ export const WebSocketProvider = ({children}) => {
 
 
     const subscribe = (destination, callback) => {
+        console.log(stompClient);
+        console.log(stompClient.connected);
         if (stompClient && stompClient.connected) {
             const subscription = stompClient.subscribe(destination, callback);
             console.log("Subscribed to " + destination);
@@ -150,6 +152,7 @@ export const WebSocketProvider = ({children}) => {
 
     const sendMessage = (destination, body) => {
         if (stompClient && stompClient.connected) {
+            console.log("in sendMessage " + destination);
             stompClient.publish({
                 destination: destination,
                 body: body,
