@@ -7,6 +7,7 @@ function Loader({ setIsLoading }) {
 	const normalizedProgress = Math.round(progress); // 소수점 제거
 
 	useEffect(() => {
+		console.log('Loader active: ', active);
 		setIsLoading(active);
 	}, [active, setIsLoading]);
 	return (

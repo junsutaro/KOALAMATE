@@ -2,16 +2,16 @@ import { alpha } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
 
 export const brand = {
-  50: '#F0F7FF',
-  100: '#CEE5FD',
-  200: '#9CCCFC',
-  300: '#55A6F6',
-  400: '#0A66C2',
-  500: '#0959AA',
-  600: '#064079',
-  700: '#033363',
-  800: '#02294F',
-  900: '#021F3B',
+  50: '#fce4ec',
+  100: '#fce4ec',
+  200: '#f8bbd0',
+  300: '#f8bbd0',
+  400: '#f48fb1',
+  500: '#f48fb1',
+  600: '#ec407a',
+  700: '#ec407a',
+  800: '#e91e63',
+  900: '#e91e63',
 };
 
 export const secondary = {
@@ -298,7 +298,7 @@ export default function getLPTheme(mode) {
               ownerState.color === 'primary' && {
                 color: brand[50],
                 background: brand[500],
-                backgroundImage: `linear-gradient(to bottom, ${brand[400]}, ${brand[600]})`,
+                // backgroundImage: `linear-gradient(to bottom, ${brand[400]}, ${brand[600]})`,
                 boxShadow: `inset 0 1px ${alpha(brand[300], 0.4)}`,
                 outline: `1px solid ${brand[700]}`,
                 '&:hover': {

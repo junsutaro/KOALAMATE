@@ -20,7 +20,7 @@ import { useWebSocket } from 'context/WebSocketContext';
 import { useVoiceSocket } from 'context/VoiceSocketContext';
 import { styled } from '@mui/material/styles';
 
-const Nav = () => {
+const Nav = ({isDrawerOpen}) => {
 	const { isLoggedIn } = useSelector(state => state.auth);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -47,6 +47,11 @@ const Nav = () => {
 
 		return () => resizeObserver.disconnect();
 	}, [ref]);
+
+	useEffect(() => {
+		console.log('toggleDrawer: ', isDrawerOpen);
+
+	}, [isDrawerOpen]);
 
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -130,7 +135,10 @@ const Nav = () => {
 			backgroundImage: 'none',
 			mt: 2,
 		}} ref={ref}>
-			<Container maxWidth="lg">
+			<Container maxWidth="lg" sx={{
+				transition: 'padding-right 0.5s cubic-bezier(.53,0,.65,1.38)',
+				...(isDrawerOpen && { '@media (min-width: 600px)': {paddingRight: '374px'}}),
+			}} >
 				<Toolbar
 					variant="regular"
 					sx={(theme) => ({
@@ -147,8 +155,8 @@ const Nav = () => {
 						border: '1px solid',
 						borderColor: 'divider',
 						boxShadow: theme.palette.mode === 'light'
-							? `0 0 1px rgba(85, 166, 246, 0.1), 1px 1.5px 2px -1px rgba(85, 166, 246, 0.15), 4px 4px 12px -2.5px rgba(85, 166, 246, 0.15)`
-							: '0 0 1px rgba(2, 31, 59, 0.7), 1px 1.5px 2px -1px rgba(2, 31, 59, 0.65), 4px 4px 12px -2.5px rgba(2, 31, 59, 0.65)',
+							? `0 0 1px rgba(246, 85, 243, 0.1), 1px 1.5px 2px -1px rgba(246, 85, 243, 0.15), 4px 4px 12px -2.5px rgba(246, 85, 243, 0.15)`
+							: '0 0 1px rgba(59, 2, 57, 0.7), 1px 1.5px 2px -1px rgba(59, 2, 57, 0.65), 4px 4px 12px -2.5px rgba(59, 2, 57, 0.65)',
 					})}>
 					<Box sx={{
 						flexGrow: 1,

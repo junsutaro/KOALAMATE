@@ -76,6 +76,8 @@ function ModifyFridge() {
 	}
 
 	useEffect(() => {
+		setIsLoading(true);
+		console.log(isLoading);
 		const loadModel = (url) => {
 			return new Promise((resolve, reject) => {
 				const loader = new GLTFLoader();
