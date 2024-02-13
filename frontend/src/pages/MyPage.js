@@ -3,7 +3,7 @@ import {NavLink, useParams} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import Profile from '../components/Profile/Profile';
 import MyRecipe from '../components/Profile/MyRecipe';
-import LikeRecipe from '../components/Profile/LikeRecipe';
+import LikedRecipe from '../components/Profile/LikedRecipe';
 import DetailProfile from '../components/Profile/DetailProfile';
 import MyPageButton from '../components/Profile/MyPageButton';
 import axios from 'axios';
@@ -142,7 +142,7 @@ const MyPage = () => {
                 />
             </Box>
             <MyRecipe nickname={profileData.nickname} userId={userId}/>
-            <LikeRecipe nickname={profileData.nickname}/>
+            <LikedRecipe nickname={profileData.nickname} userId={userId}/>
 
         </Container>
     );

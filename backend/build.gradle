@@ -52,6 +52,12 @@ dependencies {
     //encryption
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 
+    //file upload
+    // https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload
+    implementation 'commons-fileupload:commons-fileupload:1.5'
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation 'commons-io:commons-io:2.11.0'
+    implementation 'commons-codec:commons-codec:1.15'
 }
 
 tasks.named('test') {

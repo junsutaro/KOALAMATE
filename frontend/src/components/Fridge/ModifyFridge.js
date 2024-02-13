@@ -37,6 +37,8 @@ function ModifyFridge() {
 	const [models, setModels] = useState([]);
 	const [isSaved, setIsSaved] = useState(true);
 	const [openDialog, setOpenDialog] = useState(false);
+	const [openSaved, setOpenSaved] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const navigate = useNavigate();
 
 	const handleSave = () => {
@@ -56,6 +58,7 @@ function ModifyFridge() {
 				.then(() => {
 					console.log('custom object added');
 					setIsSaved(true);
+					setOpenSaved(true);
 				})
 				.catch((err) => {
 					console.log(err);
@@ -73,6 +76,8 @@ function ModifyFridge() {
 	}
 
 	useEffect(() => {
+		setIsLoading(true);
+		console.log(isLoading);
 		const loadModel = (url) => {
 			return new Promise((resolve, reject) => {
 				const loader = new GLTFLoader();
@@ -118,7 +123,7 @@ function ModifyFridge() {
 				{/*<spotLight position={[-3, 3, 3]} angle={0.15} penumbra={0.5} castShadow/>*/}
 				{/*<directionalLight ref={directionalLightRef} position={[10, 5, 5]} intensity={5} castShadow/>*/}
 				<pointLight ref={pointLightRef} position={[5, 5, 5]} intensity={100} castShadow/>
-				<Suspense fallback={<Loader/>}>
+				<Suspense fallback={<Loader setIsLoading={setIsLoading}/>}>
 					<FridgeModel setUuid={setFridgeUuid}/>
 					<TrashcanModel initialPosition={[-2.5, -1.5, 1]} setModels={setModels} models={models} setIsSaved={setIsSaved}/>
 					<MBTIModel initialPosition={[2, 1.7, 0]} fridgeUuid={fridgeUuid} models={models} setModels={setModels} setIsSaved={setIsSaved}/>
@@ -126,21 +131,27 @@ function ModifyFridge() {
 					<Environment />
 				</Suspense>
 			</Canvas>
+			{!isLoading &&
 			<Box sx={{width: '200px', position: 'absolute', top: '90%', left: '90%', transform: 'translate(-50%, -50%)', padding: '20px'}}>
 				<Button onClick={handleSave}>저장</Button>
 				<Button onClick={() => {
 					if (isSaved) navigate('/fridgeInside');
-					setOpenDialog(true);
+					else setOpenDialog(true);
 				}}>내부로 이동</Button>
 			</Box>
+			}
 			<Snackbar
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-				open={isSaved}
+				open={openSaved}
 				autoHideDuration={3000}
-				onClose={() => setIsSaved(false)}
+				onClose={() => {
+					setOpenSaved(false);
+				}}
 			>
 				<Alert
-					onClose={() => setIsSaved(false)}
+					onClose={() => {
+						setOpenSaved(false);
+					}}
 					severity="success"
 					variant="filled"
 				>저장 완료!</Alert>

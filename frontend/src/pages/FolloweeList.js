@@ -7,7 +7,6 @@ import { Box } from '@mui/material';
 
 const FolloweeList = () => {
 	const { userId } = useParams();
-	console.log(userId);
 
 	const [followeeData, setFolloweeData] = useState({
 		cnt: 0,
@@ -35,7 +34,6 @@ const FolloweeList = () => {
 		getFolloweeData();
 	}, [userId]);
 
-	console.log(followeeData);
 
 	return (
 			<>

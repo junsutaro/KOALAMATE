@@ -32,6 +32,7 @@ import VoiceChatRoom from '../components/VoiceChatRoom';
 import ModifyFridge from '../components/Fridge/ModifyFridge';
 import ModifyFridgeInside from '../components/Fridge/ModifyFridgeInside';
 import MyPosts from "../pages/MyPosts";
+import MyLikes from "../pages/MyLikes";
 import ShowFridge from "../components/Fridge/ShowFridge";
 import ShowFridgeInside from "../components/Fridge/ShowFridgeInside";
 
@@ -90,7 +91,7 @@ const MainLayout = () => {
 				</Drawer>
 			)}
 
-			<Nav />
+			<Nav isDrawerOpen={isOpen} />
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/mate" element={<Mate />} />
@@ -111,6 +112,7 @@ const MainLayout = () => {
 				<Route path="/user/:userId/follower" element={<FollowerList />} />
 				<Route path="/user/:userId/followee" element={<FolloweeList />} />
 				<Route path="/user/:userId/posts" element={<MyPosts />} />
+				<Route path="/user/:userId/likes" element={<MyLikes />} />
 				<Route path="/fridge" element={<ModifyFridge />} />
 				<Route path="/fridge/:userId" element={<ShowFridge />} />
 				<Route path="/fridgeInside" element={<ModifyFridgeInside />} />
