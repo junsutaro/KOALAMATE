@@ -633,5 +633,45 @@ public class BoardService {
 				.collect(Collectors.toList());
 	}
 
+	public Page<ViewBoardResponseDto> searchBoardsByDrinkCountAndCategory(int minDrinks, int maxDrinks, int category, int page, int size, Long userId) {
+		Sort sort = Sort.by(Sort.Direction.DESC, "id");
+		PageRequest pageable = PageRequest.of(page, size, sort);
+
+		Page<BoardModel> pageResult = null;
+		if (userId == null) {
+			// 로그인하지 않은 경우
+			pageResult = boardRepository.findBoardByDrinkCountAndCategory(minDrinks, maxDrinks, category, pageable);
+		} else {
+			// 로그인한 경우
+			pageResult = boardRepository.findBoardByDrinkCountAndCategory(minDrinks, maxDrinks, category, pageable);
+		}
+
+		List<ViewBoardResponseDto> result = pageResult.getContent().stream()
+				.map(board -> {
+					ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
+					BeanUtils.copyProperties(board, boardDto);
+
+					List<CocktailWithDrinkDto> cocktails = board.getCocktails().stream()
+							.map(temp -> {
+								CocktailWithDrinkDto insert = new CocktailWithDrinkDto();
+								BeanUtils.copyProperties(temp, insert);
+
+								DrinkWithoutCocktailDto drinkDto = new DrinkWithoutCocktailDto();
+								BeanUtils.copyProperties(temp.getDrink(), drinkDto);
+
+								insert.setDrink(drinkDto);
+								return insert;
+							})
+							.collect(Collectors.toList());
+
+					boardDto.setCocktails(cocktails);
+					boardDto.setComments(null);
+					return boardDto;
+				})
+				.collect(Collectors.toList());
+
+		return new PageImpl<>(result, pageable, pageResult.getTotalElements());
+	}
+
 
 }

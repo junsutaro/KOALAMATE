@@ -30,4 +30,10 @@ public interface BoardRepository extends JpaRepository<BoardModel, Long>, JpaSpe
     @Query("select b from BoardModel b where b.userId = :userId")
     Page<BoardModel> findBoardById(@Param("userId") Long userId, Pageable pageable);
 
+    @Query("SELECT b FROM BoardModel b " +
+            "WHERE b.id IN (SELECT c.board.id FROM CocktailModel c GROUP BY c.board HAVING COUNT(c.board) BETWEEN :minDrinks AND :maxDrinks) " +
+            "AND b.id IN (SELECT c.board.id FROM CocktailModel c WHERE c.drink.category = :category GROUP BY c.board)")
+    Page<BoardModel> findBoardByDrinkCountAndCategory(@Param("minDrinks") int minDrinks, @Param("maxDrinks") int maxDrinks, @Param("category") int category, Pageable pageable);
+
+
 }
