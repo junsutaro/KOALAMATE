@@ -95,12 +95,15 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 import refrig from 'assets/refrig_map.png'; // 기본 마커 이미지 경로
 import style from 'components/FindMate/Map.module.css';
+
 
 function Map() {
 	const mapContainer = useRef(null);
 	const [userData, setUserData] = useState([]);
+	const navigate = useNavigate(); // useNavigate 사용
 
 	useEffect(() => {
 		const confirmLocationAccess = window.confirm("위치 정보 활용에 동의하고 내 주변 냉장고를 찾아볼까요?");
@@ -147,8 +150,10 @@ function Map() {
 
 		const map = new window.kakao.maps.Map(mapContainer.current, mapOption);
 
+
 		// 유저 데이터를 사용하여 각 위치에 커스텀 마커 추가
 		userData.forEach(user => {
+			console.log(user);
 			const markerPosition = new window.kakao.maps.LatLng(user.latitude, user.longitude);
 			const marker = new window.kakao.maps.Marker({
 				position: markerPosition,
@@ -177,10 +182,16 @@ function Map() {
 					{ offset: new window.kakao.maps.Point(27, 69) }
 				));
 			});
+
+			// 마커 클릭 이벤트 추가
+			window.kakao.maps.event.addListener(marker, 'click', function() {
+				console.log(`Navigating to /fridge/${user.id}`); // userId 값 확인
+				navigate(`/fridge/${user.id}`); // 사용자 ID를 사용하여 경로 이동
+			});
 		});
 	};
 
-	return <div ref={mapContainer} style={{ width: '100%', height: '600px' }} />;
+	return <div ref={mapContainer} className={style.mapContainer} />;
 }
 
 export default Map;
