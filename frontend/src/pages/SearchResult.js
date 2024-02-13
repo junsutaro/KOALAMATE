@@ -124,7 +124,7 @@ const SearchResult = ({term}) => {
                         {ingredientData.map(result => (
                             <IngredientItem
                                 key={result.id}
-                                drinkId={result.id}
+                                ingredientId={result.id}
                                 imageUrl={result.imageUrl}
                                 name={result.name}
                                 idx={result.category}

@@ -3,12 +3,12 @@ import style from "./RecipeBoard/RecipeItem.module.css";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import React from "react";
-const IngredientItem = ({drinkId, imageUrl, name, idx}) => {
+const IngredientItem = ({ingredientId, imageUrl, name, idx}) => {
     const img = `${process.env.REACT_APP_IMAGE_URL}/${imageUrl}`
     const navigate = useNavigate();
 
     const handleCardClick = () => {
-        navigate(`/drink/${drinkId}`);
+        navigate(`/ingredient/${ingredientId}`);
     };
 
     const categories = [
