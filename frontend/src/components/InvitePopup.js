@@ -8,11 +8,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { CircularProgress, Typography } from "@mui/material";
+import {useWebSocket} from "../context/WebSocketContext";
 
 const InvitePopup = ({ open, onClose, users, roomId }) => {
     const [followees, setFollowees] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const curUser = useSelector(state => state.auth.user);
+
+    const { sendMessage, roomStatus, setRoomStatus } = useWebSocket();
+
 
     useEffect(() => {
         const fetchFollowees = async () => {
@@ -43,18 +47,19 @@ const InvitePopup = ({ open, onClose, users, roomId }) => {
 
     const handleInvite = async (user) => {
         try {
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/chatroom/invite`, {
+
+            axios.post(`${process.env.REACT_APP_API_URL}/chatroom/invite`, {
                 userEmail: user.email,
                 chatroomId: roomId
             }, {
                 headers: getAuthHeader(),
+            }).then( (response) => {
+                sendMessage(`/app/notification/${user.nickname}`,JSON.stringify({roomId:response.data.id}))
             });
 
-            let roomList = JSON.parse(sessionStorage.getItem('roomList'));
-            const roomIndex = roomList.findIndex(room => room.id === roomId);
+            const roomIndex = roomStatus.findIndex(room => room.id === roomId);
             if (roomIndex !== -1) {
-                roomList[roomIndex].users.push(user);
-                sessionStorage.setItem('roomList', JSON.stringify(roomList));
+                roomStatus[roomIndex].users.push(user);
             }
 
             onClose();
