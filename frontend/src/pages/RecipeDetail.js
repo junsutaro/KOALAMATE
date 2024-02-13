@@ -5,8 +5,10 @@ import CommentList from "components/Comment/CommentList";
 import style from "../components/RecipeBoard/RecipeItem.module.css";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
-import { Typography, Box, Button, ListItemText, List } from "@mui/material";
+import { Typography, Box, Button, ListItemText, List, Grid } from "@mui/material";
 import { format } from 'date-fns';
+import Paper from '@mui/material/Paper';
+
 
 const RecipeDetail = () => {
     const { boardId } = useParams(); // URL 파라미터에서 boardId 추출
@@ -58,41 +60,74 @@ const RecipeDetail = () => {
         getDetailRecipe();
     }, [boardId]);
 
-    return (
-        <>
-            <Box m={3} p={2} display="flex" flexDirection="column" justifyContent="space-between" height="100%">
-                <Box>
-                    <Typography>{`${recipe.id}번째 레시피입니다`}</Typography>
-                    <Typography>제목: {recipe.title}</Typography>
-                    <Typography>내용: {recipe.content}</Typography>
-                    <Typography>작성자: {recipe.nickname}</Typography>
-                    <Typography>작성일: {recipe.date}</Typography>
-                    <Typography>조회수: {recipe.views}</Typography>
-                    <img src={recipe.image} />
+//     return (
+//         <>
+//             <Box m={3} p={2} display="flex" flexDirection="column" justifyContent="space-between" height="100%">
+//                 <Box>
+//                     <Typography>{`${recipe.id}번째 레시피입니다`}</Typography>
+//                     <Typography>제목: {recipe.title}</Typography>
+//                     <Typography>내용: {recipe.content}</Typography>
+//                     <Typography>작성자: {recipe.nickname}</Typography>
+//                     <Typography>작성일: {recipe.date}</Typography>
+//                     <Typography>조회수: {recipe.views}</Typography>
+//                     <img src={recipe.image} />
+//
+//                     <List>
+//                         {recipe.ingredients.map((ingredient, index) => (
+//                             <ListItemText key={index}>
+//                                 <div>이름: {ingredient.drink.name}</div>
+//                                 <div>카테고리: {ingredient.drink.category}</div>
+//                                 <div>비율: {ingredient.proportion} {ingredient.unit}</div>
+//                                 <div>이미지: <img src={ingredient.drink.image} alt={ingredient.drink.name}/></div>
+//                             </ListItemText>
+//                         ))}
+//                     </List>
+//                 </Box>
+//                 <Box display="flex" justifyContent="flex-end" alignItems="flex-end" marginTop={2}>
+//                     <Button className={style.likeButton} onClick={handleLikeClick}>
+//                         {isLiked ? (
+//                             <FavoriteIcon sx={{fontSize: '2rem', color: '#FF9B9B'}}/>
+//                         ) : (
+//                             <FavoriteTwoToneIcon sx={{fontSize: '2rem', color: '#e9e9e9'}}/>
+//                         )}
+//                     </Button>
+//                 </Box>
+//             </Box>
+//             <CommentList/>
+//         </>
+//     );
+// }
 
-                    <List>
-                        {recipe.ingredients.map((ingredient, index) => (
-                            <ListItemText key={index}>
-                                <div>이름: {ingredient.drink.name}</div>
-                                <div>카테고리: {ingredient.drink.category}</div>
-                                <div>비율: {ingredient.proportion} {ingredient.unit}</div>
-                                <div>이미지: <img src={ingredient.drink.image} alt={ingredient.drink.name}/></div>
-                            </ListItemText>
-                        ))}
-                    </List>
-                </Box>
-                <Box display="flex" justifyContent="flex-end" alignItems="flex-end" marginTop={2}>
-                    <Button className={style.likeButton} onClick={handleLikeClick}>
-                        {isLiked ? (
-                            <FavoriteIcon sx={{fontSize: '2rem', color: '#FF9B9B'}}/>
-                        ) : (
-                            <FavoriteTwoToneIcon sx={{fontSize: '2rem', color: '#e9e9e9'}}/>
-                        )}
-                    </Button>
-                </Box>
-            </Box>
-            <CommentList/>
-        </>
+
+    return (
+        <div>
+            <Paper sx={{ margin: '170px', padding: '20px', backgroundColor: 'white', borderRadius: '15px'}} elevation={3}>
+                <Grid container spacing={2} justifyContent="center">
+                    <Grid item xs={12} sm={6}>
+                        <Box component="img" src={recipe.image} sx={{ width: '100%', height: 'auto', objectFit: 'contain', maxHeight: 300 }} />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Box display="flex" flexDirection="column" justifyContent="space-between" height="100%">
+                            <div>
+                                <Typography variant="h6">{`#${recipe.id}번째 레시피`}</Typography>
+                                <Typography variant="h5">{recipe.title}</Typography>
+                                <Typography>By {recipe.nickname}</Typography>
+                                <Typography>작성일: {recipe.date}</Typography>
+                                <Typography sx={{ my: 2 }}>{recipe.content}</Typography>
+                            </div>
+                            <Button className={style.likeButton} onClick={handleLikeClick}>
+                                {isLiked ? (
+                                    <FavoriteIcon sx={{ fontSize: '2rem', color: '#FF9B9B' }} />
+                                ) : (
+                                    <FavoriteTwoToneIcon sx={{ fontSize: '2rem', color: '#e9e9e9' }} />
+                                )}
+                            </Button>
+                        </Box>
+                    </Grid>
+                </Grid>
+            </Paper>
+            <CommentList />
+        </div>
     );
 }
 
