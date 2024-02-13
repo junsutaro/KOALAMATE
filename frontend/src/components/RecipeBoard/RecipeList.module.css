@@ -15,3 +15,12 @@
         flex-direction: column;
     }
 }
+
+
+.justifyStart {
+    justify-content: start !important;
+    margin: 20px 10px;
+}
+.justifyCenter {
+    justify-content: center;
+}

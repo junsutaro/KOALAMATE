@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import style from "../components/RecipeBoard/RecipeList.module.css";
 import RecipeItem from "../components/RecipeBoard/RecipeItem";
 import PaginationComponent from "../components/PaginationComponent";
+import SearchResultBtn from "../components/SearchResultBtn";
 
 const SearchResult = ({searchResults, totalPages, setIsSearch}) => {
     const [likedRecipes, setLikedRecipes] = useState([]);
@@ -25,6 +26,7 @@ const SearchResult = ({searchResults, totalPages, setIsSearch}) => {
     return (
         <>
             <h3>검색 결과</h3>
+            <SearchResultBtn />
             <div className={style.cardList}>
                 {searchResults.map(result => (
                     <RecipeItem
@@ -51,3 +53,4 @@ const SearchResult = ({searchResults, totalPages, setIsSearch}) => {
     )
 }
 export default SearchResult
+

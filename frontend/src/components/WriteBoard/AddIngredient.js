@@ -33,6 +33,7 @@ const AddIngredient = ({updateCocktails}) => {
     const handleAddIngredient = () => {
         // proportion을 숫자로 명시적 변환
         const numericProportion = parseFloat(proportion);
+        // selectedIngredient 얘가 null일 때 오류 남
         if (selectedIngredient && numericProportion >= 1 && unit) {
             const newIngredient = {
                 proportion: numericProportion,

@@ -78,8 +78,9 @@ const MyRecipe = ({nickname, userId}) => {
                     <Button p={10} sx={{color: '#ff9b9b'}} onClick={handleViewAllClick}>전체보기</Button>
                 </Box>
 
-                <Box sx={{display: 'flex'}}>
-                    <div className={style.cardList}>
+                <Box  sx={{display: 'flex', justifyContent:'start' }}>
+                    {/*<div  className={`${style.cardList} ${style.justifyStart}`}>*/}
+                    <div className={`${style.cardList} ${style.justifyStart}`}>
                         {recipeData.map(recipe => (
                             <RecipeItem
                                 key={recipe.boardId}
@@ -99,7 +100,7 @@ const MyRecipe = ({nickname, userId}) => {
                         <NavLink to="/writeBoard" style={{
                             textDecoration: 'none',
                             color: 'inherit',
-                            margin: '20px auto',
+                            margin: '20px 0',
                             width: '240px',
                             height: '240px',
                             backgroundColor: 'transparent',
@@ -114,6 +115,6 @@ const MyRecipe = ({nickname, userId}) => {
                     )}
                 </Box>
             </Container>
-        );
-    };
-    export default MyRecipe;
+    );
+};
+export default MyRecipe;

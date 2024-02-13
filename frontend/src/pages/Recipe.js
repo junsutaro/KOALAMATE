@@ -13,6 +13,8 @@ const Recipe = () => {
     // 옵션 숫자 1: 전체 레시피 조회, 2: 관리자(admin) 레시피 조회, 3: 유저 레시피 조회
     const [optionNum, setOptionNum] = useState(1)
 
+    const [searchResultUrl, setSearchResultUrl] = useState('')
+
     // 검색 결과 저장
     const [searchResults, setSearchResults] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
