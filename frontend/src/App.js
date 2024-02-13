@@ -10,6 +10,12 @@ import { useWebSocket } from './context/WebSocketContext';
 import { useSelector } from 'react-redux';
 import getLPTheme from './getLPTheme';
 
+import styles from './App.css'
+
+// 다른 페이지 컴포넌트들을 임포트
+
+
+
 function App () {
 	const { connect, setRoomStatus } = useWebSocket();
 	const dispatch = useDispatch();
