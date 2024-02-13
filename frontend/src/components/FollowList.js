@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {List, ListItem, ListItemText, CircularProgress, Avatar, Divider, IconButton} from '@mui/material';
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
-import ChatIcon from '@mui/icons-material/Chat'; // 채팅 아이콘 추가
+import {useNavigate} from 'react-router-dom';
+import ChatIcon from '@mui/icons-material/Chat';
+import {useWebSocket} from "../context/WebSocketContext"; // 채팅 아이콘 추가
 
-const FollowList = ({setTabValue, setExpandedRoomId} ) => {
+const FollowList = ({setTabValue, setExpandedRoomId}) => {
     const [followees, setFollowees] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const curUser = useSelector(state => state.auth.user);
     const navigate = useNavigate();
 
+    const {sendMessage, roomStatus, setRoomStatus, subscribe} = useWebSocket();
+
     const getAuthHeader = () => {
         const authHeader = localStorage.getItem('authHeader');
-        return authHeader ? { Authorization: authHeader } : {};
+        return authHeader ? {Authorization: authHeader} : {};
     };
 
     const getChatRooms = () => {
@@ -59,17 +62,32 @@ const FollowList = ({setTabValue, setExpandedRoomId} ) => {
         } else {
             // 새로운 방 생성
             try {
-                const response = await axios.post(`${process.env.REACT_APP_API_URL}/chatroom/createRoom`, {otherUserEmail:followee.email},{
+                axios.post(`${process.env.REACT_APP_API_URL}/chatroom/createRoom`, {otherUserEmail: followee.email}, {
                     headers: getAuthHeader(),
+                }).then((response) => {
+                    sendMessage(`/app/notification/${followee.nickname}`, JSON.stringify({roomId:response.data.id}));
+                    // 새 방 정보 추가
+                    const newRoom = response.data;
+                    subscribe(`/topic/messages/${newRoom.id}`, (message) => {
+                        console.log('Message received');
+                        setRoomStatus(prevStatus =>
+                            prevStatus?.map(r =>
+                                r.id === newRoom.id ? {...newRoom, lastMessage: JSON.parse(message.body)} : r
+                            )
+                        );
+                    });
+
+                    setRoomStatus([...roomStatus, newRoom])
+
+                    // roomList.push(newRoom);
+                    // // sessionStorage에 저장
+                    // sessionStorage.setItem('roomList', JSON.stringify(roomList));
+                    // // 새 방으로 이동
+                    setExpandedRoomId(newRoom.id); // 확장될 방 ID 설정
+                    setTabValue(1); // 채팅 탭으로 변경
                 });
-                // 새 방 정보 추가
-                const newRoom = response.data;
-                roomList.push(newRoom);
-                // sessionStorage에 저장
-                sessionStorage.setItem('roomList', JSON.stringify(roomList));
-                // 새 방으로 이동
-                setExpandedRoomId(newRoom.id); // 확장될 방 ID 설정
-                setTabValue(1); // 채팅 탭으로 변경
+
+
             } catch (error) {
                 console.error("Failed to create chatroom:", error);
             }
@@ -81,7 +99,7 @@ const FollowList = ({setTabValue, setExpandedRoomId} ) => {
     };
 
     if (isLoading) {
-        return <CircularProgress />;
+        return <CircularProgress/>;
     }
 
     return (
@@ -91,14 +109,16 @@ const FollowList = ({setTabValue, setExpandedRoomId} ) => {
                     <ListItem
                         secondaryAction={
                             <IconButton edge="end" onClick={() => navigateToChatRoom(followee)}>
-                                <ChatIcon />
+                                <ChatIcon/>
                             </IconButton>
                         }
                     >
-                        <Avatar alt={followee.name} src={followee?.profile ? `${process.env.REACT_APP_IMAGE_URL}/${followee.profile}` : 'default_profile_picture_url'} />
-                        <ListItemText primary={`${followee.nickname}`} onClick={() => handleListItemClick(followee.id)} />
+                        <Avatar alt={followee.name}
+                                src={followee?.profile ? `${process.env.REACT_APP_IMAGE_URL}/${followee.profile}` : 'default_profile_picture_url'}/>
+                        <ListItemText primary={`${followee.nickname}`}
+                                      onClick={() => handleListItemClick(followee.id)}/>
                     </ListItem>
-                    <Divider />
+                    <Divider/>
                 </React.Fragment>
             ))}
         </List>

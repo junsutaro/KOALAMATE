@@ -28,7 +28,7 @@ export const WebSocketProvider = ({children}) => {
     const [stompClient, setStompClient] = useState(null);
     const [connected, setConnected] = useState(false);
     const [roomStatus, setRoomStatus] = useState([]);
-    const {isLoggedIn} = useSelector(state => state.auth);
+    const {isLoggedIn, user} = useSelector(state => state.auth);
     const [isRefresh, setIsRefresh] = useState(false);
 
     useEffect(() => {
@@ -41,7 +41,7 @@ export const WebSocketProvider = ({children}) => {
                 .then((response) => {
                     console.log(response.data);
                     setRoomStatus(response.data);
-                    sessionStorage.setItem('roomList', JSON.stringify(response.data));
+                    //sessionStorage.setItem('roomList', JSON.stringify(response.data));
                 }).catch((error) => {
                 console.log('Get Room List Failed: ', error);
             });
@@ -52,6 +52,7 @@ export const WebSocketProvider = ({children}) => {
         console.log('roomStatus changed');
         if (isRefresh && connected) {
             // 받아온 roomList의 roomId로 구독하기
+            console.log(roomStatus);
             roomStatus.forEach((room) => {
                 console.log(room);
                 subscribe(`/topic/messages/${room.id}`, (message) => {
@@ -63,6 +64,31 @@ export const WebSocketProvider = ({children}) => {
                     );
                 });
             });
+
+            subscribe(`/topic/notification/${user.nickname}`, (message) => {
+                console.log('notification received');
+                getRoomList()
+                    .then((response) => {
+                        console.log(message);
+                        const messageData = JSON.parse(message.body); // 메시지 본문을 객체로 파싱
+                        console.log(messageData);
+                        subscribe(`/topic/messages/${messageData.roomId}`, (message) => {
+                            console.log('Message received');
+                            const newMessage = JSON.parse(message.body);
+                            setRoomStatus(prevStatus =>
+                                prevStatus?.map(r =>
+                                    r.id === messageData.roomId ? {...r, lastMessage: newMessage} : r
+                                )
+                            );
+                        });
+
+                        setRoomStatus(response.data);
+                        //sessionStorage.setItem('roomList', JSON.stringify(response.data));
+                    }).catch((error) => {
+                    console.log('Get Room List Failed: ', error);
+                });
+            });
+
             setIsRefresh(false);
         }
         console.log(roomStatus);
