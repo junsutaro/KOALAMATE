@@ -2,9 +2,13 @@ import {Box, Chip, Container, Typography, Slider} from '@mui/material';
 import Soju from '../../assets/alcohol.png';
 import SojuCup from '../../assets/cup.png';
 import React, {useEffect, useState} from 'react';
+import {useNavigate} from "react-router-dom";
+import FridgeModal from '../Fridge/FridgeModal';
 
 const DetailProfile = ({intro, alcoholLimitBottle, alcoholLimitGlass, mannersScore, tags}) => {
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+	const navigate = useNavigate();
+	const [modalOpen, setModalOpen] = useState(false);
 
 	useEffect(() => {
 		const handleResize = () => {
@@ -16,7 +20,14 @@ const DetailProfile = ({intro, alcoholLimitBottle, alcoholLimitGlass, mannersSco
 		};
 	}, []);
 
+	// onClick 이벤트 핸들러 정의
+	const handleViewRefrigerator = () => {
+		// 여기에 버튼 클릭 시 실행할 로직을 구현
+		console.log("냉장고 보기 버튼이 클릭되었습니다.");
+		setModalOpen(true);
+	};
 	return (<Container>
+			<FridgeModal open={modalOpen} handleClose={() => setModalOpen(false)} userId={userId} />
 		<Box
 				sx={{
 					display: 'flex',
