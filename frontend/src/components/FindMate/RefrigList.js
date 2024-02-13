@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Box, Chip, Divider, List, ListItem, ListItemAvatar, ListItemText, Avatar, Typography } from '@mui/material';
+import { Box, Chip, Divider, List, ListItem, ListItemAvatar, ListItemText, Avatar, Typography, Badge  } from '@mui/material';
 import { Favorite as FavoriteIcon } from '@mui/icons-material';
 import DefaultImg from 'assets/profile.jpg';
 import { useNavigate } from 'react-router-dom';
 import {useSelector} from "react-redux";
+import RefrigeratorImg from 'assets/refrig_map.png';
 
 const authHeader = localStorage.getItem('authHeader');
 
@@ -12,6 +13,29 @@ const RefrigList = () => {
     const [userData, setUserData] = useState([]);
     const navigate = useNavigate();
     const curUser = useSelector(state => state.auth.user);
+
+    // 좌우로 회전하는 이미지 스타일
+    const swingStyle = {
+        animation: 'swing ease-in-out 1s infinite alternate',
+        transformOrigin: 'top center'
+    };
+
+    // CSS 애니메이션
+    useEffect(() => {
+        const styleSheet = document.createElement('style');
+        styleSheet.type = 'text/css';
+        styleSheet.innerText = `
+            @keyframes swing {
+                from { transform: rotate(-5deg); }
+                to { transform: rotate(5deg); }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+        return () => {
+            document.head.removeChild(styleSheet);
+        };
+    }, []);
+
 
     const getUserData = async () => {
         if (!authHeader) {
@@ -67,7 +91,13 @@ const RefrigList = () => {
                                 />
                             </ListItem>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginRight: 2 }}>
-                                {user.follow && <FavoriteIcon color="error" />}
+                                {user.follow ? (
+                                    <Badge badgeContent={<FavoriteIcon color="error" sx={{ fontSize: 'small' }}/>} overlap="circular">
+                                        <Avatar src={RefrigeratorImg} style={user.likeCnt > 2 ? swingStyle : {}}/>
+                                    </Badge>
+                                ) : (
+                                    <Avatar src={RefrigeratorImg} style={user.likeCnt > 2 ? swingStyle : {}}/>
+                                )}
                             </Box>
                         </Box>
                         <Divider />
