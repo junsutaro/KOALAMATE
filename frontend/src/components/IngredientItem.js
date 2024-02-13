@@ -14,18 +14,18 @@ const IngredientItem = ({drinkId, imageUrl, name, idx}) => {
     const categories = [
         // '무알콜',
         '기타 재료',
-        '진 베이스',
-        '럼 베이스',
-        '보드카 베이스',
-        '위스키 베이스',
-        '데킬라 베이스',
-        '브랜디 베이스',
-        '리큐르 베이스',
-        '맥주 베이스',
-        '소주 베이스',
+        '진',
+        '럼',
+        '보드카',
+        '위스키',
+        '데킬라',
+        '브랜디',
+        '리큐르',
+        '맥주',
+        '소주',
     ];
 
-
+    console.log(idx)
     return (
         <div className={style.card} onClick={handleCardClick}>
             <img src={img} alt={name} className={style.cardImage}/>
