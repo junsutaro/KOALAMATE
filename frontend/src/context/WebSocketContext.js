@@ -50,7 +50,7 @@ export const WebSocketProvider = ({children}) => {
 
     useEffect(() => {
         console.log('roomStatus changed');
-        if (isRefresh) {
+        if (isRefresh && connected) {
             // 받아온 roomList의 roomId로 구독하기
             roomStatus.forEach((room) => {
                 console.log(room);
@@ -66,7 +66,7 @@ export const WebSocketProvider = ({children}) => {
             setIsRefresh(false);
         }
         console.log(roomStatus);
-    }, [roomStatus]);
+    }, [roomStatus,stompClient]);
 
 
 
