@@ -191,12 +191,12 @@ const SearchResult = ({term}) => {
                     </div>
                 ) : (
                     <Stack sx={{ width: '100%', maxWidth: 360, m:3}} spacing={2}>
-                    <Alert severity="error"
-                           sx={{
-                               backgroundColor: '#eeeeee', // 배경색 변경
-                               borderRadius: 3,
-                           }}
-                    >검색 결과가 없습니다.</Alert>
+                        <Alert severity="error"
+                               sx={{
+                                   backgroundColor: '#eeeeee', // 배경색 변경
+                                   borderRadius: 3,
+                               }}
+                        >검색 결과가 없습니다.</Alert>
                     </Stack>
                 )
             )}

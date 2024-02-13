@@ -39,7 +39,7 @@ const Recipe = () => {
             <p></p>
             <div className={style.topContainer}>
                 <RecipeButton setOptionNum={setOptionNum}/>
-                <Searchbar setIsSearch={setIsSearch} setTerm={setTerm}/>
+                <Searchbar setIsSearch={setIsSearch} setTerm={setTerm} term={term}/>
             </div>
             <hr/>
             <PopularRecipes/>
@@ -49,9 +49,17 @@ const Recipe = () => {
                 <SearchResult term={term}/> :
                 <>
                     <RecipeFilter onCategoryChange={handleCategoryChange} />
-                    <RecipeList optionNum={optionNum} category={category} searchResults={searchResults}/>
+                    <RecipeList optionNum={optionNum} category={category} />
                 </>
             }
+
+            {/*{isSearch ?*/}
+            {/*    <SearchResult term={term}/> :*/}
+            {/*    <>*/}
+            {/*        <RecipeFilter onCategoryChange={handleCategoryChange} />*/}
+            {/*        <RecipeList optionNum={optionNum} category={category} searchResults={searchResults}/>*/}
+            {/*    </>*/}
+            {/*}*/}
 
         </div>
 

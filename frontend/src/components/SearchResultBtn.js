@@ -76,34 +76,3 @@ const SearchResultBtn = ({setOptionNum}) => {
     )
 }
 export default SearchResultBtn;
-
-// import React, {useState} from "react";
-// import Button from "@mui/material/Button";
-// import ButtonGroup from "@mui/material/ButtonGroup";
-//
-// const SearchResultBtn = ({ setSearchOptionNum }) => {
-//     const [clickedButton, setClickedButton] = useState('admin')
-//     const handleOptionChange = (option) => {
-//         setSearchOptionNum(option);
-//     };
-//
-//     // 버튼 스타일을 동적으로 변경하기 위한 함수
-//     const getButtonStyle = (buttonName) => ({
-//         backgroundColor: clickedButton === buttonName ? '#FF9B9B' : '',
-//         color: clickedButton === buttonName ? 'white' : '#FF9B9B',
-//         borderRadius: '10px',
-//         fontWeight: 'bold',
-//         borderColor: '#FF9B9B', // 버튼 그룹에 있는 버튼들을 위해 추가
-//     });
-//
-//     return (
-//         <div>
-//             <ButtonGroup variant="contained">
-//                 <Button onClick={() => handleOptionChange(1)}>레시피 백과</Button>
-//                 <Button onClick={() => handleOptionChange(2)}>유저 레시피</Button>
-//                 <Button onClick={() => handleOptionChange(3)}>재료 검색</Button>
-//                 <Button onClick={() => handleOptionChange(4)}>검색어가 들어간 레시피</Button>
-//             </ButtonGroup>
-//         </div>
-//     );
-// };

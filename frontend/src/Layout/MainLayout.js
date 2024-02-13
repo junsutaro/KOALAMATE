@@ -121,7 +121,6 @@ const MainLayout = () => {
 				<Route path="/fridgeInside/:userId" element={<ShowFridgeInside />} />
 				<Route path="/voiceChat/:roomId" element={<VoiceChatRoom />} />
 				<Route path="/drink/:drinkId" element={<ingredientDetail />} />
-				<Route path="/recipe/search" element={<SearchResult />} />
 
 				{/* 다른 라우트들 */}
 			</Routes>
