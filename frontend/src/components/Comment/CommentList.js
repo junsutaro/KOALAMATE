@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import axios from 'axios';
-import {Container, List, Typography, Button, Grid} from '@mui/material';
+import {Container, List, Typography, Button, Grid, Box} from '@mui/material';
 import CommentForm from './CommentForm';
 import CommentItem from './CommentItem'; // Import the new component
 
@@ -67,7 +67,13 @@ const CommentList = () => {
     return (
         <>
             <Container component="main" maxWidth="sm">
-                <Typography variant="h6">댓글 {comments.length || 0}</Typography>
+                <Box sx={{display: 'inline-flex', gap: 1}}>
+                    <Typography sx={{fontWeight: 'bold'}} variant="h6">
+                        댓글
+                    </Typography>
+                    <Typography sx={{fontWeight: 'bold', color: '#ff9b9b'}}
+                                variant="h6">{comments.length || 0}</Typography>
+                </Box>
 
                 <CommentForm boardId={boardId} updateComments={getComments}/>
                 <List>
