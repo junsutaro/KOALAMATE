@@ -28,13 +28,12 @@ function Environment() {
     return null;
 }
 
-function ShowFridge() {
+function ShowFridge({setOpenInside, userId}) {
     const pointLightRef = useRef();
     const [fridgeUuid, setFridgeUuid] = React.useState(null);
     const { roomStatus } = useWebSocket();
     const [models, setModels] = useState([]);
     const navigate = useNavigate();
-    const {userId} = useParams();
 
     useEffect(() => {
         const loadModel = (url) => {
@@ -75,7 +74,7 @@ function ShowFridge() {
     }, [pointLightRef]);
 
     return (
-        <Box height='800px'>
+      <>
             <Canvas camera={{ position: [0, 0, 6], fov: 60 }} shadows antialias='true' colorManagement={true} shadowMap={{ type: THREE.VSMShadowMap }}>
                 {/*<OrbitControls />*/}
                 {/*<ambientLight intensity={0.5}/>*/}
@@ -101,10 +100,10 @@ function ShowFridge() {
                 padding: '20px'
             }}>
                 <Button onClick={() => {
-                    navigate(`/fridgeInside/${userId}`);
+                    setOpenInside(true);
                 }}>내부로 이동</Button>
             </Box>
-        </Box>
+          </>
     )
 }
 

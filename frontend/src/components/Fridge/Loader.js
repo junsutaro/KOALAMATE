@@ -8,7 +8,8 @@ function Loader({ setIsLoading }) {
 
 	useEffect(() => {
 		console.log('Loader active: ', active);
-		setIsLoading(active);
+		if (setIsLoading)
+			setIsLoading(active);
 	}, [active, setIsLoading]);
 	return (
 		<Html center>
