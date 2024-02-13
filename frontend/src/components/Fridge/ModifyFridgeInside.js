@@ -94,6 +94,7 @@ function ModifyFridgeInside() {
     const category = ['Gin', 'Rum', 'Vodka', 'Whiskey', 'Tequila', 'Brandy', 'Liqueur', 'Beer', 'Soju'];
 
     useEffect(() => {
+        setIsLoading(true);
         setModels([]);
         axios.post(`${process.env.REACT_APP_API_URL}/user/myId`, null, {
             headers: {

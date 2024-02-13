@@ -91,7 +91,7 @@ const MainLayout = () => {
 				</Drawer>
 			)}
 
-			<Nav />
+			<Nav isDrawerOpen={isOpen} />
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/mate" element={<Mate />} />
