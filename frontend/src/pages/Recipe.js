@@ -8,6 +8,7 @@ import style from 'pages/Recipe.module.css';
 import RecipeButton from 'components/RecipeBoard/RecipeButton';
 import SearchResult from './SearchResult';
 
+
 const Recipe = () => {
     // 옵션 숫자 1: 전체 레시피 조회, 2: 관리자(admin) 레시피 조회, 3: 유저 레시피 조회
     const [optionNum, setOptionNum] = useState(1)

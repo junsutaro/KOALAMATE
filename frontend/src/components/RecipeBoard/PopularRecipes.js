@@ -14,7 +14,7 @@ const PopularRecipes = () => {
 	const [isHovering, setIsHovering] = useState(false);
 
 	useEffect(() => {
-		const interval = setInterval(() => {
+		let interval = setInterval(() => {
 			if (!isHovering) {
 			setCurrentRecipeIndex(
 					(currentRecipeIndex) => (currentRecipeIndex + 1) % recipeNames.length
@@ -34,29 +34,49 @@ const PopularRecipes = () => {
 	};
 
 
+	// return (
+	// 		<div className={styles.container}>
+	// 			<div className={styles.fixedText}>
+	// 				<span className={styles.flameIcon}>🔥</span> 지금 핫한 레시피 Top 10
+	// 			</div>
+	// 			<div
+	// 				className={styles.recipesContainer}
+	// 				onMouseEnter={() => setIsHovering(true)} // 마우스가 영역에 들어오면 멈춤
+	// 				onMouseLeave={() => setIsHovering(false)} // 마우스가 영역을 벗어나면 다시 시작
+	// 			>
+	// 				<div
+	// 						className={styles.recipe}
+	// 						style={{ transform: `translateY(${-currentRecipeIndex * 100}%)` }}
+	// 				>
+	// 					{recipeNames.map((name, index) => (
+	// 						<div key={index} className={styles.recipeName}>
+	// 							{name}
+	// 						</div>
+	// 					))}
+	// 				</div>
+	// 			</div>
+	// 		</div>
+	// );
 	return (
-			<div className={styles.container}>
-				<div className={styles.fixedText}>
-					<span className={styles.flameIcon}>🔥</span> 지금 핫한 레시피 Top 10
-				</div>
-				<div className={styles.recipesContainer}>
-					<div
-							className={styles.recipe}
-							style={{ transform: `translateY(${-currentRecipeIndex * 100}%)` }}
-					>
-						{recipeNames.map((name, index) => (
-							<div
-								key={index}
-								className={styles.recipeName}
-								onMouseEnter={() => handleMouseEnter(index)}
-								onMouseLeave={handleMouseLeave}
-							>
-								{name}
-							</div>
-						))}
-					</div>
-				</div>
+		<div className={styles.container}>
+			<div className={styles.fixedText}>
+				<span className={styles.flameIcon}>🔥</span> 지금 핫한 레시피 Top 10
 			</div>
+			<div
+				className={styles.recipesContainer}
+				onMouseEnter={() => setIsHovering(true)}
+				onMouseLeave={() => setIsHovering(false)}
+			>
+				{recipeNames.map((name, index) => (
+					<div
+						key={index}
+						className={`${styles.recipeName} ${index === currentRecipeIndex ? styles.show : styles.hide}`}
+					>
+						{name}
+					</div>
+				))}
+			</div>
+		</div>
 	);
 };
 
