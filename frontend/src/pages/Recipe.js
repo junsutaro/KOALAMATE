@@ -13,14 +13,15 @@ const Recipe = () => {
     // 옵션 숫자 1: 전체 레시피 조회, 2: 관리자(admin) 레시피 조회, 3: 유저 레시피 조회
     const [optionNum, setOptionNum] = useState(1)
 
-    const [searchResultUrl, setSearchResultUrl] = useState('')
-
     // 검색 결과 저장
     const [searchResults, setSearchResults] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
-    const [isSearch, setIsSearch] = useState(false)
+
 
     const [category, setCategory] = useState(null);
+
+    const [term, setTerm] = useState('');
+    const [isSearch, setIsSearch] = useState(false)
 
     const handleSearchResults = (result, pages) => {
         setSearchResults(result);     // 검색 결과를 저장
@@ -38,14 +39,14 @@ const Recipe = () => {
             <p></p>
             <div className={style.topContainer}>
                 <RecipeButton setOptionNum={setOptionNum}/>
-                <Searchbar onSearch={handleSearchResults} setIsSearch={setIsSearch}/>
+                <Searchbar setIsSearch={setIsSearch} setTerm={setTerm}/>
             </div>
             <hr/>
             <PopularRecipes/>
 
 
             {isSearch ?
-                <SearchResult searchResults={searchResults} totalPages={totalPages} setIsSearch={setIsSearch}/> :
+                <SearchResult term={term}/> :
                 <>
                     <RecipeFilter onCategoryChange={handleCategoryChange} />
                     <RecipeList optionNum={optionNum} category={category} searchResults={searchResults}/>

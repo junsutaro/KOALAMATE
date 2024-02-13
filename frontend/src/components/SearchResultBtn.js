@@ -2,27 +2,27 @@ import React, {useState} from "react";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 
-const SearchResultBtn = () => {
+const SearchResultBtn = ({setOptionNum}) => {
     const [clickedButton, setClickedButton] = useState('admin')
 
     // 버튼 클릭 이벤트 핸들러 함수들
     const handleAdminRecipesClick = () => {
-
+        setOptionNum(1)
         setClickedButton('admin')
     };
 
     const handleUserRecipesClick = () => {
-
+        setOptionNum(2)
         setClickedButton('user')
     };
 
     const handleIngredientClick = () => {
-
+        setOptionNum(4)
         setClickedButton('ingredient')
     };
 
     const handleDrinkClick = () => {
-
+        setOptionNum(3)
         setClickedButton('drink')
     };
 
