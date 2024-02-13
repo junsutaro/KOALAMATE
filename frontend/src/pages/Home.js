@@ -28,6 +28,7 @@ const Home = () => {
 
 	return (
 			<Container>
+				<FridgeModal userId={1}/>
 				<h1>Home</h1>
 				<Button color="inherit" component={NavLink} to="/writeBoard">
 					write

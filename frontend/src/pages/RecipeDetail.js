@@ -101,7 +101,7 @@ const RecipeDetail = () => {
 
     return (
         <div>
-            <Paper sx={{ margin: '170px', padding: '20px', backgroundColor: 'white', borderRadius: '15px'}} elevation={3}>
+            <Paper sx={{ margin: '200px', padding: '20px', backgroundColor: 'white', borderRadius: '15px'}} elevation={3}>
                 <Grid container spacing={2} justifyContent="center">
                     <Grid item xs={12} sm={6}>
                         <Box component="img" src={recipe.image} sx={{ width: '100%', height: 'auto', objectFit: 'contain', maxHeight: 300 }} />
@@ -109,20 +109,20 @@ const RecipeDetail = () => {
                     <Grid item xs={12} sm={6}>
                         <Box display="flex" flexDirection="column" justifyContent="space-between" height="100%">
                             <div>
-                                <Typography variant="h6">{`#${recipe.id}번째 레시피`}</Typography>
-                                <Typography variant="h5">{recipe.title}</Typography>
-                                <Typography>By {recipe.nickname}</Typography>
-                                <Typography>작성일: {recipe.date}</Typography>
+                                <Typography variant="h6" sx={{ mb: 2 }}>{`#${recipe.id}번째 레시피`}</Typography>
+                                <Typography variant="h5" color="#FF9B9B" sx={{ mb: 2 }}>{recipe.title}</Typography>
+                                <Typography sx={{ mb: 2 }}>By {recipe.nickname}</Typography>
+                                <Typography sx={{ mb: 2 }}>작성일: {recipe.date}</Typography>
                                 <Typography sx={{ my: 2 }}>{recipe.content}</Typography>
                             </div>
-                            <Button className={style.likeButton} onClick={handleLikeClick}>
-                                {isLiked ? (
-                                    <FavoriteIcon sx={{ fontSize: '2rem', color: '#FF9B9B' }} />
-                                ) : (
-                                    <FavoriteTwoToneIcon sx={{ fontSize: '2rem', color: '#e9e9e9' }} />
-                                )}
-                            </Button>
                         </Box>
+                        <Button className={style.likeButton} onClick={handleLikeClick}>
+                            {isLiked ? (
+                                <FavoriteIcon sx={{ fontSize: '2rem', color: '#FF9B9B' }} />
+                            ) : (
+                                <FavoriteTwoToneIcon sx={{ fontSize: '2rem', color: '#e9e9e9' }} />
+                            )}
+                        </Button>
                     </Grid>
                 </Grid>
             </Paper>
