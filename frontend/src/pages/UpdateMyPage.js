@@ -84,6 +84,9 @@ const UpdateMyPage = () => {
 
     const navigate = useNavigate()
 
+    const [fileInfo, setFileInfo] = useState({id: null, fileDownloadUri: ''});
+
+
     // user 프로필 정보를 가져오는 함수
     useEffect(() => {
         const getProfileData = async () => {
@@ -190,22 +193,25 @@ const UpdateMyPage = () => {
             // FormData 객체를 생성하여 이미지 파일을 담음
             const formData = new FormData();
             formData.append("file", selectedImageFile);
+            formData.append("type", "profile");
 
 
             // Axios를 사용하여 이미지를 업로드하는 요청 보냄
-            const response = await axios.put(`${process.env.REACT_APP_API_URL}/profile/uploadProfileImage`, formData, {
+            const response = await axios.put(`${process.env.REACT_APP_API_URL}/profile/upload`, formData, {
                 headers: getAuthHeader(), // 인증 헤더 추가
             });
 
             // 응답에 따른 처리 (여기서는 콘솔에 출력)
             console.log(response.data);
+
+            return response.data;
         } catch (error) {
             console.error("프로필 이미지 업로드에 실패했습니다.", error);
         }
     };
 
     // saveProfile 함수 수정
-    const saveProfile = async () => {
+    const saveProfile = async (FileResult) => {
         try {
             // 서버에 요청 보내기
             const response = await axios.put(
@@ -220,8 +226,10 @@ const UpdateMyPage = () => {
                     tags: selectedTags,
                     latitude: latitude,
                     longitude: longitude,
+                    fileId: FileResult.id,
+                    profile: FileResult.fileDownloadUri,
                 }, {
-                    headers: getAuthHeader(), // 인증 헤더 추가
+                    headers: getAuthHeader() // 인증 헤더 추가
                 });
             console.log('프로필 저장 성공:', response.data);
 
@@ -237,8 +245,8 @@ const UpdateMyPage = () => {
 
     // 저장 버튼 클릭 시 SaveProfileImage 함수와 saveProfile 함수를 호출
     const handleSaveButtonClick = async () => {
-        await SaveProfileImage();    // SaveProfileImage 함수의 완료를 기다림
-        saveProfile();               // SaveProfileImage가 완료된 후 saveProfile 함수 실행
+        const fileResult = await SaveProfileImage();    // SaveProfileImage 함수의 완료를 기다림
+        saveProfile(fileResult);               // SaveProfileImage가 완료된 후 saveProfile 함수 실행
     };
 
 

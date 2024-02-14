@@ -1,5 +1,6 @@
 package com.ssafy.koala.model;
 
+import com.ssafy.koala.model.file.FileMetadata;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,5 +25,9 @@ public class DrinkModel {
 
     @OneToMany(mappedBy = "drink")
     private List<RefrigeratorDrinkModel> refrigeratorDrinkModels;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "file_metadata_id")
+    private FileMetadata fileMetadata;
 
 }

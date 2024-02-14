@@ -1,6 +1,7 @@
 package com.ssafy.koala.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.ssafy.koala.model.file.FileMetadata;
 import com.ssafy.koala.model.user.UserModel;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -48,4 +49,8 @@ public class BoardModel {
 
 	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<LikeModel> likes;
+
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "file_metadata_id")
+	private FileMetadata fileMetadata;
 }
