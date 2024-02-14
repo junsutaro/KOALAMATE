@@ -15,6 +15,8 @@ import java.util.List;
 public interface LikeRepository extends JpaRepository<LikeModel, Long> {
     boolean existsByUserAndBoard(UserModel user, BoardModel board);
 
+    boolean existsByUserIdAndBoardId(Long userId, Long boardId);
+
     @Transactional
     void deleteByUserAndBoard(UserModel user, BoardModel board);
 

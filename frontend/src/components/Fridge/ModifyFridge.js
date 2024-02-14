@@ -83,8 +83,9 @@ function ModifyFridge({setOpenInside}) {
 		console.log(isLoading);
 		const loadModel = (url) => {
 			return new Promise((resolve, reject) => {
+				console.log(url);
 				const loader = new GLTFLoader();
-				loader.load(url, resolve, undefined, reject);
+				loader.load(`/${url}`, resolve, undefined, reject);
 			});
 		};
 		axios.post(`${process.env.REACT_APP_API_URL}/user/myId`, null, {
