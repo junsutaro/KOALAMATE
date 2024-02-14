@@ -102,23 +102,24 @@ const CommentItem = ({comment, onDeleteComment, onEditComment, handleEditComment
                             {isCommentAuthor && (
                                 <>
                                     <Button
-                                        onClick={() => onDeleteComment(comment.id)}
-                                        variant="contained"
-                                        sx={{marginTop: '10px', marginRight: '5px'}}
-                                    >
-                                        삭제
-                                    </Button>
-                                    <Button
                                         onClick={() => handleEditClick(comment.id, editedContent)}
                                         variant="contained"
                                         sx={{
                                             marginTop: '10px',
+                                            marginRight: '5px',
                                             bgcolor: '#99ccff',
                                             '&:hover': {bgcolor: '#99ccff'},
                                             // border: 'none',
                                         }}
                                     >
                                         수정
+                                    </Button>
+                                    <Button
+                                        onClick={() => onDeleteComment(comment.id)}
+                                        variant="contained"
+                                        sx={{marginTop: '10px'}}
+                                    >
+                                        삭제
                                     </Button>
                                 </>
                             )}
