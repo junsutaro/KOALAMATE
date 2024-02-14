@@ -5,7 +5,9 @@ import com.ssafy.koala.dto.cocktail.CocktailWithBoardDto;
 import com.ssafy.koala.dto.drink.DrinkDto;
 import com.ssafy.koala.dto.drink.DrinkWithoutCocktailDto;
 import com.ssafy.koala.model.DrinkModel;
+import com.ssafy.koala.model.file.FileMetadata;
 import com.ssafy.koala.repository.DrinkRepository;
+import com.ssafy.koala.repository.file.FileMetadataRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +19,12 @@ import java.util.stream.Collectors;
 @Service
 public class DrinkService {
     private final DrinkRepository drinkRepository;
+    private final FileMetadataRepository fileMetadataRepository;
 
 
-    public DrinkService(DrinkRepository drinkRepository) {
+    public DrinkService(DrinkRepository drinkRepository, FileMetadataRepository fileMetadataRepository) {
         this.drinkRepository = drinkRepository;
+        this.fileMetadataRepository = fileMetadataRepository;
     }
 
     public DrinkDto getDrinkById(long id) {
@@ -38,6 +42,8 @@ public class DrinkService {
     public DrinkModel createDrink(DrinkWithoutCocktailDto drinkDto) {
         DrinkModel drinkModel = new DrinkModel();
         BeanUtils.copyProperties(drinkDto, drinkModel);
+        Optional<FileMetadata> fileMetadata = fileMetadataRepository.findById(drinkDto.getFileId());
+        fileMetadata.ifPresent(drinkModel::setFileMetadata);
 
         return drinkRepository.save(drinkModel);
     }

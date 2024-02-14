@@ -2,8 +2,10 @@ package com.ssafy.koala.service.user;
 
 import com.ssafy.koala.dto.user.ProfileDto;
 import com.ssafy.koala.dto.user.ProfileModifyDto;
+import com.ssafy.koala.model.file.FileMetadata;
 import com.ssafy.koala.model.user.UserModel;
 import com.ssafy.koala.repository.UserRepository;
+import com.ssafy.koala.repository.file.FileMetadataRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -20,9 +22,10 @@ import java.util.Optional;
 public class ProfileService {
 
     private final UserRepository userRepository;
-
-    public ProfileService(UserRepository userRepository) {
+    private final FileMetadataRepository fileMetadataRepository;
+    public ProfileService(UserRepository userRepository, FileMetadataRepository fileMetadataRepository) {
         this.userRepository = userRepository;
+        this.fileMetadataRepository = fileMetadataRepository;
     }
 
     public Optional<ProfileDto> getProfileDtoByUserId(Long userId) {
@@ -47,13 +50,16 @@ public class ProfileService {
             user.setNickname(modifiedProfile.getNickname());
             user.setBirthRange(modifiedProfile.getBirthRange());
             user.setGender(modifiedProfile.getGender());
-//            user.setProfile(modifiedProfile.getProfile());
+            user.setProfile(modifiedProfile.getProfile());
             user.setIntroduction(modifiedProfile.getIntroduction());
             user.setAlcoholLimitBottle(modifiedProfile.getAlcoholLimitBottle());
             user.setAlcoholLimitGlass(modifiedProfile.getAlcoholLimitGlass());
             user.setTags(modifiedProfile.getTags());
             user.setLatitude(modifiedProfile.getLatitude());
             user.setLongitude(modifiedProfile.getLongitude());
+
+            Optional<FileMetadata> fileMetadata = fileMetadataRepository.findById(modifiedProfile.getFileId());
+            fileMetadata.ifPresent(user::setFileMetadata);
 
             userRepository.save(user);
 

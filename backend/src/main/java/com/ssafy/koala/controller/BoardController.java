@@ -3,14 +3,18 @@ package com.ssafy.koala.controller;
 import com.ssafy.koala.dto.board.BoardWithoutCocktailDto;
 import com.ssafy.koala.dto.board.CreateBoardRequestDto;
 import com.ssafy.koala.dto.board.ViewBoardResponseDto;
+import com.ssafy.koala.dto.file.StoreFileDto;
+import com.ssafy.koala.dto.file.UploadFileResponse;
 import com.ssafy.koala.dto.user.UserDto;
 import com.ssafy.koala.model.BoardModel;
 import com.ssafy.koala.model.CocktailModel;
 import com.ssafy.koala.model.DrinkModel;
+import com.ssafy.koala.model.file.FileMetadata;
 import com.ssafy.koala.service.AuthService;
 import com.ssafy.koala.service.BoardService;
 import com.ssafy.koala.service.CocktailService;
 import com.ssafy.koala.service.DrinkService;
+import com.ssafy.koala.service.file.FileStorageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityManager;
@@ -18,18 +22,22 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.BeanUtils;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -40,13 +48,15 @@ public class BoardController {
 	private final DrinkService drinkService;
 	private final CocktailService cocktailService;
 	private final AuthService authService;
+	private final FileStorageService fileStorageService;
 	@PersistenceContext
 	private EntityManager entityManager;
-	public BoardController (BoardService boardService, DrinkService drinkService, CocktailService cocktailService, AuthService authService) {
+	public BoardController (BoardService boardService, DrinkService drinkService, CocktailService cocktailService, AuthService authService, FileStorageService fileStorageService) {
 		this.boardService = boardService;
 		this.drinkService = drinkService;
 		this.cocktailService = cocktailService;
         this.authService = authService;
+        this.fileStorageService = fileStorageService;
     }
 
 	@GetMapping("/list")
@@ -101,6 +111,8 @@ public class BoardController {
 		board.setNickname(userDto.getNickname());
 		BoardModel boardModel = new BoardModel();
 		BeanUtils.copyProperties(board, boardModel);
+		Optional<FileMetadata> metadata = fileStorageService.findById(board.getFileId());
+        metadata.ifPresent(boardModel::setFileMetadata);
 		boardService.createBoard(boardModel);
 
 		List<CocktailModel> list = board.getCocktails().stream()
@@ -288,5 +300,29 @@ public class BoardController {
 		responseBody.put("totalPages", totalPages);
 
 		return new ResponseEntity<>(responseBody, HttpStatus.OK);
+	}
+
+	// 백 서버에 파일 업로드
+	@PostMapping(value="/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+		StoreFileDto storedFile = fileStorageService.storeFile(file, "board");
+		String fileName = storedFile.getFilename();
+
+		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+				.path("/board/download/")
+				.path(fileName)
+				.toUriString();
+
+		return ResponseEntity.ok(new UploadFileResponse(storedFile.getId(), fileName, fileDownloadUri, file.getContentType(), file.getSize()));
+	}
+
+	// 백 서버에서 파일 다운로드
+	@GetMapping("/download/{fileName:.+}")
+	public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
+		// Load file as Resource
+		Resource resource = fileStorageService.loadFileAsResource(fileName, "board");
+
+		return ResponseEntity.ok()
+				.body(resource);
 	}
 }
