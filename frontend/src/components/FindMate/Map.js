@@ -123,11 +123,9 @@ const Map = ()  => {
         const fetchUserData = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_API_URL}/findmate/listMate`, {
-                    headers: {
-                        'Authorization': localStorage.getItem('authHeader'),
-                    },
+                    headers: { 'Authorization': localStorage.getItem('authHeader') },
                 });
-                setUserData(response.data);
+                initializeMap(response.data);
             } catch (error) {
                 console.error("유저 데이터를 가져오는 중 오류 발생", error);
             }
@@ -136,40 +134,32 @@ const Map = ()  => {
         fetchUserData();
     }, []);
 
-    useEffect(() => {
+    const initializeMap = (userData) => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
-                initializeMap(position.coords.latitude, position.coords.longitude);
+                const mapOption = {
+                    center: new window.kakao.maps.LatLng(position.coords.latitude, position.coords.longitude),
+                    level: 3,
+                };
+                const map = new window.kakao.maps.Map(mapContainer.current, mapOption);
+                addMarkers(map, userData);
+                window.kakao.maps.event.addListener(map, 'idle', () => updateVisibleMarkers(map, userData));
             }, () => {
                 console.error("위치 정보를 가져올 수 없습니다.");
-                initializeMap(36.1081844, 128.4139686); // 기본 위치 설정
             });
         } else {
             console.log("이 브라우저에서는 위치 정보가 지원되지 않습니다.");
-            initializeMap(36.1081844, 128.4139686); // 기본 위치 설정
         }
-    }, [userData]);
+    };
 
 
-    const initializeMap = (lat, lng) => {
-        const mapOption = {
-            center: new window.kakao.maps.LatLng(lat, lng),
-            level: 3
-        };
-
-        const map = new window.kakao.maps.Map(mapContainer.current, mapOption);
-
-
-        // 유저 데이터를 사용하여 각 위치에 커스텀 마커 추가
-        userData.filter(user => user.nickname !== curUser.nickname).map(user => {
-            const markerPosition = new window.kakao.maps.LatLng(user.latitude, user.longitude);
-            const marker = new window.kakao.maps.Marker({
+    const addMarkers = (map, userData) => {
+        userData.forEach(user => {
+            if (user.nickname !== curUser.nickname) {
+                const markerPosition = new window.kakao.maps.LatLng(user.latitude, user.longitude);
+                const marker = new window.kakao.maps.Marker({
                     position: markerPosition,
-                    image: new window.kakao.maps.MarkerImage(
-                        refrig,
-                        new window.kakao.maps.Size(65, 70),
-                        {offset: new window.kakao.maps.Point(27, 69)}
-                    )
+                    image: new window.kakao.maps.MarkerImage(refrig, new window.kakao.maps.Size(65, 70), { offset: new window.kakao.maps.Point(27, 69) }),
                 });
 
                 // follow 상태에 따른 하트 아이콘 표시
@@ -218,28 +208,22 @@ const Map = ()  => {
                     navigate(`/user/${user.id}`);
                 });
 
-                const newMap = new window.kakao.maps.Map(mapContainer.current, mapOption);
-                setMap(newMap);
-
-                window.kakao.maps.event.addListener(newMap, 'idle', function () {
-                    updateVisibleMarkers(userData, newMap);
-                });
-
-            return user; // 화면에 보이는 마커에 해당하는 유저 데이터 반환
+                marker.setMap(map);
+                // 마커에 클릭 이벤트를 추가할 수 있습니다.
+            }
         });
+    };
 
-        const updateVisibleMarkers = (userData, map) => {
-            const bounds = map.getBounds();
-            const visibleMarkers = userData.filter(user => {
-                const userPosition = new window.kakao.maps.LatLng(user.latitude, user.longitude);
-                return bounds.contain(userPosition);
-            });
-
-            setVisibleMarkersData(visibleMarkers);
-        };
+    const updateVisibleMarkers = (map, userData) => {
+        const bounds = map.getBounds();
+        const visibleMarkers = userData.filter(user => {
+            const position = new window.kakao.maps.LatLng(user.latitude, user.longitude);
+            return bounds.contain(position) && user.nickname !== curUser.nickname;
+        });
+        setVisibleMarkersData(visibleMarkers);
     };
 
     return <div ref={mapContainer} style={{ width: '100%', height: '600px' }} />;
-}
+};
 
 export default Map;
