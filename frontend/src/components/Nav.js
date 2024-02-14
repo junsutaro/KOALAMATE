@@ -216,7 +216,9 @@ const Nav = ({isDrawerOpen}) => {
 									<Tooltip title="Open settings">
 										<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
 											<Avatar alt="Remy Sharp"
-											        src="/static/images/avatar/2.jpg"/>
+											        src="/static/images/avatar/2.jpg"
+													sx={{ bgcolor: '#FF9B9B'}}
+											/>
 										</IconButton>
 									</Tooltip>
 									<Menu
