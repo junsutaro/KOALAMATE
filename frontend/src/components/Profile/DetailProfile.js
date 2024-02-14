@@ -4,11 +4,13 @@ import SojuCup from '../../assets/cup.png';
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import FridgeModal from '../Fridge/FridgeModal';
+import { useSelector } from 'react-redux';
 
-const DetailProfile = ({intro, alcoholLimitBottle, alcoholLimitGlass, mannersScore, tags, userId }) => {
+const DetailProfile = ({intro, alcoholLimitBottle, alcoholLimitGlass, mannersScore, tags, userId, nickname }) => {
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 	const navigate = useNavigate();
 	const [modalOpen, setModalOpen] = useState(false);
+	const {user, isLoggedIn} = useSelector(state => state.auth);
 
 	useEffect(() => {
 		const handleResize = () => {
@@ -26,9 +28,9 @@ const DetailProfile = ({intro, alcoholLimitBottle, alcoholLimitGlass, mannersSco
 		console.log("냉장고 보기 버튼이 클릭되었습니다.");
 		setModalOpen(true);
 	};
-	
+
 	return (<Container>
-			<FridgeModal open={modalOpen} handleClose={() => setModalOpen(false)} userId={userId} />
+		{(nickname === user.nickname) && isLoggedIn ? <FridgeModal open={modalOpen} handleClose={() => setModalOpen(false)}/> : <FridgeModal open={modalOpen} handleClose={() => setModalOpen(false)} userId={userId} />}
 		<Box
 				sx={{
 					display: 'flex',
