@@ -4,6 +4,7 @@ import Slider from 'react-slick';
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import "./ImageSlider.css";
+import { Box } from '@mui/material';
 
 const ImageSlider = () => {
   const images = [
@@ -30,17 +31,48 @@ const ImageSlider = () => {
     cssEase: "linear" // 전환 효과
   };
 
-  // 이미지 클릭 이벤트 핸들러
+  const clickTolerance = 10; // 클릭으로 간주할 마우스 이동 최대 허용 오차 (예: 10픽셀)
+
+  const [startPosition, setStartPosition] = React.useState(null);
+  const [endPosition, setEndPosition] = React.useState(null);
+
+  const handleMouseDown = (e) => {
+    setStartPosition({ x: e.clientX, y: e.clientY });
+  };
+
+  const handleMouseUp = (e) => {
+    setEndPosition({ x: e.clientX, y: e.clientY });
+  };
+
   const handleImageClick = (imagePath) => {
-    navigate(imagePath); // 원하는 경로로 이동
+    if (startPosition && endPosition) {
+      const dx = endPosition.x - startPosition.x; // X축 이동 거리
+      const dy = endPosition.y - startPosition.y; // Y축 이동 거리
+      const distance = Math.sqrt(dx * dx + dy * dy); // 이동 거리 계산
+
+      // 이동 거리가 허용 오차 내이면 클릭으로 간주
+      if (distance <= clickTolerance) {
+        navigate(imagePath);
+      }
+    }
+
+    // 위치 초기화
+    setStartPosition(null);
+    setEndPosition(null);
   };
 
   return (
     <Slider {...settings}>
       {images.map((image, idx) => (
-        <div key={idx} onClick={() => handleImageClick(image.path)}>
+        <Box
+          key={idx}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onClick={() => handleImageClick(image.path)}
+          style={{ height: '100%'}}
+        >
           <img src={image.src} alt={`Slide ${idx}`} style={{ width: '100%'}}/>
-        </div>
+        </Box>
       ))}
     </Slider>
   );

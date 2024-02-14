@@ -269,7 +269,7 @@ function ModifyFridgeInside({ setOpenInside }) {
                 <Suspense fallback={<Loader setIsLoading={setIsLoading}/>}>
                     <FridgeInsideModel setUuid={setFridgeUuid}/>
                     <AddButtonModel models={models} onAddClick={handleAddClick}/>
-                    <BottleModel models={models} onBottleClick={handleBottleClick}/>
+                    <BottleModel models={models} onBottleClick={handleBottleClick} setSelectedCategory={setSelectedCategory} selectedCategory={selectedCategory}/>
                     <Environment/>
                 </Suspense>
                 <CameraControl cell={cell} setCell={setCell} isLoading={isLoading}/>
