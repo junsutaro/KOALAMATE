@@ -48,9 +48,11 @@ const MyPage = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_API_URL}/profile/${userId}`);
             const data = response.data;
+            console.log('data',data)
 
             // 이미지 URL을 가져와서 상태 업데이트
             setProfileImageUrl(`${data.profile}`)
+            console.log('이미지',profileImageUrl)
 
             // 나머지 프로필 데이터 업데이트
             setProfileData({
@@ -141,7 +143,6 @@ const MyPage = () => {
                     },
                 }}
             >
-
                 <Profile
                     userId={userId}
                     img={profileImageUrl}

@@ -19,16 +19,10 @@ const Recipe = () => {
     const [totalPages, setTotalPages] = useState(0);
 
 
-    // const [category, setCategory] = useState(null);
+    const [category, setCategory] = useState(null);
 
-    const [searchTerm, setSearchTerm] = useState('');
+    const [term, setTerm] = useState('');
     const [isSearch, setIsSearch] = useState(false)
-
-    const [filter, setFilter] = useState({
-        category: null,
-        minIngredients: 0,
-        maxIngredients: 10
-    });
 
     const handleSearchResults = (result, pages) => {
         setSearchResults(result);     // 검색 결과를 저장
@@ -36,8 +30,8 @@ const Recipe = () => {
         setIsSearch(true);      // 검색이 수행되었음을 표시
     };
 
-    const handleFilterChange = (selectedCategory, minIngredients, maxIngredients) => {
-        setFilter({ category: selectedCategory, minIngredients, maxIngredients });
+    const handleCategoryChange = (selectedCategory) => {
+        setCategory(selectedCategory);
     };
 
     return (
@@ -46,17 +40,17 @@ const Recipe = () => {
             <p></p>
             <div className={style.topContainer}>
                 <RecipeButton setOptionNum={setOptionNum}/>
-                <Searchbar setIsSearch={setIsSearch} setTerm={setSearchTerm} term={searchTerm}/>
+                <Searchbar setIsSearch={setIsSearch} setTerm={setTerm} term={term}/>
             </div>
             <hr/>
             <PopularRecipes/>
 
 
             {isSearch ?
-                <SearchResult term={searchTerm}/> :
+                <SearchResult term={term}/> :
                 <>
-                    <RecipeFilter onFilterChange={handleFilterChange} />
-                    <RecipeList optionNum={optionNum} filter={filter} />
+                    <RecipeFilter onCategoryChange={handleCategoryChange} />
+                    <RecipeList optionNum={optionNum} category={category} />
                 </>
             }
 
