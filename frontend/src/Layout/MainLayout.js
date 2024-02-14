@@ -35,6 +35,7 @@ import MyPosts from "../pages/MyPosts";
 import MyLikes from "../pages/MyLikes";
 import ShowFridge from "../components/Fridge/ShowFridge";
 import ShowFridgeInside from "../components/Fridge/ShowFridgeInside";
+import WriteDrink from "../pages/WriteDrink";
 
 const CustomScrollBox = styled(Box)(({ theme }) => ({
 	overflowY: 'auto', // 세로 스크롤바 활성화
@@ -141,6 +142,7 @@ const MainLayout = () => {
 				<Route path="/fridgeInside" element={<ModifyFridgeInside />} />
 				<Route path="/fridgeInside/:userId" element={<ShowFridgeInside />} />
 				<Route path="/voiceChat/:roomId" element={<VoiceChatRoom />} />
+				<Route path="/writeDrink" element={<WriteDrink />} />
 				{/* 다른 라우트들 */}
 			</Routes>
 			<Footer />
