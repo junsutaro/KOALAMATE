@@ -30,10 +30,30 @@ public interface BoardRepository extends JpaRepository<BoardModel, Long>, JpaSpe
     @Query("select b from BoardModel b where b.userId = :userId")
     Page<BoardModel> findBoardById(@Param("userId") Long userId, Pageable pageable);
 
-    @Query("SELECT b FROM BoardModel b " +
-            "WHERE b.id IN (SELECT c.board.id FROM CocktailModel c GROUP BY c.board HAVING COUNT(c.board) BETWEEN :minDrinks AND :maxDrinks) " +
-            "AND b.id IN (SELECT c.board.id FROM CocktailModel c WHERE c.drink.category = :category GROUP BY c.board)")
-    Page<BoardModel> findBoardByDrinkCountAndCategory(@Param("minDrinks") int minDrinks, @Param("maxDrinks") int maxDrinks, @Param("category") int category, Pageable pageable);
 
+
+
+
+    //////////////////////춘춘따리춘춘따/////////////////////////
+
+
+
+    // category가 null일 때 모든 카테고리를 대상으로 검색해야하는데..
+
+
+    @Query("SELECT b FROM BoardModel b WHERE b.nickname = :nickname AND b.id IN " +
+            "(SELECT b.id FROM BoardModel b JOIN b.cocktails c GROUP BY b.id " +
+            "HAVING COUNT(c) >= :minDrinks AND COUNT(c) <= :maxDrinks)")
+    Page<BoardModel> findByAdminWithDrinkCountInRange(@Param("nickname") String nickname, @Param("minDrinks") long minDrinks, @Param("maxDrinks") long maxDrinks, Pageable pageable);
+
+    @Query("SELECT b FROM BoardModel b WHERE b.nickname <> :nickname AND b.id IN " +
+            "(SELECT b.id FROM BoardModel b JOIN b.cocktails c GROUP BY b.id " +
+            "HAVING COUNT(c) >= :minDrinks AND COUNT(c) <= :maxDrinks)")
+    Page<BoardModel> findByNonAdminWithDrinkCountInRange(@Param("nickname") String nickname, @Param("minDrinks") long minDrinks, @Param("maxDrinks") long maxDrinks, Pageable pageable);
+
+    @Query("SELECT b FROM BoardModel b WHERE b.id IN " +
+            "(SELECT b.id FROM BoardModel b JOIN b.cocktails c GROUP BY b.id " +
+            "HAVING COUNT(c) >= :minDrinks AND COUNT(c) <= :maxDrinks)")
+    Page<BoardModel> findWithDrinkCountInRange(@Param("minDrinks") long minDrinks, @Param("maxDrinks") long maxDrinks, Pageable pageable);
 
 }

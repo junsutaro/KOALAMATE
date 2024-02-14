@@ -344,35 +344,22 @@ public class BoardController {
 			@RequestParam int size,
 			@RequestParam(required = false) Integer minDrinks,
 			@RequestParam(required = false) Integer maxDrinks,
-			@RequestParam(required = false) Integer category) {
+			@RequestParam(required = false) Integer category,
+			@RequestParam(required = false, defaultValue = "1") Integer option) { // 추가된 매개변수
 
 		ResponseEntity response = null;
 		Page<ViewBoardResponseDto> pageEntities = null;
 
 		Long userId = null;
 		if(request.getHeader("Authorization") != null) {
-			// 로그인 했을 경우
 			String accessToken = authService.getAccessToken(request);
 			UserDto user = authService.extractUserFromToken(accessToken);
 			userId = user.getId();
 		}
 
-		// 카테고리만 입력된 경우
-		if (category != null && minDrinks == null && maxDrinks == null) {
-			pageEntities = boardService.searchBoardsByDrinkCountAndCategory(0, Integer.MAX_VALUE, category, page-1, size, userId);
-		} else if (category == null) {
-			if (minDrinks == null || maxDrinks == null) {
-				return new ResponseEntity<>("카테고리, 재료갯수 범위 둘 중 하나는 필요", HttpStatus.BAD_REQUEST);
-			}
-			// minDrinks와 maxDrinks만 입력된 경우
-			pageEntities = boardService.searchBoardsByDrinkCountAndCategory(minDrinks, maxDrinks, 0, page-1, size, userId);
-		} else {
-			// Category와 minDrinks, maxDrinks가 모두 입력된 경우
-			if (minDrinks == null || maxDrinks == null) {
-				return new ResponseEntity<>("카테고리, 재료갯수 범위 둘 중 하나는 필요", HttpStatus.BAD_REQUEST);
-			}
-			pageEntities = boardService.searchBoardsByDrinkCountAndCategory(minDrinks, maxDrinks, category, page-1, size, userId);
-		}
+		pageEntities = boardService.searchBoardsByDrinkCountAndCategoryWithOptions(
+				minDrinks, maxDrinks, category,
+				page-1, size, userId, option);
 
 
 		List<ViewBoardResponseDto> content = pageEntities.getContent();
