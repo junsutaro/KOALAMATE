@@ -1,9 +1,6 @@
 package com.ssafy.koala.controller;
 
-import com.ssafy.koala.dto.CustomobjDto;
-import com.ssafy.koala.dto.RefrigeratorDTO;
-import com.ssafy.koala.dto.RefrigeratorDrinkDTO;
-import com.ssafy.koala.dto.RefrigeratorWithObjDto;
+import com.ssafy.koala.dto.*;
 import com.ssafy.koala.dto.user.UserDto;
 import com.ssafy.koala.service.AuthService;
 import com.ssafy.koala.service.RefrigeratorService;
@@ -125,7 +122,7 @@ public class RefrigeratorController {
 
     @GetMapping("/drink/{userId}")
     public ResponseEntity<?> getDrinks(@PathVariable Long userId) {
-        List<RefrigeratorDrinkDTO> drinks = refrigeratorService.getDrinksByUserId(userId);
+        List<RefrigeratorInsideDto> drinks = refrigeratorService.getDrinksByUserId(userId);
         return new ResponseEntity<>(drinks, HttpStatus.OK);
     }
 

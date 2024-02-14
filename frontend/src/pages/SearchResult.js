@@ -30,7 +30,7 @@ const SearchResult = ({term}) => {
 
     const getSearchRecipe = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/board/searchForFront?page=${currentPage}&size=${sizeNum}&keyword=${term}&option=${optionNum}`)
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/board/searchForFront?page=${currentPage}&size=${sizeNum}&keyword=${term}&option=${optionNum}`, { headers: {'Authorization': localStorage.getItem('authHeader')}})
             const data = response.data.content
             setTotalPages(response.data.totalPages)     // 총 페이지 수
             setRecipeData(data.map(item => ({

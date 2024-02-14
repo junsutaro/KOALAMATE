@@ -85,10 +85,10 @@ const RecipeDetail = () => {
                 nickname: data.nickname,
                 comments: data.comments || [],
                 likeCount: data.likeCount,
-                liked: data.like,
+                liked: data.liked,
                 ingredients: data.cocktails || [],
             });
-            setIsLiked(data.like);
+            setIsLiked(data.liked);
 
         } catch (error) {
             console.error('레시피 상세 정보를 가져오는 중 에러 발생: ', error);

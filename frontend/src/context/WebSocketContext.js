@@ -160,6 +160,7 @@ export const WebSocketProvider = ({children}) => {
         if (stompClient && stompClient.connected) {
             stompClient.deactivate();
             setStompClient(null); // 연결 해제 후 인스턴스 참조 제거
+            setConnected(false);
             console.log('Disconnected from WebSocket server');
         }
     };
