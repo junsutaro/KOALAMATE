@@ -15,5 +15,6 @@ public class DrinkDto {
     private String label;
 
     private List<CocktailWithBoardDto> cocktails;
+    private Long fileMetadataId;
 
 }

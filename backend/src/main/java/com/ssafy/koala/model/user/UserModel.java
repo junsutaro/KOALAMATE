@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ssafy.koala.model.LikeModel;
 import com.ssafy.koala.model.RefrigeratorModel;
 import com.ssafy.koala.model.chat.ChatModel;
+import com.ssafy.koala.model.file.FileMetadata;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -53,4 +54,8 @@ public class UserModel {
 	private List<LikeModel> likes;
 
 	private int evaluateCnt = 0; // 나를 평가한 사람 수
+
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "file_metadata_id")
+	private FileMetadata fileMetadata;
 }

@@ -154,7 +154,7 @@ const Nav = ({isDrawerOpen}) => {
 						border: '1px solid',
 						borderColor: 'divider',
 						boxShadow: theme.palette.mode === 'light'
-							? `0 0 1px rgba(246, 85, 243, 0.1), 1px 1.5px 2px -1px rgba(246, 85, 243, 0.15), 4px 4px 12px -2.5px rgba(246, 85, 243, 0.15)`
+							? `0 0 1px rgba(255, 155, 155, 0.1), 1px 1.5px 2px -1px rgba(255, 155, 155, 0.15), 4px 4px 12px -2.5px rgba(255, 155, 155, 0.15)`
 							: '0 0 1px rgba(59, 2, 57, 0.7), 1px 1.5px 2px -1px rgba(59, 2, 57, 0.65), 4px 4px 12px -2.5px rgba(59, 2, 57, 0.65)',
 					})}>
 					<Box sx={{
@@ -216,7 +216,9 @@ const Nav = ({isDrawerOpen}) => {
 									<Tooltip title="Open settings">
 										<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
 											<Avatar alt="Remy Sharp"
-											        src="/static/images/avatar/2.jpg"/>
+											        src="/static/images/avatar/2.jpg"
+													sx={{ bgcolor: '#FF9B9B'}}
+											/>
 										</IconButton>
 									</Tooltip>
 									<Menu

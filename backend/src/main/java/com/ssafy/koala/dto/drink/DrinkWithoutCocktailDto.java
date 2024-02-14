@@ -10,4 +10,5 @@ public class DrinkWithoutCocktailDto {
     private int category;
     private String image;
     private String label;
+    private Long fileId;
 }

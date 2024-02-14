@@ -14,7 +14,7 @@ const CommentList = () => {
     const getComments = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:8085/board/view?id=${boardId}`)
+                `${process.env.REACT_APP_API_URL}/board/view?id=${boardId}`)
             setComments(response.data.comments || []);
 
             console.log(response.data)
@@ -74,7 +74,6 @@ const CommentList = () => {
                     <Typography sx={{fontWeight: 'bold', color: '#ff9b9b'}}
                                 variant="h6">{comments.length || 0}</Typography>
                 </Box>
-
                 <CommentForm boardId={boardId} updateComments={getComments}/>
                 <List>
                     {comments.map((comment) => (

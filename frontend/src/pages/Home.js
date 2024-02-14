@@ -28,6 +28,7 @@ const Home = () => {
 
 	return (
 			<Container>
+				<FridgeModal userId={1}/>
 				<h1>Home</h1>
 				<Button color="inherit" component={NavLink} to="/writeBoard">
 					write
@@ -40,7 +41,7 @@ const Home = () => {
 				       style={{
 					       overflow: 'scroll',
 					       backdropFilter: 'blur(3px)',
-					       backgroundColor: 'rgba(0, 0, 0, 0.7)',
+					       backgroundColor: 'rgba(0, 0, 0, 0.7git )',
 				       }}
 				>
 					<div style={style}>

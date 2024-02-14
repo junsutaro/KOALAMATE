@@ -71,7 +71,8 @@ const MainLayout = () => {
 				width: '100%',
 				backgroundImage:
 					theme.palette.mode === 'light'
-					? 'linear-gradient(180deg, #fdcef8, #FFF)'
+					? 'linear-gradient(180deg, #FFDFDF,  #FFF)'
+
 					: 'linear-gradient(#4f024b, #10090f)',
 				backgroundSize: '100% 20vh',
 				backgroundRepeat: 'no-repeat',
@@ -88,6 +89,7 @@ const MainLayout = () => {
 			>
 
 		<Box sx={{ width: '100%', transition: 'margin 0.3s ease-out', marginRight: isLoggedIn && isOpen ? '350px' : 0 }}>
+
 			{isLoggedIn && !isOpen && (
 				<IconButton onClick={() => toggleDrawer(true)} sx={{ position: 'fixed', right: 16, bottom: 16, zIndex: 1300 }}>
 					<ChatIcon />
@@ -146,7 +148,6 @@ const MainLayout = () => {
 
 				{/* 다른 라우트들 */}
 			</Routes>
-
 			<Footer />
 		</Box>
 			</Container>

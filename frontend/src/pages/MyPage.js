@@ -50,7 +50,7 @@ const MyPage = () => {
             const data = response.data;
 
             // 이미지 URL을 가져와서 상태 업데이트
-            setProfileImageUrl(`/${data.profile}`)
+            setProfileImageUrl(`${data.profile}`)
 
             // 나머지 프로필 데이터 업데이트
             setProfileData({

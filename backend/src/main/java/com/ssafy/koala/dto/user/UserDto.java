@@ -15,4 +15,6 @@ public class UserDto {
 	private String profile;
 	private boolean isAdmin;
 	private String refreshToken;
+
+	private Long fileMetadataId;
 }
