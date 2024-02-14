@@ -337,5 +337,44 @@ public class BoardController {
 		return response;
 	}
 
+	@GetMapping("/searchByDrinkCountAndCategory")
+	public ResponseEntity<?> searchBoardByDrinkCountAndCategory(
+			HttpServletRequest request,
+			@RequestParam int page,
+			@RequestParam int size,
+			@RequestParam(required = false) Integer minDrinks,
+			@RequestParam(required = false) Integer maxDrinks,
+			@RequestParam(required = false) Integer category,
+			@RequestParam(required = false, defaultValue = "1") Integer option) { // 추가된 매개변수
+
+		ResponseEntity response = null;
+		Page<ViewBoardResponseDto> pageEntities = null;
+
+		Long userId = null;
+		if(request.getHeader("Authorization") != null) {
+			String accessToken = authService.getAccessToken(request);
+			UserDto user = authService.extractUserFromToken(accessToken);
+			userId = user.getId();
+		}
+
+		pageEntities = boardService.searchBoardsByDrinkCountAndCategoryWithOptions(
+				minDrinks, maxDrinks, category,
+				page-1, size, userId, option);
+
+
+		List<ViewBoardResponseDto> content = pageEntities.getContent();
+		int totalPages = pageEntities.getTotalPages();
+		long totalElements = pageEntities.getTotalElements();
+
+		Map<String, Object> responseBody = new HashMap<>();
+		responseBody.put("content", content);
+		responseBody.put("totalPages", totalPages);
+		responseBody.put("totalElements", totalElements);
+
+		response = new ResponseEntity<>(responseBody, HttpStatus.OK);
+		return response;
+	}
+
+
 
 }
