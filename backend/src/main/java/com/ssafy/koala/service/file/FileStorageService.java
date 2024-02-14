@@ -1,5 +1,6 @@
 package com.ssafy.koala.service.file;
 
+import com.ssafy.koala.dto.file.StoreFileDto;
 import com.ssafy.koala.exception.file.FileStorageException;
 import com.ssafy.koala.model.file.FileMetadata;
 import com.ssafy.koala.repository.file.FileMetadataRepository;
@@ -23,6 +24,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FileStorageService {
@@ -34,11 +36,11 @@ public class FileStorageService {
         // 파일 저장을 지원하는 이미지 파일 확장자 목록
         List<String> imageTypes = new ArrayList<>();
         // 이미지 파일 확장자
-        imageTypes.add("jpeg");
-        imageTypes.add("jpg");
-        imageTypes.add("png");
-        imageTypes.add("gif");
-        imageTypes.add("bmp");
+        imageTypes.add("image/jpeg");
+        imageTypes.add("image/jpg");
+        imageTypes.add("image/png");
+        imageTypes.add("image/gif");
+        imageTypes.add("image/bmp");
 
         SUPPORTED_FILE_TYPES = Collections.unmodifiableList(imageTypes);
     }
@@ -52,7 +54,7 @@ public class FileStorageService {
         this.fileMetadataRepository = fileMetadataRepository;
     }
 
-    public String storeFile(MultipartFile file) {
+    public StoreFileDto storeFile(MultipartFile file, String directory) {
 
         validateFile(file);
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -60,7 +62,7 @@ public class FileStorageService {
         String hashedFileName = generateHashedFileName(fileName) + "." + fileExtension;
 
         try {
-            Path fileStorageLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
+            Path fileStorageLocation = Paths.get(uploadDir + "/" + directory).toAbsolutePath().normalize();
             Files.createDirectories(fileStorageLocation);
 
             Path targetLocation = fileStorageLocation.resolve(hashedFileName);
@@ -77,8 +79,13 @@ public class FileStorageService {
                     .path(hashedFileName)
                     .toUriString());
             fileMetadataRepository.save(metadata);
+            Long id = metadata.getId();
+            System.out.println("file id: "+id);
+            StoreFileDto dto = new StoreFileDto();
+            dto.setId(id);
+            dto.setFilename(hashedFileName);
 
-            return fileName;
+            return dto;
         } catch (IOException ex) {
             throw new RuntimeException("Could not store file " + fileName + ". Please try again!", ex);
         }
@@ -113,9 +120,9 @@ public class FileStorageService {
     }
 
     // file 이름으로 파일을 찾아서 리소스로 반환
-    public Resource loadFileAsResource(String fileName) {
+    public Resource loadFileAsResource(String fileName, String directory) {
         try {
-            Path fileStorageLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
+            Path fileStorageLocation = Paths.get(uploadDir+ "/" + directory).toAbsolutePath().normalize();
             Path filePath = fileStorageLocation.resolve(StringUtils.cleanPath(fileName)).normalize();
             Resource resource = new UrlResource(filePath.toUri());
 
@@ -130,4 +137,8 @@ public class FileStorageService {
     }
 
     // 파일 로드 및 기타 필요한 메서드 구현
+
+    public Optional<FileMetadata> findById(Long id) {
+        return fileMetadataRepository.findById(id);
+    }
 }

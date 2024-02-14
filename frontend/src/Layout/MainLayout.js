@@ -70,6 +70,7 @@ const MainLayout = () => {
 				backgroundImage:
 					theme.palette.mode === 'light'
 					? 'linear-gradient(180deg, #FFDFDF,  #FFF)'
+
 					: 'linear-gradient(#4f024b, #10090f)',
 				backgroundSize: '100% 20vh',
 				backgroundRepeat: 'no-repeat',
@@ -84,7 +85,9 @@ const MainLayout = () => {
 					pb: { xs: 8, sm: 12 },
 				}}
 			>
-		<Box sx={{ transition: 'margin 0.3s ease-out', marginRight: isLoggedIn && isOpen ? '350px' : 0 }}>
+
+		<Box sx={{ width: '100%', transition: 'margin 0.3s ease-out', marginRight: isLoggedIn && isOpen ? '350px' : 0 }}>
+
 			{isLoggedIn && !isOpen && (
 				<IconButton onClick={() => toggleDrawer(true)} sx={{ position: 'fixed', right: 16, bottom: 16, zIndex: 1300 }}>
 					<ChatIcon />
@@ -140,9 +143,9 @@ const MainLayout = () => {
 				<Route path="/voiceChat/:roomId" element={<VoiceChatRoom />} />
 				{/* 다른 라우트들 */}
 			</Routes>
+			<Footer />
 		</Box>
 			</Container>
-			<Footer />
 		</Box>
 	);
 };

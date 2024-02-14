@@ -18,4 +18,5 @@ public class CreateBoardRequestDto {
     private String image;
     private List<CocktailWithDrinkDto> cocktails;
     private Long userId;
+    private Long fileId;
 }

@@ -19,6 +19,8 @@ public class BoardDto {
 	private int views;
 	private String nickname;
 	private String image;
+
 	private List<CocktailModel> cocktails;
 	private List<CommentModel> comments;
+	private Long fileMetadataId;
 }

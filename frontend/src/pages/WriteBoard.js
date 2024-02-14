@@ -17,6 +17,7 @@ function BulletinBoard() {
     const [cocktails, setCocktails] = useState([]);
     const [selectedImageFile, setSelectedImageFile] = useState(null);
     const [imgUrl, setImgUrl] = useState('')
+    const [fileInfo, setFileInfo] = useState({id: null, fileDownloadUri: ''});
 
     // 전부 입력되었는지 확인하기 위한 변수
     const isFormValid = title && content && cocktails.length > 0 && selectedImageFile;
@@ -65,6 +66,35 @@ function BulletinBoard() {
         setImagePreview(NoImage);
     };
 
+    // const saveRecipeImage = async (e) => {
+    //     e.preventDefault()
+    //     try {
+    //         // 이미지 파일이 선택되지 않았을 경우 예외처리
+    //         if (!selectedImageFile) {
+    //             console.error("이미지 파일이 선택되지 않았습니다.");
+    //             return;
+    //         }
+    //
+    //         // FormData 객체를 생성하여 이미지 파일을 담음
+    //         const formData = new FormData();
+    //         formData.append("file", selectedImageFile);
+    //
+    //         // Axios를 사용하여 이미지를 업로드하는 요청 보냄
+    //         const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/files/upload`,
+    //             formData,
+    //             {
+    //                 headers: getAuthHeader()
+    //             });
+    //
+    //         // 이미지 업로드 완료 후 URL을 반환
+    //         return response.data.imageUrl;
+    //
+    //     } catch (error) {
+    //         console.error("이미지 업로드에 실패했습니다.", error);
+    //         throw error; // 에러를 다시 던져서 호출한 곳에서 처리할 수 있도록 함
+    //     }
+    // };
+
     const saveRecipeImage = async (e) => {
         e.preventDefault()
         try {
@@ -77,16 +107,19 @@ function BulletinBoard() {
             // FormData 객체를 생성하여 이미지 파일을 담음
             const formData = new FormData();
             formData.append("file", selectedImageFile);
+            formData.append("type", "board");
 
             // Axios를 사용하여 이미지를 업로드하는 요청 보냄
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/uploadBoardImage`,
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/upload`,
                 formData,
+                "board",
                 {
                     headers: getAuthHeader()
                 });
 
-            // 이미지 업로드 완료 후 URL을 반환
-            return response.data.imageUrl;
+
+            // 이미지 업로드 완료 후 URL과 메타데이터 id를 반환
+            return response.data;
 
         } catch (error) {
             console.error("이미지 업로드에 실패했습니다.", error);
@@ -95,7 +128,7 @@ function BulletinBoard() {
     };
 
     // 게시글 저장 함수, 이제 imageUrl을 인자로 받음
-    const saveRecipe = async (imageUrl) => {
+    const saveRecipe = async (fileResult) => {
         console.log("saveRecipe");
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/write`, {
@@ -103,7 +136,8 @@ function BulletinBoard() {
                 title: title,
                 content: content,
                 cocktails: cocktails,
-                image: imageUrl // 인자로 받은 이미지 URL 사용
+                image: fileResult.fileDownloadUri, // 인자로 받은 이미지 URL 사용
+                fileId: fileResult.id,
             },
                 {
                     headers: getAuthHeader()
@@ -125,8 +159,12 @@ function BulletinBoard() {
             return;
         }
         try {
-            const imageUrl = await saveRecipeImage(e); // 이미지 업로드 완료까지 기다림
-            await saveRecipe(imageUrl); // 업로드된 이미지 URL을 가지고 게시글 저장
+            const fileResult = await saveRecipeImage(e); // 이미지 업로드 완료까지 기다림
+            setFileInfo({
+                id: fileResult.id,
+                fileDownloadUri: fileResult.fileDownloadUri,
+            });
+            await saveRecipe(fileResult); // 업로드된 이미지 URL을 가지고 게시글 저장
             alert('레시피가 성공적으로 저장되었습니다😊');
 
             // 입력 필드와 이미지 미리보기를 초기화
@@ -143,7 +181,7 @@ function BulletinBoard() {
 
     return (
         <Container>
-            <Box component="form" noValidate autoComplete="off" mt={2}>
+            <Box component="form" noValidate autoComplete="off" mt={15}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={4}>
                         <Box

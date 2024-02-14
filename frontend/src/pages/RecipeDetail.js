@@ -65,7 +65,7 @@ const RecipeDetail = () => {
                 content: data.content,
                 date: format(new Date(data.date), 'yyyy년 MM월 dd일 HH:mm:ss'),
                 views: data.views,
-                image: `${process.env.REACT_APP_IMAGE_URL}/${data.image}` ,
+                image: `${data.image}` ,
                 nickname: data.nickname,
                 comments: data.comments || [],
                 likeCount: data.likeCount,
