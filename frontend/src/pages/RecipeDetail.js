@@ -30,6 +30,7 @@ const RecipeDetail = () => {
 
     // 좋아요 상태를 추적하기 위한 상태 변수와 setter 함수
     const [isLiked, setIsLiked] = useState(false);
+    const authHeader = localStorage.getItem('authHeader');
 
     const handleLikeClick = async (e) => {
         e.stopPropagation();
@@ -39,7 +40,6 @@ const RecipeDetail = () => {
             return;
         }
 
-        const authHeader = localStorage.getItem('authHeader');
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/like`, {id: boardId, like: true}, {
                 headers: {'Authorization': authHeader}
@@ -57,8 +57,9 @@ const RecipeDetail = () => {
 
     const getDetailRecipe = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/board/view?id=${boardId}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/board/view?id=${boardId}`,{ headers: {'Authorization': authHeader}});
             const data = response.data;
+            console.log(data);
             setRecipe({
                 id: data.id,
                 title: data.title,
