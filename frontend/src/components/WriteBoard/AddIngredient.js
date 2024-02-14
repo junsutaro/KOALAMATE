@@ -14,8 +14,10 @@ const AddIngredient = ({updateCocktails}) => {
 
     const fetchIngredients = async (search) => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/drink/search?name=${search}`);
-            setSearchResults(response.data);
+            axios.get(`${process.env.REACT_APP_API_URL}/drink/search?name=${search}`)
+                .then((response) => {
+                    setSearchResults(response.data);
+            });
         } catch (error) {
             console.error('Error fetching ingredients:', error);
         }
@@ -33,30 +35,32 @@ const AddIngredient = ({updateCocktails}) => {
     const handleAddIngredient = () => {
         // proportion을 숫자로 명시적 변환
         const numericProportion = parseFloat(proportion);
-        console.log(numericProportion);
-        console.log(selectedIngredient)
-        console.log(unit);
-        if (selectedIngredient && numericProportion >= 1 && unit) {
+
+        const ingredientToUse = selectedIngredient ?? searchResults.find(item => item.name === searchTerm);
+        if (ingredientToUse && numericProportion >= 1 && unit) {
             const newIngredient = {
                 proportion: numericProportion,
                 unit: unit,
                 drink: {
-                    id: selectedIngredient.id,
-                    name: selectedIngredient.name,
-                    category: selectedIngredient.category,
+                    id: ingredientToUse.id,
+                    name: ingredientToUse.name,
+                    category: ingredientToUse.category,
                 }
             };
-            updateCocktails((prevCocktails) => {
-                const updatedCocktails = [...prevCocktails, newIngredient];
-                return updatedCocktails;
-            });
-            setSearchTerm('');
-            setSelectedIngredient(null);
-            setProportion('');
-            setUnit('');
+            updateCocktails((prevCocktails) => [...prevCocktails, newIngredient]);
+            // 상태 초기화
+            resetForm();
         } else {
             alert('용량은 1 이상이어야 합니다.');
         }
+    };
+
+    // 입력 폼을 초기화하는 함수
+    const resetForm = () => {
+        setSearchTerm('');
+        setSelectedIngredient(null);
+        setProportion('');
+        setUnit('');
     };
 
     return (
@@ -90,7 +94,7 @@ const AddIngredient = ({updateCocktails}) => {
                         value={proportion}
                         onChange={(e) => {
                             const value = e.target.value ? parseFloat(e.target.value) : '';
-                            console.log(value);
+                            //console.log(value);
                             if (!value || value >= 1) {
                                 setProportion(value);
                             }
