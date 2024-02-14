@@ -33,6 +33,9 @@ const Home = () => {
 				<Button color="inherit" component={NavLink} to="/writeBoard">
 					write
 				</Button>
+				<Button color="inherit" component={NavLink} to="/writeDrink">
+					drink
+				</Button>
 				<Button onClick={handleOpen}>모델 렌더링</Button>
 				<Modal open={open}
 				       onClose={handleClose}
