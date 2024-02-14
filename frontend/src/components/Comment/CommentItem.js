@@ -60,11 +60,9 @@ const CommentItem = ({comment, onDeleteComment, onEditComment, handleEditComment
                             <Typography variant="body1" sx={{marginBottom: '10px'}}>
                                 {comment.content}
                             </Typography>
-                            <Box display={'flex-end'}>
-                                <Typography variant="body2" sx={{color: '#888'}}>
-                                    {format(new Date(comment.date), 'yyyy년 MM월 dd일 HH:mm:ss')}
-                                </Typography>
-                            </Box>
+                            <Typography variant="body2" sx={{color: '#888'}}>
+                                {format(new Date(comment.date), 'yyyy년 MM월 dd일 HH:mm:ss')}
+                            </Typography>
                         </>
                     )}
                 </Grid>

@@ -69,7 +69,7 @@ const IngredientDetail = () => {
     const type = categories[ingredient.category]
 
     return (
-        <Container sx={{ marginTop: 20}}>
+        <Container>
             <h3>재료 상세</h3>
             <img src={img} alt={`${ingredient.name} 이미지`} />
             <Typography>{ingredient.name}</Typography>

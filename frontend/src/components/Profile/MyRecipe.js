@@ -7,10 +7,10 @@ import style from '../RecipeBoard/RecipeList.module.css';
 import RecipeItem from '../RecipeBoard/RecipeItem';
 import axios from "axios";
 
-const MyRecipe = ({nickname, userId}) => {
+const MyRecipe = ({nickname, userId, myId}) => {
     const navigate = useNavigate();
     const {user, isLoggedIn} = useSelector(state => state.auth);
-    const isCurrentUser = isLoggedIn && user.nickname === nickname;    // 현재 사용자의 닉네임과 비교
+    const isCurrentUser = isLoggedIn && String(userId) === String(myId);    // 현재 사용자의 닉네임과 비교
 
     // 인증 헤더를 가져오는 함수
     const getAuthHeader = () => {
@@ -65,7 +65,7 @@ const MyRecipe = ({nickname, userId}) => {
     };
 
     return (
-            <Container sx={{marginTop: '30px'}}>
+            <Box sx={{marginTop: '30px'}}>
                 <Box sx={{display: 'inline-flex', gap: 1}}>
                     <Typography sx={{fontWeight: 'bold'}} variant="h5">
                         {isCurrentUser ? '나만의' : `${nickname}의`} 레시피
@@ -114,7 +114,7 @@ const MyRecipe = ({nickname, userId}) => {
                         </NavLink>
                     )}
                 </Box>
-            </Container>
+            </Box>
     );
 };
 export default MyRecipe;

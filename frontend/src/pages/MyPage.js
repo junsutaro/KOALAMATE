@@ -18,9 +18,8 @@ const MyPage = () => {
     const getAuthHeader = () => {
         const authHeader = localStorage.getItem('authHeader');
         return authHeader ? {Authorization: authHeader} : {};
-    };    // console.log(userId)
-    // const {user} = useSelector((state) => state.auth);
-    // const userNickname = user.nickname;
+    };
+
 
     const [profileImageUrl, setProfileImageUrl] = useState()
     const [profileData, setProfileData] = useState({
@@ -98,6 +97,25 @@ const MyPage = () => {
         }
     };
 
+    const [myId, setMyId] = useState(null); // 사용자 ID를 저장할 상태
+    const getMyId = async () => {
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/myId`,
+                {}, {
+                    headers: getAuthHeader(), // 인증 헤더 추가
+                });
+            // API 응답 구조에 맞게 수정할 것
+            setMyId(response.data); // 가정: 응답이 { userId: '...' } 구조를 가짐
+        } catch (error) {
+            console.error('내 아이디 가지고 오는 중 에러 발생: ', error);
+        }
+    };
+
+    // 컴포넌트 마운트 시 사용자 ID 가져오기
+    useEffect(() => {
+        getMyId();
+    }, []);
+
     // userId가 바뀌면 user 프로필 정보를 가져오기
     useEffect(() => {
         getProfileData();
@@ -142,7 +160,7 @@ const MyPage = () => {
                     userId={userId}
                 />
             </Box>
-            <MyRecipe nickname={profileData.nickname} userId={userId}/>
+            <MyRecipe nickname={profileData.nickname} userId={userId} myId={myId}/>
             <LikedRecipe nickname={profileData.nickname} userId={userId}/>
 
         </Container>

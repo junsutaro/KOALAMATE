@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import style from "../components/RecipeBoard/RecipeList.module.css";
 import RecipeItem from "../components/RecipeBoard/RecipeItem";
 import PaginationComponent from "../components/PaginationComponent";
-import SearchResultBtn from "../components/SearchResultBtn";
+import SearchResultBtn from "../components/Search/SearchResultBtn";
 import axios from "axios";
 import IngredientItem from "../components/IngredientItem";
 import {Alert, Container, Stack} from '@mui/material'

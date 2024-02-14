@@ -7,9 +7,11 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import { Typography, Box, Button, ListItemText, List } from "@mui/material";
 import { format } from 'date-fns';
+import {useSelector} from "react-redux";
 
 const RecipeDetail = () => {
-    const { boardId } = useParams(); // URL 파라미터에서 boardId 추출
+    const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+    const { boardId } = useParams();
     const [recipe, setRecipe] = useState({
         id: 0,
         title: "",
@@ -23,13 +25,30 @@ const RecipeDetail = () => {
         liked: false,
         ingredients: []
     });
+    const [isLiked, setIsLiked] = useState(false);
 
-    // 좋아요 상태를 추적하기 위한 상태 변수와 setter 함수
-    const [isLiked, setIsLiked] = useState(recipe.liked);
+    const handleLikeClick = async (e) => {
+        e.stopPropagation();
 
-    const handleLikeClick = (e) => {
-        e.stopPropagation(); // 버튼 클릭 시 이벤트 버블링을 방지
-        setIsLiked(!isLiked); // 좋아요 상태를 토글
+        if (!isLoggedIn) {
+            alert('좋아요를 누르려면 로그인을 하셔야 합니다. 로그인 해주세요.');
+            return;
+        }
+
+        const authHeader = localStorage.getItem('authHeader');
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/like`, {id: boardId}, {
+                headers: {'Authorization': authHeader}
+            });
+            if(response.status === 200) {
+                setIsLiked(!isLiked);
+            } else {
+                // 실패 응답 처리
+                console.error('좋아요 변경 실패:', response);
+            }
+        } catch (error) {
+            console.error('좋아요 상태를 변경하는 중 에러 발생:', error);
+        }
     };
 
     const getDetailRecipe = async () => {
@@ -49,6 +68,7 @@ const RecipeDetail = () => {
                 liked: data.liked,
                 ingredients: data.cocktails || [],
             });
+            setIsLiked(data.liked);
         } catch (error) {
             console.error('레시피 상세 정보를 가져오는 중 에러 발생: ', error);
         }
@@ -57,6 +77,7 @@ const RecipeDetail = () => {
     useEffect(() => {
         getDetailRecipe();
     }, [boardId]);
+
 
     return (
         <>

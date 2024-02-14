@@ -7,6 +7,7 @@ import PopularRecipes from '../components/RecipeBoard/PopularRecipes';
 import style from 'pages/Recipe.module.css';
 import RecipeButton from 'components/RecipeBoard/RecipeButton';
 import SearchResult from './SearchResult';
+import {Box} from "@mui/material";
 
 
 const Recipe = () => {
@@ -34,7 +35,7 @@ const Recipe = () => {
     };
 
     return (
-        <div>
+        <Box>
             <h1>레시피 조회 페이지</h1>
             <p></p>
             <div className={style.topContainer}>
@@ -61,7 +62,7 @@ const Recipe = () => {
             {/*    </>*/}
             {/*}*/}
 
-        </div>
+        </Box>
 
     );
 };
