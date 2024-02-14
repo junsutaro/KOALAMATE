@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react'
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import Recommend from "../components/Recommend";
-import {Typography, Chip, Box, Container} from "@mui/material";
+import {Typography, Box, Grid, Chip} from "@mui/material";
+import Paper from "@mui/material/Paper";
 
 const IngredientDetail = () => {
     // 인증 헤더를 가져오는 함수
@@ -67,7 +68,7 @@ const IngredientDetail = () => {
             console.error('재료 데이터 가져오는 중 에러 발생 :',  error)
         }
     }
-            cocktailData.map(it => console.log(it.boardId, it.liked))
+
 
     useEffect(() => {
         getIngredientData()
@@ -75,19 +76,56 @@ const IngredientDetail = () => {
     }, [ingredientId]);
 
 
-
-    const img = `${process.env.REACT_APP_IMAGE_URL}/${ingredient.imageUrl}`
+    // 진짜
+    // const img = `${process.env.REACT_APP_IMAGE_URL}/${ingredient.imageUrl}`
     const type = categories[ingredient.category]
 
+    // 테스트용
+    // const img = `${process.env.REACT_APP_IMAGE_URL}/ingredientImage/orange2.jpg`
+    const img = `${process.env.REACT_APP_IMAGE_URL}/ingredientImage/orange.png`
+
+
     return (
-        <Container>
-            <h3>재료 상세</h3>
-            <img src={img} alt={`${ingredient.name} 이미지`} />
-            <Typography>{ingredient.name}</Typography>
-            <Chip label={type} />
-            <hr/>
-            <Recommend cocktails={cocktailData}/>
-        </Container>
-    );
+    <div>
+        <Paper sx={{margin: '20px', padding: '20px', backgroundColor: 'white', borderRadius: '15px'}} elevation={3}>
+            <Grid container spacing={5} justifyContent="center" display="flex" flexDirection="row">
+                <Grid item xs={12} sm={6}>
+                    <Box
+                        display="flex"
+                        justifyContent="flex-end" // 이미지를 오른쪽으로 이동
+                        sx={{
+                            width: '100%',
+                            paddingRight: '20%',
+                        }}
+                    >
+                        <Box
+                            component="img"
+                            src={img}
+                            sx={{
+                                width: '70%',
+                                height: 'auto',
+                                objectFit: 'contain',
+                                maxHeight: 600,
+                                borderRadius: '15px', // 모서리를 둥글게 처리
+                            }}
+                        />
+                    </Box>
+                </Grid>
+                {/*<hr/>*/}
+                <Grid item xs={12} sm={6}>
+                    <Box display="flex" flexDirection="column" justifyContent="space-between" height="100%" gap={1}>
+                        <div>
+                            <Typography variant="h5" color="#FF9B9B" sx={{mt: 2, mb:1}}>{ingredient.name}</Typography>
+                            <Chip label={`# ${type}`}/>
+                        </div>
+                    </Box>
+
+                </Grid>
+            </Grid>
+        </Paper>
+
+        <Recommend cocktails={cocktailData}/>
+    </div>
+);
 }
 export default IngredientDetail;

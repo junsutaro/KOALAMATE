@@ -66,7 +66,7 @@ const CommentList = () => {
 
     return (
         <>
-            <Container component="main" maxWidth="sm">
+            <Box component="main" margin={3} marginTop={10}>
                 <Box sx={{display: 'inline-flex', gap: 1}}>
                     <Typography sx={{fontWeight: 'bold'}} variant="h6">
                         댓글
@@ -74,6 +74,7 @@ const CommentList = () => {
                     <Typography sx={{fontWeight: 'bold', color: '#ff9b9b'}}
                                 variant="h6">{comments.length || 0}</Typography>
                 </Box>
+                   <hr></hr>
                 <CommentForm boardId={boardId} updateComments={getComments}/>
                 <List>
                     {comments.map((comment) => (
@@ -85,7 +86,7 @@ const CommentList = () => {
                         />
                     ))}
                 </List>
-            </Container>
+            </Box>
         </>
     );
 };

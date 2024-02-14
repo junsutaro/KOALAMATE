@@ -3,8 +3,12 @@ import style from "./RecipeBoard/RecipeItem.module.css";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import React from "react";
+import {Typography, Box, Button, ListItem, ListItemText, List, ListItemAvatar, Avatar, Grid, Chip, Container} from "@mui/material";
+import Paper from "@mui/material/Paper";
+import CommentList from "./Comment/CommentList";
 const IngredientItem = ({ingredientId, imageUrl, name, idx}) => {
-    const img = `${process.env.REACT_APP_IMAGE_URL}/${imageUrl}`
+    // 진짜
+    // const img = `${process.env.REACT_APP_IMAGE_URL}/${imageUrl}`
     const navigate = useNavigate();
 
     const handleCardClick = () => {
@@ -25,17 +29,21 @@ const IngredientItem = ({ingredientId, imageUrl, name, idx}) => {
         '소주',
     ];
 
-    console.log(idx)
+    // 테스트용
+    // const img = `${process.env.REACT_APP_IMAGE_URL}/ingredientImage/orange2.jpg`
+    const img = `${process.env.REACT_APP_IMAGE_URL}/ingredientImage/orange.png`
+
     return (
         <div className={style.card} onClick={handleCardClick}>
             <img src={img} alt={name} className={style.cardImage}/>
             <div className={style.cardContent}>
                 <p className={style.cardTitle}>{name}</p>
                 <div className={style.cardTags}>
-                        <span className={style.tag} key={idx}># {categories[idx]}</span>
+                    <span className={style.tag} key={idx}># {categories[idx]}</span>
                 </div>
             </div>
         </div>
-    );
+)
+    ;
 }
 export default IngredientItem

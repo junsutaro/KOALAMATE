@@ -57,12 +57,13 @@ const CommentItem = ({comment, onDeleteComment, onEditComment, handleEditComment
                             <Typography variant="subtitle1" sx={{fontWeight: 'bold'}}>
                                 {comment.nickname}
                             </Typography>
-                            <Typography variant="body1" sx={{marginBottom: '10px'}}>
+                            <Typography variant="body1" sx={{marginBottom: '5px'}}>
                                 {comment.content}
                             </Typography>
                             <Typography variant="body2" sx={{color: '#888'}}>
                                 {format(new Date(comment.date), 'yyyy년 MM월 dd일 HH:mm:ss')}
                             </Typography>
+
                         </>
                     )}
                 </Grid>

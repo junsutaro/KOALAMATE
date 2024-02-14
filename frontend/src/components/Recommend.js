@@ -18,54 +18,53 @@ const Recommend = ({ cocktails }) => {
         setIndex(Math.min(cocktails.length - 1, index + 1));
     };
 
-    // const toggleLikedState = async (boardId) => {
-    //     const isLiked = likedRecipes.includes(boardId);
-    //     const newLikedRecipes = isLiked ? likedRecipes.filter(id => id !== boardId) : [...likedRecipes, boardId];
-    //     setLikedRecipes(newLikedRecipes);
-    // };
-    console.log(cocktails)
+    const toggleLikedState = async (boardId) => {
+        const isLiked = likedRecipes.includes(boardId);
+        const newLikedRecipes = isLiked ? likedRecipes.filter(id => id !== boardId) : [...likedRecipes, boardId];
+        setLikedRecipes(newLikedRecipes);
+    };
+
+    // cocktails.map(it => console.log(it.boardId, it.liked, it.imageUrl))
 
     return (
-        <>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Typography sx={{ fontWeight: 'bold' }} variant="h5">
+        <Box marginTop={5}>
+            <hr/>
+            <Box marginTop={2} sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                <Typography sx={{fontWeight: 'bold'}} variant="h5">
                     🍸 해당 재료로 만들 수 있는 칵테일
                 </Typography>
-                <Typography sx={{ fontWeight: 'bold', color: '#ff9b9b' }} variant="h5">
+                <Typography sx={{fontWeight: 'bold', color: '#ff9b9b'}} variant="h5">
                     {cocktails.length}
                 </Typography>
-
-
             </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+            <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2}}>
                 <IconButton onClick={handlePrev} disabled={index === 0}>
-                    <ArrowBackIosIcon />
+                    <ArrowBackIosIcon/>
                 </IconButton>
-            <SwipeableViews enableMouseEvents index={index} onChangeIndex={setIndex}>
-                {Array.from({ length: Math.ceil(cocktails.length / 3) }, (_, index) => (
-                    <Box key={index} display="flex" justifyContent="center" padding={1} className={style.cardList}>
-                        {cocktails.slice(index * 3, (index + 1) * 3).map((cocktail) => (
-                            <RecipeItem
-                                key={cocktail.boardId}
-                                boardId={cocktail.boardId}
-                                imageUrl={cocktail.imageUrl}
-                                title={cocktail.title}
-                                author={cocktail.author}
-                                // liked={cocktail.like}
-                                liked={cocktail.liked}
-                                // toggleLiked={() => toggleLikedState(cocktail.boardId)}
-                                tags={[]}
-                            />
-                        ))}
-                    </Box>
-                ))}
-            </SwipeableViews>
+                <SwipeableViews enableMouseEvents index={index} onChangeIndex={setIndex}>
+                    {Array.from({length: Math.ceil(cocktails.length / 3)}, (_, index) => (
+                        <Box key={index} display="flex" justifyContent="center" padding={1} className={style.cardList}>
+                            {cocktails.slice(index * 3, (index + 1) * 3).map((cocktail) => (
+                                <RecipeItem
+                                    key={cocktail.boardId}
+                                    boardId={cocktail.boardId}
+                                    imageUrl={cocktail.imageUrl}
+                                    title={cocktail.title}
+                                    author={cocktail.author}
+                                    liked={cocktail.liked}
+                                    toggleLiked={() => toggleLikedState(cocktail.boardId)}
+                                    tags={[]}
+                                />
+                            ))}
+                        </Box>
+                    ))}
+                </SwipeableViews>
                 <IconButton onClick={handleNext} disabled={index === Math.ceil(cocktails.length / 3) - 1}>
-                    <ArrowForwardIosIcon />
+                    <ArrowForwardIosIcon/>
                 </IconButton>
             </Box>
-        </>
+        </Box>
     );
 };
 

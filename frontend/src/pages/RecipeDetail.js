@@ -5,15 +5,27 @@ import CommentList from "components/Comment/CommentList";
 import style from "../components/RecipeBoard/RecipeItem.module.css";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
-import {Typography, Box, Button, ListItem, ListItemText, List, ListItemAvatar, Avatar, Grid, Chip, Container} from "@mui/material";
-import { format } from 'date-fns';
+import {
+    Typography,
+    Box,
+    Button,
+    ListItem,
+    ListItemText,
+    List,
+    ListItemAvatar,
+    Avatar,
+    Grid,
+    Chip,
+    Container
+} from "@mui/material";
+import {format} from 'date-fns';
 import Paper from '@mui/material/Paper';
 import {useSelector} from "react-redux";
-
+import {Link} from 'react-router-dom';
 
 const RecipeDetail = () => {
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
-    const { boardId } = useParams(); // URL 파라미터에서 boardId 추출
+    const {boardId} = useParams(); // URL 파라미터에서 boardId 추출
     const [recipe, setRecipe] = useState({
         id: 0,
         title: "",
@@ -60,7 +72,7 @@ const RecipeDetail = () => {
 
     const getDetailRecipe = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/board/view?id=${boardId}`,{ headers: {'Authorization': authHeader}});
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/board/view?id=${boardId}`, {headers: {'Authorization': authHeader}});
             const data = response.data;
             console.log(data);
             setRecipe({
@@ -69,7 +81,7 @@ const RecipeDetail = () => {
                 content: data.content,
                 date: format(new Date(data.date), 'yyyy년 MM월 dd일 HH:mm:ss'),
                 views: data.views,
-                image: `${data.image}` ,
+                image: `${process.env.REACT_APP_IMAGE_URL}/${data.image}`,
                 nickname: data.nickname,
                 comments: data.comments || [],
                 likeCount: data.likeCount,
@@ -87,6 +99,7 @@ const RecipeDetail = () => {
         getDetailRecipe();
     }, [boardId]);
 
+    console.log(recipe)
 
 //     return (
 //         <>
@@ -126,32 +139,51 @@ const RecipeDetail = () => {
 //     );
 // }
 
+    const categories = [
+        // '무알콜',
+        '기타 재료',
+        '진',
+        '럼',
+        '보드카',
+        '위스키',
+        '데킬라',
+        '브랜디',
+        '리큐르',
+        '맥주',
+        '소주',
+    ];
 
     return (
         <div>
-            <Chip label={`#${recipe.id}번째 레시피`} />
-            <Paper sx={{ margin: '20px', padding: '20px', backgroundColor: 'white', borderRadius: '15px'}} elevation={3}>
+            <Chip label={`#${recipe.id}번째 레시피`}/>
+            <Paper sx={{margin: '20px', padding: '20px', backgroundColor: 'white', borderRadius: '15px'}} elevation={3}>
                 <Grid container spacing={5} justifyContent="center" display="flex" flexDirection="row">
                     <Grid item xs={12} sm={6}>
-                        <Box component="img" src={recipe.image} sx={{ width: '100%', height: 'auto', objectFit: 'contain', maxHeight: 600 }} />
+                        <Box component="img" src={recipe.image}
+                             sx={{width: '100%', height: 'auto', objectFit: 'contain', maxHeight: 600}}/>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <Box display="flex" flexDirection="column" justifyContent="space-between" height="100%">
                             <div>
-                                <Typography variant="h6" sx={{ mb: 2 }}>{`#${recipe.id}번째 레시피`}</Typography>
-                                <Typography variant="h5" color="#FF9B9B" sx={{ mt: 2, mb: 3 }}>{recipe.title}</Typography>
-                                <Typography variant="h5" color='gray' sx={{ mb: 1 }}>By {recipe.nickname}</Typography>
-                                <Typography color='gray' sx={{ mb: 2 }}>작성일: {recipe.date}</Typography>
-                                <Typography color='#FF9B9B' sx={{ mt: 4, mb: 1}}>레시피 설명</Typography>
-                                <Box sx={{ m:1, p: 2, border: '1px solid #FF9B9B', borderRadius: '15px' }}>{recipe.content}</Box>
+                                <Typography variant="h6" sx={{mb: 2}}>{`#${recipe.id}번째 레시피`}</Typography>
+                                <Typography variant="h5" color="#FF9B9B" sx={{mt: 2, mb: 3}}>{recipe.title}</Typography>
+                                <Typography variant="h5" color='gray' sx={{mb: 1}}>By {recipe.nickname}</Typography>
+                                <Typography color='gray' sx={{mb: 2}}>작성일: {recipe.date}</Typography>
+                                <Typography color='#FF9B9B' sx={{mt: 4, mb: 1}}>레시피 설명</Typography>
+                                <Box sx={{
+                                    m: 1,
+                                    p: 2,
+                                    border: '1px solid #FF9B9B',
+                                    borderRadius: '15px'
+                                }}>{recipe.content}</Box>
 
-                                    <Button onClick={handleLikeClick}>
-                                        {isLiked ? (
-                                            <FavoriteIcon sx={{ fontSize: '2rem', color: '#FF9B9B' }} />
-                                        ) : (
-                                            <FavoriteTwoToneIcon sx={{ fontSize: '2rem', color: '#e9e9e9' }} />
-                                        )}
-                                    </Button>
+                                <Button onClick={handleLikeClick}>
+                                    {isLiked ? (
+                                        <FavoriteIcon sx={{fontSize: '2rem', color: '#FF9B9B'}}/>
+                                    ) : (
+                                        <FavoriteTwoToneIcon sx={{fontSize: '2rem', color: '#e9e9e9'}}/>
+                                    )}
+                                </Button>
 
                             </div>
                         </Box>
@@ -160,32 +192,37 @@ const RecipeDetail = () => {
                 </Grid>
             </Paper>
 
-            <Typography variant="h5" color="#FF9B9B" sx={{ mt: 7, mb: 1 }}>재료 정보</Typography>
-            <Paper elevation={3} sx={{ margin: '20px', padding: 2, boxShadow: 3, backgroundColor: 'white', borderRadius: '15px'}}>
+            <Typography variant="h5" color="#FF9B9B" sx={{mt: 7, mb: 1}}>재료 정보</Typography>
+            <Paper elevation={3}
+                   sx={{margin: '20px', padding: 2, boxShadow: 3, backgroundColor: 'white', borderRadius: '15px'}}>
                 <List>
                     {recipe.ingredients.map((ingredient, index) => (
-                        <ListItem key={index} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <ListItemAvatar>
-                                <Avatar src={ingredient.drink.image} alt={ingredient.drink.name} sx={{ width: 56, height: 56, bgcolor: '#FF9B9B' }} />
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary={ingredient.drink.name}
-                                secondary={`카테고리: ${ingredient.drink.category}`}
-                                sx={{ margin: '0 16px', flex: '1 1 auto' }}
-                            />
-                            <Typography variant="body2" sx={{ minWidth: '50px', textAlign: 'right' }}>
-                                {`${ingredient.proportion} ${ingredient.unit}`}
-                            </Typography>
-                        </ListItem>
+                        <Link to={`/ingredient/${ingredient.drink.id}`} key={index}
+                              style={{textDecoration: 'none', color: 'inherit'}}>
+                            <ListItem key={index}
+                                      sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                                <ListItemAvatar>
+                                    <Avatar src={ingredient.drink.image} alt={ingredient.drink.name}
+                                            sx={{width: 56, height: 56, bgcolor: '#FF9B9B'}}/>
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={ingredient.drink.name}
+                                    secondary={`카테고리: ${categories[ingredient.drink.category]}`}
+                                    sx={{margin: '0 16px', flex: '1 1 auto'}}
+                                />
+                                <Typography variant="body2" sx={{minWidth: '50px', textAlign: 'right'}}>
+                                    {`${ingredient.proportion} ${ingredient.unit}`}
+                                </Typography>
+                            </ListItem>
+                        </Link>
                     ))}
                 </List>
             </Paper>
 
-            <CommentList />
+            <CommentList/>
         </div>
     );
 }
-
 
 
 export default RecipeDetail;

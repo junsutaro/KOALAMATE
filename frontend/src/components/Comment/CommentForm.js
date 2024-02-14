@@ -85,7 +85,7 @@ const CommentForm = ({boardId, updateComments}) => {
                     <Box display={'flex'} flexGrow={1} width={'100%'}>
                         <TextField
                             inputRef={commentInput}
-                            label="댓글 내용"
+                            // label="댓글 내용"
                             placeholder="칭찬과 격려의 댓글은 작성자에게 큰 힘이 됩니다 :)"
                             inputProps={{maxLength: 200}}
                             value={commentData.content}
