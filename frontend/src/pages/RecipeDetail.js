@@ -98,8 +98,7 @@ const RecipeDetail = () => {
     useEffect(() => {
         getDetailRecipe();
     }, [boardId]);
-
-    console.log(recipe)
+    
 
 //     return (
 //         <>

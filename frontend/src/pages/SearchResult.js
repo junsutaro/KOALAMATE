@@ -16,6 +16,7 @@ const SearchResult = ({term}) => {
     const [optionNum, setOptionNum] = useState(1)
 
     const [recipeData, setRecipeData] = useState([])
+    const [drinkData, setDrinkData] = useState([])
     const [ingredientData, setIngredientData] = useState([])
 
     const handlePageChange = (event, value) => {
@@ -45,7 +46,6 @@ const SearchResult = ({term}) => {
         } catch (error) {
             console.error("검색 결과(레시피) 가지고 오던 중 에러 발생: ", error)
         }
-
     }
 
     const getSearchIngredient = async () => {
@@ -109,7 +109,7 @@ const SearchResult = ({term}) => {
                         />
                     </>
                 ) : (
-                    <Stack sx={{ width: '100%', maxWidth: 360, m: 3 }} spacing={2}>
+                    <Stack sx={{width: '100%', maxWidth: 360, m: 3}} spacing={2}>
                         <Alert severity="error"
                                sx={{
                                    backgroundColor: '#eeeeee', // 배경색 변경
@@ -132,7 +132,7 @@ const SearchResult = ({term}) => {
                         ))}
                     </div>
                 ) : (
-                    <Stack sx={{ width: '100%', maxWidth: 360, m:3}} spacing={2}>
+                    <Stack sx={{width: '100%', maxWidth: 360, m: 3}} spacing={2}>
                         <Alert severity="error"
                                sx={{
                                    backgroundColor: '#eeeeee', // 배경색 변경

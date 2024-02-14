@@ -68,7 +68,7 @@ const SearchResultBtn = ({setOptionNum}) => {
                         onClick={handleDrinkClick}
                         style={getButtonStyle('drink')}
                     >
-                        검색어가 들어간 레시피
+                        검색어가 들어간 레시피 백과
                     </Button>
                 </ButtonGroup>
             </div>
