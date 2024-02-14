@@ -57,7 +57,7 @@ const RecipeDetail = () => {
 
     const getDetailRecipe = async () => {
         try {
-            const response = await axios.get(`http://localhost:8085/board/view?id=${boardId}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/board/view?id=${boardId}`);
             const data = response.data;
             setRecipe({
                 id: data.id,
