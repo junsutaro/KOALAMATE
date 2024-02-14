@@ -6,12 +6,9 @@ import ShowFridge from './ShowFridge';
 import ShowFridgeInside from './ShowFridgeInside';
 import CloseIcon from '@mui/icons-material/Close';
 
-function FridgeModal({userId}) {
+function FridgeModal({userId, open, handleClose}) {
 	const [openInside, setOpenInside] = React.useState(false);
 	const theme = useTheme();
-
-	const [open, setOpen] = React.useState(true);
-	const handleClose = () => setOpen(false);
 
 	return (
 		<Modal

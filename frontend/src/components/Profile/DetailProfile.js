@@ -3,10 +3,14 @@ import Soju from '../../assets/alcohol.png';
 import SojuCup from '../../assets/cup.png';
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
+import FridgeModal from '../Fridge/FridgeModal';
+import { useSelector } from 'react-redux';
 
-const DetailProfile = ({intro, alcoholLimitBottle, alcoholLimitGlass, mannersScore, tags, userId}) => {
+const DetailProfile = ({intro, alcoholLimitBottle, alcoholLimitGlass, mannersScore, tags, userId, nickname }) => {
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 	const navigate = useNavigate();
+	const [modalOpen, setModalOpen] = useState(false);
+	const {user, isLoggedIn} = useSelector(state => state.auth);
 
 	useEffect(() => {
 		const handleResize = () => {
@@ -22,10 +26,11 @@ const DetailProfile = ({intro, alcoholLimitBottle, alcoholLimitGlass, mannersSco
 	const handleViewRefrigerator = () => {
 		// 여기에 버튼 클릭 시 실행할 로직을 구현
 		console.log("냉장고 보기 버튼이 클릭되었습니다.");
-		 navigate(`/fridge/${userId}`); // useNavigate 훅을 사용하여 경로 이동
+		setModalOpen(true);
 	};
 
 	return (<Container>
+		{(nickname === user.nickname) && isLoggedIn ? <FridgeModal open={modalOpen} handleClose={() => setModalOpen(false)}/> : <FridgeModal open={modalOpen} handleClose={() => setModalOpen(false)} userId={userId} />}
 		<Box
 				sx={{
 					display: 'flex',

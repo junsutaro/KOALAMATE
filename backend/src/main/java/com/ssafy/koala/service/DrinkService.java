@@ -6,6 +6,7 @@ import com.ssafy.koala.dto.drink.DrinkDto;
 import com.ssafy.koala.dto.drink.DrinkWithoutCocktailDto;
 import com.ssafy.koala.model.DrinkModel;
 import com.ssafy.koala.repository.DrinkRepository;
+import com.ssafy.koala.repository.LikeRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,6 @@ import java.util.stream.Collectors;
 @Service
 public class DrinkService {
     private final DrinkRepository drinkRepository;
-
 
     public DrinkService(DrinkRepository drinkRepository) {
         this.drinkRepository = drinkRepository;
