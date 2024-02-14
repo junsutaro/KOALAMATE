@@ -36,11 +36,11 @@ import MyLikes from "../pages/MyLikes";
 import IngredientDetail from "../pages/IngredientDetail";
 import ShowFridge from "../components/Fridge/ShowFridge";
 import ShowFridgeInside from "../components/Fridge/ShowFridgeInside";
-<<<<<<< HEAD
+
+
 import SearchResult from "../pages/SearchResult";
-=======
 import WriteDrink from "../pages/WriteDrink";
->>>>>>> master
+
 
 const CustomScrollBox = styled(Box)(({ theme }) => ({
 	overflowY: 'auto', // 세로 스크롤바 활성화
