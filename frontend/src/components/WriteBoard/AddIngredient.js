@@ -45,6 +45,7 @@ const AddIngredient = ({updateCocktails}) => {
                     id: ingredientToUse.id,
                     name: ingredientToUse.name,
                     category: ingredientToUse.category,
+                    image: ingredientToUse.image,
                 }
             };
             updateCocktails((prevCocktails) => [...prevCocktails, newIngredient]);
@@ -62,6 +63,8 @@ const AddIngredient = ({updateCocktails}) => {
         setProportion('');
         setUnit('');
     };
+
+    console.log(searchResults)
 
     return (
         <Box m={1} p={4} sx={{

@@ -1,15 +1,51 @@
 import React from 'react'
-import {List, ListItem, ListItemText} from "@mui/material";
+import { Avatar, Chip, List, ListItem, ListItemAvatar, ListItemText, Typography, IconButton } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 
-const Ingredients = ({cocktails}) => {
+const Ingredients = ({cocktails, onDeleteIngredient}) => {
+    const categories = [
+        // '무알콜',
+        '기타 재료',
+        '진',
+        '럼',
+        '보드카',
+        '위스키',
+        '데킬라',
+        '브랜디',
+        '리큐르',
+        '맥주',
+        '소주',
+    ];
     return (
         <>
             {cocktails.map((ingredient, index) => (
-                <List key={index} sx={{ mt: 2 }}>
-                    <ListItem>
-                        <ListItemText
-                            primary={`재료 이름: ${ingredient.drink.name}, 용량: ${ingredient.proportion}, 단위: ${ingredient.unit}`}
-                        />
+                <List key={index} sx={{mt: 2}}>
+                    <ListItem key={index} sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <ListItemAvatar>
+                            <Avatar src={ingredient.drink.image} alt={ingredient.drink.name}
+                                    sx={{width: 56, height: 56, bgcolor: '#FF9B9B'}}/>
+                        </ListItemAvatar>
+
+                        <ListItemText>
+                            <ListItemText
+                                variant="body3"
+                                primary={ingredient.drink.name}
+                                sx={{margin: '0 16px', flex: '1 1 auto'}}
+                            />
+                            <Chip label={`#${categories[ingredient.drink.category]}`}
+                                            sx={{margin: '5px 16px', flex: '1 1 auto'}}/>
+                        </ListItemText>
+
+                        <Typography variant="body3" sx={{minWidth: '50px', textAlign: 'right'}}>
+                            {`${ingredient.proportion} ${ingredient.unit}`}
+                        </Typography>
+                        {/* 삭제 버튼 */}
+                        <IconButton
+                            aria-label="delete"
+                            onClick={() => onDeleteIngredient(index)}
+                        >
+                            <DeleteIcon />
+                        </IconButton>
                     </ListItem>
                 </List>
             ))}
