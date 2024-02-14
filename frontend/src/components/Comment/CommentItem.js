@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {ListItem, Typography, Button, Grid, TextField} from '@mui/material';
+import {ListItem, Typography, Button, Grid, TextField, Box} from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import {useSelector} from 'react-redux';
@@ -60,9 +60,11 @@ const CommentItem = ({comment, onDeleteComment, onEditComment, handleEditComment
                             <Typography variant="body1" sx={{marginBottom: '10px'}}>
                                 {comment.content}
                             </Typography>
-                            <Typography variant="body2" sx={{color: '#888'}}>
-                                {format(new Date(comment.date), 'yyyy년 MM월 dd일 HH:mm:ss')}
-                            </Typography>
+                            <Box display={'flex-end'}>
+                                <Typography variant="body2" sx={{color: '#888'}}>
+                                    {format(new Date(comment.date), 'yyyy년 MM월 dd일 HH:mm:ss')}
+                                </Typography>
+                            </Box>
                         </>
                     )}
                 </Grid>
