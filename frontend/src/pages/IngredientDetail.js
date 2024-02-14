@@ -5,6 +5,11 @@ import Recommend from "../components/Recommend";
 import {Typography, Chip, Box, Container} from "@mui/material";
 
 const IngredientDetail = () => {
+    // 인증 헤더를 가져오는 함수
+    const getAuthHeader = () => {
+        const authHeader = localStorage.getItem('authHeader');
+        return authHeader ? {Authorization: authHeader} : {};
+    };
     const {ingredientId} = useParams();
     const categories = [
         // '무알콜',
@@ -33,7 +38,10 @@ const IngredientDetail = () => {
 
     const getIngredientData = async () => {
         try {
-        const response = await axios.get(`${process.env.REACT_APP_IMAGE_URL}/drink/${ingredientId}`)
+        const response = await axios.get(`${process.env.REACT_APP_IMAGE_URL}/drink/${ingredientId}`,
+            {
+                headers: getAuthHeader(), // 인증 헤더 추가
+            })
         const data = response.data
         setIngredient({
             id: data.id,
@@ -52,18 +60,21 @@ const IngredientDetail = () => {
                 date: item.board.date,
                 author: item.board.nickname,
                 imageUrl: item.board.image,
-                ingredients: item.cocktails || [],
+                liked: item.board.like // 여기가 올바르게 작동해야 함
             })));
+
         } catch (error) {
             console.error('재료 데이터 가져오는 중 에러 발생 :',  error)
         }
     }
+            cocktailData.map(it => console.log(it.boardId, it.liked))
 
     useEffect(() => {
         getIngredientData()
+
     }, [ingredientId]);
 
-    console.log(cocktailData || [])
+
 
     const img = `${process.env.REACT_APP_IMAGE_URL}/${ingredient.imageUrl}`
     const type = categories[ingredient.category]

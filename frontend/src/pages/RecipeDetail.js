@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
 import axios from "axios";
 import CommentList from "components/Comment/CommentList";
 import style from "../components/RecipeBoard/RecipeItem.module.css";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
-import { Typography, Box, Button, ListItemText, List } from "@mui/material";
-import { format } from 'date-fns';
+import {Typography, Box, Button, ListItemText, List} from "@mui/material";
+import {format} from 'date-fns';
 import {useSelector} from "react-redux";
 
 const RecipeDetail = () => {
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
-    const { boardId } = useParams();
+    const {boardId} = useParams();
     const [recipe, setRecipe] = useState({
         id: 0,
         title: "",
@@ -19,7 +19,7 @@ const RecipeDetail = () => {
         date: "",
         views: 0,
         nickname: "",
-        image:'',
+        image: '',
         comments: [],
         likeCount: 0,
         liked: false,
@@ -37,10 +37,13 @@ const RecipeDetail = () => {
 
         const authHeader = localStorage.getItem('authHeader');
         try {
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/like`, {id: boardId}, {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/like`, {
+                id: boardId,
+                like: !isLiked
+            }, {
                 headers: {'Authorization': authHeader}
             });
-            if(response.status === 200) {
+            if (response.status === 200) {
                 setIsLiked(!isLiked);
             } else {
                 // 실패 응답 처리
@@ -61,14 +64,14 @@ const RecipeDetail = () => {
                 content: data.content,
                 date: format(new Date(data.date), 'yyyy년 MM월 dd일 HH:mm:ss'),
                 views: data.views,
-                image: `${process.env.REACT_APP_IMAGE_URL}/${data.image}` ,
+                image: `${process.env.REACT_APP_IMAGE_URL}/${data.image}`,
                 nickname: data.nickname,
                 comments: data.comments || [],
                 likeCount: data.likeCount,
-                liked: data.liked,
+                liked: data.like,
                 ingredients: data.cocktails || [],
             });
-            setIsLiked(data.liked);
+            setIsLiked(data.like);
         } catch (error) {
             console.error('레시피 상세 정보를 가져오는 중 에러 발생: ', error);
         }
@@ -78,6 +81,8 @@ const RecipeDetail = () => {
         getDetailRecipe();
     }, [boardId]);
 
+
+    
 
     return (
         <>
@@ -89,7 +94,7 @@ const RecipeDetail = () => {
                     <Typography>작성자: {recipe.nickname}</Typography>
                     <Typography>작성일: {recipe.date}</Typography>
                     <Typography>조회수: {recipe.views}</Typography>
-                    <img src={recipe.image} />
+                    <img src={recipe.image}/>
 
                     <List>
                         {recipe.ingredients.map((ingredient, index) => (

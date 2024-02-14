@@ -7,7 +7,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import style from "./RecipeBoard/RecipeList.module.css";
 const Recommend = ({ cocktails }) => {
     const [index, setIndex] = useState(0); // 현재 슬라이드 인덱스
-
+    const [likedRecipes, setLikedRecipes] = useState([]);
     // 이전 슬라이드로 이동
     const handlePrev = () => {
         setIndex(Math.max(0, index - 1));
@@ -17,6 +17,13 @@ const Recommend = ({ cocktails }) => {
     const handleNext = () => {
         setIndex(Math.min(cocktails.length - 1, index + 1));
     };
+
+    // const toggleLikedState = async (boardId) => {
+    //     const isLiked = likedRecipes.includes(boardId);
+    //     const newLikedRecipes = isLiked ? likedRecipes.filter(id => id !== boardId) : [...likedRecipes, boardId];
+    //     setLikedRecipes(newLikedRecipes);
+    // };
+    console.log(cocktails)
 
     return (
         <>
@@ -45,6 +52,9 @@ const Recommend = ({ cocktails }) => {
                                 imageUrl={cocktail.imageUrl}
                                 title={cocktail.title}
                                 author={cocktail.author}
+                                // liked={cocktail.like}
+                                liked={cocktail.liked}
+                                // toggleLiked={() => toggleLikedState(cocktail.boardId)}
                                 tags={[]}
                             />
                         ))}
