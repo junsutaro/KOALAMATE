@@ -36,10 +36,6 @@ import MyLikes from "../pages/MyLikes";
 import IngredientDetail from "../pages/IngredientDetail";
 import ShowFridge from "../components/Fridge/ShowFridge";
 import ShowFridgeInside from "../components/Fridge/ShowFridgeInside";
-
-
-
-
 import SearchResult from "../pages/SearchResult";
 import WriteDrink from "../pages/WriteDrink";
 
