@@ -29,6 +29,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Dialog from "@mui/material/Dialog";
 import {useNavigate} from "react-router-dom";
+import ModifyFridge from './ModifyFridge';
 
 function Environment() {
     const {scene} = useThree();
@@ -44,25 +45,38 @@ function Environment() {
     return null;
 }
 
-const CameraControl = ({ cell, setCell }) => {
+const CameraControl = ({ cell, setCell, isLoading }) => {
     const camera = useThree((state) => state.camera);
 
     useEffect(() => {
-        camera.rotation.set(-0.2, 0, 0);
-    }, [])
+        camera.fov = 40;
+    }, []);
+
+
+    useEffect(() => {
+        console.log(!isLoading);
+        if (!isLoading) {
+            console.log("asdf");
+            camera.position.set(0, 0, 0.6);
+            camera.rotation.set(-0.17, 0, 0);
+        }
+    }, [!isLoading])
 
     useFrame(() => {
         // 카메라의 Y 위치를 조정하여 '올라가기'와 '내려가기' 기능을 구현합니다.
         // camera.position.y = 1.5 - (cell * 0.86); // 여기서 cell 값에 따라 카메라의 Y 위치를 조정합니다.
-        const targetY = 1.5 - (cell * 0.86);
-        camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 0.05);
+        if (!isLoading) {
+            const targetY = 1.5 - (cell * 0.86);
+            camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 0.05);
+        }
+
     });
 
     // HTML 요소를 3D 캔버스 외부에 배치하여 화면에 고정되도록 합니다.
     return null; // HTML 요소는 이 컴포넌트 밖에서 직접 렌더링합니다.
 };
 
-function ModifyFridgeInside() {
+function ModifyFridgeInside({ setOpenInside }) {
     const pointLightRef = useRef();
     const [fridgeUuid, setFridgeUuid] = React.useState(null);
     const {roomStatus} = useWebSocket();
@@ -77,7 +91,9 @@ function ModifyFridgeInside() {
     const [isCanvasLoaded, setIsCanvasLoaded] = useState(false);
     const [isAdded, setIsAdded] = useState(false);
     const [isSaved, setIsSaved] = useState(true);
+    const [openSaved, setOpenSaved] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const category = ['Gin', 'Rum', 'Vodka', 'Whiskey', 'Tequila', 'Brandy', 'Liqueur', 'Beer', 'Soju'];
@@ -99,6 +115,8 @@ function ModifyFridgeInside() {
                 console.log(error);
             });
             }).catch((error) => {
+                alert('로그인이 필요합니다.');
+                navigate('/login');
                 console.log(error);
             });
     }, []);
@@ -147,10 +165,10 @@ function ModifyFridgeInside() {
 
     const handleInsideWithSave = () => {
         handleSave();
-        navigate('/fridge');
+        setOpenInside(false);
     }
     const handleInsideWithoutSave = () => {
-        navigate('/fridge');
+        setOpenInside(false);
     }
 
     const handleBottleClick = (index) => {
@@ -182,7 +200,10 @@ function ModifyFridgeInside() {
             }).then(() => {
                 console.log('drinks added');
                 setIsSaved(true);
-            })
+                setOpenSaved(true);
+            }).catch((err) => {
+               console.log(err);
+            });
         }
     }
 
@@ -239,22 +260,20 @@ function ModifyFridgeInside() {
 
     return (
         <>
-            <Box height='800px'>
-                <Canvas camera={{position: [0, 0, 0.6], fov: 40, rotation: [-0.2, 0, 0]}} shadows antialias='true' onCreated={() => setIsCanvasLoaded(true)}>
-                    {/*<OrbitControls />*/}
-                    {/*<ambientLight intensity={0.5}/>*/}
-                    {/*<spotLight position={[-3, 3, 3]} angle={0.15} penumbra={0.5} castShadow/>*/}
-                    {/*<directionalLight ref={directionalLightRef} position={[10, 5, 5]} intensity={5} castShadow/>*/}
-                    <pointLight ref={pointLightRef} position={[0, 5, 0]} intensity={10} castShadow/>
-                    <Suspense fallback={<Loader/>}>
-                        <FridgeInsideModel setUuid={setFridgeUuid}/>
-                        <AddButtonModel models={models} onAddClick={handleAddClick}/>
-                        <BottleModel models={models} onBottleClick={handleBottleClick}/>
-                        <Environment/>
-                    </Suspense>
-                    <CameraControl cell={cell} setCell={setCell}/>
-                </Canvas>
-            </Box>
+            <Canvas camera={{ fov: 50 }} shadows antialias='true' onCreated={() => setIsCanvasLoaded(true)}>
+                {/*<OrbitControls />*/}
+                {/*<ambientLight intensity={0.5}/>*/}
+                {/*<spotLight position={[-3, 3, 3]} angle={0.15} penumbra={0.5} castShadow/>*/}
+                {/*<directionalLight ref={directionalLightRef} position={[10, 5, 5]} intensity={5} castShadow/>*/}
+                <pointLight ref={pointLightRef} position={[0, 5, 0]} intensity={10} castShadow/>
+                <Suspense fallback={<Loader setIsLoading={setIsLoading}/>}>
+                    <FridgeInsideModel setUuid={setFridgeUuid}/>
+                    <AddButtonModel models={models} onAddClick={handleAddClick}/>
+                    <BottleModel models={models} onBottleClick={handleBottleClick}/>
+                    <Environment/>
+                </Suspense>
+                <CameraControl cell={cell} setCell={setCell} isLoading={isLoading}/>
+            </Canvas>
             {renderAddDrinkUI()}
             <Box>
                 {isCanvasLoaded && cell > 0 &&
@@ -285,18 +304,18 @@ function ModifyFridgeInside() {
             <Box sx={{width: '200px', position: 'absolute', top: '90%', left: '90%', transform: 'translate(-50%, -50%)', padding: '20px'}}>
                 <Button onClick={handleSave}>저장</Button>
                 <Button onClick={() => {
-                    if (isSaved) navigate('/fridge');
+                    if (isSaved) setOpenInside(false);
                     setOpenDialog(true);
                 }}>외부로 이동</Button>
             </Box>
             <Snackbar
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                open={isSaved}
+                open={openSaved}
                 autoHideDuration={3000}
-                onClose={() => setIsSaved(false)}
+                onClose={() => setOpenSaved(false)}
             >
                 <Alert
-                    onClose={() => setIsSaved(false)}
+                    onClose={() => setOpenSaved(false)}
                     severity="success"
                     variant="filled"
                     >저장 완료!</Alert>

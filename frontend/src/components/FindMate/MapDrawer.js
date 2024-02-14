@@ -55,8 +55,7 @@ export default function SlideIn() {
 				</Box>
 			</Drawer>
 			<Box>
-				<p>여기는 기존 컨텐츠가 위치합니다. Drawer가 열리면 전체 페이지가 오른쪽으로 밀립니다.</p>
-				<Map />
+				{/*<Map />*/}
 			</Box>
 		</Box>
 	);

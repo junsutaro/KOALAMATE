@@ -1,36 +1,7 @@
-.customoverlay {
-    position: relative;
-    bottom: 75px; /* 마커 위에 표시되도록 조정 */
+/* Map.module.css */
+.mapContainer {
+    width: 60%; /* 또는 원하는 너비 */
+    height: 600px; /* 또는 원하는 높이 */
+    margin: 0 auto; /* 중앙 정렬 */
     border-radius: 20px;
-    border: 1px solid #ccc;
-    border-bottom: 2px solid #ddd;
-    padding: 5px;
-    background-color: white;
-    width: 120px;
-    text-align: center;
 }
-
-.customoverlay a {
-    display: block;
-    text-decoration: none;
-    color: #000;
-    text-align: center;
-}
-
-.customoverlay .title {
-    font-size: 14px;
-    font-weight: bold;
-}
-
-/*.customoverlay:after { !* 말풍선 꼬리 디자인 *!*/
-/*    content: '';*/
-/*    position: absolute;*/
-/*    margin-left: -12px;*/
-/*    left: 50%;*/
-/*    bottom: -12px;*/
-/*    width: 0;*/
-/*    height: 0;*/
-/*    border-left: 12px solid transparent;*/
-/*    border-right: 12px solid transparent;*/
-/*    border-top: 12px solid white;*/
-/*}*/

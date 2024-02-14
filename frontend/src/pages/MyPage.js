@@ -139,6 +139,8 @@ const MyPage = () => {
                     alcoholLimitGlass={profileData.alcoholLimitGlass}
                     mannersScore={profileData.mannersScore}
                     tags={profileData.tags}
+                    userId={userId}
+                    nickname={profileData.nickname}
                 />
             </Box>
             <MyRecipe nickname={profileData.nickname} userId={userId}/>

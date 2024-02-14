@@ -3,12 +3,10 @@ package com.ssafy.koala.repository;
 import com.ssafy.koala.model.BoardModel;
 import com.ssafy.koala.model.CocktailModel;
 import com.ssafy.koala.model.DrinkModel;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
-import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,5 +75,37 @@ public class BoardSpecifications {
             // drinks의 name을 기준으로 검색 조건을 설정합니다.
             return criteriaBuilder.like(drinksJoin.get("name"), "%" + drinkName + "%");
         };
+    }
+
+
+    // 프론트 요청
+
+    public static Specification<BoardModel> searchOnlyTitle(String keyword) {
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (StringUtils.hasText(keyword)) {
+                predicates.add(criteriaBuilder.like(root.get("title"), "%" + keyword + "%"));
+                //predicates.add(criteriaBuilder.like(root.get("nickname"), "%" + keyword + "%"));
+//                predicates.add(criteriaBuilder.like(root.get("content"), "%" + keyword + "%"));
+            }
+
+            return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
+        };
+    }
+
+    public static Specification<BoardModel> searchByNickname(String nickname, boolean isAdmin) {
+        return (root, query, criteriaBuilder) -> {
+            if (isAdmin) {
+                return criteriaBuilder.equal(root.get("nickname"), "admin");
+            } else {
+                return criteriaBuilder.notEqual(root.get("nickname"), "admin");
+            }
+        };
+    }
+
+    // Overload for convenience
+    public static Specification<BoardModel> searchByNickname(String nickname) {
+        return searchByNickname(nickname, true); // Default to admin
     }
 }

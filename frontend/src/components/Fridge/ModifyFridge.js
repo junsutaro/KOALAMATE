@@ -15,6 +15,7 @@ import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import Dialog from "@mui/material/Dialog";
+import { useSelector } from 'react-redux';
 
 function Environment() {
 	const { scene } = useThree();
@@ -30,13 +31,17 @@ function Environment() {
 	return null;
 }
 
-function ModifyFridge() {
+function ModifyFridge({setOpenInside}) {
 	const pointLightRef = useRef();
 	const [fridgeUuid, setFridgeUuid] = React.useState(null);
 	const { roomStatus } = useWebSocket();
 	const [models, setModels] = useState([]);
 	const [isSaved, setIsSaved] = useState(true);
 	const [openDialog, setOpenDialog] = useState(false);
+	const [openSaved, setOpenSaved] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const {isLoggedIn} = useSelector(state => state.auth);
+	const [isCanvasLoaded, setIsCanvasLoaded] = useState(false);
 	const navigate = useNavigate();
 
 	const handleSave = () => {
@@ -56,6 +61,7 @@ function ModifyFridge() {
 				.then(() => {
 					console.log('custom object added');
 					setIsSaved(true);
+					setOpenSaved(true);
 				})
 				.catch((err) => {
 					console.log(err);
@@ -66,17 +72,20 @@ function ModifyFridge() {
 
 	const handleInsideWithSave = () => {
 		handleSave();
-		navigate('/fridgeInside');
+		setOpenInside(true);
 	}
 	const handleInsideWithoutSave = () => {
-		navigate('/fridgeInside');
+		setOpenInside(true);
 	}
 
 	useEffect(() => {
+		setIsLoading(true);
+		console.log(isLoading);
 		const loadModel = (url) => {
 			return new Promise((resolve, reject) => {
+				console.log(url);
 				const loader = new GLTFLoader();
-				loader.load(url, resolve, undefined, reject);
+				loader.load(`/${url}`, resolve, undefined, reject);
 			});
 		};
 		axios.post(`${process.env.REACT_APP_API_URL}/user/myId`, null, {
@@ -97,6 +106,11 @@ function ModifyFridge() {
 						setModels(modelData);
 					});
 				});
+		}).catch((err) => {
+			alert('로그인이 필요합니다.');
+			if (err.response.status === 403) {
+				navigate('/login');
+			}
 		});
 	}, []);
 
@@ -111,36 +125,50 @@ function ModifyFridge() {
 	}, [pointLightRef]);
 
 	return (
-		<Box height='800px'>
-			<Canvas camera={{ position: [0, 0, 6], fov: 60 }} shadows antialias='true' colorManagement={true} shadowMap={{ type: THREE.VSMShadowMap }}>
+		<>
+			<Canvas camera={{ position: [0, 0, 6], fov: 60 }} shadows antialias='true' onCreated={() => setIsCanvasLoaded(true)}>
 				{/*<OrbitControls />*/}
 				{/*<ambientLight intensity={0.5}/>*/}
 				{/*<spotLight position={[-3, 3, 3]} angle={0.15} penumbra={0.5} castShadow/>*/}
 				{/*<directionalLight ref={directionalLightRef} position={[10, 5, 5]} intensity={5} castShadow/>*/}
 				<pointLight ref={pointLightRef} position={[5, 5, 5]} intensity={100} castShadow/>
-				<Suspense fallback={<Loader/>}>
-					<FridgeModel setUuid={setFridgeUuid}/>
-					<TrashcanModel initialPosition={[-2.5, -1.5, 1]} setModels={setModels} models={models} setIsSaved={setIsSaved}/>
-					<MBTIModel initialPosition={[2, 1.7, 0]} fridgeUuid={fridgeUuid} models={models} setModels={setModels} setIsSaved={setIsSaved}/>
-					<Rig/>
+				<Rig/>
+				<Suspense fallback={<Loader setIsLoading={setIsLoading}/>}>
 					<Environment />
 				</Suspense>
+				<Suspense fallback={<Loader setIsLoading={setIsLoading}/>}>
+					<FridgeModel setUuid={setFridgeUuid}/>
+				</Suspense>
+				<Suspense fallback={<Loader setIsLoading={setIsLoading}/>}>
+					<TrashcanModel initialPosition={[-2.5, -1.5, 1]} setModels={setModels} models={models} setIsSaved={setIsSaved}/>
+				</Suspense>
+				<Suspense fallback={<Loader setIsLoading={setIsLoading}/>}>
+					<MBTIModel initialPosition={[2, 1.7, 0]} fridgeUuid={fridgeUuid} models={models} setModels={setModels} setIsSaved={setIsSaved}/>
+				</Suspense>
+
+
 			</Canvas>
-			<Box sx={{width: '200px', position: 'absolute', top: '90%', left: '90%', transform: 'translate(-50%, -50%)', padding: '20px'}}>
-				<Button onClick={handleSave}>저장</Button>
-				<Button onClick={() => {
-					if (isSaved) navigate('/fridgeInside');
-					setOpenDialog(true);
-				}}>내부로 이동</Button>
-			</Box>
+			{ isCanvasLoaded &&
+				<Box sx={{width: '200px', position: 'absolute', top: '90%', left: '90%', transform: 'translate(-50%, -50%)', padding: '20px'}}>
+					<Button onClick={handleSave}>저장</Button>
+					<Button onClick={() => {
+						if (isSaved) setOpenInside(true);
+						else setOpenDialog(true);
+					}}>내부로 이동</Button>
+				</Box>
+			}
 			<Snackbar
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-				open={isSaved}
+				open={openSaved}
 				autoHideDuration={3000}
-				onClose={() => setIsSaved(false)}
+				onClose={() => {
+					setOpenSaved(false);
+				}}
 			>
 				<Alert
-					onClose={() => setIsSaved(false)}
+					onClose={() => {
+						setOpenSaved(false);
+					}}
 					severity="success"
 					variant="filled"
 				>저장 완료!</Alert>
@@ -158,7 +186,7 @@ function ModifyFridge() {
 					</Button>
 				</DialogActions>
 			</Dialog>
-		</Box>
+		</>
 	)
 }
 
