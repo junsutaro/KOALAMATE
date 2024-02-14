@@ -101,12 +101,17 @@ import style from 'components/FindMate/Map.module.css';
 import {useSelector} from "react-redux";
 import defaultProfile from 'assets/logo2.png';
 
+import { useMap } from 'context/MapContext';
 
-function Map() {
-    const mapContainer = useRef(null);
+const Map = ()  => {
     const [userData, setUserData] = useState([]);
     const navigate = useNavigate(); // useNavigate 사용
     const curUser = useSelector(state => state.auth.user);
+
+    const { setVisibleMarkersData } = useMap();
+    const mapContainer = useRef(null);
+    const [map, setMap] = useState(null);
+
 
     useEffect(() => {
         const confirmLocationAccess = window.confirm("위치 정보 활용에 동의하고 내 주변 냉장고를 찾아볼까요?");
@@ -119,8 +124,8 @@ function Map() {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_API_URL}/findmate/listMate`, {
                     headers: {
-                        'Authorization': localStorage.getItem('authHeader')
-                    }
+                        'Authorization': localStorage.getItem('authHeader'),
+                    },
                 });
                 setUserData(response.data);
             } catch (error) {
@@ -137,13 +142,13 @@ function Map() {
                 initializeMap(position.coords.latitude, position.coords.longitude);
             }, () => {
                 console.error("위치 정보를 가져올 수 없습니다.");
-                initializeMap(36.1081844, 128.4139686); // 기본 위치
+                initializeMap(36.1081844, 128.4139686); // 기본 위치 설정
             });
         } else {
             console.log("이 브라우저에서는 위치 정보가 지원되지 않습니다.");
-            initializeMap(36.1081844, 128.4139686); // 기본 위치
+            initializeMap(36.1081844, 128.4139686); // 기본 위치 설정
         }
-    }, [userData]); // 유저 데이터가 변경될 때마다 지도 초기화
+    }, [userData]);
 
 
     const initializeMap = (lat, lng) => {
@@ -154,11 +159,11 @@ function Map() {
 
         const map = new window.kakao.maps.Map(mapContainer.current, mapOption);
 
+
         // 유저 데이터를 사용하여 각 위치에 커스텀 마커 추가
-        userData.forEach(user => {
-            if (user.nickname !== curUser.nickname) {
-                const markerPosition = new window.kakao.maps.LatLng(user.latitude, user.longitude);
-                const marker = new window.kakao.maps.Marker({
+        userData.filter(user => user.nickname !== curUser.nickname).map(user => {
+            const markerPosition = new window.kakao.maps.LatLng(user.latitude, user.longitude);
+            const marker = new window.kakao.maps.Marker({
                     position: markerPosition,
                     image: new window.kakao.maps.MarkerImage(
                         refrig,
@@ -208,17 +213,33 @@ function Map() {
                     customOverlay.setMap(null);
                 });
 
-                marker.setMap(map);
-
                 // 마커 클릭 이벤트 추가
                 window.kakao.maps.event.addListener(marker, 'click', function () {
                     navigate(`/user/${user.id}`);
                 });
-            }
+
+                const newMap = new window.kakao.maps.Map(mapContainer.current, mapOption);
+                setMap(newMap);
+
+                window.kakao.maps.event.addListener(newMap, 'idle', function () {
+                    updateVisibleMarkers(userData, newMap);
+                });
+
+            return user; // 화면에 보이는 마커에 해당하는 유저 데이터 반환
         });
+
+        const updateVisibleMarkers = (userData, map) => {
+            const bounds = map.getBounds();
+            const visibleMarkers = userData.filter(user => {
+                const userPosition = new window.kakao.maps.LatLng(user.latitude, user.longitude);
+                return bounds.contain(userPosition);
+            });
+
+            setVisibleMarkersData(visibleMarkers);
+        };
     };
 
-    return <div ref={mapContainer} className={style.mapContainer}/>;
+    return <div ref={mapContainer} style={{ width: '100%', height: '600px' }} />;
 }
 
 export default Map;

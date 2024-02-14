@@ -7,12 +7,16 @@ import { useNavigate } from 'react-router-dom';
 import {useSelector} from "react-redux";
 import RefrigeratorImg from 'assets/refrig_map.png';
 
+import { useMap } from 'context/MapContext';
+
 const authHeader = localStorage.getItem('authHeader');
 
-const RefrigList = () => {
+const RefrigList = ({markersData}) => {
     const [userData, setUserData] = useState([]);
     const navigate = useNavigate();
     const curUser = useSelector(state => state.auth.user);
+
+    const { visibleMarkersData } = useMap();
 
     // 좌우로 회전하는 이미지 스타일
     const swingStyle = {
@@ -58,7 +62,7 @@ const RefrigList = () => {
     };
 
     useEffect(() => {
-        getUserData();
+        //getUserData();
     }, []);
 
     // 리스트 아이템 클릭 핸들러, id를 인자로 받음
@@ -71,7 +75,7 @@ const RefrigList = () => {
             <h3>내 주변의 냉장고</h3>
             <Divider />
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                {userData.map((user) => (
+                {visibleMarkersData.map((user) => (
                     <React.Fragment key={user.id}>
                         <Box onClick={() => handleListItemClick(user.id)} sx={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginY: 1 }}>
                             <ListItem>
