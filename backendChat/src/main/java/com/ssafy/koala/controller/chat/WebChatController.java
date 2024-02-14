@@ -3,6 +3,7 @@ package com.ssafy.koala.controller.chat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.koala.dto.MessageDto;
+import com.ssafy.koala.dto.NotificationDto;
 import com.ssafy.koala.dto.SocketMessageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -12,16 +13,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 public class WebChatController {
@@ -44,9 +36,9 @@ public class WebChatController {
 
     @MessageMapping("/notification/{nickname}")
     @SendTo("/topic/notification/{nickname}")
-    public String sendNotification(@PathVariable String nickname, String message) {
-        System.out.println(nickname + " " + message);
-        return message;
+    public NotificationDto sendNotification(@DestinationVariable String nickname, NotificationDto notificationDto) {
+        System.out.println("notification " + nickname + " " + notificationDto.getRoomId());
+        return notificationDto;
     }
 
     @MessageMapping("/messages/{roomId}")

@@ -123,7 +123,6 @@ const Nav = ({isDrawerOpen}) => {
 
 	const settings = [
 		{ name: '마이페이지', action: handleMyPage },
-		{ name: '설정', path: '/settings' },
 		{ name: '로그아웃', action: handleLogout },
 	];
 
@@ -211,7 +210,53 @@ const Nav = ({isDrawerOpen}) => {
 							gap: 0.5,
 							alignItems: 'center',
 						}}>
-						{/*	로그인 했을때 아바타 구현*/}
+							<Box sx={{ flexGrow: 0, display: 'flex' }}>
+								{/*Profile Image*/}
+								<Box sx={{ flexGrow: 0 }}>
+									<Tooltip title="Open settings">
+										<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+											<Avatar alt="Remy Sharp"
+											        src="/static/images/avatar/2.jpg"/>
+										</IconButton>
+									</Tooltip>
+									<Menu
+										sx={{ mt: '45px' }}
+										id="menu-appbar"
+										anchorEl={anchorElUser}
+										anchorOrigin={{
+											vertical: 'top',
+											horizontal: 'right',
+										}}
+										keepMounted
+										transformOrigin={{
+											vertical: 'top',
+											horizontal: 'right',
+										}}
+										open={Boolean(anchorElUser)}
+										onClose={handleCloseUserMenu}
+									>
+										{settings.map((setting) => (
+											<MenuItem key={setting.name} onClick={setting.action
+												? setting.action
+												: handleCloseUserMenu}>
+												{setting.path ? (
+													<NavLink to={setting.path} style={{
+														textDecoration: 'none',
+														color: 'inherit',
+														width: '100%',
+													}}>
+														<Typography
+															textAlign="center">{setting.name}</Typography>
+													</NavLink>
+												) : (
+													<Typography textAlign="center"
+													            style={{ width: '100%' }}>{setting.name}</Typography>
+												)}
+											</MenuItem>
+										))}
+									</Menu>
+								</Box>
+							</Box>
 						</Box>
 						:
 						<Box sx={{
@@ -238,56 +283,6 @@ const Nav = ({isDrawerOpen}) => {
 								Sign up
 							</Button>
 						</Box>
-					}
-					{isLoggedIn && (
-						<Box sx={{ flexGrow: 0, display: 'flex' }}>
-							{/*Profile Image*/}
-							<Box sx={{ flexGrow: 0 }}>
-								<Tooltip title="Open settings">
-									<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-										<Avatar alt="Remy Sharp"
-										        src="/static/images/avatar/2.jpg"/>
-									</IconButton>
-								</Tooltip>
-								<Menu
-									sx={{ mt: '45px' }}
-									id="menu-appbar"
-									anchorEl={anchorElUser}
-									anchorOrigin={{
-										vertical: 'top',
-										horizontal: 'right',
-									}}
-									keepMounted
-									transformOrigin={{
-										vertical: 'top',
-										horizontal: 'right',
-									}}
-									open={Boolean(anchorElUser)}
-									onClose={handleCloseUserMenu}
-								>
-									{settings.map((setting) => (
-										<MenuItem key={setting.name} onClick={setting.action
-											? setting.action
-											: handleCloseUserMenu}>
-											{setting.path ? (
-												<NavLink to={setting.path} style={{
-													textDecoration: 'none',
-													color: 'inherit',
-													width: '100%',
-												}}>
-													<Typography
-														textAlign="center">{setting.name}</Typography>
-												</NavLink>
-											) : (
-												<Typography textAlign="center"
-												            style={{ width: '100%' }}>{setting.name}</Typography>
-											)}
-										</MenuItem>
-									))}
-								</Menu>
-							</Box>
-						</Box>
-					)
 					}
 
 				</Toolbar>

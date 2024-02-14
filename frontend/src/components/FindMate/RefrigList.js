@@ -1,21 +1,41 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import Divider from '@mui/material/Divider';
-import Chip from '@mui/material/Chip';
-import Box from '@mui/material/Box';
+import { Box, Chip, Divider, List, ListItem, ListItemAvatar, ListItemText, Avatar, Typography, Badge  } from '@mui/material';
+import { Favorite as FavoriteIcon } from '@mui/icons-material';
 import DefaultImg from 'assets/profile.jpg';
 import { useNavigate } from 'react-router-dom';
+import {useSelector} from "react-redux";
+import RefrigeratorImg from 'assets/refrig_map.png';
 
 const authHeader = localStorage.getItem('authHeader');
 
 const RefrigList = () => {
     const [userData, setUserData] = useState([]);
     const navigate = useNavigate();
+    const curUser = useSelector(state => state.auth.user);
+
+    // 좌우로 회전하는 이미지 스타일
+    const swingStyle = {
+        animation: 'swing ease-in-out 1s infinite alternate',
+        transformOrigin: 'top center'
+    };
+
+    // CSS 애니메이션
+    useEffect(() => {
+        const styleSheet = document.createElement('style');
+        styleSheet.type = 'text/css';
+        styleSheet.innerText = `
+            @keyframes swing {
+                from { transform: rotate(-5deg); }
+                to { transform: rotate(5deg); }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+        return () => {
+            document.head.removeChild(styleSheet);
+        };
+    }, []);
+
 
     const getUserData = async () => {
         if (!authHeader) {
@@ -24,12 +44,14 @@ const RefrigList = () => {
         }
 
         try {
-            const response = await axios.get(`http://localhost:8085/findmate/listMate`, {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/findmate/listMate`, {
                 headers: {
                     'Authorization': authHeader
                 }
             });
-            setUserData(response.data);
+            const filteredData = response.data.filter(user => user.nickname !== curUser.nickname);
+            console.log(filteredData);
+            setUserData(filteredData);
         } catch (error) {
             console.error('유저 리스트를 가져오는 중 에러 발생: ', error);
         }
@@ -41,7 +63,7 @@ const RefrigList = () => {
 
     // 리스트 아이템 클릭 핸들러, id를 인자로 받음
     const handleListItemClick = (id) => {
-        navigate(`/fridge/${id}`);
+        navigate(`/user/${id}`);
     };
 
     return (
@@ -51,7 +73,7 @@ const RefrigList = () => {
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                 {userData.map((user) => (
                     <React.Fragment key={user.id}>
-                        <Box onClick={() => handleListItemClick(user.id)} style={{ cursor: 'pointer' }}>
+                        <Box onClick={() => handleListItemClick(user.id)} sx={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginY: 1 }}>
                             <ListItem>
                                 <ListItemAvatar>
                                     <Avatar src={user.profile ? `${process.env.REACT_APP_IMAGE_URL}/${user.profile}` : DefaultImg} />
@@ -68,8 +90,17 @@ const RefrigList = () => {
                                     }
                                 />
                             </ListItem>
-                            <Divider />
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginRight: 2 }}>
+                                {user.follow ? (
+                                    <Badge badgeContent={<FavoriteIcon color="error" sx={{ fontSize: 'small' }}/>} overlap="circular">
+                                        <Avatar src={RefrigeratorImg} style={user.likeCnt > 2 ? swingStyle : {}}/>
+                                    </Badge>
+                                ) : (
+                                    <Avatar src={RefrigeratorImg} style={user.likeCnt > 2 ? swingStyle : {}}/>
+                                )}
+                            </Box>
                         </Box>
+                        <Divider />
                     </React.Fragment>
                 ))}
             </List>

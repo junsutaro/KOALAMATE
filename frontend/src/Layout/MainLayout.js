@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
 	Drawer,
 	Box,
-	IconButton, styled,
+	IconButton, styled, Container,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -66,6 +66,26 @@ const MainLayout = () => {
 	};
 
 	return (
+		<Box
+			sx={(theme) => ({
+				width: '100%',
+				backgroundImage:
+					theme.palette.mode === 'light'
+					? 'linear-gradient(180deg, #fdcef8, #FFF)'
+					: 'linear-gradient(#4f024b, #10090f)',
+				backgroundSize: '100% 20vh',
+				backgroundRepeat: 'no-repeat',
+			})}
+			>
+			<Container
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+					pt: { xs: 14, sm: 20 },
+					pb: { xs: 8, sm: 12 },
+				}}
+			>
 		<Box sx={{ transition: 'margin 0.3s ease-out', marginRight: isLoggedIn && isOpen ? '350px' : 0 }}>
 			{isLoggedIn && !isOpen && (
 				<IconButton onClick={() => toggleDrawer(true)} sx={{ position: 'fixed', right: 16, bottom: 16, zIndex: 1300 }}>
@@ -125,7 +145,10 @@ const MainLayout = () => {
 
 				{/* 다른 라우트들 */}
 			</Routes>
+
 			<Footer />
+		</Box>
+			</Container>
 		</Box>
 	);
 };
