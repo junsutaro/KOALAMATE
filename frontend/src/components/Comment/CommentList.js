@@ -67,7 +67,7 @@ const CommentList = () => {
     return (
         <>
             <Container component="main" maxWidth="sm">
-                <Typography variant="h6">댓글 {comments.length || 0}</Typography>
+                <Typography variant="h5" color="#FF9B9B" sx={{ mt: 10, mb: 2 }}>댓글 {comments.length || 0}</Typography>
 
                 <CommentForm boardId={boardId} updateComments={getComments}/>
                 <List>

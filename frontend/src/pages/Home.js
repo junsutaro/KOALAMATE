@@ -41,7 +41,7 @@ const Home = () => {
 				       style={{
 					       overflow: 'scroll',
 					       backdropFilter: 'blur(3px)',
-					       backgroundColor: 'rgba(0, 0, 0, 0.7)',
+					       backgroundColor: 'rgba(0, 0, 0, 0.7git )',
 				       }}
 				>
 					<div style={style}>
