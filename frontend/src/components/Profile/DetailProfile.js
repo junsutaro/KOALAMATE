@@ -5,7 +5,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import FridgeModal from '../Fridge/FridgeModal';
 
-const DetailProfile = ({intro, alcoholLimitBottle, alcoholLimitGlass, mannersScore, tags}) => {
+const DetailProfile = ({intro, alcoholLimitBottle, alcoholLimitGlass, mannersScore, tags, userId }) => {
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 	const navigate = useNavigate();
 	const [modalOpen, setModalOpen] = useState(false);
