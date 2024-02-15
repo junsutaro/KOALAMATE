@@ -125,20 +125,20 @@ const RecipeDetail = () => {
     return (
         <div>
             <Chip label={`#${recipe.id}번째 레시피`} />
-            <Paper sx={{ margin: '20px', padding: '20px', backgroundColor: 'white', borderRadius: '15px'}} elevation={3}>
-                <Grid container spacing={5} justifyContent="center" display="flex" flexDirection="row">
-                    <Grid item xs={12} sm={6}>
-                        <Box component="img" src={recipe.image} sx={{ width: '100%', height: 'auto', objectFit: 'contain', maxHeight: 600 }} />
+            <Paper sx={{ margin: '20px', padding: '30px', backgroundColor: 'white', borderRadius: '15px'}} elevation={3}>
+                <Grid container justifyContent="center" display="flex-wrap" flexDirection="row" spacing={2}>
+                    <Grid item xs={12} sm={4}>
+                        <Box component="img" src={recipe.image} sx={{ width: '300px', height: '400px', objectFit: 'cover', borderRadius: '15px'}} />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <Box display="flex" flexDirection="column" justifyContent="space-between" height="100%">
+                        <Box display="flex" flexDirection="column" height="100%">
                             <div>
                                 <Typography variant="h6" sx={{ mb: 2 }}>{`#${recipe.id}번째 레시피`}</Typography>
                                 <Typography variant="h5" color="#FF9B9B" sx={{ mt: 2, mb: 3 }}>{recipe.title}</Typography>
                                 <Typography variant="h5" color='gray' sx={{ mb: 1 }}>By {recipe.nickname}</Typography>
                                 <Typography color='gray' sx={{ mb: 2 }}>작성일: {recipe.date}</Typography>
                                 <Typography color='#FF9B9B' sx={{ mt: 4, mb: 1}}>레시피 설명</Typography>
-                                <Box sx={{ m:1, p: 2, border: '1px solid #FF9B9B', borderRadius: '15px' }}>{recipe.content}</Box>
+                                <Box sx={{ m:1, p: 2, border: '1px solid #FF9B9B', borderRadius: '15px', whiteSpace: 'pre-wrap'}}>{recipe.content}</Box>
 
                                     <Button onClick={handleLikeClick}>
                                         {isLiked ? (
@@ -156,7 +156,7 @@ const RecipeDetail = () => {
             </Paper>
 
             <Typography variant="h5" color="#FF9B9B" sx={{ mt: 7, mb: 1 }}>재료 정보</Typography>
-            <Paper elevation={3} sx={{ margin: '20px', padding: 2, boxShadow: 3, backgroundColor: 'white', borderRadius: '15px'}}>
+            <Paper elevation={3} sx={{ margin: '20px', padding: '40px', boxShadow: 3, backgroundColor: 'white', borderRadius: '15px'}}>
                 <List>
                     {recipe.ingredients.map((ingredient, index) => (
                         <ListItem key={index} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
