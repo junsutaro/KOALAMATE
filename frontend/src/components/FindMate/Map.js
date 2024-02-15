@@ -116,7 +116,7 @@ const Map = ()  => {
     useEffect(() => {
         const confirmLocationAccess = window.confirm("위치 정보 활용에 동의하고 내 주변 냉장고를 찾아볼까요?");
         if (!confirmLocationAccess) {
-            console.log("위치 정보 활용에 동의하지 않았습니다.");
+        //    console.log("위치 정보 활용에 동의하지 않았습니다.");
             navigate('/')
             return;
         }
@@ -157,7 +157,7 @@ const Map = ()  => {
 
     const addMarkers = (map, userData) => {
         userData.forEach(user => {
-            if (user.nickname !== curUser.nickname) {
+            if (user.nickname !== curUser.nickname && user.nickname !== 'admin') {
                 const markerPosition = new window.kakao.maps.LatLng(user.latitude, user.longitude);
                 const marker = new window.kakao.maps.Marker({
                     position: markerPosition,

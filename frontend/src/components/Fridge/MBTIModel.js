@@ -26,7 +26,7 @@ export default function MBTIModel ({ initialPosition, fridgeUuid, models, setMod
 	const { scene: J_scene } = useGLTF(J_URL);
 
 	const onModelClick = (modelScene, url) => {
-		console.log('model clicked');
+	//	console.log('model clicked');
 		if (!modelScene) {
 			console.log('Model is not loaded yet');
 			return;

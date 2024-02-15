@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import Map from 'components/FindMate/Map';
 import Matelist from 'components/FindMate/MapDrawer';
 import {MapProvider} from 'context/MapContext';
+import mapBanner from 'assets/map_banner.svg'
 
 const Mate = () => {
 	return (
 		<MapProvider>
 			<div>
-				<h1>메이트 찾기</h1>
-				<p>내 주변의 냉장고 & 메이트 찾기</p>
+				<img src={mapBanner} alt={mapBanner} style={{ width: '100%', height: 'auto' }}/>
 				<Matelist />
 				<Map />
 			</div>
