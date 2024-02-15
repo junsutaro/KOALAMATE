@@ -154,7 +154,8 @@ const RecipeDetail = () => {
 
     return (
         <div>
-            <Chip label={`#${recipe.id}번째 레시피`} />
+            {/*<Chip label={`#${recipe.id}번째 레시피`} />*/}
+            <Typography variant="h5" color="#FF9B9B" sx={{ mb: 2 }}>레시피 상세</Typography>
             <Paper sx={{ margin: '20px', padding: '30px', backgroundColor: 'white', borderRadius: '15px'}} elevation={3}>
                 <Grid container justifyContent="center" display="flex-wrap" flexDirection="row" spacing={2}>
                     <Grid item xs={12} sm={4}>

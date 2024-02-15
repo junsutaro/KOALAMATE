@@ -59,13 +59,13 @@ const Home = () => {
 			}}>
 				{!isLoggedIn &&
 					<Stack spacing={2} useFlexGap
-					       sx={{ width: { xs: '100%', sm: '70%' } }} mb={10}>
+						   sx={{width: {xs: '100%', sm: '70%'}}} mb={10}>
 						<Typography
 							component="h1"
 							variant="h1"
 							sx={{
 								display: 'flex',
-								flexDirection: { xs: 'column', md: 'row' },
+								flexDirection: {xs: 'column', md: 'row'},
 								alignSelf: 'center',
 								textAlign: 'center',
 							}}
@@ -85,44 +85,44 @@ const Home = () => {
 							</Typography>
 						</Typography>
 						<Typography variant="body1" textAlign="center"
-						            color="text.secondary">
+									color="text.secondary">
 							주변의 술 친구를 찾고 공유하고 소통해보세요. <br/>
 							냉장고 꾸미기로 개성을 표현하고 취향에 맞는 친구를 찾아보세요.
 						</Typography>
 						<Stack
-							direction={{ xs: 'column', sm: 'row' }}
+							direction={{xs: 'column', sm: 'row'}}
 							alignSelf="center"
 							spacing={1}
 							useFlexGap
-							sx={{ pt: 2, width: { xs: '100%', sm: 'auto' } }}
+							sx={{pt: 2, width: {xs: '100%', sm: 'auto'}}}
 						>
 							<form onSubmit={(event => {
 								event.preventDefault();
 								handleStartNow();
 							})}
-							      style={{ display: 'flex', gap: '16px' }}
+								  style={{display: 'flex', gap: '16px'}}
 							>
-							<TextField
-								id="outlined-basic"
-								hiddenLabel
-								size="small"
-								variant="outlined"
-								aria-label="Enter your email address"
-								placeholder="Your email address"
-								value={email}
-								onChange={handleEmailChange}
-								inputProps={{
-									autocomplete: 'off',
-									ariaLabel: 'Enter your email address',
-								}}
-							/>
-							<Button type="susbmit" variant="contained" color="primary">
-								지금 시작
-							</Button>
+								<TextField
+									id="outlined-basic"
+									hiddenLabel
+									size="small"
+									variant="outlined"
+									aria-label="Enter your email address"
+									placeholder="Your email address"
+									value={email}
+									onChange={handleEmailChange}
+									inputProps={{
+										autocomplete: 'off',
+										ariaLabel: 'Enter your email address',
+									}}
+								/>
+								<Button type="susbmit" variant="contained" color="primary">
+									지금 시작
+								</Button>
 							</form>
 						</Stack>
 						<Typography variant="caption" textAlign="center"
-						            sx={{ opacity: 0.8 }}>
+									sx={{opacity: 0.8}}>
 							&quot;지금 시작&quot; 버튼을 클릭하면 &nbsp;
 							<Link href="#" color="primary">
 								Terms & Conditions
@@ -136,21 +136,35 @@ const Home = () => {
 				{/*		<ImageSlider/>*/}
 				{/*	</Paper>*/}
 				{/*</Box>*/}
-				<Box mb={10} sx={{ width: '100%' }}> {/* 화면 전체 너비를 가지도록 설정 */}
+				<Box mb={10} sx={{width: '100%'}}> {/* 화면 전체 너비를 가지도록 설정 */}
 					<ImageSlider/>
 				</Box>
 				<Box mb={10}>
-					<Typography variant={'h2'} align={'center'}>
+					<Typography variant={'h4'} align={'center'} >
 						궁금한 레시피
 					</Typography>
-					<Typography variant={'h5'} align={'center'}>
+					<Typography variant={'h6'} color="text.secondary" align={'center'} margin={2}>
 						너무나 복잡한 칵테일 레시피, 쉽게 찾고 공유해요
 					</Typography>
 					<HomeRecipeList optionNum={1} currentPage={5}/>
 				</Box>
-				<Box mb={4}>
-					<h2>내 주변의 냉장고 & 메이트 찾기</h2>
-					<SimpleMap/>
+
+				<Typography variant={'h4'} align={'center'} >
+					내 주변의 냉장고 & 메이트 찾기
+				</Typography>
+				<Typography variant={'h6'} color="text.secondary" align={'center'} margin={2}>
+					같이 마실래요? 우리 동네에서 함께 마실 친구도 구해요
+				</Typography>
+				<Box mb={4} sx={{
+					width: '100%',
+					height: '600px',
+					maxWidth: '1200px',
+					margin: '0 auto',
+					borderRadius: '15px',
+					overflow: 'hidden' // 이 부분 추가
+				}}>
+
+					<SimpleMap sx={{width: '100%', height: '100%'}}/>
 				</Box>
 			</Container>
 		</div>
