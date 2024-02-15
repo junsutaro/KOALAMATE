@@ -157,7 +157,7 @@ const Map = ()  => {
 
     const addMarkers = (map, userData) => {
         userData.forEach(user => {
-            if (user.nickname !== curUser.nickname) {
+            if (user.nickname !== curUser.nickname && user.nickname !== 'admin') {
                 const markerPosition = new window.kakao.maps.LatLng(user.latitude, user.longitude);
                 const marker = new window.kakao.maps.Marker({
                     position: markerPosition,
