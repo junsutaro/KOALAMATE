@@ -179,19 +179,9 @@ const Nav = ({isDrawerOpen}) => {
 								            color="text.primary">Mate</Typography>
 							</MenuItem>
 							<MenuItem sx={{ py: '6px', px: '12px' }}
-							          onClick={() => {navigate('/1/comments');}}>
-								<Typography variant="body2"
-								            color="text.primary">Comments</Typography>
-							</MenuItem>
-							<MenuItem sx={{ py: '6px', px: '12px' }}
 							          onClick={() => {navigate('/recipe');}}>
 								<Typography variant="body2"
 								            color="text.primary">Recipe</Typography>
-							</MenuItem>
-							<MenuItem sx={{ py: '6px', px: '12px' }}
-							          onClick={() => {navigate('/');}}>
-								<Typography variant="body2"
-								            color="text.primary">FAQ</Typography>
 							</MenuItem>
 							{isLoggedIn &&
 								<>
