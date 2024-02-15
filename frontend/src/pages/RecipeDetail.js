@@ -161,7 +161,7 @@ const RecipeDetail = () => {
                     {recipe.ingredients.map((ingredient, index) => (
                         <ListItem key={index} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <ListItemAvatar>
-                                <Avatar src={ingredient.drink.image} alt={ingredient.drink.name} sx={{ width: 56, height: 56, bgcolor: '#FF9B9B' }} />
+                                <Avatar src={ingredient.drink.image} alt={ingredient.drink.name} sx={{ width: 56, height: 56, margin: '0 20px', bgcolor: '#FF9B9B' }} />
                             </ListItemAvatar>
                             <ListItemText
                                 primary={ingredient.drink.name}
