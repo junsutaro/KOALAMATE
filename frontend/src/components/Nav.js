@@ -8,7 +8,7 @@ import {
 	Box,
 	IconButton,
 	Menu,
-	Tooltip, MenuItem, Avatar, createTheme, Container,
+	Tooltip, MenuItem, Avatar, createTheme, Container, useMediaQuery,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Collapse from '@mui/material/Collapse';
@@ -32,6 +32,8 @@ const Nav = ({isDrawerOpen}) => {
 	const [isWide, setIsWide] = useState(false);
 	const theme = createTheme();
 	const ref = React.useRef(null);
+	const matches = useMediaQuery(theme.breakpoints.down('md'));
+
 
 	useEffect(() => {
 		const checkWidth = () => {
@@ -167,24 +169,29 @@ const Nav = ({isDrawerOpen}) => {
 							textDecoration: 'inherit',
 						}}>
 							<img src={logoImage} alt="Logo" style={{ maxHeight: '55px' }}/>
+							{!matches && (
+								<Typography variant="h5" color="text.primary" ml={2}>
+									코알라 메이트
+								</Typography>
+							)}
 						</NavLink>
 						<Box sx={{ display: 'flex', ml: '8px' }}>
 							<MenuItem sx={{ py: '6px', px: '12px' }}
 							          onClick={() => {navigate('/mate');}}>
 								<Typography variant="body2"
-								            color="text.primary">친구 찾기</Typography>
+								            color="text.primary">Mate</Typography>
 							</MenuItem>
 							<MenuItem sx={{ py: '6px', px: '12px' }}
 							          onClick={() => {navigate('/recipe');}}>
 								<Typography variant="body2"
-								            color="text.primary">레시피</Typography>
+								            color="text.primary">Recipe</Typography>
 							</MenuItem>
 							{isLoggedIn &&
 								<>
 									<MenuItem sx={{ py: '6px', px: '12px' }}
 									          onClick={() => {navigate('/writeBoard');}}>
 										<Typography variant="body2"
-										            color="text.primary">레시피 작성</Typography>
+										            color="text.primary">Write</Typography>
 									</MenuItem>
 								</>
 							}
@@ -248,7 +255,7 @@ const Nav = ({isDrawerOpen}) => {
 						</Box>
 						:
 						<Box sx={{
-							display: { xs: 'none', md: 'flex' },
+							display: 'flex',
 							gap: 0.5,
 							alignItems: 'center',
 						}}>
