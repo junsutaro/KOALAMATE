@@ -3,6 +3,7 @@ import React from 'react';
 import {Box, Chip, TextField, Button, Typography} from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import CancelIcon from '@mui/icons-material/Cancel';
+import DoneIcon from '@mui/icons-material/Done';
 
 // 기본 태그 리스트
 const defaultTags = [
@@ -11,7 +12,6 @@ const defaultTags = [
     "직장인", "학생", "취준생", "주부", "홈 프로텍터",
     "남자만", "여자만", "남녀 모두",
 ];
-import DoneIcon from '@mui/icons-material/Done';
 
 const TagsInput = ({
                        tagOptions,
