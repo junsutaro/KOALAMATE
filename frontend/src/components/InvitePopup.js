@@ -79,7 +79,7 @@ const InvitePopup = ({ open, onClose, users, roomId }) => {
                 {filteredFollowees.length > 0 ? (
                     filteredFollowees.map((followee) => (
                         <ListItem button onClick={() => handleInvite(followee)} key={followee.id}>
-                            <Avatar src={followee?.profile ? `${process.env.REACT_APP_IMAGE_URL}/${followee.profile}` : 'default_profile_picture_url'} />
+                            <Avatar src={followee?.profile ? `${followee.profile}` : 'default_profile_picture_url'} />
                             <ListItemText primary={followee.nickname} sx={{ ml: 2 }} />
                         </ListItem>
                     ))

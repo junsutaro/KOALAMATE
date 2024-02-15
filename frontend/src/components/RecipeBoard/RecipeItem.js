@@ -7,8 +7,8 @@ import axios from "axios";
 import {useSelector} from 'react-redux';
 
 function RecipeItem({boardId, imageUrl, title, author, tags, liked, toggleLiked}) {
-    // const img = `${imageUrl}`
-    const img = `http://localhost:3000/${imageUrl}`
+    const img = `${imageUrl}`
+    // const img = `http://localhost:3000/${imageUrl}`
 
     const navigate = useNavigate();
     const [isLiked, setIsLiked] = useState(liked);

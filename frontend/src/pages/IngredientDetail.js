@@ -39,7 +39,7 @@ const IngredientDetail = () => {
 
     const getIngredientData = async () => {
         try {
-        const response = await axios.get(`${process.env.REACT_APP_IMAGE_URL}/drink/${ingredientId}`,
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/drink/${ingredientId}`,
             {
                 headers: getAuthHeader(), // 인증 헤더 추가
             })
@@ -77,12 +77,12 @@ const IngredientDetail = () => {
 
 
     // 진짜
-    // const img = `${process.env.REACT_APP_IMAGE_URL}/${ingredient.imageUrl}`
+    const img = `${ingredient.imageUrl}`
     const type = categories[ingredient.category]
 
     // 테스트용
     // const img = `${process.env.REACT_APP_IMAGE_URL}/ingredientImage/orange2.jpg`
-    const img = `${process.env.REACT_APP_IMAGE_URL}/ingredientImage/orange.png`
+    // const img = `${process.env.REACT_APP_IMAGE_URL}/ingredientImage/orange.png`
 
 
     return (
