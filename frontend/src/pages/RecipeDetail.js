@@ -175,7 +175,8 @@ const RecipeDetail = () => {
                                     border: '1px solid #FF9B9B',
                                     borderRadius: '15px'
                                 }}>{recipe.content}</Box>
-
+                            </div>
+                            <Box sx={{display: 'flex'}}>
                                 <Button onClick={handleLikeClick}>
                                     {isLiked ? (
                                         <FavoriteIcon sx={{fontSize: '2rem', color: '#FF9B9B'}}/>
@@ -183,8 +184,7 @@ const RecipeDetail = () => {
                                         <FavoriteTwoToneIcon sx={{fontSize: '2rem', color: '#e9e9e9'}}/>
                                     )}
                                 </Button>
-
-                            </div>
+                            </Box>
                         </Box>
 
                     </Grid>

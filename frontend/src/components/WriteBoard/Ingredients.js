@@ -1,5 +1,5 @@
 import React from 'react'
-import {Avatar, Chip, List, ListItem, ListItemAvatar, ListItemText, Typography, IconButton, Tooltip} from "@mui/material";
+import {Paper, Avatar, Chip, List, ListItem, ListItemAvatar, ListItemText, Typography, IconButton, Tooltip} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const Ingredients = ({cocktails, onDeleteIngredient}) => {
@@ -17,9 +17,9 @@ const Ingredients = ({cocktails, onDeleteIngredient}) => {
         '소주',
     ];
     return (
-        <>
+        <Paper sx={{margin: '20px', padding: '20px', backgroundColor: 'white', borderRadius: '15px'}} elevation={3}>
             {cocktails.map((ingredient, index) => (
-                <List key={index} sx={{mt: 2}}>
+                <List key={index} sx={{mt: 1}}>
                     <ListItem key={index} sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                         <ListItemAvatar>
                             <Avatar src={ingredient.drink.image} alt={ingredient.drink.name}
@@ -39,6 +39,7 @@ const Ingredients = ({cocktails, onDeleteIngredient}) => {
                         <Typography variant="body3" sx={{minWidth: '50px', textAlign: 'right'}}>
                             {`${ingredient.proportion} ${ingredient.unit}`}
                         </Typography>
+
                         {/* 삭제 버튼 */}
                         <Tooltip title="Delete">
                             <IconButton
@@ -49,10 +50,11 @@ const Ingredients = ({cocktails, onDeleteIngredient}) => {
                                 <DeleteIcon/>
                             </IconButton>
                         </Tooltip>
+
                     </ListItem>
                 </List>
             ))}
-        </>
+        </Paper>
     )
 }
 export default Ingredients

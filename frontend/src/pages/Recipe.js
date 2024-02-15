@@ -39,14 +39,18 @@ const Recipe = () => {
     return (
         <Box>
             <h1>레시피 조회 페이지</h1>
-            <p></p>
-            <div className={style.topContainer}>
-                <RecipeButton setOptionNum={setOptionNum}/>
-                <Searchbar setIsSearch={setIsSearch} setTerm={setTerm} term={term}/>
-            </div>
+            {isSearch ?
+                <div className={style.topContainer2}>
+                    <Searchbar setIsSearch={setIsSearch} setTerm={setTerm} term={term}/>
+                </div>
+                :
+                <div className={style.topContainer}>
+                    <RecipeButton setOptionNum={setOptionNum}/>
+                    <Searchbar setIsSearch={setIsSearch} setTerm={setTerm} term={term}/>
+                </div>
+            }
             <hr/>
             <PopularRecipes/>
-
 
             {isSearch ?
                 <SearchResult term={term}/> :
@@ -55,15 +59,6 @@ const Recipe = () => {
                     <RecipeList optionNum={optionNum} category={category} minNum={minNum} maxNum={maxNum}/>
                 </>
             }
-
-            {/*{isSearch ?*/}
-            {/*    <SearchResult term={term}/> :*/}
-            {/*    <>*/}
-            {/*        <RecipeFilter onCategoryChange={handleCategoryChange} />*/}
-            {/*        <RecipeList optionNum={optionNum} category={category} searchResults={searchResults}/>*/}
-            {/*    </>*/}
-            {/*}*/}
-
         </Box>
 
     );
