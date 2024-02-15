@@ -9,10 +9,10 @@ export default function RecipeFilter({onCategoryChange, setMinNum, setMaxNum}) {
     const handleIngredientsChange = (event) => {
         setIngredients(event.target.value);
     };
-    
+
     const [base, setBase] = React.useState('');
     const categories = [
-        '무알콜',
+        '',
         '진',
         '럼',
         '보드카',
@@ -27,7 +27,7 @@ export default function RecipeFilter({onCategoryChange, setMinNum, setMaxNum}) {
     const handleBaseChange = (event) => {
         const selectedCategory = event.target.value
         setBase(selectedCategory);
-        onCategoryChange(selectedCategory); // 부모 컴포넌트에 선택된 카테고리 전달
+        onCategoryChange(selectedCategory+1); // 부모 컴포넌트에 선택된 카테고리 전달
     };
 
     const handleClearCategory = () => {
@@ -35,7 +35,7 @@ export default function RecipeFilter({onCategoryChange, setMinNum, setMaxNum}) {
         onCategoryChange(null);
     };
 
-    
+
     // 재료 수 변경
     const [value, setValue] = React.useState([2, 10]);
 
@@ -98,12 +98,13 @@ export default function RecipeFilter({onCategoryChange, setMinNum, setMaxNum}) {
                                 ) : null
                             }
                         >
-                            {categories.map((label, index) => (
+                            {categories.slice(1).map((label, index) => (
                                 <MenuItem key={index} value={index}>{label}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>
                 </Grid>
+
             </Grid>
         </Container>
     );
