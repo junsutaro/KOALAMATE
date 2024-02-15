@@ -58,8 +58,10 @@ public class ProfileService {
             user.setLatitude(modifiedProfile.getLatitude());
             user.setLongitude(modifiedProfile.getLongitude());
 
-            Optional<FileMetadata> fileMetadata = fileMetadataRepository.findById(modifiedProfile.getFileId());
-            fileMetadata.ifPresent(user::setFileMetadata);
+            if(modifiedProfile.getFileId() != null) {
+                Optional<FileMetadata> fileMetadata = fileMetadataRepository.findById(modifiedProfile.getFileId());
+                fileMetadata.ifPresent(user::setFileMetadata);
+            }
 
             userRepository.save(user);
 
