@@ -80,7 +80,7 @@ public class FileStorageService {
                     .toUriString());
             fileMetadataRepository.save(metadata);
             Long id = metadata.getId();
-            System.out.println("file id: "+id);
+          //  System.out.println("file id: "+id);
             StoreFileDto dto = new StoreFileDto();
             dto.setId(id);
             dto.setFilename(hashedFileName);
