@@ -5,7 +5,7 @@ import axios from 'axios';
 import PaginationComponent from 'components/PaginationComponent'
 
 
-function RecipeList({ optionNum, category }) {
+function RecipeList({ optionNum, category, minNum, maxNum }) {
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const sizeNum = 8
@@ -70,9 +70,10 @@ function RecipeList({ optionNum, category }) {
 
     const getCardData = async () => {
         // 카테고리에 따라 URL을 조정하여 API 호출
-        let url = `${process.env.REACT_APP_API_URL}/board/list?page=${currentPage}&size=${sizeNum}&option=${optionNum}`
+        // 카테고리가 null인 경우
+        let url = `${process.env.REACT_APP_API_URL}/board/searchByDrinkCountAndCategory?page=${currentPage}&size=${sizeNum}&minDrinks=${minNum}&maxDrinks=${maxNum}&option=${optionNum}`
         if (category !== null) {
-            url = `${process.env.REACT_APP_API_URL}/board/searchByDrinkCategory?page=${currentPage}&size=${sizeNum}&category=${category}`
+                url = `${process.env.REACT_APP_API_URL}/board/searchByDrinkCountAndCategory?page=${currentPage}&size=${sizeNum}&minDrinks=${minNum}&maxDrinks=${maxNum}&category=${category}&option=${optionNum}`
         }
         try {
             const response = await axios.get(url,
@@ -100,7 +101,7 @@ function RecipeList({ optionNum, category }) {
 
     useEffect(() => {
         getCardData(likedRecipes);
-    }, [currentPage, optionNum, category]);
+    }, [currentPage, optionNum, category, minNum, maxNum]);
 
     const handlePageChange = (event, value) => {
         setCurrentPage(value);

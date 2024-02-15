@@ -13,6 +13,8 @@ import {Box} from "@mui/material";
 const Recipe = () => {
     // 옵션 숫자 1: 전체 레시피 조회, 2: 관리자(admin) 레시피 조회, 3: 유저 레시피 조회
     const [optionNum, setOptionNum] = useState(1)
+    const [minNum, setMinNum] = useState(1)
+    const [maxNum, setMaxNum] = useState(30)
 
     // 검색 결과 저장
     const [searchResults, setSearchResults] = useState([]);
@@ -49,8 +51,8 @@ const Recipe = () => {
             {isSearch ?
                 <SearchResult term={term}/> :
                 <>
-                    <RecipeFilter onCategoryChange={handleCategoryChange} />
-                    <RecipeList optionNum={optionNum} category={category} />
+                    <RecipeFilter onCategoryChange={handleCategoryChange} setMinNum={setMinNum} setMaxNum={setMaxNum}/>
+                    <RecipeList optionNum={optionNum} category={category} minNum={minNum} maxNum={maxNum}/>
                 </>
             }
 

@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom';
 import axios from 'axios';
 import MyPageButton from '../components/Profile/MyPageButton';
 import FollowItem from '../components/Follow/FollowItem';
-import {Box} from '@mui/material';
+import {Box, Typography} from '@mui/material';
 
 const FollowerList = () => {
     const {userId} = useParams();
@@ -39,8 +39,14 @@ const FollowerList = () => {
     return (
         <>
             <MyPageButton userId={userId}/>
-            <Box sx={{display: 'flex', justifyContent: 'center'}}>
-                <h3>{followerData.user}님의 팔로워 목록 {followerData.cnt}</h3>
+            <Box sx={{display:'flex', flexDirection: 'column' ,justifyContent:'center'}}>
+                <Box sx={{display: 'inline-flex', gap: 1, marginLeft:8, marginTop:3, marginBottom:0 }}>
+                    <Typography sx={{fontWeight: 'bold'}} variant="h6">
+                        {followerData.user}님의 팔로잉 목록
+                    </Typography>
+                    <Typography sx={{fontWeight: 'bold', color: '#ff9b9b'}}
+                                variant="h6">{followerData.cnt || 0}</Typography>
+                </Box>
                 <ul>
                     {followerData.list.map(follower => (
                         <FollowItem

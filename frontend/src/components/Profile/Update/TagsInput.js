@@ -2,6 +2,15 @@
 import React from 'react';
 import {Box, Chip, TextField, Button, Typography} from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import CancelIcon from '@mui/icons-material/Cancel';
+
+// 기본 태그 리스트
+const defaultTags = [
+    "1~2명", "3~5명", "6~8명", "8~10명",
+    "20대", "30대", "40대", "50대", "60대 이상",
+    "직장인", "학생", "취준생", "주부", "홈 프로텍터",
+    "남자만", "여자만", "남녀 모두",
+];
 import DoneIcon from '@mui/icons-material/Done';
 
 const TagsInput = ({
@@ -14,6 +23,7 @@ const TagsInput = ({
                        addTag,
                        setAddTag,
                        error,
+                       handleRemoveTag
                    }) => {
     const renderTags = () => {
         return (
@@ -24,21 +34,29 @@ const TagsInput = ({
                 flexWrap: 'wrap',
             }}>
                 {tagOptions.map((tag) => (
-                    <Chip
-                        key={tag}
-                        label={tag}
-                        variant="filled"
-                        onClick={() => handleTagClick(tag)}
-                        icon={selectedTags.includes(tag) ? <DoneIcon /> : null}
-                        sx={{
-                            mr: 1,
-                            mb: 1,
-                            backgroundColor: selectedTags.includes(tag)
-                                ? '#ff9b9b'
-                                : undefined,
-                            color: selectedTags.includes(tag) ? '#fff' : undefined,
-                        }}
-                    />
+                    <Box key={tag} sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Chip
+                            label={tag}
+                            variant="filled"
+                            onClick={() => handleTagClick(tag)}
+                            icon={selectedTags.includes(tag) ? <DoneIcon /> : null}
+                            sx={{
+                                mr: 1,
+                                mb: 1,
+                                // backgroundColor: selectedTags.includes(tag)
+                                //     ? '#ff9b9b'
+                                //     : undefined,
+                                // color: selectedTags.includes(tag) ? '#fff' : undefined,
+                            }}
+                            color={selectedTags.includes(tag) ? "success" : "default"}
+                        />
+                        {!defaultTags.includes(tag) && (
+                            <CancelIcon
+                                onClick={() => handleRemoveTag(tag)}
+                                sx={{ cursor: 'pointer', color: 'grey', ml: 0.5 }}
+                            />
+                        )}
+                    </Box>
                 ))}
             </Box>
         );

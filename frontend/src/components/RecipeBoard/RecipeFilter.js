@@ -1,18 +1,15 @@
 import  React, { useState }  from 'react';
-import { FormControl, InputLabel, Select, MenuItem, Container, Grid, IconButton,  InputAdornment  } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem, Container, Grid, IconButton,  InputAdornment, Slider, Typography  } from '@mui/material';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 
-export default function RecipeFilter({onCategoryChange}) {
-    // const [degree, setDegree] = React.useState('');
-    // const handleDegreeChange = (event) => {
-    // 	setDegree(event.target.value);
-    // };
+export default function RecipeFilter({onCategoryChange, setMinNum, setMaxNum}) {
+
+    // 카테고리 변경
     const [ingredients, setIngredients] = React.useState('');
     const handleIngredientsChange = (event) => {
         setIngredients(event.target.value);
     };
-
-
+    
     const [base, setBase] = React.useState('');
     const categories = [
         '무알콜',
@@ -38,41 +35,45 @@ export default function RecipeFilter({onCategoryChange}) {
         onCategoryChange(null);
     };
 
+    
+    // 재료 수 변경
+    const [value, setValue] = React.useState([2, 10]);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+        setMinNum(newValue[0]);
+        // 최대값이 10 이상일 경우 백엔드로 보내는 값은 30으로 설정
+        setMaxNum(newValue[1] >= 10 ? 30 : newValue[1]);
+    };
+
+    const marks = [
+        {
+            value: 2,
+            label: '2',
+        },
+        {
+            value: 10,
+            label: '10+',
+        },
+    ];
 
     return (
         <Container>
             <Grid container justifyContent='center' spacing={2}>
-                {/*<Grid item xs={12} sm={4}>*/}
-                {/*	<FormControl fullWidth>*/}
-                {/*		<InputLabel id="degree-label">도수</InputLabel>*/}
-                {/*		<Select*/}
-                {/*				labelId="degree-label"*/}
-                {/*				id="degree-select"*/}
-                {/*				value={degree}*/}
-                {/*				label="Degree"*/}
-                {/*				onChange={handleDegreeChange}*/}
-                {/*		>*/}
-                {/*			<MenuItem value={'non-alcoholic'}>무알콜</MenuItem>*/}
-                {/*			<MenuItem value={'low'}>낮은 도수</MenuItem>*/}
-                {/*			<MenuItem value={'high'}>높은 도수</MenuItem>*/}
-                {/*		</Select>*/}
-                {/*	</FormControl>*/}
-                {/*</Grid>*/}
-                <Grid item xs={12} sm={4}>
-                    <FormControl fullWidth>
-                        <InputLabel id="ingredients-label">재료 수</InputLabel>
-                        <Select
-                            labelId="ingredients-label"
-                            id="ingredients-select"
-                            value={ingredients}
-                            label="Ingredients"
-                            onChange={handleIngredientsChange}
-                        >
-                            {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
-                                <MenuItem key={num} value={num}>{num}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                <Grid item xs={12} sm={4} sx={{marginRight: '30px'}}>
+                    <Typography id="range-slider" gutterBottom>
+                        재료 수
+                    </Typography>
+                    <Slider
+                        value={value}
+                        onChange={handleChange}
+                        valueLabelDisplay="auto"
+                        aria-labelledby="range-slider"
+                        getAriaValueText={(value) => `${value}`}
+                        min={2}
+                        max={10}
+                        marks={marks}
+                    />
                 </Grid>
 
                 <Grid item xs={12} sm={4}>
