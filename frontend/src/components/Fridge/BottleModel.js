@@ -3,9 +3,41 @@ import { useGLTF } from '@react-three/drei';
 import BOTTLE_URL from 'assets/bottle.glb';
 import CAN_URL from 'assets/can.glb';
 
-const BottleModel = ({ models, onBottleClick, selectedCategory, setSelectedCategory }) => {
+const BottleModel = ({ models, onBottleClick }) => {
     const { scene: bottleScene } = useGLTF(BOTTLE_URL);
     const { scene: canScene } = useGLTF(CAN_URL);
+
+    const getBottle = (drink) => {
+        console.log(drink);
+        if (!drink) return bottleScene.clone();
+        switch(drink.category) {
+            case 1:
+                return bottleScene.clone();
+            case 2:
+                return bottleScene.clone();
+            case 3:
+                return bottleScene.clone();
+            case 4:
+                return bottleScene.clone();
+            case 5:
+                return bottleScene.clone();
+            case 6:
+                return bottleScene.clone();
+            case 7:
+                return bottleScene.clone();
+            case 8:
+                console.log('asdfasdfasdfasdf');
+                return canScene.clone();
+            case 9:
+                return bottleScene.clone();
+            default:
+                return bottleScene.clone();
+        }
+    }
+
+    useEffect(() => {
+        console.log(models);
+    }, [models]);
 
     // useEffect(() => {
     //     scene.traverse((child) => {
@@ -30,22 +62,14 @@ const BottleModel = ({ models, onBottleClick, selectedCategory, setSelectedCateg
                 // 모델의 위치 계산 (예시 값, 필요에 따라 조정)
                 const position = [column * 0.45 - 0.7, row * -0.86 + 1.3, -0.6]; // X, Y, Z 위치
 
-                if (selectedCategory === 'Beer') {
-                    return (
-                        <primitive key={index} object={canScene.clone()} position={position} scale={[0.1, 0.1, 0.1]} onClick={() => onBottleClick(index)}
-                                   onPointerOver={() => (document.body.style.cursor = 'pointer')}
-                                   onPointerOut={() => (document.body.style.cursor = 'auto')}
-                        />
-                    );
-                }
-                else {
-                    return (
-                        <primitive key={index} object={bottleScene.clone()} position={position} scale={[0.1, 0.1, 0.1]} onClick={() => onBottleClick(index)}
-                                   onPointerOver={() => (document.body.style.cursor = 'pointer')}
-                                   onPointerOut={() => (document.body.style.cursor = 'auto')}
-                        />
-                    );
-                }
+                console.log(model);
+
+                return (
+                    <primitive key={index} object={getBottle(model)} position={position} scale={[0.1, 0.1, 0.1]} onClick={() => onBottleClick(index)}
+                               onPointerOver={() => (document.body.style.cursor = 'pointer')}
+                               onPointerOut={() => (document.body.style.cursor = 'auto')}
+                    />
+                );
             })}
         </>
     );

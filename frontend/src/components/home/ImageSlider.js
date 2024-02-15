@@ -71,7 +71,7 @@ const ImageSlider = () => {
           onClick={() => handleImageClick(image.path)}
           style={{ height: '100%'}}
         >
-          <img src={image.src} alt={`Slide ${idx}`} style={{ width: '100%'}}/>
+          <img src={image.src} alt={`Slide ${idx}`} style={{ width: '100%', borderRadius: '20px'}}/>
         </Box>
       ))}
     </Slider>

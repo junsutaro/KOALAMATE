@@ -127,10 +127,6 @@ function ModifyFridge({setOpenInside}) {
 	return (
 		<>
 			<Canvas camera={{ position: [0, 0, 6], fov: 60 }} shadows antialias='true' onCreated={() => setIsCanvasLoaded(true)}>
-				{/*<OrbitControls />*/}
-				{/*<ambientLight intensity={0.5}/>*/}
-				{/*<spotLight position={[-3, 3, 3]} angle={0.15} penumbra={0.5} castShadow/>*/}
-				{/*<directionalLight ref={directionalLightRef} position={[10, 5, 5]} intensity={5} castShadow/>*/}
 				<pointLight ref={pointLightRef} position={[5, 5, 5]} intensity={100} castShadow/>
 				<Rig/>
 				<Suspense fallback={<Loader setIsLoading={setIsLoading}/>}>
