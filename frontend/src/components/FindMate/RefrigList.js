@@ -20,7 +20,7 @@ const RefrigList = ({markersData}) => {
 
     // 좌우로 회전하는 이미지 스타일
     const swingStyle = {
-        animation: 'swing ease-in-out 1s infinite alternate',
+        animation: 'swing ease-in-out 0.3s infinite alternate',
         transformOrigin: 'top center'
     };
 
