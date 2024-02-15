@@ -153,6 +153,7 @@ const MyPage = () => {
                     followee={followeeData}
                 />
                 <DetailProfile
+                    myId={myId}
                     intro={profileData.intro}
                     alcoholLimitBottle={profileData.alcoholLimitBottle}
                     alcoholLimitGlass={profileData.alcoholLimitGlass}

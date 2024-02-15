@@ -178,7 +178,7 @@ const Map = ()  => {
             border: 1px solid #fff;
             transform: translate(-50%, -100%);
             ">
-            <img src="${user.profile ? `${user.profile}` : defaultProfile}" alt="프로필 사진" style="width: 40px; height: 40px; border-radius: 50%;" />
+            <img src="${user.profile ? `${user.profile}` : `${defaultProfile}`}" alt="프로필 사진" style="width: 40px; height: 40px; border-radius: 50%;" />
             <div style="font-size: 14px; font-weight: 500;">${user.nickname}</div>
             <div style="position: absolute; top: -10px; right: -10px;">${followHeartSVG}</div>
         </div>

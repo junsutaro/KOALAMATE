@@ -1,5 +1,5 @@
 import React from 'react'
-import { Avatar, Chip, List, ListItem, ListItemAvatar, ListItemText, Typography, IconButton } from "@mui/material";
+import {Avatar, Chip, List, ListItem, ListItemAvatar, ListItemText, Typography, IconButton, Tooltip} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const Ingredients = ({cocktails, onDeleteIngredient}) => {
@@ -33,19 +33,22 @@ const Ingredients = ({cocktails, onDeleteIngredient}) => {
                                 sx={{margin: '0 16px', flex: '1 1 auto'}}
                             />
                             <Chip label={`#${categories[ingredient.drink.category]}`}
-                                            sx={{margin: '5px 16px', flex: '1 1 auto'}}/>
+                                  sx={{margin: '5px 16px', flex: '1 1 auto'}}/>
                         </ListItemText>
 
                         <Typography variant="body3" sx={{minWidth: '50px', textAlign: 'right'}}>
                             {`${ingredient.proportion} ${ingredient.unit}`}
                         </Typography>
                         {/* 삭제 버튼 */}
-                        <IconButton
-                            aria-label="delete"
-                            onClick={() => onDeleteIngredient(index)}
-                        >
-                            <DeleteIcon />
-                        </IconButton>
+                        <Tooltip title="Delete">
+                            <IconButton
+                                sx={{marginX:'5px'}}
+                                aria-label="delete"
+                                onClick={() => onDeleteIngredient(index)}
+                            >
+                                <DeleteIcon/>
+                            </IconButton>
+                        </Tooltip>
                     </ListItem>
                 </List>
             ))}
