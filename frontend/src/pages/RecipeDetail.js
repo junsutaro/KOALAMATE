@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import axios from "axios";
 import CommentList from "components/Comment/CommentList";
 import style from "../components/RecipeBoard/RecipeItem.module.css";
@@ -22,9 +22,16 @@ import {format} from 'date-fns';
 import Paper from '@mui/material/Paper';
 import {useSelector} from "react-redux";
 import {Link} from 'react-router-dom';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const RecipeDetail = () => {
-    const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+    const navigate = useNavigate();
+
+    // 로그인한 사용자 정보 가져오기
+    const {user, isLoggedIn} = useSelector(state => state.auth);
+    const currentUserNickname = user.nickname
+    console.log('로그인한 사용자 닉네임: ', currentUserNickname)
+
     const {boardId} = useParams(); // URL 파라미터에서 boardId 추출
     const [recipe, setRecipe] = useState({
         id: 0,
@@ -99,44 +106,23 @@ const RecipeDetail = () => {
         getDetailRecipe();
     }, [boardId]);
 
-
-//     return (
-//         <>
-//             <Box m={3} p={2} display="flex" flexDirection="column" justifyContent="space-between" height="100%">
-//                 <Box>
-//                     <Typography>{`${recipe.id}번째 레시피입니다`}</Typography>
-//                     <Typography>제목: {recipe.title}</Typography>
-//                     <Typography>내용: {recipe.content}</Typography>
-//                     <Typography>작성자: {recipe.nickname}</Typography>
-//                     <Typography>작성일: {recipe.date}</Typography>
-//                     <Typography>조회수: {recipe.views}</Typography>
-//                     <img src={recipe.image} />
-//
-//                     <List>
-//                         {recipe.ingredients.map((ingredient, index) => (
-//                             <ListItemText key={index}>
-//                                 <div>이름: {ingredient.drink.name}</div>
-//                                 <div>카테고리: {ingredient.drink.category}</div>
-//                                 <div>비율: {ingredient.proportion} {ingredient.unit}</div>
-//                                 <div>이미지: <img src={ingredient.drink.image} alt={ingredient.drink.name}/></div>
-//                             </ListItemText>
-//                         ))}
-//                     </List>
-//                 </Box>
-//                 <Box display="flex" justifyContent="flex-end" alignItems="flex-end" marginTop={2}>
-//                     <Button className={style.likeButton} onClick={handleLikeClick}>
-//                         {isLiked ? (
-//                             <FavoriteIcon sx={{fontSize: '2rem', color: '#FF9B9B'}}/>
-//                         ) : (
-//                             <FavoriteTwoToneIcon sx={{fontSize: '2rem', color: '#e9e9e9'}}/>
-//                         )}
-//                     </Button>
-//                 </Box>
-//             </Box>
-//             <CommentList/>
-//         </>
-//     );
-// }
+    const handleDelete = async () => {
+        if(window.confirm('이 레시피를 정말 삭제하시겠습니까?')) {
+            try {
+                const response = await axios.delete(`${process.env.REACT_APP_API_URL}/board/delete/${boardId}`, {
+                    headers: {'Authorization': authHeader}
+                });
+                if (response.status === 200) {
+                    alert('레시피가 성공적으로 삭제되었습니다.');
+                    navigate(`/recipe`);
+                } else {
+                    console.error('삭제 실패:', response);
+                }
+            } catch (error) {
+                console.error('레시피 삭제 중 에러 발생:', error);
+            }
+        }
+    }
 
     const categories = [
         // '무알콜',
@@ -154,7 +140,20 @@ const RecipeDetail = () => {
 
     return (
         <div>
-            <Chip label={`#${recipe.id}번째 레시피`} />
+
+            <Box sx={{display:'flex', justifyContent:'space-between'}}>
+                <Chip label={`#${recipe.id}번째 레시피`} />
+                {user &&  (recipe.nickname === currentUserNickname || currentUserNickname === 'admin') && (
+                    <Button
+                        variant="contained"
+                        sx={{ marginRight:3, paddingRight:1}}
+                        onClick={handleDelete}
+                    >
+                        레시피 삭제
+                        <DeleteIcon />
+                    </Button>
+                )}
+            </Box>
             <Paper sx={{ margin: '20px', padding: '30px', backgroundColor: 'white', borderRadius: '15px'}} elevation={3}>
                 <Grid container justifyContent="center" display="flex-wrap" flexDirection="row" spacing={2}>
                     <Grid item xs={12} sm={4}>
@@ -163,7 +162,6 @@ const RecipeDetail = () => {
                     <Grid item xs={12} sm={6}>
                         <Box display="flex" flexDirection="column" height="100%">
                             <Box>
-
                                 <Typography variant="h6" sx={{ mb: 2 }}>{`#${recipe.id}번째 레시피`}</Typography>
                                 <Typography variant="h5" color="#FF9B9B" sx={{ mt: 2, mb: 3 }}>{recipe.title}</Typography>
                                 <Typography variant="h5" color='gray' sx={{ mb: 1 }}>By {recipe.nickname}</Typography>

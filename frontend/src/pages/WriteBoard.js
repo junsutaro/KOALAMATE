@@ -20,6 +20,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import koalaImage from '../assets/profile.jpg'
 import {array} from "yup";
+import {useNavigate} from "react-router-dom";
 
 function BulletinBoard() {
     const [title, setTitle] = useState('');
@@ -30,6 +31,8 @@ function BulletinBoard() {
     const [selectedImageFile, setSelectedImageFile] = useState(null);
     const [imgUrl, setImgUrl] = useState('')
     const [fileInfo, setFileInfo] = useState({id: null, fileDownloadUri: ''});
+
+    const navigate = useNavigate();
 
     // 전부 입력되었는지 확인하기 위한 변수
     const isFormValid = title && content && cocktails.length > 0 && selectedImageFile;
@@ -148,6 +151,7 @@ function BulletinBoard() {
             });
             await saveRecipe(fileResult); // 업로드된 이미지 URL을 가지고 게시글 저장
             alert('레시피가 성공적으로 저장되었습니다😊');
+            navigate(`/recipe`);
 
             // 입력 필드와 이미지 미리보기를 초기화
             setTitle(''); // 제목 초기화
@@ -255,13 +259,13 @@ function BulletinBoard() {
 
                         {/*칵테일 이름*/}
                         <Box>
-                            <Typography variant="h5">칵테일 이름 🍹</Typography>
+                            <Typography variant="h5" mb={1}>칵테일 이름 🍹</Typography>
                             <TextField label="칵테일 이름"
                                        variant="outlined"
                                        fullWidth
                                        value={title}
                                        onChange={handleTitleChange}
-                                       sx={{padding: '10px', margin: '10px', marginTop: 0}}
+                                       sx={{paddingY: '10px', margin: '10px', marginTop: 0}}
                                        placeholder="칵테일 이름을 지어주세요 : )"
                             />
                         </Box>

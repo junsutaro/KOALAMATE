@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Typography, Box, Container, Button} from '@mui/material';
+import {Typography, Box, Container, Button, Tooltip } from '@mui/material';
 import QueueIcon from '@mui/icons-material/Queue';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -65,44 +65,45 @@ const MyRecipe = ({nickname, userId, myId}) => {
     };
 
     return (
-            <Box sx={{marginTop: '30px'}}>
-                <Box sx={{display: 'inline-flex', gap: 1}}>
-                    <Typography sx={{fontWeight: 'bold'}} variant="h5">
-                        {isCurrentUser ? '나만의' : `${nickname}의`} 레시피
-                    </Typography>
-                    <Typography sx={{fontWeight: 'bold', color: '#ff9b9b'}}
-                                variant="h5">{totalNum}</Typography>
-                </Box>
-                <Box sx={{display: 'flex', gap: 1}}>
-                    <Typography sx={{flexGrow: 1}}>{nickname}님의 칵테일 레시피예요🍸</Typography>
-                    <Button p={10} sx={{color: '#ff9b9b'}} onClick={handleViewAllClick}>전체보기</Button>
-                </Box>
+        <Box sx={{marginTop: '30px'}}>
+            <Box sx={{display: 'inline-flex', gap: 1}}>
+                <Typography sx={{fontWeight: 'bold'}} variant="h5">
+                    {isCurrentUser ? '나만의' : `${nickname}의`} 레시피
+                </Typography>
+                <Typography sx={{fontWeight: 'bold', color: '#ff9b9b'}}
+                            variant="h5">{totalNum}</Typography>
+            </Box>
+            <Box sx={{display: 'flex', gap: 1}}>
+                <Typography sx={{flexGrow: 1}}>{nickname}님의 칵테일 레시피예요🍸</Typography>
+                <Button p={10} sx={{color: '#ff9b9b'}} onClick={handleViewAllClick}>전체보기</Button>
+            </Box>
 
-                <Box  sx={{display: 'flex', justifyContent:'start' }}>
-                    {/*<div  className={`${style.cardList} ${style.justifyStart}`}>*/}
-                    <div className={`${style.cardList} ${style.justifyStart}`}>
-                        {recipeData.map(recipe => (
-                            <RecipeItem
-                                key={recipe.boardId}
-                                boardId={recipe.boardId}
-                                imageUrl={recipe.imageUrl}
-                                title={recipe.title}
-                                author={recipe.author}
-                                tags={[]}
-                                liked={recipe.liked}
-                                toggleLiked={() => toggleLikedState(recipe.boardId)}
-                                // liked={likedRecipes.includes(card.id)}
-                            />
-                        ))}
-                    </div>
+            <Box sx={{display: 'flex', justifyContent: 'start'}}>
+                {/*<div  className={`${style.cardList} ${style.justifyStart}`}>*/}
+                <div className={`${style.cardList} ${style.justifyStart}`}>
+                    {recipeData.map(recipe => (
+                        <RecipeItem
+                            key={recipe.boardId}
+                            boardId={recipe.boardId}
+                            imageUrl={recipe.imageUrl}
+                            title={recipe.title}
+                            author={recipe.author}
+                            tags={[]}
+                            liked={recipe.liked}
+                            toggleLiked={() => toggleLikedState(recipe.boardId)}
+                            // liked={likedRecipes.includes(card.id)}
+                        />
+                    ))}
+                </div>
 
-                    {isCurrentUser && (
+                {isCurrentUser && (
+                    <Tooltip title="나만의 레시피 작성하러 가기">
                         <NavLink to="/writeBoard" style={{
                             textDecoration: 'none',
                             color: 'inherit',
                             margin: '20px 0',
                             width: '240px',
-                            height: '240px',
+                            height: '375px',
                             backgroundColor: 'transparent',
                             border: '2px solid #ff9b9b',
                             borderRadius: '15px',
@@ -112,9 +113,10 @@ const MyRecipe = ({nickname, userId, myId}) => {
                         }}>
                             <QueueIcon sx={{fontSize: 48, color: '#ff9b9b'}}/>
                         </NavLink>
-                    )}
-                </Box>
+                    </Tooltip>
+                )}
             </Box>
+        </Box>
     );
 };
 export default MyRecipe;
