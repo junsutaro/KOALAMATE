@@ -51,7 +51,7 @@ const Nav = ({isDrawerOpen}) => {
 	}, [ref]);
 
 	useEffect(() => {
-		console.log('toggleDrawer: ', isDrawerOpen);
+	//	console.log('toggleDrawer: ', isDrawerOpen);
 
 	}, [isDrawerOpen]);
 
@@ -78,6 +78,7 @@ const Nav = ({isDrawerOpen}) => {
 	};
 
 	const handleMyPage = async () => {
+		setAnchorElUser(null);
 		try {
 			const authHeader = localStorage.getItem('authHeader');
 			const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/myId`,
@@ -87,7 +88,7 @@ const Nav = ({isDrawerOpen}) => {
 					},
 					withCredentials: true,
 				});
-			console.log(res);
+	//		console.log(res);
 			navigate(`/user/${res.data}`);
 		} catch (error) {
 			console.log(error);

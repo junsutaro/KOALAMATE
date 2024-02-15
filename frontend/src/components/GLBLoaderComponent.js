@@ -70,7 +70,7 @@ function GLBLoaderComponent() {
 				gltf.scenes.forEach((scene) => {
 					scene.traverse((node) => {
 						if (node.isLight) {
-							console.log(node);
+		//					console.log(node);
 							node.intensity *= 0.07;
 							scene.add(node);
 						}
@@ -78,7 +78,7 @@ function GLBLoaderComponent() {
 				});
 			}
 
-			console.log("asdfasdfasdfasdf");
+	//		console.log("asdfasdfasdfasdf");
 
 			setIsLoading(false);
 		},
@@ -86,7 +86,7 @@ function GLBLoaderComponent() {
 			//if (xhr.total === 0) return;
 			const progress = (xhr.loaded / 18143484/*xhr.total*/) * 100;
 				setLoadingProgress(progress);
-				console.log(`${progress}% loaded`)
+	//			console.log(`${progress}% loaded`)
 			},
 			function (error) {
 				console.error('Error loading gltf', error);
@@ -111,7 +111,7 @@ function GLBLoaderComponent() {
 				actionRef.current = mixerRef.current.clipAction(gltfRef.current.animations[0]);
 				actionRef.current.setLoop(LoopOnce);
 			}
-			console.log(actionRef.current);
+	//		console.log(actionRef.current);
 			actionRef.current.stop();
 			actionRef.current.play();
 		};
@@ -119,7 +119,7 @@ function GLBLoaderComponent() {
 
 		const onRightClick = (event) => {
 			event.preventDefault();
-			console.log(gltfRef.current);
+	//		console.log(gltfRef.current);
 
 			let newColorValue = Math.random() * 0xffffff;
 			gltfRef.current.scene.traverse(function (object) {
@@ -141,7 +141,7 @@ function GLBLoaderComponent() {
 
 			// 카메라가 바라보는 방향 조정 (마우스 위치에 따라)
 			camera.lookAt(0, 0.5, 0);
-			console.log(camera.position.z, camera.position.y)
+	//		console.log(camera.position.z, camera.position.y)
 		}
 		window.addEventListener('mousemove', onMouseMove, false);
 

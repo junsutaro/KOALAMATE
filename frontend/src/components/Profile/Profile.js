@@ -9,7 +9,7 @@ import GenderBirthRange from "../GenderBirthRange";
 const standardImgPath = '/assets/profile.jpg';
 
 const Profile = ({img, nickname, gender, age, follower, followee, userId}) => {
-    console.log(img)
+  //  console.log(img)
 
     // 로그인한 사용자 정보 가져오기
     const {user, isLoggedIn} = useSelector(state => state.auth);

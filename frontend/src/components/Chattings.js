@@ -61,7 +61,7 @@ const Chattings = () => {
     }, [expandedRoomId]);
 
     useEffect(() => {
-        console.log('roomStatus: ', roomStatus);
+   //     console.log('roomStatus: ', roomStatus);
     }, [roomStatus]);
 
 	// 탭 변경 핸들러

@@ -31,9 +31,9 @@ function App () {
 
 	useEffect(() => {
 		if (!isLoggedIn) {
-			console.log("로그아웃");
+		//	console.log("로그아웃");
 			try {
-				console.log(`${process.env.REACT_APP_API_URL}`);
+		//		console.log(`${process.env.REACT_APP_API_URL}`);
 				axios.post(`${process.env.REACT_APP_API_URL}/user/logout`, {},
 					{ withCredentials: true });
 				disconnect();
@@ -59,7 +59,7 @@ function App () {
 				withCredentials: true,
 			})
 				.then((response) => {
-					console.log('Auth Response: ', response);
+		//			console.log('Auth Response: ', response);
 					connect(`${process.env.REACT_APP_CHAT_URL}`);
 				})
 				.catch((error) => {

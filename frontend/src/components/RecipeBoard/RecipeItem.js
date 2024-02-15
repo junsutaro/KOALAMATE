@@ -41,7 +41,7 @@ function RecipeItem({boardId, imageUrl, title, author, tags, liked, toggleLiked}
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/like`, {id: boardId}, {
                 headers: {'Authorization': authHeader}  // 요청 헤더에 인증 토큰 추가
             })
-            console.log('좋아요 상태 변경 성공');
+       //     console.log('좋아요 상태 변경 성공');
             toggleLiked(boardId, !isLiked);  // 상태 업데이트 성공 시, 상위 컴포넌트의 상태도 업데이트
         } catch (error) {
             console.error('좋아요 상태 변경 실패', error);

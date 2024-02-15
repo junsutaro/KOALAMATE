@@ -17,7 +17,7 @@ const CommentList = () => {
                 `${process.env.REACT_APP_API_URL}/board/view?id=${boardId}`)
             setComments(response.data.comments || []);
 
-            console.log(response.data)
+    //        console.log(response.data)
         } catch (error) {
             console.error('댓글 목록을 가져오는 중 에러 발생: ', error);
         }

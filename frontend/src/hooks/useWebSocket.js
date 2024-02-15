@@ -14,7 +14,7 @@ const useWebSocket = (url) => {
 			// 연결이 성공적으로 설정되었을 때의 콜백 함수
 			onConnect: () => {
 				setConnected(true);
-				console.log('WebSocket Connected: ', url);
+		//		console.log('WebSocket Connected: ', url);
 				// 여기에 추가적인 구독 설정 등을 추가할 수 있음
 			},
 
@@ -33,7 +33,7 @@ const useWebSocket = (url) => {
 		return () => {
 			if (client && client.active) {
 				client.deactivate(() => {
-					console.log('WebSocket Disconnected: ', url);
+		//			console.log('WebSocket Disconnected: ', url);
 				});
 			}
 		};

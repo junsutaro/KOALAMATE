@@ -26,7 +26,7 @@ const DetailProfile = ({intro, alcoholLimitBottle, alcoholLimitGlass, mannersSco
 	// onClick 이벤트 핸들러 정의
 	const handleViewRefrigerator = () => {
 		// 여기에 버튼 클릭 시 실행할 로직을 구현
-		console.log("냉장고 보기 버튼이 클릭되었습니다.");
+	//	console.log("냉장고 보기 버튼이 클릭되었습니다.");
 		setModalOpen(true);
 	};
 
