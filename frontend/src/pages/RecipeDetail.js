@@ -1,19 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
 import axios from "axios";
 import CommentList from "components/Comment/CommentList";
 import style from "../components/RecipeBoard/RecipeItem.module.css";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
-import {Typography, Box, Button, ListItem, ListItemText, List, ListItemAvatar, Avatar, Grid, Chip, Container} from "@mui/material";
-import { format } from 'date-fns';
+import {
+    Typography,
+    Box,
+    Button,
+    ListItem,
+    ListItemText,
+    List,
+    ListItemAvatar,
+    Avatar,
+    Grid,
+    Chip,
+    Container
+} from "@mui/material";
+import {format} from 'date-fns';
 import Paper from '@mui/material/Paper';
 import {useSelector} from "react-redux";
-
+import {Link} from 'react-router-dom';
 
 const RecipeDetail = () => {
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
-    const { boardId } = useParams(); // URL 파라미터에서 boardId 추출
+    const {boardId} = useParams(); // URL 파라미터에서 boardId 추출
     const [recipe, setRecipe] = useState({
         id: 0,
         title: "",
@@ -21,7 +33,7 @@ const RecipeDetail = () => {
         date: "",
         views: 0,
         nickname: "",
-        image:'',
+        image: '',
         comments: [],
         likeCount: 0,
         liked: false,
@@ -30,6 +42,7 @@ const RecipeDetail = () => {
 
     // 좋아요 상태를 추적하기 위한 상태 변수와 setter 함수
     const [isLiked, setIsLiked] = useState(false);
+    const authHeader = localStorage.getItem('authHeader');
 
     const handleLikeClick = async (e) => {
         e.stopPropagation();
@@ -39,12 +52,14 @@ const RecipeDetail = () => {
             return;
         }
 
-        const authHeader = localStorage.getItem('authHeader');
         try {
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/like`, {id: boardId, like: true}, {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/like`, {
+                id: boardId,
+                like: !isLiked
+            }, {
                 headers: {'Authorization': authHeader}
             });
-            if(response.status === 200) {
+            if (response.status === 200) {
                 setIsLiked(!isLiked);
             } else {
                 // 실패 응답 처리
@@ -57,15 +72,16 @@ const RecipeDetail = () => {
 
     const getDetailRecipe = async () => {
         try {
-            const response = await axios.get(`http://localhost:8085/board/view?id=${boardId}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/board/view?id=${boardId}`, {headers: {'Authorization': authHeader}});
             const data = response.data;
+            console.log(data);
             setRecipe({
                 id: data.id,
                 title: data.title,
                 content: data.content,
                 date: format(new Date(data.date), 'yyyy년 MM월 dd일 HH:mm:ss'),
                 views: data.views,
-                image: `${data.image}` ,
+                image: `${data.image}`,
                 nickname: data.nickname,
                 comments: data.comments || [],
                 likeCount: data.likeCount,
@@ -73,6 +89,7 @@ const RecipeDetail = () => {
                 ingredients: data.cocktails || [],
             });
             setIsLiked(data.liked);
+
         } catch (error) {
             console.error('레시피 상세 정보를 가져오는 중 에러 발생: ', error);
         }
@@ -121,6 +138,19 @@ const RecipeDetail = () => {
 //     );
 // }
 
+    const categories = [
+        // '무알콜',
+        '기타 재료',
+        '진',
+        '럼',
+        '보드카',
+        '위스키',
+        '데킬라',
+        '브랜디',
+        '리큐르',
+        '맥주',
+        '소주',
+    ];
 
     return (
         <div>
@@ -140,13 +170,13 @@ const RecipeDetail = () => {
                                 <Typography color='#FF9B9B' sx={{ mt: 4, mb: 1}}>레시피 설명</Typography>
                                 <Box sx={{ m:1, p: 2, border: '1px solid #FF9B9B', borderRadius: '15px', whiteSpace: 'pre-wrap'}}>{recipe.content}</Box>
 
-                                    <Button onClick={handleLikeClick}>
-                                        {isLiked ? (
-                                            <FavoriteIcon sx={{ fontSize: '2rem', color: '#FF9B9B' }} />
-                                        ) : (
-                                            <FavoriteTwoToneIcon sx={{ fontSize: '2rem', color: '#e9e9e9' }} />
-                                        )}
-                                    </Button>
+                                <Button onClick={handleLikeClick}>
+                                    {isLiked ? (
+                                        <FavoriteIcon sx={{fontSize: '2rem', color: '#FF9B9B'}}/>
+                                    ) : (
+                                        <FavoriteTwoToneIcon sx={{fontSize: '2rem', color: '#e9e9e9'}}/>
+                                    )}
+                                </Button>
 
                             </div>
                         </Box>
@@ -159,28 +189,32 @@ const RecipeDetail = () => {
             <Paper elevation={3} sx={{ margin: '20px', padding: '40px', boxShadow: 3, backgroundColor: 'white', borderRadius: '15px'}}>
                 <List>
                     {recipe.ingredients.map((ingredient, index) => (
-                        <ListItem key={index} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <ListItemAvatar>
-                                <Avatar src={ingredient.drink.image} alt={ingredient.drink.name} sx={{ width: 56, height: 56, margin: '0 20px', bgcolor: '#FF9B9B' }} />
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary={ingredient.drink.name}
-                                secondary={`카테고리: ${ingredient.drink.category}`}
-                                sx={{ margin: '0 16px', flex: '1 1 auto' }}
-                            />
-                            <Typography variant="body2" sx={{ minWidth: '50px', textAlign: 'right' }}>
-                                {`${ingredient.proportion} ${ingredient.unit}`}
-                            </Typography>
-                        </ListItem>
+                        <Link to={`/ingredient/${ingredient.drink.id}`} key={index}
+                              style={{textDecoration: 'none', color: 'inherit'}}>
+                            <ListItem key={index}
+                                      sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                                <ListItemAvatar>
+                                    <Avatar src={ingredient.drink.image} alt={ingredient.drink.name}
+                                            sx={{width: 56, height: 56, margin: '0 20px', bgcolor: '#FF9B9B'}}/>
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={ingredient.drink.name}
+                                    secondary={`카테고리: ${categories[ingredient.drink.category]}`}
+                                    sx={{margin: '0 16px', flex: '1 1 auto'}}
+                                />
+                                <Typography variant="body2" sx={{minWidth: '50px', textAlign: 'right'}}>
+                                    {`${ingredient.proportion} ${ingredient.unit}`}
+                                </Typography>
+                            </ListItem>
+                        </Link>
                     ))}
                 </List>
             </Paper>
 
-            <CommentList />
+            <CommentList/>
         </div>
     );
 }
-
 
 
 export default RecipeDetail;

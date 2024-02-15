@@ -7,10 +7,10 @@ import style from '../RecipeBoard/RecipeList.module.css';
 import RecipeItem from '../RecipeBoard/RecipeItem';
 import axios from "axios";
 
-const MyRecipe = ({nickname, userId}) => {
+const MyRecipe = ({nickname, userId, myId}) => {
     const navigate = useNavigate();
     const {user, isLoggedIn} = useSelector(state => state.auth);
-    const isCurrentUser = isLoggedIn && user.nickname === nickname;    // 현재 사용자의 닉네임과 비교
+    const isCurrentUser = isLoggedIn && String(userId) === String(myId);    // 현재 사용자의 닉네임과 비교
 
     // 인증 헤더를 가져오는 함수
     const getAuthHeader = () => {
@@ -65,7 +65,7 @@ const MyRecipe = ({nickname, userId}) => {
     };
 
     return (
-            <Container sx={{marginTop: '30px'}}>
+            <Box sx={{marginTop: '30px'}}>
                 <Box sx={{display: 'inline-flex', gap: 1}}>
                     <Typography sx={{fontWeight: 'bold'}} variant="h5">
                         {isCurrentUser ? '나만의' : `${nickname}의`} 레시피
@@ -78,8 +78,9 @@ const MyRecipe = ({nickname, userId}) => {
                     <Button p={10} sx={{color: '#ff9b9b'}} onClick={handleViewAllClick}>전체보기</Button>
                 </Box>
 
-                <Box sx={{display: 'flex'}}>
-                    <div className={style.cardList}>
+                <Box  sx={{display: 'flex', justifyContent:'start' }}>
+                    {/*<div  className={`${style.cardList} ${style.justifyStart}`}>*/}
+                    <div className={`${style.cardList} ${style.justifyStart}`}>
                         {recipeData.map(recipe => (
                             <RecipeItem
                                 key={recipe.boardId}
@@ -99,7 +100,7 @@ const MyRecipe = ({nickname, userId}) => {
                         <NavLink to="/writeBoard" style={{
                             textDecoration: 'none',
                             color: 'inherit',
-                            margin: '20px auto',
+                            margin: '20px 0',
                             width: '240px',
                             height: '240px',
                             backgroundColor: 'transparent',
@@ -113,7 +114,7 @@ const MyRecipe = ({nickname, userId}) => {
                         </NavLink>
                     )}
                 </Box>
-            </Container>
-        );
-    };
-    export default MyRecipe;
+            </Box>
+    );
+};
+export default MyRecipe;

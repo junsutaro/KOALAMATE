@@ -9,22 +9,16 @@ function RecipeButtons({setOptionNum}) {
 	const handleAllRecipesClick = () => {
 		setOptionNum(1)
 		setClickedButton('all')
-		console.log('전체 조회');
-		console.log(1)
 	};
 
 	const handleKoalaRecipesClick = () => {
 		setOptionNum(2)
 		setClickedButton('admin')
-		console.log('레시피 백과');
-		console.log(2)
 	};
 
 	const handleUserRecipesClick = () => {
 		setOptionNum(3)
 		setClickedButton('user')
-		console.log('유저 레시피');
-		console.log(3)
 	};
 
 	// 버튼 스타일을 동적으로 변경하기 위한 함수

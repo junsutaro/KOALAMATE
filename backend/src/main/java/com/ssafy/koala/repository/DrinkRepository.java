@@ -20,4 +20,6 @@ public interface DrinkRepository extends JpaRepository<DrinkModel, Long> {
             + "(select rdm.drink.id from RefrigeratorDrinkModel rdm "
             + "where rdm.refrigerator.id = (select r.id from RefrigeratorModel r where r.user.id = :user_id))")
     List<DrinkModel> findAllEntitiesByUserId(@Param("user_id") Long user_id);
+
+    List<DrinkModel> findByIdIn(List<Long> ids);
 }

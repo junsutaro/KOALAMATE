@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import axios from 'axios';
-import {Container, List, Typography, Button, Grid} from '@mui/material';
+import {Container, List, Typography, Button, Grid, Box} from '@mui/material';
 import CommentForm from './CommentForm';
 import CommentItem from './CommentItem'; // Import the new component
 
@@ -14,7 +14,7 @@ const CommentList = () => {
     const getComments = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:8085/board/view?id=${boardId}`)
+                `${process.env.REACT_APP_API_URL}/board/view?id=${boardId}`)
             setComments(response.data.comments || []);
 
             console.log(response.data)
@@ -66,9 +66,15 @@ const CommentList = () => {
 
     return (
         <>
-            <Container component="main" maxWidth="sm">
-                <Typography variant="h5" color="#FF9B9B" sx={{ mt: 10, mb: 2 }}>댓글 {comments.length || 0}</Typography>
-
+            <Box component="main" margin={3} marginTop={10}>
+                <Box sx={{display: 'inline-flex', gap: 1}}>
+                    <Typography sx={{fontWeight: 'bold'}} variant="h6">
+                        댓글
+                    </Typography>
+                    <Typography sx={{fontWeight: 'bold', color: '#ff9b9b'}}
+                                variant="h6">{comments.length || 0}</Typography>
+                </Box>
+                   <hr></hr>
                 <CommentForm boardId={boardId} updateComments={getComments}/>
                 <List>
                     {comments.map((comment) => (
@@ -80,7 +86,7 @@ const CommentList = () => {
                         />
                     ))}
                 </List>
-            </Container>
+            </Box>
         </>
     );
 };

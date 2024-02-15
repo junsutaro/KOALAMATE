@@ -178,6 +178,10 @@ function BulletinBoard() {
         }
     };
 
+    const handleDeleteIngredient = (index) => {
+        setCocktails((prevCocktails) => prevCocktails.filter((_, i) => i !== index));
+    };
+
 
     return (
         <Container>
@@ -239,8 +243,8 @@ function BulletinBoard() {
                             value={content}
                             onChange={handleContentChange}
                         />
-                        <Ingredients cocktails={cocktails}/>
                         <AddIngredient updateCocktails={setCocktails}/> {/* prop으로 상태 업데이트 함수 전달 */}
+                        <Ingredients cocktails={cocktails} onDeleteIngredient={handleDeleteIngredient} />
 
                         <Box display="flex" justifyContent="flex-end" mt={2}>
                             <Button type="submit" variant="contained" color="primary" onClick={handleSubmit}

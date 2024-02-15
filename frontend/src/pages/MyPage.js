@@ -18,9 +18,8 @@ const MyPage = () => {
     const getAuthHeader = () => {
         const authHeader = localStorage.getItem('authHeader');
         return authHeader ? {Authorization: authHeader} : {};
-    };    // console.log(userId)
-    // const {user} = useSelector((state) => state.auth);
-    // const userNickname = user.nickname;
+    };
+
 
     const [profileImageUrl, setProfileImageUrl] = useState()
     const [profileData, setProfileData] = useState({
@@ -49,9 +48,11 @@ const MyPage = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_API_URL}/profile/${userId}`);
             const data = response.data;
+            console.log('data',data)
 
             // 이미지 URL을 가져와서 상태 업데이트
             setProfileImageUrl(`${data.profile}`)
+            console.log('이미지',profileImageUrl)
 
             // 나머지 프로필 데이터 업데이트
             setProfileData({
@@ -98,6 +99,25 @@ const MyPage = () => {
         }
     };
 
+    const [myId, setMyId] = useState(null); // 사용자 ID를 저장할 상태
+    const getMyId = async () => {
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/myId`,
+                {}, {
+                    headers: getAuthHeader(), // 인증 헤더 추가
+                });
+            // API 응답 구조에 맞게 수정할 것
+            setMyId(response.data); // 가정: 응답이 { userId: '...' } 구조를 가짐
+        } catch (error) {
+            console.error('내 아이디 가지고 오는 중 에러 발생: ', error);
+        }
+    };
+
+    // 컴포넌트 마운트 시 사용자 ID 가져오기
+    useEffect(() => {
+        getMyId();
+    }, []);
+
     // userId가 바뀌면 user 프로필 정보를 가져오기
     useEffect(() => {
         getProfileData();
@@ -123,7 +143,6 @@ const MyPage = () => {
                     },
                 }}
             >
-
                 <Profile
                     userId={userId}
                     img={profileImageUrl}
@@ -134,6 +153,7 @@ const MyPage = () => {
                     followee={followeeData}
                 />
                 <DetailProfile
+                    myId={myId}
                     intro={profileData.intro}
                     alcoholLimitBottle={profileData.alcoholLimitBottle}
                     alcoholLimitGlass={profileData.alcoholLimitGlass}
@@ -143,7 +163,7 @@ const MyPage = () => {
                     nickname={profileData.nickname}
                 />
             </Box>
-            <MyRecipe nickname={profileData.nickname} userId={userId}/>
+            <MyRecipe nickname={profileData.nickname} userId={userId} myId={myId}/>
             <LikedRecipe nickname={profileData.nickname} userId={userId}/>
 
         </Container>

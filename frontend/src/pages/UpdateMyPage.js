@@ -105,6 +105,10 @@ const UpdateMyPage = () => {
                     tags: data.tags || [],
                 });
 
+                // 기존 태그 옵션에 사용자가 추가한 태그들을 병합
+                const updatedTagOptions = [...new Set([...tagOptions, ...data.tags.filter(tag => !tagOptions.includes(tag))])];
+                setTagOptions(updatedTagOptions);
+
                 // setProfileData 이후에 상태 업데이트 수행
                 setSojuBottleCount(data.alcoholLimitBottle || 0);
                 setSojuCupCount(data.alcoholLimitGlass || 0);
@@ -148,14 +152,26 @@ const UpdateMyPage = () => {
     };
 
     // 태그 선택 함수
-    const handleTagClick = (clickTag) => {
-        if (selectedTags.includes(clickTag)) {
-            setSelectedTags((prevTags) => prevTags.filter((tag) => tag !== clickTag));
-        } else {
-            setSelectedTags((prevTags) => [...prevTags, clickTag]);
-        }
-    };
+    // const handleTagClick = (clickTag) => {
+    //     if (selectedTags.includes(clickTag)) {
+    //         setSelectedTags((prevTags) => prevTags.filter((tag) => tag !== clickTag));
+    //     } else {
+    //         setSelectedTags((prevTags) => [...prevTags, clickTag]);
+    //     }
+    // };
 
+    const handleTagClick = (tag) => {
+        setSelectedTags(prevTags => {
+            const index = prevTags.indexOf(tag);
+            if (index > -1) {
+                // 태그가 이미 선택된 경우, 제거
+                return prevTags.filter(t => t !== tag);
+            } else {
+                // 태그가 선택되지 않은 경우, 추가
+                return [...prevTags, tag];
+            }
+        });
+    };
 
     // 태그 추가 버튼 클릭 함수 (클릭할 때마다 폼 표시 여부 토글)
     const handleAddButton = () => {
@@ -182,6 +198,12 @@ const UpdateMyPage = () => {
         }
     };
 
+    // 태그 삭제 핸들러
+    const handleRemoveTag = (tagToRemove) => {
+        setTagOptions(prevOptions => prevOptions.filter(tag => tag !== tagToRemove));
+        setSelectedTags(prevSelected => prevSelected.filter(tag => tag !== tagToRemove));
+    };
+
     const SaveProfileImage = async () => {
         try {
             console.log("Selected Image File:", selectedImageFile);
@@ -197,7 +219,7 @@ const UpdateMyPage = () => {
 
 
             // Axios를 사용하여 이미지를 업로드하는 요청 보냄
-            const response = await axios.put(`${process.env.REACT_APP_API_URL}/profile/upload`, formData, {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/profile/upload`, formData, {
                 headers: getAuthHeader(), // 인증 헤더 추가
             });
 
@@ -322,6 +344,7 @@ const UpdateMyPage = () => {
                         addTag={addTag}
                         setAddTag={setAddTag}
                         error={error}
+                        handleRemoveTag={handleRemoveTag}
                     />
                 </Box>
             </Box>

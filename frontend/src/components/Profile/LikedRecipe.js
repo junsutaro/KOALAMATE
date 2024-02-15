@@ -65,7 +65,7 @@ const LikedRecipe = ({nickname, userId}) => {
 
 
 	return (
-			<Container sx={{ marginTop: '30px' }}>
+			<Box sx={{ marginTop: '30px' }}>
 				<Box sx={{display: 'inline-flex', gap: 1}}>
 					<Typography sx={{fontWeight: 'bold'}} variant="h5">좋아요한
 						레시피</Typography>
@@ -91,7 +91,7 @@ const LikedRecipe = ({nickname, userId}) => {
 						/>
 					))}
 				</div>
-			</Container>
+			</Box>
 	);
 };
 export default LikedRecipe;

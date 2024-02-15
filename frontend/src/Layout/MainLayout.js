@@ -33,9 +33,13 @@ import ModifyFridge from '../components/Fridge/ModifyFridge';
 import ModifyFridgeInside from '../components/Fridge/ModifyFridgeInside';
 import MyPosts from "../pages/MyPosts";
 import MyLikes from "../pages/MyLikes";
+import IngredientDetail from "../pages/IngredientDetail";
 import ShowFridge from "../components/Fridge/ShowFridge";
 import ShowFridgeInside from "../components/Fridge/ShowFridgeInside";
 import chattingicon from "../assets/chattingicon.png";
+import SearchResult from "../pages/SearchResult";
+import WriteDrink from "../pages/WriteDrink";
+
 
 const CustomScrollBox = styled(Box)(({ theme }) => ({
 	overflowY: 'auto', // 세로 스크롤바 활성화
@@ -142,6 +146,9 @@ const MainLayout = () => {
 				<Route path="/fridgeInside" element={<ModifyFridgeInside />} />
 				<Route path="/fridgeInside/:userId" element={<ShowFridgeInside />} />
 				<Route path="/voiceChat/:roomId" element={<VoiceChatRoom />} />
+				<Route path="/ingredient/:ingredientId" element={<IngredientDetail />} />
+				<Route path="/writeDrink" element={<WriteDrink />} />
+
 				{/* 다른 라우트들 */}
 			</Routes>
 			<Footer />

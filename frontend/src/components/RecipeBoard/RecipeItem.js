@@ -16,6 +16,10 @@ function RecipeItem({boardId, imageUrl, title, author, tags, liked, toggleLiked}
 
     const authHeader = localStorage.getItem('authHeader'); // 인증 토큰 가져오기
 
+    if (author === 'admin') {
+        author = '레시피 백과사전'
+    }
+
     // 레시피 상세 페이지로 이동
     const handleCardClick = () => {
         navigate(`/recipe/${boardId}`);
@@ -31,9 +35,8 @@ function RecipeItem({boardId, imageUrl, title, author, tags, liked, toggleLiked}
             return;
         }
 
-        // if (isLoggedIn) {
-            const newLikedState = !isLiked;
-            setIsLiked(newLikedState);
+        const newLikedState = !isLiked;
+        setIsLiked(newLikedState);
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/like`, {id: boardId}, {
                 headers: {'Authorization': authHeader}  // 요청 헤더에 인증 토큰 추가

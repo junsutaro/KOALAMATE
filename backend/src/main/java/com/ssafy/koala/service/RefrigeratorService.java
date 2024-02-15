@@ -3,6 +3,8 @@ package com.ssafy.koala.service;
 import com.ssafy.koala.dto.CustomobjDto;
 import com.ssafy.koala.dto.RefrigeratorDTO;
 import com.ssafy.koala.dto.RefrigeratorDrinkDTO;
+import com.ssafy.koala.dto.drink.DrinkWithoutCocktailDto;
+import com.ssafy.koala.dto.RefrigeratorInsideDto;
 import com.ssafy.koala.model.CustomobjModel;
 import com.ssafy.koala.model.DrinkModel;
 import com.ssafy.koala.model.RefrigeratorDrinkModel;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -183,19 +186,37 @@ public class RefrigeratorService {
         return result;
     }
 
-    public List<RefrigeratorDrinkDTO> getDrinksByUserId(Long userId) {
+    public List<RefrigeratorInsideDto> getDrinksByUserId(Long userId) {
         Optional<RefrigeratorModel> refrigeratorOptional = refrigeratorRepository.findByUserId(userId);
-        if (refrigeratorOptional.isPresent()) {
-            RefrigeratorModel refrigerator = refrigeratorOptional.get();
-            List<RefrigeratorDrinkModel> refrigeratorDrinkModels = refrigerator.getRefrigeratorDrinkModels();
-
-            // Drink를 DTO로 변환하여 리턴
-            List<RefrigeratorDrinkDTO> modifiedContents = refrigeratorDrinkModels.stream()
-                    .map(RefrigeratorDrinkDTO::fromEntity)
+        return refrigeratorOptional.map(refrigerator -> {
+            // DrinkModel 객체들을 조회
+            List<Long> drinkIds = refrigerator.getRefrigeratorDrinkModels().stream()
+                    .map(refrigeratorDrinkModel -> refrigeratorDrinkModel.getDrink().getId())
                     .collect(Collectors.toList());
+            List<DrinkModel> drinks = drinkRepository.findByIdIn(drinkIds);
 
-            return modifiedContents;
-        }
-        return Collections.emptyList(); // 해당 유저의 냉장고나 Drink가 존재하지 않을 경우
+            // drinks 리스트를 ID를 키로 하는 맵으로 변환하여 검색 시간 단축
+            Map<Long, DrinkModel> drinksMap = drinks.stream()
+                    .collect(Collectors.toMap(DrinkModel::getId, Function.identity()));
+
+            // 결과 리스트 생성 및 반환
+            return refrigerator.getRefrigeratorDrinkModels().stream().map(rdmodel -> {
+                DrinkWithoutCocktailDto drinkDto = new DrinkWithoutCocktailDto();
+                // ID 비교를 통해 해당 DrinkModel 찾기
+                DrinkModel drinkModel = drinksMap.get(rdmodel.getDrink().getId());
+                if (drinkModel != null) {
+                    BeanUtils.copyProperties(drinkModel, drinkDto);
+                }
+
+                RefrigeratorInsideDto insert = new RefrigeratorInsideDto();
+                insert.setDrink(drinkDto);
+                insert.setPosIdx(rdmodel.getPosIdx());
+                insert.setId(rdmodel.getId());
+                insert.setRefrigeratorId(rdmodel.getRefrigerator().getId());
+
+                return insert;
+            }).collect(Collectors.toList());
+        }).orElse(Collections.emptyList()); // 냉장고가 없을 경우 빈 리스트 반환
+
     }
 }

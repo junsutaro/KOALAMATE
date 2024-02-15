@@ -9,6 +9,7 @@ import GenderBirthRange from "../GenderBirthRange";
 const standardImgPath = '/assets/profile.jpg';
 
 const Profile = ({img, nickname, gender, age, follower, followee, userId}) => {
+    console.log(img)
 
     // 로그인한 사용자 정보 가져오기
     const {user, isLoggedIn} = useSelector(state => state.auth);
@@ -17,8 +18,9 @@ const Profile = ({img, nickname, gender, age, follower, followee, userId}) => {
         userNickname = user.nickname; // user가 null인 경우를 처리
     }
 
+    const profileImage = img ? `${img}` : '/assets/profile.jpg';
 
-    const profileImage = img || '/assets/profile.jpg'
+    // const profileImage = img || '/assets/profile.jpg'
     const followerCnt = follower.cnt;
     const followeeCnt = followee.cnt;
 
