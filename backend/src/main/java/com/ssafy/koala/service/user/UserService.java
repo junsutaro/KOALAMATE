@@ -128,7 +128,7 @@ public class UserService {
         // 냉장고 정보 저장
         RefrigeratorModel newRefrigerator = new RefrigeratorModel();
         newRefrigerator = refrigeratorRepository.save(newRefrigerator);
-        System.out.println(newRefrigerator.getId());
+      //  System.out.println(newRefrigerator.getId());
 
         // 냉장고에 유저 설정
         newRefrigerator.setUser(newUser);
@@ -138,7 +138,7 @@ public class UserService {
 
         // 유저 정보 저장 (이때 냉장고 정보도 함께 저장됨)
         newUser = userRepository.save(newUser);
-        System.out.println(newUser.getRefrigerator().getId());
+     //   System.out.println(newUser.getRefrigerator().getId());
 
         // 토큰 생성
         String accessToken = jwtUtil.createAccessToken(convertToDto(newUser));

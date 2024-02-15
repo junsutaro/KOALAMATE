@@ -114,7 +114,7 @@ const FollowList = ({setTabValue, setExpandedRoomId}) => {
                         }
                     >
                         <Avatar alt={followee.name}
-                                src={followee?.profile ? `${process.env.REACT_APP_IMAGE_URL}/${followee.profile}` : 'default_profile_picture_url'}/>
+                                src={followee?.profile ? `${followee.profile}` : 'default_profile_picture_url'}/>
                         <ListItemText primary={`${followee.nickname}`}
                                       onClick={() => handleListItemClick(followee.id)}/>
                     </ListItem>

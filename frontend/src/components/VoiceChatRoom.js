@@ -72,7 +72,7 @@ const VoiceChatRoom = () => {
                         <Grid item xs={12} sm={6} md={4} lg={3} key={user.nickname} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <Avatar
                                 onClick={() => user?.id ? handleAvatarClick(user.id) : null}
-                                src={user?.profile ? `${process.env.REACT_APP_IMAGE_URL}/${user.profile}` : 'default_profile_picture_url'} sx={{ width: 100, height: 100, border: `2px solid ${participants.some(p => p.nickname === user.nickname) || user.nickname === curUser.nickname ? 'blue' : 'grey'}` }} />
+                                src={user?.profile ? `${user.profile}` : 'default_profile_picture_url'} sx={{ width: 100, height: 100, border: `2px solid ${participants.some(p => p.nickname === user.nickname) || user.nickname === curUser.nickname ? 'blue' : 'grey'}` }} />
                             <Typography variant="subtitle1" style={{ marginTop: '10px' }}>
                                 {user.nickname}
                             </Typography>

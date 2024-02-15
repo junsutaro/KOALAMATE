@@ -37,7 +37,7 @@ public class ChatroomController {
         String email = authService.extractUserFromToken(accessToken).getEmail();
 
         String otherUserEmail = requestDto.getOtherUserEmail();
-        System.out.println(otherUserEmail);
+        //System.out.println(otherUserEmail);
 
         ChatroomResponseDto chatroom = chatroomService.createRoom(email, otherUserEmail);
 
@@ -46,9 +46,9 @@ public class ChatroomController {
 
     @PostMapping("/roomlist")
     public ResponseEntity<List<ChatroomResponseDto>> getChatroomByUserId(HttpServletRequest request) {
-        System.out.println("getChatroomByUserId");
+        //System.out.println("getChatroomByUserId");
         String accessToken = authService.getAccessToken(request);
-        System.out.println(accessToken);
+        //System.out.println(accessToken);
         long id = authService.extractUserFromToken(accessToken).getId();
         List<ChatroomResponseDto> list = chatService.getChatroomByUserId(id);
         return new ResponseEntity<>(list, HttpStatus.OK);

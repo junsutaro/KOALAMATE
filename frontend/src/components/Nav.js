@@ -8,7 +8,7 @@ import {
 	Box,
 	IconButton,
 	Menu,
-	Tooltip, MenuItem, Avatar, createTheme, Container,
+	Tooltip, MenuItem, Avatar, createTheme, Container, useMediaQuery,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Collapse from '@mui/material/Collapse';
@@ -32,6 +32,8 @@ const Nav = ({isDrawerOpen}) => {
 	const [isWide, setIsWide] = useState(false);
 	const theme = createTheme();
 	const ref = React.useRef(null);
+	const matches = useMediaQuery(theme.breakpoints.down('md'));
+
 
 	useEffect(() => {
 		const checkWidth = () => {
@@ -71,20 +73,8 @@ const Nav = ({isDrawerOpen}) => {
 	};
 
 	const handleLogout = async () => {
-		try {
-			console.log(`${process.env.REACT_APP_API_URL}`);
-			await axios.post(`${process.env.REACT_APP_API_URL}/user/logout`, {},
-				{ withCredentials: true });
-			dispatch(setLoginStatus(false));
-			disconnect();
-			setRoomStatus();
-			disconnectSession();
-			navigate('/');
-			handleClose();
-			localStorage.removeItem('authHeader');
-		} catch (error) {
-			console.log(error);
-		}
+		dispatch(setLoginStatus(false));
+		navigate('/');
 	};
 
 	const handleMyPage = async () => {
@@ -102,11 +92,6 @@ const Nav = ({isDrawerOpen}) => {
 		} catch (error) {
 			console.log(error);
 		}
-	};
-
-	const handleToolbarFocus = () => {
-		console.log('asdf');
-		setMenuOpen(true);
 	};
 
 	const NavButton = styled(Button)({
@@ -161,6 +146,7 @@ const Nav = ({isDrawerOpen}) => {
 						flexGrow: 1,
 						display: 'flex',
 						alignItems: 'center',
+						justifyContent: 'space-between',
 						ml: '-5px',
 						px: 0,
 					}}>
@@ -171,27 +157,22 @@ const Nav = ({isDrawerOpen}) => {
 							textDecoration: 'inherit',
 						}}>
 							<img src={logoImage} alt="Logo" style={{ maxHeight: '55px' }}/>
+							{!matches && (
+								<Typography variant="h5" color="text.primary" ml={2}>
+									코알라 메이트
+								</Typography>
+							)}
 						</NavLink>
-						<Box sx={{ display: { xs: 'none', md: 'flex' }, ml: '8px' }}>
+						<Box sx={{ display: 'flex', ml: '8px' }}>
 							<MenuItem sx={{ py: '6px', px: '12px' }}
 							          onClick={() => {navigate('/mate');}}>
 								<Typography variant="body2"
 								            color="text.primary">Mate</Typography>
 							</MenuItem>
 							<MenuItem sx={{ py: '6px', px: '12px' }}
-							          onClick={() => {navigate('/1/comments');}}>
-								<Typography variant="body2"
-								            color="text.primary">Comments</Typography>
-							</MenuItem>
-							<MenuItem sx={{ py: '6px', px: '12px' }}
 							          onClick={() => {navigate('/recipe');}}>
 								<Typography variant="body2"
 								            color="text.primary">Recipe</Typography>
-							</MenuItem>
-							<MenuItem sx={{ py: '6px', px: '12px' }}
-							          onClick={() => {navigate('/');}}>
-								<Typography variant="body2"
-								            color="text.primary">FAQ</Typography>
 							</MenuItem>
 							{isLoggedIn &&
 								<>
@@ -203,10 +184,10 @@ const Nav = ({isDrawerOpen}) => {
 								</>
 							}
 						</Box>
-					</Box>
+
 					{isLoggedIn ?
 						<Box sx={{
-							display: { xs: 'none', md: 'flex' },
+							display: 'flex',
 							gap: 0.5,
 							alignItems: 'center',
 						}}>
@@ -262,7 +243,7 @@ const Nav = ({isDrawerOpen}) => {
 						</Box>
 						:
 						<Box sx={{
-							display: { xs: 'none', md: 'flex' },
+							display: 'flex',
 							gap: 0.5,
 							alignItems: 'center',
 						}}>
@@ -286,87 +267,88 @@ const Nav = ({isDrawerOpen}) => {
 							</Button>
 						</Box>
 					}
+					</Box>
 
 				</Toolbar>
-				<Toolbar sx={{ display: isWide ? 'none' : 'flex' }}
-				         onMouseEnter={() => setMenuOpen(true)}
-				         onMouseLeave={() => setMenuOpen(false)}>
-					<Box sx={{
-						flexGrow: 1,
-						display: 'flex',
-						justifyContent: 'space-between',
-						alignItems: 'center',
-						color: 'inherit',
-						textDecoration: 'inherit',
-					}}>
-						<NavLink to="/" style={{
-							display: 'flex',
-							alignItems: 'center',
-							color: 'inherit',
-							textDecoration: 'inherit',
-						}}>
-							<img src={logoImage} alt="Logo" style={{ maxHeight: '50px' }}/>
-						</NavLink>
-						<Box
-							sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-							<IconButton size="large" aria-label="menu"
-							            aria-controls="menu-appbar"
-							            aria-haspopup="true" onClick={handleMenu}>
-								<MenuIcon/>
-							</IconButton>
-						</Box>
-					</Box>
-					<Collapse in={menuOpen}>
-						<Box sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							alignItems: 'center',
-							pb: 2,
-						}}>
-							<NavButton color="inherit" component={NavLink} to="/mate"
-							           onClick={() => setMenuOpen(false)}>Mate</NavButton>
-							<NavButton color="inherit" component={NavLink} to="/1/comments"
-							           onClick={() => setMenuOpen(false)}>Comments</NavButton>
-							<NavButton color="inherit" component={NavLink} to="/recipe"
-							           onClick={() => setMenuOpen(false)}>Recipe</NavButton>
-							{isLoggedIn ? (
-								<>
-									<NavButton color="inherit" component={NavLink}
-									           to="/writeBoard"
-									           onClick={() => setMenuOpen(
-										           false)}>Write</NavButton>
-									<NavButton color="inherit"
-									           onClick={handleLogout}>Logout</NavButton>
-								</>
-							) : (
-								<>
-									<NavButton color="inherit" component={NavLink} to="/login"
-									           onClick={() => setMenuOpen(
-										           false)}>Login</NavButton>
-									<NavButton color="inherit" component={NavLink} to="/signup"
-									           onClick={() => setMenuOpen(
-										           false)}>SignUp</NavButton>
-								</>
-							)}
-						</Box>
-					</Collapse>
-					{/*<Menu id="menu-appbar" anchorEl={anchorEl} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} keepMounted transformOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} onClose={handleClose}>*/}
-					{/*	<MenuItem onClick={handleClose} component={NavLink} to="/about">About</MenuItem>*/}
-					{/*	<MenuItem onClick={handleClose} component={NavLink} to="/1/comments">Comments</MenuItem>*/}
-					{/*	<MenuItem onClick={handleClose} component={NavLink} to="/recipe">Recipe</MenuItem>*/}
-					{/*	{isLoggedIn ? (*/}
-					{/*			<>*/}
-					{/*				<MenuItem onClick={handleClose} component={NavLink} to="/writeBoard">Write</MenuItem>*/}
-					{/*				<MenuItem onClick={handleLogout}>Logout</MenuItem>*/}
-					{/*			</>*/}
-					{/*	) : (*/}
-					{/*			<>*/}
-					{/*				<MenuItem onClick={handleClose} component={NavLink} to="/login">Login</MenuItem>*/}
-					{/*				<MenuItem onClick={handleClose} component={NavLink} to="/signup">SignUp</MenuItem>*/}
-					{/*			</>*/}
-					{/*	)}*/}
-					{/*</Menu>*/}
-				</Toolbar>
+				{/*<Toolbar sx={{ display: isWide ? 'none' : 'flex' }}*/}
+				{/*         onMouseEnter={() => setMenuOpen(true)}*/}
+				{/*         onMouseLeave={() => setMenuOpen(false)}>*/}
+				{/*	<Box sx={{*/}
+				{/*		flexGrow: 1,*/}
+				{/*		display: 'flex',*/}
+				{/*		justifyContent: 'space-between',*/}
+				{/*		alignItems: 'center',*/}
+				{/*		color: 'inherit',*/}
+				{/*		textDecoration: 'inherit',*/}
+				{/*	}}>*/}
+				{/*		<NavLink to="/" style={{*/}
+				{/*			display: 'flex',*/}
+				{/*			alignItems: 'center',*/}
+				{/*			color: 'inherit',*/}
+				{/*			textDecoration: 'inherit',*/}
+				{/*		}}>*/}
+				{/*			<img src={logoImage} alt="Logo" style={{ maxHeight: '50px' }}/>*/}
+				{/*		</NavLink>*/}
+				{/*		<Box*/}
+				{/*			sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>*/}
+				{/*			<IconButton size="large" aria-label="menu"*/}
+				{/*			            aria-controls="menu-appbar"*/}
+				{/*			            aria-haspopup="true" onClick={handleMenu}>*/}
+				{/*				<MenuIcon/>*/}
+				{/*			</IconButton>*/}
+				{/*		</Box>*/}
+				{/*	</Box>*/}
+				{/*	<Collapse in={menuOpen}>*/}
+				{/*		<Box sx={{*/}
+				{/*			display: 'flex',*/}
+				{/*			flexDirection: 'column',*/}
+				{/*			alignItems: 'center',*/}
+				{/*			pb: 2,*/}
+				{/*		}}>*/}
+				{/*			<NavButton color="inherit" component={NavLink} to="/mate"*/}
+				{/*			           onClick={() => setMenuOpen(false)}>Mate</NavButton>*/}
+				{/*			<NavButton color="inherit" component={NavLink} to="/1/comments"*/}
+				{/*			           onClick={() => setMenuOpen(false)}>Comments</NavButton>*/}
+				{/*			<NavButton color="inherit" component={NavLink} to="/recipe"*/}
+				{/*			           onClick={() => setMenuOpen(false)}>Recipe</NavButton>*/}
+				{/*			{isLoggedIn ? (*/}
+				{/*				<>*/}
+				{/*					<NavButton color="inherit" component={NavLink}*/}
+				{/*					           to="/writeBoard"*/}
+				{/*					           onClick={() => setMenuOpen(*/}
+				{/*						           false)}>Write</NavButton>*/}
+				{/*					<NavButton color="inherit"*/}
+				{/*					           onClick={handleLogout}>Logout</NavButton>*/}
+				{/*				</>*/}
+				{/*			) : (*/}
+				{/*				<>*/}
+				{/*					<NavButton color="inherit" component={NavLink} to="/login"*/}
+				{/*					           onClick={() => setMenuOpen(*/}
+				{/*						           false)}>Login</NavButton>*/}
+				{/*					<NavButton color="inherit" component={NavLink} to="/signup"*/}
+				{/*					           onClick={() => setMenuOpen(*/}
+				{/*						           false)}>SignUp</NavButton>*/}
+				{/*				</>*/}
+				{/*			)}*/}
+				{/*		</Box>*/}
+				{/*	</Collapse>*/}
+				{/*	/!*<Menu id="menu-appbar" anchorEl={anchorEl} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} keepMounted transformOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} onClose={handleClose}>*!/*/}
+				{/*	/!*	<MenuItem onClick={handleClose} component={NavLink} to="/about">About</MenuItem>*!/*/}
+				{/*	/!*	<MenuItem onClick={handleClose} component={NavLink} to="/1/comments">Comments</MenuItem>*!/*/}
+				{/*	/!*	<MenuItem onClick={handleClose} component={NavLink} to="/recipe">Recipe</MenuItem>*!/*/}
+				{/*	/!*	{isLoggedIn ? (*!/*/}
+				{/*	/!*			<>*!/*/}
+				{/*	/!*				<MenuItem onClick={handleClose} component={NavLink} to="/writeBoard">Write</MenuItem>*!/*/}
+				{/*	/!*				<MenuItem onClick={handleLogout}>Logout</MenuItem>*!/*/}
+				{/*	/!*			</>*!/*/}
+				{/*	/!*	) : (*!/*/}
+				{/*	/!*			<>*!/*/}
+				{/*	/!*				<MenuItem onClick={handleClose} component={NavLink} to="/login">Login</MenuItem>*!/*/}
+				{/*	/!*				<MenuItem onClick={handleClose} component={NavLink} to="/signup">SignUp</MenuItem>*!/*/}
+				{/*	/!*			</>*!/*/}
+				{/*	/!*	)}*!/*/}
+				{/*	/!*</Menu>*!/*/}
+				{/*</Toolbar>*/}
 			</Container>
 		</AppBar>
 	);

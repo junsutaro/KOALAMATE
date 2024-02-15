@@ -1,5 +1,6 @@
 import { alpha } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
+import './fonts.css';
 
 export const brand = {
   50: '#fce4ec',
@@ -130,7 +131,8 @@ const getDesignTokens = (mode) => ({
     },
   },
   typography: {
-    fontFamily: ['"Inter", "sans-serif"'].join(','),
+    fontFamily: 'SEOLLEIMcool, sans-serif',
+    // fontFamily: ['"Inter", "sans-serif"'].join(','),
     h1: {
       fontSize: 60,
       fontWeight: 600,
@@ -382,12 +384,17 @@ export default function getLPTheme(mode) {
             alignSelf: 'center',
             py: 1.5,
             px: 0.5,
-            background: `linear-gradient(to bottom right, ${brand[50]}, ${brand[100]})`,
+            background: `linear-gradient(to bottom right, ${brand[50]}, ${brand[50]})`,
             border: '1px solid',
             borderColor: `${alpha(brand[500], 0.3)}`,
             fontWeight: '600',
             '&:hover': {
               backgroundColor: brand[500],
+              borderColor: `${alpha(brand[800], 0.5)}`,
+            },
+            '&:active': {
+              backgroundColor: brand[600],
+              borderColor: `${alpha(brand[800], 0.5)}`,
             },
             '&:focus-visible': {
               borderColor: brand[800],

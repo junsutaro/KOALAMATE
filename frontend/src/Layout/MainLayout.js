@@ -36,10 +36,7 @@ import MyLikes from "../pages/MyLikes";
 import IngredientDetail from "../pages/IngredientDetail";
 import ShowFridge from "../components/Fridge/ShowFridge";
 import ShowFridgeInside from "../components/Fridge/ShowFridgeInside";
-
-
-
-
+import chattingicon from "../assets/chattingicon.png";
 import SearchResult from "../pages/SearchResult";
 import WriteDrink from "../pages/WriteDrink";
 
@@ -97,8 +94,8 @@ const MainLayout = () => {
 		<Box sx={{ width: '100%', transition: 'margin 0.3s ease-out', marginRight: isLoggedIn && isOpen ? '350px' : 0 }}>
 
 			{isLoggedIn && !isOpen && (
-				<IconButton onClick={() => toggleDrawer(true)} sx={{ position: 'fixed', right: 16, bottom: 16, zIndex: 1300 }}>
-					<ChatIcon />
+				<IconButton onClick={() => toggleDrawer(true)} sx={{ position: 'fixed', right: 30, bottom: 30, zIndex: 1300 }}>
+					<img src={chattingicon} style={{width: 60, height: 60}}/>
 				</IconButton>
 			)}
 

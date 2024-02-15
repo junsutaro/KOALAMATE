@@ -18,7 +18,7 @@ const Profile = ({img, nickname, gender, age, follower, followee, userId}) => {
         userNickname = user.nickname; // user가 null인 경우를 처리
     }
 
-    const profileImage = img ? `${process.env.REACT_APP_IMAGE_URL}/${img}` : '/assets/profile.jpg';
+    const profileImage = img ? `${img}` : '/assets/profile.jpg';
 
     // const profileImage = img || '/assets/profile.jpg'
     const followerCnt = follower.cnt;

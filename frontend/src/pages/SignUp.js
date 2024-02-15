@@ -21,6 +21,7 @@ import {
     Container, colors,
 } from '@mui/material';
 import GetMyPosition from "../components/GetMyPosition";
+import { useLocation } from 'react-router-dom';
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -35,6 +36,9 @@ const SignUp = () => {
     // 위치 설정
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
+
+    const location = useLocation();
+    const emailFromHome = location.state?.email || '';
 
     // Yup 스키마 정의
     const schema = yup.object().shape({
@@ -53,7 +57,7 @@ const SignUp = () => {
     const {register, handleSubmit, getValues, formState: {errors}} = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            email: '@gmail.com',
+            email: emailFromHome,
         },
     });
 
@@ -135,7 +139,7 @@ const SignUp = () => {
                     alignItems="center"
                 >
                     <Grid item>
-                        <Avatar sx={{bgcolor: '#1a237e', mt: 3}}/>
+                        <Avatar sx={{bgcolor: '#FF9B9B', mt: 3}}/>
                     </Grid>
                     <Grid item>
                         <Typography variant="h3">Sign Up</Typography>

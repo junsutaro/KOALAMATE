@@ -219,7 +219,7 @@ const UpdateMyPage = () => {
 
 
             // Axios를 사용하여 이미지를 업로드하는 요청 보냄
-            const response = await axios.put(`${process.env.REACT_APP_API_URL}/profile/upload`, formData, {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/profile/upload`, formData, {
                 headers: getAuthHeader(), // 인증 헤더 추가
             });
 

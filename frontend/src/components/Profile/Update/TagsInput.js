@@ -3,6 +3,7 @@ import React from 'react';
 import {Box, Chip, TextField, Button, Typography} from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import CancelIcon from '@mui/icons-material/Cancel';
+import DoneIcon from '@mui/icons-material/Done';
 
 // 기본 태그 리스트
 const defaultTags = [
@@ -38,6 +39,7 @@ const TagsInput = ({
                             label={tag}
                             variant="filled"
                             onClick={() => handleTagClick(tag)}
+                            icon={selectedTags.includes(tag) ? <DoneIcon /> : null}
                             sx={{
                                 mr: 1,
                                 mb: 1,

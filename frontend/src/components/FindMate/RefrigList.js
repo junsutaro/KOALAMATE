@@ -20,7 +20,7 @@ const RefrigList = ({markersData}) => {
 
     // 좌우로 회전하는 이미지 스타일
     const swingStyle = {
-        animation: 'swing ease-in-out 1s infinite alternate',
+        animation: 'swing ease-in-out 0.3s infinite alternate',
         transformOrigin: 'top center'
     };
 
@@ -80,7 +80,7 @@ const RefrigList = ({markersData}) => {
                         <Box onClick={() => handleListItemClick(user.id)} sx={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginY: 1 }}>
                             <ListItem>
                                 <ListItemAvatar>
-                                    <Avatar src={user.profile ? `${process.env.REACT_APP_IMAGE_URL}/${user.profile}` : DefaultImg} />
+                                    <Avatar src={user.profile ? `${user.profile}` : DefaultImg} />
                                 </ListItemAvatar>
                                 <ListItemText
                                     primary={user.nickname}

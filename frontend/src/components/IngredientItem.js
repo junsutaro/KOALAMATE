@@ -8,7 +8,7 @@ import Paper from "@mui/material/Paper";
 import CommentList from "./Comment/CommentList";
 const IngredientItem = ({ingredientId, imageUrl, name, idx}) => {
     // 진짜
-    // const img = `${process.env.REACT_APP_IMAGE_URL}/${imageUrl}`
+    const img = `${imageUrl}`
     const navigate = useNavigate();
 
     const handleCardClick = () => {
@@ -31,7 +31,7 @@ const IngredientItem = ({ingredientId, imageUrl, name, idx}) => {
 
     // 테스트용
     // const img = `${process.env.REACT_APP_IMAGE_URL}/ingredientImage/orange2.jpg`
-    const img = `${process.env.REACT_APP_IMAGE_URL}/ingredientImage/orange.png`
+    // const img = `${process.env.REACT_APP_IMAGE_URL}/ingredientImage/orange.png`
 
     return (
         <div className={style.card} onClick={handleCardClick}>
