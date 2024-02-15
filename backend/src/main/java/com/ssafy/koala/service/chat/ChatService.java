@@ -46,7 +46,7 @@ public class ChatService {
                     insert.setUsers(getUserByChatroomId(temp.getChatroom().getId()));
 
                     int lastIdx = temp.getChatroom().getMessages().size() - 1;
-                    System.out.println("lastIdx " + lastIdx);
+                   // System.out.println("lastIdx " + lastIdx);
                     MessageDto message = null;
                     if(lastIdx >= 0) {
                         message = new MessageDto();

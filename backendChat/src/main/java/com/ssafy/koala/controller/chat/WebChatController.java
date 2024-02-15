@@ -37,7 +37,7 @@ public class WebChatController {
     @MessageMapping("/notification/{nickname}")
     @SendTo("/topic/notification/{nickname}")
     public NotificationDto sendNotification(@DestinationVariable String nickname, NotificationDto notificationDto) {
-        System.out.println("notification " + nickname + " " + notificationDto.getRoomId());
+        //System.out.println("notification " + nickname + " " + notificationDto.getRoomId());
         return notificationDto;
     }
 
@@ -47,7 +47,7 @@ public class WebChatController {
         String sessionId = headerAccessor.getSessionId();
 
 
-        System.out.println(roomId + " " + messageDto + " " + sessionId);
+     //   System.out.println(roomId + " " + messageDto + " " + sessionId);
 
         SocketMessageDto sockMessageDto = new SocketMessageDto();
         sockMessageDto.setSessionId(sessionId);

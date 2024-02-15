@@ -176,7 +176,8 @@ const RecipeDetail = () => {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <Box display="flex" flexDirection="column" height="100%">
-                            <div>
+                            <Box>
+
                                 <Typography variant="h6" sx={{ mb: 2 }}>{`#${recipe.id}번째 레시피`}</Typography>
                                 <Typography variant="h5" color="#FF9B9B" sx={{ mt: 2, mb: 3 }}>{recipe.title}</Typography>
                                 <Typography variant="h5" color='gray' sx={{ mb: 1 }}>By {recipe.nickname}</Typography>
@@ -191,8 +192,7 @@ const RecipeDetail = () => {
                                         <FavoriteTwoToneIcon sx={{fontSize: '2rem', color: '#e9e9e9'}}/>
                                     )}
                                 </Button>
-
-                            </div>
+                            </Box>
                         </Box>
 
                     </Grid>
