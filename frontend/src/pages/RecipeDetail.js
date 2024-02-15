@@ -22,6 +22,7 @@ import {format} from 'date-fns';
 import Paper from '@mui/material/Paper';
 import {useSelector} from "react-redux";
 import {Link} from 'react-router-dom';
+import placeHolder from 'assets/no_img.png'
 
 const RecipeDetail = () => {
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
@@ -43,6 +44,8 @@ const RecipeDetail = () => {
     // 좋아요 상태를 추적하기 위한 상태 변수와 setter 함수
     const [isLiked, setIsLiked] = useState(false);
     const authHeader = localStorage.getItem('authHeader');
+
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleLikeClick = async (e) => {
         e.stopPropagation();
@@ -158,7 +161,18 @@ const RecipeDetail = () => {
             <Paper sx={{ margin: '20px', padding: '30px', backgroundColor: 'white', borderRadius: '15px'}} elevation={3}>
                 <Grid container justifyContent="center" display="flex-wrap" flexDirection="row" spacing={2}>
                     <Grid item xs={12} sm={4}>
-                        <Box component="img" src={recipe.image} sx={{ width: '300px', height: '400px', objectFit: 'cover', borderRadius: '15px'}} />
+                        <Box sx={{ width: '300px', height: '400px', borderRadius: '15px', overflow: 'hidden' }}>
+                            {isLoading && (
+                              // 이미지 로딩 중에 표시할 플레이스홀더 이미지
+                              <Box component="img" src={placeHolder} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            )}
+                            <Box
+                              component="img"
+                              src={recipe.image}
+                              sx={{ width: '100%', height: '100%', objectFit: 'cover', display: isLoading ? 'none' : 'block' }}
+                              onLoad={() => setIsLoading(false)} // 이미지 로딩 완료 시 isLoading 상태를 false로 설정
+                            />
+                        </Box>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <Box display="flex" flexDirection="column" height="100%">

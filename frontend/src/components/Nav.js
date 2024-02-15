@@ -78,6 +78,7 @@ const Nav = ({isDrawerOpen}) => {
 	};
 
 	const handleMyPage = async () => {
+		setAnchorElUser(null);
 		try {
 			const authHeader = localStorage.getItem('authHeader');
 			const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/myId`,
