@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useWebSocket } from './context/WebSocketContext';
 import { useSelector } from 'react-redux';
+import { useVoiceSocket } from "./context/VoiceSocketContext";
 import getLPTheme from './getLPTheme';
 
 import styles from './App.css'
@@ -17,14 +18,34 @@ import styles from './App.css'
 
 
 function App () {
-	const { connect, setRoomStatus } = useWebSocket();
+	const { connect, disconnect, setRoomStatus } = useWebSocket();
+	const { disconnectSession } = useVoiceSocket();
 	const dispatch = useDispatch();
 	const [mode, setMode] = React.useState('light');
 	const LPtheme = createTheme(getLPTheme(mode));
+	const { isLoggedIn } = useSelector((state) => state.auth);
 
 	const toggleColorMode = () => {
 		setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
 	};
+
+	useEffect(() => {
+		if (!isLoggedIn) {
+			console.log("로그아웃");
+			try {
+				console.log(`${process.env.REACT_APP_API_URL}`);
+				axios.post(`${process.env.REACT_APP_API_URL}/user/logout`, {},
+					{ withCredentials: true });
+				disconnect();
+				setRoomStatus();
+				disconnectSession();
+				// handleClose();
+				localStorage.removeItem('authHeader');
+			} catch (error) {
+				console.log(error);
+			}
+		}
+	}, [isLoggedIn]);
 
 	useEffect(() => {
 		// 로컬 스토리지에 로그인 정보가 있으면 벡에 유효성 검증 요청

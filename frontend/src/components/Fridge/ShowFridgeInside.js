@@ -105,7 +105,7 @@ function ShowFridgeInside ({ setOpenInside, userId }) {
 				(response) => {
 					response.data.forEach((drink) => {
 						console.log(drink);
-						setModels(prevState => [...prevState, drink.drinkId]);
+						setModels(prevState => [...prevState, drink]);
 					});
 				})
 			.catch((error) => {
@@ -126,7 +126,7 @@ function ShowFridgeInside ({ setOpenInside, userId }) {
 	const handleBottleClick = (index) => {
 		console.log('clicked index: ', index);
 
-		axios.get(`${process.env.REACT_APP_API_URL}/drink/${models[index]}`)
+		axios.get(`${process.env.REACT_APP_API_URL}/drink/${models[index].id}`)
 			.then(response => {
 				console.log(response.data);
 				setClickedDrinkInfo(response.data);

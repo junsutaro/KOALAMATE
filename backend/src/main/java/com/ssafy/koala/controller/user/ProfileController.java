@@ -42,14 +42,14 @@ public class ProfileController {
             HttpServletRequest request,
             @RequestBody ProfileModifyDto modifiedProfile) {
 
-        System.out.println("Controller의 modifyProfile 메서드 호출 확인");
+        //System.out.println("Controller의 modifyProfile 메서드 호출 확인");
 
         String accessToken = authService.getAccessToken(request);
         UserDto userDto = authService.extractUserFromToken(accessToken);
         Long userId = userDto.getId(); // UserDto에서 id를 가져와야 함
 
         boolean result = profileService.modifyProfile(userId, modifiedProfile);
-        System.out.println("프로필 서비스의 modifyProfile 메서드 실행 !");
+       // System.out.println("프로필 서비스의 modifyProfile 메서드 실행 !");
         if (result) {
             return ResponseEntity.ok("프로필이 성공적으로 수정되었습니다.");
         } else {

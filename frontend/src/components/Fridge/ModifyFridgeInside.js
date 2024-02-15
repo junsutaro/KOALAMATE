@@ -109,7 +109,7 @@ function ModifyFridgeInside({ setOpenInside }) {
                 (response) => {
                     response.data.forEach((drink) => {
                         console.log(drink);
-                        setModels(prevState => [...prevState, drink.drinkId]);
+                        setModels(prevState => [...prevState, drink.drink]);
                     });
                 }).catch((error) => {
                 console.log(error);
@@ -175,7 +175,7 @@ function ModifyFridgeInside({ setOpenInside }) {
         console.log('clicked index: ', index);
         setClickedDrink(index);
 
-        axios.get(`${process.env.REACT_APP_API_URL}/drink/${models[index]}`).then(response => {
+        axios.get(`${process.env.REACT_APP_API_URL}/drink/${models[index].id}`).then(response => {
             console.log(response.data);
             setClickedDrinkInfo(response.data);
         })
@@ -193,7 +193,7 @@ function ModifyFridgeInside({ setOpenInside }) {
 
     const handleSave = () => {
         if (models.length >= 0) {
-            axios.put(`${process.env.REACT_APP_API_URL}/refrigerator/addDrinks`, models, {
+            axios.put(`${process.env.REACT_APP_API_URL}/refrigerator/addDrinks`, models.map(model => model.id), {
                 headers: {
                     'Authorization': localStorage.getItem('authHeader'),
                 }
@@ -231,9 +231,11 @@ function ModifyFridgeInside({ setOpenInside }) {
                     id="drink-select"
                     value={selectedDrink}
                     label="술"
-                    onChange={(e) => setSelectedDrink(e.target.value)}
+                    onChange={(e) => {
+                        setSelectedDrink(e.target.value)
+                    }}
                     >
-                    {drinks.map((drink) => <MenuItem key={drink.id} value={drink.id}>{drink.name}</MenuItem>)}
+                    {drinks.map((drink) => <MenuItem key={drink.id} value={drink}>{drink.name}</MenuItem>)}
                 </Select>
             </FormControl>
             <Button onClick={() => {
@@ -269,7 +271,7 @@ function ModifyFridgeInside({ setOpenInside }) {
                 <Suspense fallback={<Loader setIsLoading={setIsLoading}/>}>
                     <FridgeInsideModel setUuid={setFridgeUuid}/>
                     <AddButtonModel models={models} onAddClick={handleAddClick}/>
-                    <BottleModel models={models} onBottleClick={handleBottleClick} setSelectedCategory={setSelectedCategory} selectedCategory={selectedCategory}/>
+                    <BottleModel models={models} onBottleClick={handleBottleClick}/>
                     <Environment/>
                 </Suspense>
                 <CameraControl cell={cell} setCell={setCell} isLoading={isLoading}/>

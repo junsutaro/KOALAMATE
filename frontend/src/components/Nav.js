@@ -73,23 +73,12 @@ const Nav = ({isDrawerOpen}) => {
 	};
 
 	const handleLogout = async () => {
-		try {
-			console.log(`${process.env.REACT_APP_API_URL}`);
-			await axios.post(`${process.env.REACT_APP_API_URL}/user/logout`, {},
-				{ withCredentials: true });
-			dispatch(setLoginStatus(false));
-			disconnect();
-			setRoomStatus();
-			disconnectSession();
-			navigate('/');
-			handleClose();
-			localStorage.removeItem('authHeader');
-		} catch (error) {
-			console.log(error);
-		}
+		dispatch(setLoginStatus(false));
+		navigate('/');
 	};
 
 	const handleMyPage = async () => {
+		setAnchorElUser(null);
 		try {
 			const authHeader = localStorage.getItem('authHeader');
 			const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/myId`,

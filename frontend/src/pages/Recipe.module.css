@@ -4,3 +4,10 @@
     align-items: center;
     margin-bottom: 10px;
 }
+
+.topContainer2 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 10px;
+}

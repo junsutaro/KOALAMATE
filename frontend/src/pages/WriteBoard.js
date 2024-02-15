@@ -2,11 +2,23 @@ import React, {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
 import NoImage from 'assets/no_img.png';
-import CustomTextareaAutosize from 'components/CustomTextareaAutosize';
+import CustomTextareaAutosize2 from 'components/CustomTextareaAutosize2';
 import AddIngredient from "components/WriteBoard/AddIngredient";
 import Ingredients from "components/WriteBoard/Ingredients";
-import {Button, TextField, Typography, Box, TextareaAutosize, IconButton, Grid, Container} from '@mui/material';
+import {
+    Button,
+    TextField,
+    Paper,
+    Typography,
+    Box,
+    TextareaAutosize,
+    IconButton,
+    Grid,
+    Container,
+    Avatar
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import koalaImage from '../assets/profile.jpg'
 import {array} from "yup";
 
 function BulletinBoard() {
@@ -66,35 +78,6 @@ function BulletinBoard() {
         setImagePreview(NoImage);
     };
 
-    // const saveRecipeImage = async (e) => {
-    //     e.preventDefault()
-    //     try {
-    //         // 이미지 파일이 선택되지 않았을 경우 예외처리
-    //         if (!selectedImageFile) {
-    //             console.error("이미지 파일이 선택되지 않았습니다.");
-    //             return;
-    //         }
-    //
-    //         // FormData 객체를 생성하여 이미지 파일을 담음
-    //         const formData = new FormData();
-    //         formData.append("file", selectedImageFile);
-    //
-    //         // Axios를 사용하여 이미지를 업로드하는 요청 보냄
-    //         const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/files/upload`,
-    //             formData,
-    //             {
-    //                 headers: getAuthHeader()
-    //             });
-    //
-    //         // 이미지 업로드 완료 후 URL을 반환
-    //         return response.data.imageUrl;
-    //
-    //     } catch (error) {
-    //         console.error("이미지 업로드에 실패했습니다.", error);
-    //         throw error; // 에러를 다시 던져서 호출한 곳에서 처리할 수 있도록 함
-    //     }
-    // };
-
     const saveRecipeImage = async (e) => {
         e.preventDefault()
         try {
@@ -116,7 +99,6 @@ function BulletinBoard() {
                 {
                     headers: getAuthHeader()
                 });
-
 
             // 이미지 업로드 완료 후 URL과 메타데이터 id를 반환
             return response.data;
@@ -185,75 +167,137 @@ function BulletinBoard() {
 
     return (
         <Container>
-            <Box component="form" noValidate autoComplete="off" mt={15}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} sm={4}>
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <Box sx={{
-                                position: 'relative',
-                                width: '100%',
-                                maxWidth: '300px',
-                                mb: 1,
-                            }}>
-                                <img src={imagePreview} alt="Preview" style={{
+            <Paper elevation={3}
+                   sx={{margin: '20px', padding: 5, boxShadow: 3, backgroundColor: 'white', borderRadius: '15px'}}>
+                <Box display={'flex'} sx={{ gap:7, padding:2 }}>
+                    <Avatar sx={{width: 200, height: 200}} src={koalaImage}/>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        textAlign: 'left',
+                        gap: 1
+                    }} ml={5}>
+                        <Typography variant="h5">나만의 레시피 올리기</Typography>
+                        <Typography variant="body3">나만의 시크릿 레시피를 마음껏 뽐내보세요!</Typography>
+                        <Box mt={2}>
+                            <Typography variant="body2" mb={1}>나만 혼자 알고 있기 아쉬운 칵테일 레시피가 있으신가요? 🍸</Typography>
+                            <Typography variant="body2" mb={1}>우리 코알라 친구들에게 나만의 시크릿 레시피를 공유해주세요 😃</Typography>
+                            <Typography variant="body2">코알라 메이트는 여러분이 함께 만들어가는 사이트입니다.</Typography>
+                        </Box>
+                    </Box>
+                </Box>
+            </Paper>
+
+            <Box component="form" noValidate autoComplete="off" mt={3}>
+                <Paper elevation={3}
+                       sx={{margin: '20px', padding: 5, boxShadow: 3, backgroundColor: 'white', borderRadius: '15px'}}>
+                    <Box sx={{display: 'flex', flexDirection: 'column', gap: 3}}>
+
+                        {/*이미지 업로드*/}
+                        <Box>
+                            <Typography variant="h5">칵테일 사진 📷</Typography>
+                            <Box sx={{display: 'flex', gap: 6}}>
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
                                     width: '100%',
-                                    height: 'auto',
-                                    borderRadius: '10px',
-                                    border: '1px solid grey',
-                                }}/>
-                                {imagePreview !== NoImage && (
-                                    <IconButton
-                                        aria-label="delete"
-                                        sx={{
-                                            position: 'absolute',
-                                            right: 0,
-                                            bottom: 0,
-                                            color: 'grey[900]',
-                                            backgroundColor: 'lightgrey',
-                                            borderRadius: '4px',
-                                            margin: '0 4px 4px 0',
-                                        }}
-                                        onClick={handleCancelImage}
-                                    >
-                                        <DeleteIcon/>
-                                    </IconButton>
-                                )}
-                                <Button variant="contained" component="label" fullWidth>
-                                    이미지 업로드
-                                    <input type="file" hidden onChange={handleImageChange}
-                                           accept="image/*"/>
-                                </Button>
+                                    maxWidth: '300px',
+                                    padding: 2,
+                                }}>
+                                    <img src={imagePreview} alt="Preview" style={{
+                                        width: '100%',
+                                        height: 'auto',
+                                        borderRadius: '10px',
+                                        border: '1px solid #eee',
+                                    }}/>
+                                    {imagePreview !== NoImage && (
+                                        <IconButton
+                                            aria-label="delete"
+                                            sx={{
+                                                position: 'absolute',
+                                                right: 0,
+                                                bottom: 0,
+                                                color: 'grey[900]',
+                                                backgroundColor: 'lightgrey',
+                                                borderRadius: '4px',
+                                                margin: '0 4px 4px 0',
+                                            }}
+                                            onClick={handleCancelImage}
+                                        >
+                                            <DeleteIcon/>
+                                        </IconButton>
+                                    )}
+                                    <Button variant="contained" component="label" fullWidth>
+                                        이미지 업로드
+                                        <input type="file" hidden onChange={handleImageChange}
+                                               accept="image/*"/>
+                                    </Button>
+                                </Box>
+                                <Box mt={2}
+                                     sx={{display: 'flex', flexDirection: 'column', justifyContent: "center", gap: 3}}>
+                                    <Box>
+                                        <Typography variant="body3" mb={1}>추천 사진 1</Typography>
+                                        <Typography variant="body2" mb={1}>깔끔한 흰 배경에서 찰칵!</Typography>
+                                    </Box>
+                                    <Box>
+                                        <Typography variant="body3" mb={1}>추천 사진 2</Typography>
+                                        <Typography variant="body2" mb={1}>어두운 곳에서 핸드폰 플래시로 반짝거리게 찰칵!</Typography>
+                                    </Box>
+                                    <Box>
+                                        <Typography variant="body3" mb={1}>추천 사진 31</Typography>
+                                        <Typography variant="body2" mb={1}>칵테일 재료들을 배경으로 화려하게 찰칵!</Typography>
+                                    </Box>
+                                </Box>
                             </Box>
                         </Box>
 
-                    </Grid>
-                    <Grid item xs={12} sm={8}>
-                        <TextField label="제목" variant="outlined" fullWidth value={title}
-                                   onChange={handleTitleChange} sx={{mb: 2}}/>
-
-                        <CustomTextareaAutosize
-                            minRows={12}
-                            placeholder="내용"
-                            value={content}
-                            onChange={handleContentChange}
-                        />
-                        <AddIngredient updateCocktails={setCocktails}/> {/* prop으로 상태 업데이트 함수 전달 */}
-                        <Ingredients cocktails={cocktails} onDeleteIngredient={handleDeleteIngredient} />
-
-                        <Box display="flex" justifyContent="flex-end" mt={2}>
-                            <Button type="submit" variant="contained" color="primary" onClick={handleSubmit}
-                                    disabled={!isFormValid}>
-                                레시피 올리기
-                            </Button>
+                        {/*칵테일 이름*/}
+                        <Box>
+                            <Typography variant="h5">칵테일 이름 🍹</Typography>
+                            <TextField label="칵테일 이름"
+                                       variant="outlined"
+                                       fullWidth
+                                       value={title}
+                                       onChange={handleTitleChange}
+                                       sx={{padding: '10px', margin: '10px', marginTop: 0}}
+                                       placeholder="칵테일 이름을 지어주세요 : )"
+                            />
                         </Box>
-                    </Grid>
-                </Grid>
+
+                        {/*재료 정보*/}
+                        <Box>
+                            <Typography variant="h5" mb={2}>재료 정보 🍋</Typography>
+                            <AddIngredient updateCocktails={setCocktails}/>
+                            <Ingredients cocktails={cocktails} onDeleteIngredient={handleDeleteIngredient}/>
+                        </Box>
+
+                        {/*레시피 설명*/}
+                        <Box>
+                            <Typography variant="h5">레시피 설명 📄</Typography>
+                            <CustomTextareaAutosize2
+                                sx={{margin: '20px', padding: '20px'}}
+                                minRows={12}
+                                placeholder="레시피에 대한 설명을 적어주세요 : )"
+                                value={content}
+                                onChange={handleContentChange}
+                            />
+                        </Box>
+                    </Box>
+
+                    {/*레시피 저장 버튼*/}
+                    <Button
+                        fullWidth
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSubmit}
+                        disabled={!isFormValid}
+                    >
+                        레시피 올리기
+                    </Button>
+                </Paper>
             </Box>
         </Container>
     );

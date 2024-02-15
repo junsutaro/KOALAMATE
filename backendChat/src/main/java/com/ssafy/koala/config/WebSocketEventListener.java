@@ -31,8 +31,8 @@ public class WebSocketEventListener {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
 
         String sessionId = headerAccessor.getSessionId();
-        System.out.println(headerAccessor);
-        System.out.println("웹 소켓 연결: User ID - "  + ", Session ID - " + sessionId);
+   //     System.out.println(headerAccessor);
+   //     System.out.println("웹 소켓 연결: User ID - "  + ", Session ID - " + sessionId);
 
         SocketMessageDto sockMessageDto = new SocketMessageDto();
         sockMessageDto.setSessionId(sessionId);
@@ -61,7 +61,7 @@ public class WebSocketEventListener {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = headerAccessor.getSessionId();
 
-        System.out.println("웹 소켓 연결 종료: User ID - "  + ", Session ID - " + sessionId);
+    //    System.out.println("웹 소켓 연결 종료: User ID - "  + ", Session ID - " + sessionId);
 
         SocketMessageDto sockMessageDto = new SocketMessageDto();
         sockMessageDto.setSessionId(sessionId);

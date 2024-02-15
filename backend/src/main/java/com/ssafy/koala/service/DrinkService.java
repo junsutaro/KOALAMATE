@@ -56,9 +56,9 @@ public class DrinkService {
     }
 
     public List<DrinkDto> getDrinkByName(String name) {
-        System.out.println(name);
+        //System.out.println(name);
         List<DrinkModel> drinks = drinkRepository.findAllByNameContaining(name);
-        System.out.println(drinks.size());
+        //System.out.println(drinks.size());
         return drinks.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());

@@ -105,7 +105,7 @@ public class RefrigeratorController {
         Long userId = userDto.getId(); // UserDto에서 id를 가져와야 함
 
         List<RefrigeratorDrinkDTO> modifiedRefrigeratorContents = refrigeratorService.addDrinksToRefrigerator(userId, drinkIds);
-        System.out.println(userId);
+        //System.out.println(userId);
         return ResponseEntity.ok(modifiedRefrigeratorContents);
     }
 

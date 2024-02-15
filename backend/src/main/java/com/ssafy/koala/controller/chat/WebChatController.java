@@ -50,11 +50,11 @@ public class WebChatController {
 
     @PostMapping("/socket/message")
     public ResponseEntity<String> receiveMessage(@RequestBody SocketMessageDto clientMessage) {
-        System.out.println(clientMessage);
+        //System.out.println(clientMessage);
         if (clientMessage.getRoomId() == -1) {  //최초 로그인
             sessionUserMap.put(clientMessage.getSessionId(), "init");
         } else if (clientMessage.getRoomId() == -2) {  //세션 종료 -> 마지막 메시지 저장 필요
-            System.out.println(sessionUserMap.get(clientMessage.getSessionId()));
+            //System.out.println(sessionUserMap.get(clientMessage.getSessionId()));
             chatService.updateLastId(sessionUserMap.get(clientMessage.getSessionId())); // 마지막 메시지 저장
 
             sessionUserMap.remove(clientMessage.getSessionId());

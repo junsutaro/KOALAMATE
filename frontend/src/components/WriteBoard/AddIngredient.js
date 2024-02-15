@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {
-    Box, Typography, TextField, Button, InputLabel, Select, MenuItem, FormControl
+    Box, Typography, TextField, Button, InputLabel, Select, MenuItem, FormControl, Paper
 } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 
@@ -67,15 +67,10 @@ const AddIngredient = ({updateCocktails}) => {
     console.log(searchResults)
 
     return (
-        <Box m={1} p={4} sx={{
-            display: 'flex',
+        <Paper sx={{margin: '20px', padding: '20px', backgroundColor: 'white', borderRadius: '15px', display: 'flex',
             flexDirection: 'column',
-            gap: 2,
-            border: 1,
-            borderRadius: 2,
-            borderColor: 'lightGray'
-        }}>
-            <Typography>재료 추가</Typography>
+            gap: 2, }} elevation={3}>
+            {/*<Typography>재료 추가</Typography>*/}
             <Autocomplete
                 freeSolo
                 options={searchResults.map((option) => option.name)}
@@ -89,7 +84,7 @@ const AddIngredient = ({updateCocktails}) => {
                     <TextField {...params} label="재료 이름을 검색해주세요" variant="outlined" />
                 )}
             />
-            <Box sx={{ display: 'flex', gap: 2 }}>
+            {/*<Box sx={{ display: 'flex', gap: 2 }}>*/}
                 <FormControl fullWidth>
                     <TextField
                         label="용량"
@@ -124,9 +119,9 @@ const AddIngredient = ({updateCocktails}) => {
                         <MenuItem value="leaves">leaves</MenuItem>
                     </Select>
                 </FormControl>
-            </Box>
+            {/*</Box>*/}
             <Button variant="outlined" onClick={handleAddIngredient} sx={{ alignSelf: 'flex-end' }}>재료 추가</Button>
-        </Box>
+        </Paper>
     );
 }
 

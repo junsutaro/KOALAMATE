@@ -40,7 +40,7 @@ public class ProfileService {
     }
 
     public boolean modifyProfile(Long userId, ProfileModifyDto modifiedProfile) {
-        System.out.println("modifyProfile 메서드 호출 확인");
+       // System.out.println("modifyProfile 메서드 호출 확인");
         Optional<UserModel> userOptional = userRepository.findById(userId);
 
         if (userOptional.isPresent()) {
@@ -64,12 +64,12 @@ public class ProfileService {
             userRepository.save(user);
 
             // 오류 메시지 출력
-            System.out.println("프로필 수정이 완료되었습니다.");
+           // System.out.println("프로필 수정이 완료되었습니다.");
 
             return true; // 수정 성공을 나타내는 값
         } else {
             // 오류 메시지 출력
-            System.out.println("유저를 찾을 수 없습니다. 유저 ID를 확인해주세요.");
+          //  System.out.println("유저를 찾을 수 없습니다. 유저 ID를 확인해주세요.");
 
             return false; // 수정 실패를 나타내는 값
         }
@@ -131,26 +131,26 @@ public class ProfileService {
         if (userOptional.isPresent() && !file.isEmpty()) {
             UserModel user = userOptional.get();
 
-            System.out.println("호출 !");
+           // System.out.println("호출 !");
 
             try {
                 String randomEnglish = RandomStringUtils.randomAlphabetic(10);
                 String uploadedFileName = randomEnglish + getFileExtension(file.getOriginalFilename());
 
-                System.out.println("uploadedFileName" + uploadedFileName);
+              //  System.out.println("uploadedFileName" + uploadedFileName);
                 // 업로드된 프로필 이미지를 저장할 디렉토리 경로 설정
                 String fileDir = filePath + "/" + userId;
                 String ImgUrl = profileImgUrl + "/" + userId + "/" + uploadedFileName;
                 File directory = new File(fileDir);
 
-                System.out.println("directory = " + directory);
+             //   System.out.println("directory = " + directory);
 
                 // 상위 디렉토리가 없으면 생성
                 createDirectory(directory);
 
                 // 업로드된 파일의 실제 경로 설정
                 String uploadedFilePath = fileDir + "/" + uploadedFileName;
-                System.out.println("filePath = " + uploadedFilePath);
+              //  System.out.println("filePath = " + uploadedFilePath);
 
                 // 파일 저장
                 Files.copy(file.getInputStream(), Paths.get(uploadedFilePath), StandardCopyOption.REPLACE_EXISTING);
@@ -172,9 +172,9 @@ public class ProfileService {
 
     private void createDirectory(File directory) {
         if (!directory.exists()) {
-            System.out.println("디렉토리 없으면~?");
+          //  System.out.println("디렉토리 없으면~?");
             if (directory.mkdirs()) {
-                System.out.println("디렉토리 생성: " + directory.getAbsolutePath());
+            //    System.out.println("디렉토리 생성: " + directory.getAbsolutePath());
             } else {
                 throw new RuntimeException("디렉토리 생성 실패: " + directory.getAbsolutePath());
             }

@@ -102,23 +102,19 @@ const Home = () => {
 							})}
 								  style={{display: 'flex', gap: '16px'}}
 							>
-								<TextField
-									id="outlined-basic"
-									hiddenLabel
-									size="small"
-									variant="outlined"
-									aria-label="Enter your email address"
-									placeholder="Your email address"
-									value={email}
-									onChange={handleEmailChange}
-									inputProps={{
-										autocomplete: 'off',
-										ariaLabel: 'Enter your email address',
-									}}
-								/>
-								<Button type="susbmit" variant="contained" color="primary">
-									지금 시작
-								</Button>
+							<TextField
+								id="outlined-basic"
+								hiddenLabel
+								size="small"
+								variant="outlined"
+								aria-label="Enter your email address"
+								placeholder="Your email address"
+								value={email}
+								onChange={handleEmailChange}
+							/>
+							<Button type="susbmit" variant="contained" color="primary">
+								지금 시작
+							</Button>
 							</form>
 						</Stack>
 						<Typography variant="caption" textAlign="center"
