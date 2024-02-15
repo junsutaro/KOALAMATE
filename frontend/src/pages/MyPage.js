@@ -6,6 +6,7 @@ import MyRecipe from '../components/Profile/MyRecipe';
 import LikedRecipe from '../components/Profile/LikedRecipe';
 import DetailProfile from '../components/Profile/DetailProfile';
 import MyPageButton from '../components/Profile/MyPageButton';
+import NoImage from 'assets/profile.jpg';
 import axios from 'axios';
 import {
     Box,
@@ -51,7 +52,7 @@ const MyPage = () => {
     //        console.log('data',data)
 
             // 이미지 URL을 가져와서 상태 업데이트
-            setProfileImageUrl(`${data.profile}`)
+            setProfileImageUrl(data.profile?`${data.profile}`: NoImage);
       //      console.log('이미지',profileImageUrl)
 
             // 나머지 프로필 데이터 업데이트

@@ -209,7 +209,7 @@ const UpdateMyPage = () => {
      //       console.log("Selected Image File:", selectedImageFile);
             // 이미지 파일이 선택되지 않았을 경우 예외처리
             if (!selectedImageFile) {
-                console.error("이미지 파일이 선택되지 않았습니다.");
+                // console.error("이미지 파일이 선택되지 않았습니다.");
                 return;
             }
             // FormData 객체를 생성하여 이미지 파일을 담음
@@ -248,8 +248,11 @@ const UpdateMyPage = () => {
                     tags: selectedTags,
                     latitude: latitude,
                     longitude: longitude,
-                    fileId: FileResult.id,
-                    profile: FileResult.fileDownloadUri,
+                    // FileResult가 있을 경우에만 파일정보(파일id, 프로필 URL) 업데이트
+                    ...(FileResult && {
+                        fileId: FileResult.id,
+                        profile: FileResult.fileDownloadUri,
+                    }),
                 }, {
                     headers: getAuthHeader() // 인증 헤더 추가
                 });
@@ -267,8 +270,15 @@ const UpdateMyPage = () => {
 
     // 저장 버튼 클릭 시 SaveProfileImage 함수와 saveProfile 함수를 호출
     const handleSaveButtonClick = async () => {
-        const fileResult = await SaveProfileImage();    // SaveProfileImage 함수의 완료를 기다림
-        saveProfile(fileResult);               // SaveProfileImage가 완료된 후 saveProfile 함수 실행
+        // const fileResult = await SaveProfileImage();    // SaveProfileImage 함수의 완료를 기다림
+        // saveProfile(fileResult);               // SaveProfileImage가 완료된 후 saveProfile 함수 실행
+
+        let fileResult = null;
+        // selectedImageFile이 있는 경우에만 이미지 파일 저장 함수를 호출
+        if (selectedImageFile) {
+            fileResult = await SaveProfileImage(); // SaveProfileImage 함수의 완료를 기다림
+        }
+        saveProfile(fileResult);
     };
 
 
