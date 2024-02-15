@@ -179,7 +179,7 @@ const RecipeDetail = () => {
                             <Box>
                                 <Typography variant="h6" sx={{ mb: 2 }}>{`#${recipe.id}번째 레시피`}</Typography>
                                 <Typography variant="h5" color="#FF9B9B" sx={{ mt: 2, mb: 3 }}>{recipe.title}</Typography>
-                                <Typography variant="h5" color='gray' sx={{ mb: 1 }}>By {recipe.nickname}</Typography>
+                                <Typography variant="h5" color='gray' sx={{ mb: 1 }}>By {recipe.nickname === 'admin' ? '레시피 백과' : recipe.nickname}</Typography>
                                 <Typography color='gray' sx={{ mb: 2 }}>작성일: {recipe.date}</Typography>
                                 <Typography color='#FF9B9B' sx={{ mt: 4, mb: 1}}>레시피 설명</Typography>
                                 <Box sx={{ m:1, p: 2, border: '1px solid #FF9B9B', borderRadius: '15px', whiteSpace: 'pre-wrap'}}>{recipe.content}</Box>

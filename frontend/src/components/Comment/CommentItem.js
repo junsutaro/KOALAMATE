@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
-import {ListItem, Typography, Button, Grid, TextField, Box} from '@mui/material';
+import {ListItem, Typography, Button, Grid, TextField, Box, IconButton, Tooltip } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import {useSelector} from 'react-redux';
 import {format} from "date-fns";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const CommentItem = ({comment, onDeleteComment, onEditComment, handleEditComment}) => {
     const [isEditing, setIsEditing] = useState(false)
@@ -70,58 +72,54 @@ const CommentItem = ({comment, onDeleteComment, onEditComment, handleEditComment
                 <Grid item xs={4} sx={{display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start'}}>
                     {isEditing ? (
                         <>
-                            <Button
-                                onClick={handleSaveClick}
-                                variant="contained"
-                                startIcon={<SaveIcon/>}
-                                sx={{
-                                    marginTop: '10px',
-                                    marginRight: '5px',
-                                    padding: '6px 12px', // 패딩 조정
-                                    fontSize: '0.75rem', // 글자 크기 조정
-                                    bgcolor: '#99ccff', '&:hover': {bgcolor: '#99ccff'},
-                                    // borderColor: '#99ccff'
-                                }}
-                            >
-                                저장
-                            </Button>
-                            <Button
-                                onClick={handleCancelClick}
-                                variant="contained"
-                                startIcon={<CancelIcon/>}
-                                sx={{
-                                    marginTop: '10px',
-                                    padding: '6px 12px', // 패딩 조정
-                                    fontSize: '0.75rem', // 글자 크기 조정
-                                }}
-                            >
-                                취소
-                            </Button>
+                            <Tooltip title="수정 취소">
+                                <IconButton
+                                    onClick={handleCancelClick}
+                                    startIcon={<CancelIcon/>}
+                                    sx={{
+                                        marginTop: '10px',
+                                    }}
+                                >
+                                    <CancelIcon/>
+                                </IconButton>
+                            </Tooltip>
+
+                            <Tooltip title="저장">
+                                <IconButton
+                                    onClick={handleSaveClick}
+                                    startIcon={<SaveIcon/>}
+                                    sx={{
+                                        marginTop: '10px',
+                                    }}
+                                >
+                                    <SaveIcon/>
+                                </IconButton>
+                            </Tooltip>
                         </>
                     ) : (
                         <>
                             {isCommentAuthor && (
                                 <>
-                                    <Button
-                                        onClick={() => handleEditClick(comment.id, editedContent)}
-                                        variant="contained"
-                                        sx={{
-                                            marginTop: '10px',
-                                            marginRight: '5px',
-                                            bgcolor: '#99ccff',
-                                            '&:hover': {bgcolor: '#99ccff'},
-                                            // border: 'none',
-                                        }}
-                                    >
-                                        수정
-                                    </Button>
-                                    <Button
-                                        onClick={() => onDeleteComment(comment.id)}
-                                        variant="contained"
-                                        sx={{marginTop: '10px'}}
-                                    >
-                                        삭제
-                                    </Button>
+                                    <Tooltip title="댓글 수정">
+                                        <IconButton
+                                            onClick={() => handleEditClick(comment.id, editedContent)}
+                                            sx={{
+                                                marginTop: '10px',
+                                            }}
+                                        >
+                                            <EditIcon />
+                                        </IconButton>
+                                    </Tooltip>
+
+                                    <Tooltip title="댓글 삭제">
+                                        <IconButton
+                                            onClick={() => onDeleteComment(comment.id)}
+                                            sx={{marginTop: '10px'}}
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </Tooltip>
+
                                 </>
                             )}
                         </>
