@@ -111,10 +111,6 @@ const Home = () => {
 								placeholder="Your email address"
 								value={email}
 								onChange={handleEmailChange}
-								inputProps={{
-									autocomplete: 'off',
-									ariaLabel: 'Enter your email address',
-								}}
 							/>
 							<Button type="susbmit" variant="contained" color="primary">
 								지금 시작
