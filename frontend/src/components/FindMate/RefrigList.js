@@ -54,7 +54,7 @@ const RefrigList = ({markersData}) => {
                 }
             });
             const filteredData = response.data.filter(user => user.nickname !== curUser.nickname && user.nickname !== 'admin');
-            console.log(filteredData);
+     //       console.log(filteredData);
             setUserData(filteredData);
         } catch (error) {
             console.error('유저 리스트를 가져오는 중 에러 발생: ', error);
