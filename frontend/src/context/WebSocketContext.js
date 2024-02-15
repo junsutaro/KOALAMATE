@@ -161,17 +161,17 @@ export const WebSocketProvider = ({children}) => {
             stompClient.deactivate();
             setStompClient(null); // 연결 해제 후 인스턴스 참조 제거
             setConnected(false);
-            console.log('Disconnected from WebSocket server');
+         //   console.log('Disconnected from WebSocket server');
         }
     };
 
 
     const subscribe = (destination, callback) => {
-        console.log(stompClient);
-        console.log(stompClient.connected);
+     //   console.log(stompClient);
+     //   console.log(stompClient.connected);
         if (stompClient && stompClient.connected) {
             const subscription = stompClient.subscribe(destination, callback);
-            console.log("Subscribed to " + destination);
+     //       console.log("Subscribed to " + destination);
             return subscription; // 구독 객체 반환
         }
         return null;
@@ -179,7 +179,7 @@ export const WebSocketProvider = ({children}) => {
 
     const sendMessage = (destination, body) => {
         if (stompClient && stompClient.connected) {
-            console.log("in sendMessage " + destination);
+     //       console.log("in sendMessage " + destination);
             stompClient.publish({
                 destination: destination,
                 body: body,
