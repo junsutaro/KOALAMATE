@@ -2,6 +2,7 @@
 import React from 'react';
 import {Box, Chip, TextField, Button, Typography} from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import DoneIcon from '@mui/icons-material/Done';
 
 const TagsInput = ({
                        tagOptions,
@@ -28,6 +29,7 @@ const TagsInput = ({
                         label={tag}
                         variant="filled"
                         onClick={() => handleTagClick(tag)}
+                        icon={selectedTags.includes(tag) ? <DoneIcon /> : null}
                         sx={{
                             mr: 1,
                             mb: 1,
