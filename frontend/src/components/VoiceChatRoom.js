@@ -32,12 +32,12 @@ const VoiceChatRoom = () => {
         const shouldConnectSession = location.state?.shouldConnectSession;
 
         if (shouldConnectSession === false) {
-            console.log("세션 연결 생략");
+      //      console.log("세션 연결 생략");
             return; // 세션 연결을 건너뛰고 useEffect 종료
         }
 
-        console.log(curUser);
-        console.log(users);
+     //   console.log(curUser);
+     //   console.log(users);
         (async () => {
             try {
                 // 세션 생성

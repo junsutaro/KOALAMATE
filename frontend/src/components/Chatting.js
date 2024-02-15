@@ -55,12 +55,12 @@ const Chatting = ({ roomNumber, users, lastMessage }) => {
 
 
 	useEffect(() => {
-		console.log('lastMessage: ', lastMessage);
+//		console.log('lastMessage: ', lastMessage);
 		if (lastMessage) {
-			console.log('lastMessage: ', lastMessage);
+//			console.log('lastMessage: ', lastMessage);
 			setMessages((prevMessages) => [...prevMessages, lastMessage]);
 				if (lastMessage.nickname === user.nickname) {
-					console.log('my message')
+	//				console.log('my message')
 					setTimeout(scrollToBottom, 100);
 				}
 		}
@@ -77,8 +77,8 @@ const Chatting = ({ roomNumber, users, lastMessage }) => {
 			},
 		})
 			.then((response) => {
-				console.log('왜 여기 두 번 들어가냐');
-				console.log(response);
+	//			console.log('왜 여기 두 번 들어가냐');
+	//			console.log(response);
 				const reversedData = [...response.data].reverse(); // 배열 복사 후 역순으로 정렬
 				reversedData.forEach((message) => {
 					setMessages((prevMessages) => [...prevMessages, message]);
@@ -115,7 +115,7 @@ const Chatting = ({ roomNumber, users, lastMessage }) => {
 
 		// 컴포넌트 언마운트 시 연결 해제
 		return () => {
-			console.log('asdfasdf');
+//			console.log('asdfasdf');
 			// if (subscription) {
 			// 	console.log('Unsubscribed from ' + messageDestination);
 			// 	subscription.unsubscribe();
@@ -162,10 +162,10 @@ const Chatting = ({ roomNumber, users, lastMessage }) => {
 		if (inputMessage.trim() !== '') {
 			const messageToSend = JSON.stringify(
 				{ content: inputMessage, nickname: user.nickname });
-			console.log(sendDestination);
+	//		console.log(sendDestination);
 			sendMessage(sendDestination, messageToSend);
 			setInputMessage('');
-			console.log('Message sent');
+	//		console.log('Message sent');
 		}
 	};
 
@@ -270,7 +270,7 @@ const Chatting = ({ roomNumber, users, lastMessage }) => {
 									 onKeyPress={(e) => {
 										 if (e.key === 'Enter' && !e.shiftKey) { // shift 키가 눌리지 않은 상태에서 엔터 키를 감지
 											 e.preventDefault(); // 엔터 키 기본 동작(새 줄 추가) 방지
-											 console.log("Enter key pressed");
+						//					 console.log("Enter key pressed");
 											 handleSendMessage(); // 메시지 전송 함수 호출
 										 }
 									 }}

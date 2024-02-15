@@ -24,7 +24,7 @@ export const VoiceSocketProvider = ({ children }) => {
             const nickname = event.stream.connection.data.split("=")[1];
             // 이전 상태를 기반으로 새 상태를 계산
             setParticipants(prevParticipants => [...prevParticipants, { subscriber, nickname }]);
-            console.log(participants);
+    //        console.log(participants);
         });
         newSession.on('streamDestroyed', event => {
             const nickname = event.stream.connection.data.split("=")[1];
@@ -44,7 +44,7 @@ export const VoiceSocketProvider = ({ children }) => {
 
     const disconnectSession = useCallback(() => {
         if (session) {
-            console.log(session);
+    //        console.log(session);
             session.disconnect();
             setSession(null);
             setParticipants([]);

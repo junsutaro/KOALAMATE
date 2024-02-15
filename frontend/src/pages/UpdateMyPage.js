@@ -206,7 +206,7 @@ const UpdateMyPage = () => {
 
     const SaveProfileImage = async () => {
         try {
-            console.log("Selected Image File:", selectedImageFile);
+     //       console.log("Selected Image File:", selectedImageFile);
             // 이미지 파일이 선택되지 않았을 경우 예외처리
             if (!selectedImageFile) {
                 console.error("이미지 파일이 선택되지 않았습니다.");
@@ -224,7 +224,7 @@ const UpdateMyPage = () => {
             });
 
             // 응답에 따른 처리 (여기서는 콘솔에 출력)
-            console.log(response.data);
+     //       console.log(response.data);
 
             return response.data;
         } catch (error) {
@@ -253,7 +253,7 @@ const UpdateMyPage = () => {
                 }, {
                     headers: getAuthHeader() // 인증 헤더 추가
                 });
-            console.log('프로필 저장 성공:', response.data);
+     //       console.log('프로필 저장 성공:', response.data);
 
             // 프로필 저장 완료 확인 창
             alert('프로필이 성공적으로 변경되었습니다😊')

@@ -64,7 +64,7 @@ const AddIngredient = ({updateCocktails}) => {
         setUnit('');
     };
 
-    console.log(searchResults)
+  //  console.log(searchResults)
 
     return (
         <Paper sx={{margin: '20px', padding: '20px', backgroundColor: 'white', borderRadius: '15px', display: 'flex',

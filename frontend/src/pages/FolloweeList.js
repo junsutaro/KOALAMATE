@@ -27,7 +27,7 @@ const FolloweeList = () => {
 				id: data.id,
 			});
 		} catch (error) {
-			console.log(`팔로잉 데이터를 가져오는 중 에러 발생: `, error);
+	//		console.log(`팔로잉 데이터를 가져오는 중 에러 발생: `, error);
 		}
 	};
 

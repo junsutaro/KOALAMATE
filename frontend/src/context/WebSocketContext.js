@@ -11,7 +11,7 @@ const WebSocketContext = createContext(null);
 const getRoomList = async () => {
     try {
         const authHeader = localStorage.getItem('authHeader');
-        console.log('Auth Header: ', authHeader);
+   //     console.log('Auth Header: ', authHeader);
         return await axios.post(`${process.env.REACT_APP_API_URL}/chatroom/roomlist`, {}, {
             headers: {
                 'Authorization': authHeader,
@@ -34,12 +34,12 @@ export const WebSocketProvider = ({children}) => {
     useEffect(() => {
         setIsRefresh(true);
         // 새로고침 했을 때도 roomList를 가져오기 위해
-        console.log('isLoggedIn: ', isLoggedIn);
+    //    console.log('isLoggedIn: ', isLoggedIn);
         // if (roomStatus) setRoomStatus([]);
         if (isLoggedIn) {
             getRoomList()
                 .then((response) => {
-                    console.log(response.data);
+      //              console.log(response.data);
                     setRoomStatus(response.data);
                     //sessionStorage.setItem('roomList', JSON.stringify(response.data));
                 }).catch((error) => {
@@ -49,14 +49,14 @@ export const WebSocketProvider = ({children}) => {
     }, []);
 
     useEffect(() => {
-        console.log('roomStatus changed');
+   //     console.log('roomStatus changed');
         if (connected) {
             // 받아온 roomList의 roomId로 구독하기
-            console.log(roomStatus);
+   //         console.log(roomStatus);
             roomStatus.forEach((room) => {
-                console.log(room);
+     //           console.log(room);
                 subscribe(`/topic/messages/${room.id}`, (message) => {
-                    console.log('Message received');
+     //               console.log('Message received');
                     setRoomStatus(prevStatus =>
                         prevStatus.map(r =>
                             r.id === room.id ? {...room, lastMessage: JSON.parse(message.body)} : r
@@ -66,14 +66,14 @@ export const WebSocketProvider = ({children}) => {
             });
 
             subscribe(`/topic/notification/${user.nickname}`, (message) => {
-                console.log('notification received');
+       //         console.log('notification received');
                 getRoomList()
                     .then((response) => {
-                        console.log(message);
+         //               console.log(message);
                         const messageData = JSON.parse(message.body); // 메시지 본문을 객체로 파싱
-                        console.log(messageData);
+         //               console.log(messageData);
                         subscribe(`/topic/messages/${messageData.roomId}`, (message) => {
-                            console.log('Message received');
+          //                  console.log('Message received');
                             const newMessage = JSON.parse(message.body);
                             setRoomStatus(prevStatus =>
                                 prevStatus?.map(r =>
@@ -91,7 +91,7 @@ export const WebSocketProvider = ({children}) => {
 
             setIsRefresh(false);
         }
-        console.log(roomStatus);
+   //     console.log(roomStatus);
     }, [connected]);
 
 
@@ -99,7 +99,7 @@ export const WebSocketProvider = ({children}) => {
     useEffect(() => {
         if (stompClient) {
             const onConnect = () => {
-                console.log('Connected to WebSocket server');
+       //         console.log('Connected to WebSocket server');
                 setConnected(true); // 연결 상태 업데이트
             };
 
@@ -119,7 +119,7 @@ export const WebSocketProvider = ({children}) => {
             const newClient = new Client({
                 webSocketFactory: () => new SockJS(url),
                 onConnect: () => {
-                    console.log('Connected to WebSocket server');
+       //             console.log('Connected to WebSocket server');
                     setConnected(true); // 연결 상태 업데이트
                 },
                 onStompError: (frame) => {

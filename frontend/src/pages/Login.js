@@ -17,7 +17,7 @@ const Login = () => {
 
 	const login = async (email, password) => {
 		try {
-			console.log(`${process.env.REACT_APP_API_URL}/user/login`)
+	//		console.log(`${process.env.REACT_APP_API_URL}/user/login`)
 			return await axios.post(`${process.env.REACT_APP_API_URL}/user/login`, {
 				email,
 				password,
@@ -31,7 +31,7 @@ const Login = () => {
 	const getRoomList = async () => {
 		try {
 			const authHeader = localStorage.getItem('authHeader');
-			console.log('Auth Header: ', authHeader);
+	//		console.log('Auth Header: ', authHeader);
 			return await axios.post(`${process.env.REACT_APP_API_URL}/chatroom/roomlist`, {},{
 				headers: {
 					'Authorization': authHeader,
@@ -45,18 +45,18 @@ const Login = () => {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		console.log('Login: ', email, password);
+	//	console.log('Login: ', email, password);
 		dispatch(setLoading(true));
 
 		login(email, password)
 		.then((response) => {
-			console.log(response);
+	//		console.log(response);
 			const authHeader = response.headers['authorization'];
 			if (!authHeader) throw new Error('No Authorization Header');
 			localStorage.setItem('authHeader', authHeader);
 			getRoomList()
 				.then((response) => {
-					console.log("asdfasdf: ",response.data);
+	//				console.log("asdfasdf: ",response.data);
 					setRoomStatus(response.data);
 					sessionStorage.setItem('roomList', JSON.stringify(response.data));
 				}).catch((error) => {
@@ -64,7 +64,7 @@ const Login = () => {
 				});
 			dispatch(setLoginStatus({isLoggedIn: true, user: response.data}));
 			connect(`${process.env.REACT_APP_CHAT_URL}`);
-			console.log(response.data);
+	//		console.log(response.data);
 
 
 			navigate('/');

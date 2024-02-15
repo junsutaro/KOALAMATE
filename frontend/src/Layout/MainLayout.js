@@ -64,7 +64,7 @@ const MainLayout = () => {
 	const { isLoggedIn } = useSelector(state => state.auth);
 
 	const toggleDrawer = (open) => {
-		console.log("toggleDrawer: ", open);
+	//	console.log("toggleDrawer: ", open);
 		setIsOpen(open);
 	};
 

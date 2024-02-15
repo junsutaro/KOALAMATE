@@ -62,24 +62,24 @@ const SignUp = () => {
     });
 
     const checkEmailAvailability = async (email) => {
-        console.log("checkEmail: ", email);
+   //     console.log("checkEmail: ", email);
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/checkEmail`,
                 {email})
 
             setIsEmailAvailable(response.data.available);
-            console.log("이메일 중복 확인", response.data.available)
+    //        console.log("이메일 중복 확인", response.data.available)
         } catch (error) {
             console.error('이메일 가용성 확인 중 오류 발생', error);
         }
     };
 
     const checkNicknameAvailability = async (nickname) => {
-        console.log("checkNickname: ", nickname);
+   //     console.log("checkNickname: ", nickname);
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/checkNickname`,
                 {nickname})
-            console.log("닉네임 중복 확인", response.data.available)
+    //        console.log("닉네임 중복 확인", response.data.available)
             setIsNicknameAvailable(response.data.available);
         } catch (error) {
             console.error('닉네임 가용성 확인 중 오류 발생', error);
@@ -87,7 +87,7 @@ const SignUp = () => {
     };
 
     const handleEmailCheck = (email) => {
-        console.log(email);
+    //    console.log(email);
         if (email) {
             checkEmailAvailability(email).then(r => console.log(r));
             setIsEmailChecked(true);
@@ -95,7 +95,7 @@ const SignUp = () => {
     };
 
     const handleNicknameCheck = (nickname) => {
-        console.log(nickname)
+   //     console.log(nickname)
         if (nickname) {
             checkNicknameAvailability(nickname).then(r => console.log(r));
             setIsNicknameChecked(true);
@@ -106,7 +106,7 @@ const SignUp = () => {
     // 폼 제출 처리 함수
     const onSubmit = (data) => {
         const {email, password, nickname, birthRange, gender} = data;
-        console.log('회원가입 데이터:', data);
+  //      console.log('회원가입 데이터:', data);
 
 // 중복 확인 여부를 검사하여 회원가입 처리
         if ((isEmailAvailable && isNicknameAvailable) && (isEmailChecked && isNicknameChecked)) {
@@ -117,7 +117,7 @@ const SignUp = () => {
 
             axios.post(`${process.env.REACT_APP_API_URL}/user/signup`,
                 {email, password, nickname, birthRange, gender, latitude, longitude}).then(response => {
-                console.log('회원가입 성공', response.data);
+      //          console.log('회원가입 성공', response.data);
                 navigate('/'); // 회원가입이 성공하면 '/'로 이동
             }).catch(error => {
                 console.log('회원가입 실패 ', error);

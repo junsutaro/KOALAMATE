@@ -111,7 +111,7 @@ function BulletinBoard() {
 
     // 게시글 저장 함수, 이제 imageUrl을 인자로 받음
     const saveRecipe = async (fileResult) => {
-        console.log("saveRecipe");
+    //    console.log("saveRecipe");
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/write`, {
                 nickname: nickname,
@@ -125,7 +125,7 @@ function BulletinBoard() {
                     headers: getAuthHeader()
                 });
 
-            console.log('게시글 작성 완료: ', response.data);
+      //      console.log('게시글 작성 완료: ', response.data);
         } catch (error) {
             console.error('게시글 작성 중 오류 발생: ', error);
             throw error; // 에러를 다시 던져서 호출한 곳에서 처리할 수 있도록 함

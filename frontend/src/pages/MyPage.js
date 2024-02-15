@@ -48,11 +48,11 @@ const MyPage = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_API_URL}/profile/${userId}`);
             const data = response.data;
-            console.log('data',data)
+    //        console.log('data',data)
 
             // 이미지 URL을 가져와서 상태 업데이트
             setProfileImageUrl(`${data.profile}`)
-            console.log('이미지',profileImageUrl)
+      //      console.log('이미지',profileImageUrl)
 
             // 나머지 프로필 데이터 업데이트
             setProfileData({
@@ -66,7 +66,7 @@ const MyPage = () => {
                 tags: data.tags || [],
             });
         } catch (error) {
-            console.log('프로필 데이터를 가져오는 중 에러 발생: ', error);
+    //        console.log('프로필 데이터를 가져오는 중 에러 발생: ', error);
         }
     };
 
@@ -81,7 +81,7 @@ const MyPage = () => {
             });
 
         } catch (error) {
-            console.log(`팔로워 데이터를 가져오는 중 에러 발생 : `, error);
+     //       console.log(`팔로워 데이터를 가져오는 중 에러 발생 : `, error);
         }
     };
 
@@ -95,7 +95,7 @@ const MyPage = () => {
                 list: data.list,
             });
         } catch (error) {
-            console.log(`팔로잉 데이터를 가져오는 중 에러 발생 : `, error);
+      //      console.log(`팔로잉 데이터를 가져오는 중 에러 발생 : `, error);
         }
     };
 

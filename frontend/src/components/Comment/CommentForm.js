@@ -47,7 +47,7 @@ const CommentForm = ({boardId, updateComments}) => {
                     date: commentData.date
                 }, {withCredentials: true});
 
-            console.log('댓글 추가 완료 : ', response.data);
+    //        console.log('댓글 추가 완료 : ', response.data);
 
             updateComments(); // 댓글 추가 후 댓글 목록 갱신
             setCommentData({
