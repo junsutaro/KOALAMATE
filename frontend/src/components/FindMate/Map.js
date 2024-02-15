@@ -223,7 +223,12 @@ const Map = ()  => {
         setVisibleMarkersData(visibleMarkers);
     };
 
-    return <div ref={mapContainer} style={{ width: '100%', height: '600px' }} />;
+    return <div ref={mapContainer}
+                style={{
+                    width: '100%',
+                    height: '600px',
+                    borderRadius: '15px',
+                    overflow: 'hidden'}} />;
 };
 
 export default Map;

@@ -29,8 +29,9 @@ export default function SlideIn() {
 				variant="persistent"
 				sx={{
 					'& .MuiDrawer-paper': {
-						marginTop: '70px', // 네비게이션 바의 높이만큼 상단 마진 설정
-						height: `calc(100% - 70px)`,// 전체 높이에서 네비게이션 바의 높이를 뺀 높이 설정
+						bgcolor: 'white',
+						// marginTop: '70px', // 네비게이션 바의 높이만큼 상단 마진 설정
+						// height: `calc(100% - 100px)`,// 전체 높이에서 네비게이션 바의 높이를 뺀 높이 설정
 					},
 				}}
 			>
@@ -38,7 +39,7 @@ export default function SlideIn() {
 				<Box
 					sx={{
 						width: 300,
-						marginTop: '70px',
+						marginX: '20px',
 					}}
 					role="presentation"
 					onClick={toggleDrawer} // 이 부분은 실제로 필요하지 않을 수 있으니, Drawer 내용에 따라 조정
