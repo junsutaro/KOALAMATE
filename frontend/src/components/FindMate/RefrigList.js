@@ -53,7 +53,7 @@ const RefrigList = ({markersData}) => {
                     'Authorization': authHeader
                 }
             });
-            const filteredData = response.data.filter(user => user.nickname !== curUser.nickname);
+            const filteredData = response.data.filter(user => user.nickname !== curUser.nickname && user.nickname !== 'admin');
             console.log(filteredData);
             setUserData(filteredData);
         } catch (error) {

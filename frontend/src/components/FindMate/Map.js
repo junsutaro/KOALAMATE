@@ -220,7 +220,7 @@ const Map = ()  => {
         const bounds = map.getBounds();
         const visibleMarkers = userData.filter(user => {
             const position = new window.kakao.maps.LatLng(user.latitude, user.longitude);
-            return bounds.contain(position) && user.nickname !== curUser.nickname;
+            return bounds.contain(position) && user.nickname !== curUser.nickname && user.nickname !== 'admin';
         });
         setVisibleMarkersData(visibleMarkers);
     };
