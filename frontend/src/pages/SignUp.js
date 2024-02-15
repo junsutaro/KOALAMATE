@@ -135,7 +135,7 @@ const SignUp = () => {
                     alignItems="center"
                 >
                     <Grid item>
-                        <Avatar sx={{bgcolor: '#1a237e', mt: 3}}/>
+                        <Avatar sx={{bgcolor: '#FF9B9B', mt: 3}}/>
                     </Grid>
                     <Grid item>
                         <Typography variant="h3">Sign Up</Typography>

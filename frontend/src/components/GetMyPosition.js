@@ -17,7 +17,7 @@ const GetMyPosition = ({setLatitude, setLongitude }) => {
     };
     return (
         <Box>
-            <Button sx={{backgroundColor: '#ff9b9b'}} variant="contained" onClick={getCurrentPosition}>현재 위치 등록</Button>
+            <Button variant="contained" onClick={getCurrentPosition}>현재 위치 등록</Button>
             {message && (
                 <Typography variant="body2" color="textSecondary" mt={1} sx={{color: 'green'}}>
                     {message}
