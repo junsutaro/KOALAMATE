@@ -58,7 +58,7 @@ const CameraControl = ({ cell, setCell, isLoading }) => {
         if (!isLoading) {
             console.log("asdf");
             camera.position.set(0, 0, 0.6);
-            camera.rotation.set(-0.17, 0, 0);
+            camera.rotation.set(-0.1, 0, 0);
         }
     }, [!isLoading])
 
