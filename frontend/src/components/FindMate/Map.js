@@ -143,6 +143,7 @@ const Map = ()  => {
                 };
                 const map = new window.kakao.maps.Map(mapContainer.current, mapOption);
                 addMarkers(map, userData);
+                updateVisibleMarkers(map, userData);
                 window.kakao.maps.event.addListener(map, 'idle', () => updateVisibleMarkers(map, userData));
             }, () => {
                 console.error("위치 정보를 가져올 수 없습니다.");
