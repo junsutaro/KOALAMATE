@@ -162,7 +162,10 @@ function ShowFridgeInside ({ setOpenInside, userId }) {
 							left: '50%',
 							transform: 'translate(-50%, -50%)',
 						}}
-						onClick={() => setCell(cell - 1)}
+						onClick={() => {
+							setCell(cell - 1);
+							setClickedDrinkInfo(null);
+						}}
 					>
 						<ExpandLessIcon/>
 					</IconButton>
@@ -175,7 +178,10 @@ function ShowFridgeInside ({ setOpenInside, userId }) {
 							left: '50%',
 							transform: 'translate(-50%, -50%)',
 						}}
-						onClick={() => setCell(cell + 1)}
+						onClick={() => {
+							setCell(cell + 1);
+							setClickedDrinkInfo(null);
+						}}
 					>
 						<ExpandMoreIcon/>
 					</IconButton>

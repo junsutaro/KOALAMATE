@@ -268,7 +268,10 @@ function ModifyFridgeInside({ setOpenInside }) {
                 {isCanvasLoaded && cell > 0 &&
                     <IconButton
                         sx={{ position: 'absolute', top: '10%', left: '50%', transform: 'translate(-50%, -50%)' }}
-                        onClick={() => setCell(cell - 1)}
+                        onClick={() => {
+                            setClickedDrinkInfo(null);
+                            setCell(cell - 1);
+                        }}
                     >
                         <ExpandLessIcon />
                     </IconButton>
@@ -276,7 +279,10 @@ function ModifyFridgeInside({ setOpenInside }) {
                 {isCanvasLoaded && cell < 3 &&
                     <IconButton
                         sx={{ position: 'absolute', top: '90%', left: '50%', transform: 'translate(-50%, -50%)' }}
-                        onClick={() => setCell(cell + 1)}
+                        onClick={() => {
+                            setClickedDrinkInfo(null);
+                            setCell(cell + 1);
+                        }}
                     >
                         <ExpandMoreIcon />
                     </IconButton>
