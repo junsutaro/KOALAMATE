@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
 import NoImage from 'assets/no_img.png';
+import cocktail from 'assets/cocktail.gif';
 import CustomTextareaAutosize2 from 'components/CustomTextareaAutosize2';
 import AddIngredient from "components/WriteBoard/AddIngredient";
 import Ingredients from "components/WriteBoard/Ingredients";
@@ -25,7 +26,7 @@ import {useNavigate} from "react-router-dom";
 function BulletinBoard() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [imagePreview, setImagePreview] = useState(NoImage);
+    const [imagePreview, setImagePreview] = useState(cocktail);
     const nickname = useSelector(state => state.auth.user?.nickname);
     const [cocktails, setCocktails] = useState([]);
     const [selectedImageFile, setSelectedImageFile] = useState(null);
@@ -78,7 +79,7 @@ function BulletinBoard() {
     };
 
     const handleCancelImage = () => {
-        setImagePreview(NoImage);
+        setImagePreview(cocktail);
     };
 
     const saveRecipeImage = async (e) => {
@@ -114,21 +115,21 @@ function BulletinBoard() {
 
     // 게시글 저장 함수, 이제 imageUrl을 인자로 받음
     const saveRecipe = async (fileResult) => {
-    //    console.log("saveRecipe");
+        //    console.log("saveRecipe");
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/write`, {
-                nickname: nickname,
-                title: title,
-                content: content,
-                cocktails: cocktails,
-                image: fileResult.fileDownloadUri, // 인자로 받은 이미지 URL 사용
-                fileId: fileResult.id,
-            },
+                    nickname: nickname,
+                    title: title,
+                    content: content,
+                    cocktails: cocktails,
+                    image: fileResult.fileDownloadUri, // 인자로 받은 이미지 URL 사용
+                    fileId: fileResult.id,
+                },
                 {
                     headers: getAuthHeader()
                 });
 
-      //      console.log('게시글 작성 완료: ', response.data);
+            //      console.log('게시글 작성 완료: ', response.data);
         } catch (error) {
             console.error('게시글 작성 중 오류 발생: ', error);
             throw error; // 에러를 다시 던져서 호출한 곳에서 처리할 수 있도록 함
@@ -157,7 +158,7 @@ function BulletinBoard() {
             setTitle(''); // 제목 초기화
             setContent(''); // 내용 초기화
             setCocktails([]); // 재료 목록 초기화
-            setImagePreview(NoImage); // 이미지 미리보기 초기화
+            setImagePreview(cocktail); // 이미지 미리보기 초기화
             setSelectedImageFile(null); // 선택된 이미지 파일 초기화
         } catch (error) {
             console.error('게시글 작성 중 오류 발생: ', error);
@@ -173,7 +174,7 @@ function BulletinBoard() {
         <Container>
             <Paper elevation={3}
                    sx={{margin: '20px', padding: 5, boxShadow: 3, backgroundColor: 'white', borderRadius: '15px'}}>
-                <Box display={'flex'} sx={{ gap:7, padding:2 }}>
+                <Box display={'flex'} sx={{gap: 7, padding: 2}}>
                     <Avatar sx={{width: 200, height: 200}} src={koalaImage}/>
                     <Box sx={{
                         display: 'flex',
@@ -207,37 +208,46 @@ function BulletinBoard() {
                                     flexDirection: 'column',
                                     alignItems: 'center',
                                     width: '100%',
-                                    maxWidth: '300px',
+                                    maxWidth: '400px',
                                     padding: 2,
                                 }}>
-                                    <img src={imagePreview} alt="Preview" style={{
-                                        width: '100%',
-                                        height: 'auto',
-                                        borderRadius: '10px',
-                                        border: '1px solid #eee',
-                                    }}/>
-                                    {imagePreview !== NoImage && (
-                                        <IconButton
-                                            aria-label="delete"
-                                            sx={{
-                                                position: 'absolute',
-                                                right: 0,
-                                                bottom: 0,
-                                                color: 'grey[900]',
-                                                backgroundColor: 'lightgrey',
-                                                borderRadius: '4px',
-                                                margin: '0 4px 4px 0',
-                                            }}
-                                            onClick={handleCancelImage}
+                                    <Box>
+                                        <img src={imagePreview} alt="Preview" style={{
+                                            width: '100%',
+                                            height: 'auto',
+                                            borderRadius: '10px',
+                                            border: '1px solid #eee',
+                                        }}/>
+                                    </Box>
+
+                                    <Box sx={{
+                                        display: 'flex',
+                                        gap: 1,
+                                        alignItems: 'center', // 아이템을 세로축 중앙에 배치
+                                    }}>
+                                        <Button
+                                            variant="contained"
+                                            component="label"
+                                            sx={{flexGrow: 1}} // 버튼이 가능한 많은 공간을 차지하도록 설정
                                         >
-                                            <DeleteIcon/>
-                                        </IconButton>
-                                    )}
-                                    <Button variant="contained" component="label" fullWidth>
-                                        이미지 업로드
-                                        <input type="file" hidden onChange={handleImageChange}
-                                               accept="image/*"/>
-                                    </Button>
+                                            이미지 업로드
+                                            <input type="file" hidden onChange={handleImageChange} accept="image/*"/>
+                                        </Button>
+                                        {imagePreview !== cocktail && (
+                                            <IconButton
+                                                aria-label="delete"
+                                                sx={{
+                                                    color: 'grey[900]',
+                                                    backgroundColor: 'lightgrey',
+                                                    borderRadius: '4px',
+                                                }}
+                                                onClick={handleCancelImage}
+                                            >
+                                                <DeleteIcon/>
+                                            </IconButton>
+                                        )}
+                                    </Box>
+
                                 </Box>
                                 <Box mt={2}
                                      sx={{display: 'flex', flexDirection: 'column', justifyContent: "center", gap: 3}}>
