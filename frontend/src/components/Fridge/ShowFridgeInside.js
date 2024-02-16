@@ -105,7 +105,7 @@ function ShowFridgeInside ({ setOpenInside, userId }) {
 				(response) => {
 					response.data.forEach((drink) => {
 						console.log(drink);
-						setModels(prevState => [...prevState, drink]);
+						setModels(prevState => [...prevState, drink.drink]);
 					});
 				})
 			.catch((error) => {
@@ -125,6 +125,7 @@ function ShowFridgeInside ({ setOpenInside, userId }) {
 
 	const handleBottleClick = (index) => {
 		console.log('clicked index: ', index);
+		setClickedDrink(index);
 
 		axios.get(`${process.env.REACT_APP_API_URL}/drink/${models[index].id}`)
 			.then(response => {
@@ -161,7 +162,10 @@ function ShowFridgeInside ({ setOpenInside, userId }) {
 							left: '50%',
 							transform: 'translate(-50%, -50%)',
 						}}
-						onClick={() => setCell(cell - 1)}
+						onClick={() => {
+							setCell(cell - 1);
+							setClickedDrinkInfo(null);
+						}}
 					>
 						<ExpandLessIcon/>
 					</IconButton>
@@ -174,7 +178,10 @@ function ShowFridgeInside ({ setOpenInside, userId }) {
 							left: '50%',
 							transform: 'translate(-50%, -50%)',
 						}}
-						onClick={() => setCell(cell + 1)}
+						onClick={() => {
+							setCell(cell + 1);
+							setClickedDrinkInfo(null);
+						}}
 					>
 						<ExpandMoreIcon/>
 					</IconButton>
@@ -184,10 +191,12 @@ function ShowFridgeInside ({ setOpenInside, userId }) {
 				<Box sx={{
 					borderRadius: '20px',
 					position: 'absolute',
-					top: '80%',
-					left: '20%',
+					top: `80%`, // 마우스 Y 위치 사용
+					left: `${clickedDrink % 4 * 20 + 20}%`, // 마우스 X 위치 사용
+					// top: '80%',
+					// left: '40%',
 					transform: 'translate(-50%, -50%)',
-					background: 'rgba(0, 0, 0, 0.1)',
+					background: 'rgba(0, 0, 0, 0.3)',
 					padding: '20px',
 				}}>
 					<h2>{clickedDrinkInfo.name}</h2>

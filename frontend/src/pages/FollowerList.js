@@ -42,7 +42,7 @@ const FollowerList = () => {
             <Box sx={{display:'flex', flexDirection: 'column' ,justifyContent:'center'}}>
                 <Box sx={{display: 'inline-flex', gap: 1, marginLeft:8, marginTop:3, marginBottom:0 }}>
                     <Typography sx={{fontWeight: 'bold'}} variant="h6">
-                        {followerData.user}님의 팔로잉 목록
+                        {followerData.user}님의 팔로워 목록
                     </Typography>
                     <Typography sx={{fontWeight: 'bold', color: '#ff9b9b'}}
                                 variant="h6">{followerData.cnt || 0}</Typography>
