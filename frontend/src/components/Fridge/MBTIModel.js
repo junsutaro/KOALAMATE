@@ -26,15 +26,12 @@ export default function MBTIModel ({ initialPosition, fridgeUuid, models, setMod
 	const { scene: J_scene } = useGLTF(J_URL);
 
 	const onModelClick = (modelScene, url) => {
-	//	console.log('model clicked');
 		if (!modelScene) {
-			console.log('Model is not loaded yet');
 			return;
 		}
 		const existingModel = models.find(
 			model => model.object.uuid === modelScene.uuid);
 		if (existingModel) {
-			console.log('existing model added');
 			setDraggedModel({ ...existingModel, isNew: false });
 		} else {
 			const clonedObject = modelScene.clone();
@@ -49,7 +46,6 @@ export default function MBTIModel ({ initialPosition, fridgeUuid, models, setMod
 	};
 
 	useEffect(() => {
-		console.log(draggedModel);
 	}, [draggedModel])
 
 	useFrame(() => {
@@ -69,10 +65,8 @@ export default function MBTIModel ({ initialPosition, fridgeUuid, models, setMod
 
 	useEffect(() => {
 		const handlePointerUp = () => {
-			console.log('pointer up')
 			document.body.style.cursor = 'auto';
 			if (!draggedModel) return;
-			console.log(draggedModel);
 
 			const raycaster = new THREE.Raycaster();
 			raycaster.setFromCamera(pointer, camera);
@@ -83,7 +77,6 @@ export default function MBTIModel ({ initialPosition, fridgeUuid, models, setMod
 				const intersects = raycaster.intersectObject(fridge, true);
 				if (intersects.length === 0) {
 					if (!draggedModel.isNew) {
-						console.log('existing model removed');
 						setModels(models.filter(model => model.object.uuid !== draggedModel.object.uuid));
 						setIsSaved(false);
 					}
@@ -91,8 +84,6 @@ export default function MBTIModel ({ initialPosition, fridgeUuid, models, setMod
 					setDraggedModel(null);
 				} else {
 					if (draggedModel.isNew) {
-						console.log('new model added');
-						console.log(draggedModel);
 						setModels([
 							...models,
 							{...draggedModel},
@@ -119,16 +110,11 @@ export default function MBTIModel ({ initialPosition, fridgeUuid, models, setMod
 	}, [draggedModel, models]);
 
 	useEffect(() => {
-		console.log(models);
 		scene.traverse((obj) => {
 			if (obj.isMesh) {
 				obj.castShadow = true;
 				// obj.receiveShadow = true;
 			}
-		});
-		console.log(models);
-		models.forEach((model, index) => {
-			console.log(model);
 		});
 	}, [models]);
 

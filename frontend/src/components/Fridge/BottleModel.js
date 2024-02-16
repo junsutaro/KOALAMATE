@@ -22,7 +22,6 @@ const BottleModel = ({ models, onBottleClick }) => {
     const { scene: liqueurScene } = useGLTF(LIQUEUR_URL);
 
     const getBottle = (drink) => {
-        console.log(drink);
         if (!drink) return bottleScene.clone();
         switch(drink.category) {
             case 1:
@@ -48,23 +47,6 @@ const BottleModel = ({ models, onBottleClick }) => {
         }
     }
 
-    useEffect(() => {
-        console.log(models);
-    }, [models]);
-
-    // useEffect(() => {
-    //     scene.traverse((child) => {
-    //         if (child.isMesh) {
-    //             // child.castShadow = true;
-    //             // child.receiveShadow = true;
-    //             // 투명한 객체인 경우 renderOrder를 조정
-    //             if (child.material.transparent) {
-    //                 child.renderOrder = 2;
-    //             }
-    //         }
-    //     });
-    // }, [models]);
-
     return (
         <>
             {models.map((model, index) => {
@@ -75,8 +57,6 @@ const BottleModel = ({ models, onBottleClick }) => {
                 // 모델의 위치 계산 (예시 값, 필요에 따라 조정)
                 const position = [column * 0.45 - 0.7, row * -0.86 + 1.3, -0.6]; // X, Y, Z 위치
                 let scale = [0.1, 0.1, 0.1]; // X, Y, Z 크기
-
-                console.log(model);
 
                 switch(model.category) {
                     case 1:

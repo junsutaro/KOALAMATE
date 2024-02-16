@@ -46,20 +46,17 @@ function ModifyFridge({setOpenInside}) {
 
 	const handleSave = () => {
 		if (models.length >= 0) {
-			console.log(models);
 			const requestObj = models.map(model => ({
 				src: model.url,
 				posX: model.object.position.x,
 				posY: model.object.position.y
 			}));
-			console.log(requestObj);
 			axios.put(`${process.env.REACT_APP_API_URL}/refrigerator/addCustomobjs`, requestObj, {
 				headers: {
 					'Authorization': localStorage.getItem('authHeader'),
 				}
 			})
 				.then(() => {
-					console.log('custom object added');
 					setIsSaved(true);
 					setOpenSaved(true);
 				})
@@ -80,10 +77,8 @@ function ModifyFridge({setOpenInside}) {
 
 	useEffect(() => {
 		setIsLoading(true);
-		console.log(isLoading);
 		const loadModel = (url) => {
 			return new Promise((resolve, reject) => {
-				console.log(url);
 				const loader = new GLTFLoader();
 				loader.load(`/${url}`, resolve, undefined, reject);
 			});
@@ -95,7 +90,6 @@ function ModifyFridge({setOpenInside}) {
 		}).then(response => {
 			axios.get(`${process.env.REACT_APP_API_URL}/refrigerator/object/${response.data}`).then(
 				async (response) => {
-					console.log(response.data);
 					const promises = response.data.objs.map(obj=> loadModel(obj.src).then(gltf => ({
 						isNew: false,
 						object: gltf.scene,
@@ -115,10 +109,7 @@ function ModifyFridge({setOpenInside}) {
 	}, []);
 
 	useEffect(() => {
-		console.log(roomStatus);
-		console.log(pointLightRef.current);
 		if (pointLightRef.current) {
-			console.log(pointLightRef.current);
 			pointLightRef.current.shadow.mapSize.width = 2048; // 그림자 맵의 너비 설정
 			pointLightRef.current.shadow.mapSize.height = 2048; // 그림자 맵의 높이 설정
 		}

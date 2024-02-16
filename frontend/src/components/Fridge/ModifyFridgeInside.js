@@ -54,9 +54,7 @@ const CameraControl = ({ cell, setCell, isLoading }) => {
 
 
     useEffect(() => {
-        console.log(!isLoading);
         if (!isLoading) {
-            console.log("asdf");
             camera.position.set(0, 0, 0.6);
             camera.rotation.set(-0.17, 0, 0);
         }
@@ -108,7 +106,6 @@ function ModifyFridgeInside({ setOpenInside }) {
             axios.get(`${process.env.REACT_APP_API_URL}/refrigerator/drink/${response.data}`).then(
                 (response) => {
                     response.data.forEach((drink) => {
-                        console.log(drink);
                         setModels(prevState => [...prevState, drink.drink]);
                     });
                 }).catch((error) => {
@@ -122,17 +119,13 @@ function ModifyFridgeInside({ setOpenInside }) {
     }, []);
 
     useEffect(() => {
-        console.log(roomStatus);
-        console.log(pointLightRef.current);
         if (pointLightRef.current) {
-            console.log(pointLightRef.current);
             pointLightRef.current.shadow.mapSize.width = 2048; // 그림자 맵의 너비 설정
             pointLightRef.current.shadow.mapSize.height = 2048; // 그림자 맵의 높이 설정
         }
     }, [pointLightRef]);
 
     useEffect(() => {
-        console.log(models);
         if (models.length % 4 === 0 && cell < 3 && isAdded) {
             setCell(cell + 1);
             setIsAdded(false);
@@ -152,7 +145,6 @@ function ModifyFridgeInside({ setOpenInside }) {
             })
             .then(response => {
                 setDrinks(response.data);
-                console.log(response.data);
             })
             .catch(error => {
                 console.error(error);
@@ -172,11 +164,9 @@ function ModifyFridgeInside({ setOpenInside }) {
     }
 
     const handleBottleClick = (index) => {
-        console.log('clicked index: ', index);
         setClickedDrink(index);
 
         axios.get(`${process.env.REACT_APP_API_URL}/drink/${models[index].id}`).then(response => {
-            console.log(response.data);
             setClickedDrinkInfo(response.data);
         })
     }
@@ -198,7 +188,6 @@ function ModifyFridgeInside({ setOpenInside }) {
                     'Authorization': localStorage.getItem('authHeader'),
                 }
             }).then(() => {
-                console.log('drinks added');
                 setIsSaved(true);
                 setOpenSaved(true);
             }).catch((err) => {
@@ -239,8 +228,6 @@ function ModifyFridgeInside({ setOpenInside }) {
                 </Select>
             </FormControl>
             <Button onClick={() => {
-                console.log(selectedDrink);
-                console.log(models.length);
                 setIsAdded(true);
                 if (models.length === 16) return;
                 if (selectedDrink === null) return;

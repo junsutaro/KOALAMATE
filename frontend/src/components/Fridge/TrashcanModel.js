@@ -13,12 +13,10 @@ export default function TrashcanModel({ initialPosition, setModels, models, setI
 
 	useEffect(() => {
 		animations.forEach((clip) => {
-			console.log(clip);
 			const action = mixerRef.current.clipAction(clip);
 			action.clampWhenFinished = true; // 애니메이션이 끝나면 마지막 프레임에 고정합니다.
 			action.loop = THREE.LoopOnce; // 애니메이션을 한 번만 재생합니다.
 			if (clip.name === "open") {
-				console.log(clip);
 				setOpenAction(action);
 			}
 		});
