@@ -105,7 +105,7 @@ function ShowFridgeInside ({ setOpenInside, userId }) {
 				(response) => {
 					response.data.forEach((drink) => {
 						console.log(drink);
-						setModels(prevState => [...prevState, drink]);
+						setModels(prevState => [...prevState, drink.drink]);
 					});
 				})
 			.catch((error) => {
