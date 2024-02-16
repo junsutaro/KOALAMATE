@@ -19,6 +19,7 @@ import axios from 'axios';
 import { useWebSocket } from 'context/WebSocketContext';
 import { useVoiceSocket } from 'context/VoiceSocketContext';
 import { styled } from '@mui/material/styles';
+import NoImage from '../assets/profile.jpg';
 
 const Nav = ({isDrawerOpen}) => {
 	const { isLoggedIn } = useSelector(state => state.auth);
@@ -33,7 +34,7 @@ const Nav = ({isDrawerOpen}) => {
 	const theme = createTheme();
 	const ref = React.useRef(null);
 	const matches = useMediaQuery(theme.breakpoints.down('md'));
-
+	const [profileImageUrl, setProfileImageUrl] = useState(null);
 
 	useEffect(() => {
 		const checkWidth = () => {
@@ -51,9 +52,23 @@ const Nav = ({isDrawerOpen}) => {
 	}, [ref]);
 
 	useEffect(() => {
-	//	console.log('toggleDrawer: ', isDrawerOpen);
+		if (!isLoggedIn) return;
+		try {
+			axios.post(`${process.env.REACT_APP_API_URL}/user/myId`, {}, {
+				headers: {
+					'Authorization': localStorage.getItem('authHeader'),
+				},
+			}).then((res) => {
+				axios.get(`${process.env.REACT_APP_API_URL}/profile/${res.data}`)
+					.then((res) => {
+						setProfileImageUrl(res.data.profile);
+					});
+			});
+		} catch (error) {
+			console.log(error.log);
+		}
 
-	}, [isDrawerOpen]);
+	}, [isLoggedIn]);
 
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -164,7 +179,7 @@ const Nav = ({isDrawerOpen}) => {
 								</Typography>
 							)}
 						</NavLink>
-						<Box sx={{ display: 'flex', ml: '8px' }}>
+						<Box sx={{ display: 'flex', mr: '50px' }}>
 							<MenuItem sx={{ py: '6px', px: '12px' }}
 							          onClick={() => {navigate('/mate');}}>
 								<Typography variant="body2"
@@ -198,7 +213,8 @@ const Nav = ({isDrawerOpen}) => {
 									<Tooltip title="Open settings">
 										<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
 											<Avatar alt="Remy Sharp"
-											        src="/static/images/avatar/2.jpg"
+											        src={profileImageUrl ? profileImageUrl : NoImage}
+											        // src="/static/images/avatar/2.jpg"
 													sx={{ bgcolor: '#FF9B9B'}}
 											/>
 										</IconButton>
