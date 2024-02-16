@@ -86,6 +86,10 @@ const UpdateMyPage = () => {
 
     const [fileInfo, setFileInfo] = useState({id: null, fileDownloadUri: ''});
 
+    // 기존 이미지 URL과 이미지 삭제 여부를 추적하는 상태 추가
+    const [originalProfileUrl, setOriginalProfileUrl] = useState('');
+    const [isImageDeleted, setIsImageDeleted] = useState(false);
+
 
     // user 프로필 정보를 가져오는 함수
     useEffect(() => {
@@ -115,6 +119,9 @@ const UpdateMyPage = () => {
                 setIntroduction(data.introduction || '');
                 setSelectedTags(data.tags || []);
                 setImagePreview(data.profile || NoImage);
+
+                setOriginalProfileUrl(data.profile || NoImage); // 기존 프로필 이미지 URL 저장
+                setIsImageDeleted(false); // 이미지 삭제 여부 초기화
             } catch (error) {
                 console.log('프로필 데이터를 가져오는 중 에러 발생: ', error);
             }
@@ -149,6 +156,8 @@ const UpdateMyPage = () => {
     // 프로필 기본 이미지로 초기화하는 함수
     const handleCancelImage = () => {
         setImagePreview(NoImage);
+        setOriginalProfileUrl(null);
+        setIsImageDeleted(true); // 이미지 삭제 여부를 true로 설정
     };
 
     // 태그 선택 함수
@@ -233,31 +242,69 @@ const UpdateMyPage = () => {
     };
 
     // saveProfile 함수 수정
-    const saveProfile = async (FileResult) => {
-        try {
-            // 서버에 요청 보내기
-            const response = await axios.put(
-                `${process.env.REACT_APP_API_URL}/profile/modify`,
-                {
-                    nickname: profileData.nickname,
-                    birthRange: profileData.birthRange,
-                    gender: profileData.gender,
-                    introduction: introduction,
-                    alcoholLimitBottle: sojuBottleCount,
-                    alcoholLimitGlass: sojuCupCount,
-                    tags: selectedTags,
-                    latitude: latitude,
-                    longitude: longitude,
-                    // FileResult가 있을 경우에만 파일정보(파일id, 프로필 URL) 업데이트
-                    ...(FileResult && {
-                        fileId: FileResult.id,
-                        profile: FileResult.fileDownloadUri,
-                    }),
-                }, {
-                    headers: getAuthHeader() // 인증 헤더 추가
-                });
-     //       console.log('프로필 저장 성공:', response.data);
+    // const saveProfile = async (FileResult) => {
+    //     try {
+    //         // 서버에 요청 보내기
+    //         const response = await axios.put(
+    //             `${process.env.REACT_APP_API_URL}/profile/modify`,
+    //             {
+    //                 nickname: profileData.nickname,
+    //                 birthRange: profileData.birthRange,
+    //                 gender: profileData.gender,
+    //                 introduction: introduction,
+    //                 alcoholLimitBottle: sojuBottleCount,
+    //                 alcoholLimitGlass: sojuCupCount,
+    //                 tags: selectedTags,
+    //                 latitude: latitude,
+    //                 longitude: longitude,
+    //                 // FileResult가 있을 경우에만 파일정보(파일id, 프로필 URL) 업데이트
+    //                 ...(FileResult && {
+    //                     fileId: FileResult.id,
+    //                     profile: FileResult.fileDownloadUri,
+    //                 }),
+    //             }, {
+    //                 headers: getAuthHeader() // 인증 헤더 추가
+    //             });
+    //  //       console.log('프로필 저장 성공:', response.data);
+    //
+    //         // 프로필 저장 완료 확인 창
+    //         alert('프로필이 성공적으로 변경되었습니다😊')
+    //         // 프로필 저장이 완료되면 사용자를 해당 페이지로 이동
+    //         navigate(`/user/${myId}`);
+    //
+    //     } catch (error) {
+    //         console.log('프로필 저장 중 에러 발생:', error);
+    //     }
+    // };
 
+    // saveProfile 함수 수정
+    const saveProfile = async (FileResult) => {
+        let requestData = {
+            nickname: profileData.nickname,
+            birthRange: profileData.birthRange,
+            gender: profileData.gender,
+            introduction: introduction,
+            alcoholLimitBottle: sojuBottleCount,
+            alcoholLimitGlass: sojuCupCount,
+            tags: selectedTags,
+            latitude: latitude,
+            longitude: longitude,
+        }
+
+        // FileResult가 있는 경우 (이미지가 변경되어 업로드된 경우)
+        if (FileResult) {
+            requestData.fileId = FileResult.id;
+            requestData.profile = FileResult.fileDownloadUri;
+        } else if (!isImageDeleted && originalProfileUrl && originalProfileUrl !== NoImage) {
+            // FileResult가 없고, 이미지가 삭제되지 않았으며, originalProfileUrl이 유효한 경우
+            // (이미지가 변경되지 않았을 때 기존 이미지 정보를 유지하기 위함)
+            requestData.profile = originalProfileUrl;
+        }
+
+        try {
+            const response = await axios.put(`${process.env.REACT_APP_API_URL}/profile/modify`, requestData, {
+                headers: getAuthHeader(), // 인증 헤더 추가
+            });
             // 프로필 저장 완료 확인 창
             alert('프로필이 성공적으로 변경되었습니다😊')
             // 프로필 저장이 완료되면 사용자를 해당 페이지로 이동
@@ -267,6 +314,7 @@ const UpdateMyPage = () => {
             console.log('프로필 저장 중 에러 발생:', error);
         }
     };
+
 
     // 저장 버튼 클릭 시 SaveProfileImage 함수와 saveProfile 함수를 호출
     const handleSaveButtonClick = async () => {
