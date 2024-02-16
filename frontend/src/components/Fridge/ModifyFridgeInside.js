@@ -58,7 +58,7 @@ const CameraControl = ({ cell, setCell, isLoading }) => {
         if (!isLoading) {
             console.log("asdf");
             camera.position.set(0, 0, 0.6);
-            camera.rotation.set(-0.1, 0, 0);
+            camera.rotation.set(-0.17, 0, 0);
         }
     }, [!isLoading])
 
@@ -296,7 +296,7 @@ function ModifyFridgeInside({ setOpenInside }) {
                 }
             </Box>
             {clickedDrinkInfo &&
-                <Box sx={{borderRadius: '20px', position: 'absolute', top: '80%', left: "20%", transform: 'translate(-50%, -50%)', background: 'rgba(0, 0, 0, 0.1)', padding: '20px'}}>
+                <Box sx={{borderRadius: '20px', position: 'absolute', top: '80%', left: `${clickedDrink % 4 * 20 + 20}%`, transform: 'translate(-50%, -50%)', background: 'rgba(0, 0, 0, 0.3)', padding: '20px'}}>
                     <h2>{clickedDrinkInfo.name}</h2>
                     <p>카테고리: {category[clickedDrinkInfo.category - 1]}</p>
                     <Button onClick={handleDeleteClick}>삭제</Button>
