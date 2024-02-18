@@ -634,16 +634,31 @@ public class BoardService {
 				.collect(Collectors.toList());
 	}
 	public Page<ViewBoardResponseDto> searchBoardsByDrinkCountAndCategoryWithOptions(
-			int minDrinks, int maxDrinks, Integer category, int page, int size, Long userId, Integer option) {
+			int minDrinks, int maxDrinks, Integer category, int page, int size, Integer option, Long userId) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		PageRequest pageable = PageRequest.of(page, size, sort);
 
 		// 기본 검색 수행
-		Page<BoardModel> pageResult = switch (option) {
-			case 2 -> boardRepository.findByAdminWithDrinkCountInRange("admin", minDrinks, maxDrinks, pageable);
-			case 3 -> boardRepository.findByNonAdminWithDrinkCountInRange("admin", minDrinks, maxDrinks, pageable);
-			default -> boardRepository.findWithDrinkCountInRange(minDrinks, maxDrinks, pageable);
-		};
+
+		Page<BoardModel> pageResult;
+
+
+		if (category == null) {
+			// category가 null일 경우의 로직
+			switch (option) {
+				case 2 -> pageResult = boardRepository.findByAdminWithDrinkCountInRange("admin", minDrinks, maxDrinks, pageable);
+				case 3 -> pageResult = boardRepository.findByNonAdminWithDrinkCountInRange("admin", minDrinks, maxDrinks, pageable);
+				default -> pageResult = boardRepository.findByDrinkCountInRange(minDrinks, maxDrinks, pageable);
+			}
+		} else {
+			// category가 null이 아닐 경우의 로직
+			switch (option) {
+				case 2 -> pageResult = boardRepository.findByAdminAndCategoryWithDrinkCountInRange("admin", minDrinks, maxDrinks, category, pageable);
+				case 3 -> pageResult = boardRepository.findByNonAdminAndCategoryWithDrinkCountInRange("admin", minDrinks, maxDrinks, category, pageable);
+				default -> pageResult = boardRepository.findByCategoryWithDrinkCountInRange(minDrinks, maxDrinks, category, pageable);
+			}
+		}
+
 
 		// 카테고리 조건으로 필터링하는 부분 추가
 		Stream<BoardModel> filteredBoardsStream = pageResult.getContent().stream()
@@ -651,29 +666,32 @@ public class BoardService {
 						.anyMatch(cocktail -> category == null || cocktail.getDrink().getCategory() == category));
 
 		// 결과 변환
-		List<ViewBoardResponseDto> result = filteredBoardsStream.map(board -> {
-			ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
-			BeanUtils.copyProperties(board, boardDto);
+		List<ViewBoardResponseDto> result = pageResult.getContent().stream()
+				.map(board -> {
+					ViewBoardResponseDto boardDto = new ViewBoardResponseDto();
+					BeanUtils.copyProperties(board, boardDto);
 
-			List<CocktailWithDrinkDto> cocktails = board.getCocktails().stream()
-					.map(cocktail -> {
-						CocktailWithDrinkDto cocktailDto = new CocktailWithDrinkDto();
-						BeanUtils.copyProperties(cocktail, cocktailDto);
+					List<CocktailWithDrinkDto> cocktails = board.getCocktails().stream()
+							.map(temp -> {
+								CocktailWithDrinkDto insert = new CocktailWithDrinkDto();
+								BeanUtils.copyProperties(temp, insert);
 
-						DrinkWithoutCocktailDto drinkDto = new DrinkWithoutCocktailDto();
-						BeanUtils.copyProperties(cocktail.getDrink(), drinkDto);
+								DrinkWithoutCocktailDto drinkDto = new DrinkWithoutCocktailDto();
+								BeanUtils.copyProperties(temp.getDrink(), drinkDto);
 
-						cocktailDto.setDrink(drinkDto);
-						return cocktailDto;
-					})
-					.collect(Collectors.toList());
+								insert.setDrink(drinkDto);
+								return insert;
+							})
+							.collect(Collectors.toList());
 
-			boardDto.setCocktails(cocktails);
-//			boardDto.setComments(null);
-			boardDto.setLiked(board.getLikes().stream()
-					.anyMatch(like -> like.getUser().getId().equals(userId)));
-			return boardDto;
-		}).collect(Collectors.toList());
+
+					boardDto.setCocktails(cocktails);
+					boardDto.setComments(null);
+					boardDto.setLiked(board.getLikes().stream()
+							.anyMatch(like -> like.getUser().getId().equals(userId)));
+					return boardDto;
+				})
+				.collect(Collectors.toList());
 
 		return new PageImpl<>(result, pageable, pageResult.getTotalElements());
 	}

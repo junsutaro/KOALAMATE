@@ -31,7 +31,7 @@ const RecipeDetail = () => {
 
     // 로그인한 사용자 정보 가져오기
     const {user, isLoggedIn} = useSelector(state => state.auth);
-    const currentUserNickname = user.nickname
+    const currentUserNickname = user?.nickname;
   //  console.log('로그인한 사용자 닉네임: ', currentUserNickname)
 
     const {boardId} = useParams(); // URL 파라미터에서 boardId 추출

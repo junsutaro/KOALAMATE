@@ -41,19 +41,22 @@ public interface BoardRepository extends JpaRepository<BoardModel, Long>, JpaSpe
     // category가 null일 때 모든 카테고리를 대상으로 검색해야하는데..
 
 
-    @Query("SELECT b FROM BoardModel b WHERE b.nickname = :nickname AND b.id IN " +
-            "(SELECT b.id FROM BoardModel b JOIN b.cocktails c GROUP BY b.id " +
-            "HAVING COUNT(c) >= :minDrinks AND COUNT(c) <= :maxDrinks)")
-    Page<BoardModel> findByAdminWithDrinkCountInRange(@Param("nickname") String nickname, @Param("minDrinks") long minDrinks, @Param("maxDrinks") long maxDrinks, Pageable pageable);
+    @Query("SELECT b FROM BoardModel b JOIN b.cocktails c WHERE b.nickname = :nickname AND (:category IS NULL OR c.drink.category = :category) AND SIZE(b.cocktails) BETWEEN :minDrinks AND :maxDrinks")
+    Page<BoardModel> findByAdminAndCategoryWithDrinkCountInRange(@Param("nickname") String nickname, @Param("minDrinks") int minDrinks, @Param("maxDrinks") int maxDrinks, @Param("category") Integer category, Pageable pageable);
 
-    @Query("SELECT b FROM BoardModel b WHERE b.nickname <> :nickname AND b.id IN " +
-            "(SELECT b.id FROM BoardModel b JOIN b.cocktails c GROUP BY b.id " +
-            "HAVING COUNT(c) >= :minDrinks AND COUNT(c) <= :maxDrinks)")
-    Page<BoardModel> findByNonAdminWithDrinkCountInRange(@Param("nickname") String nickname, @Param("minDrinks") long minDrinks, @Param("maxDrinks") long maxDrinks, Pageable pageable);
+    @Query("SELECT b FROM BoardModel b JOIN b.cocktails c WHERE b.nickname <> :nickname AND (:category IS NULL OR c.drink.category = :category) AND SIZE(b.cocktails) BETWEEN :minDrinks AND :maxDrinks")
+    Page<BoardModel> findByNonAdminAndCategoryWithDrinkCountInRange(@Param("nickname") String nickname, @Param("minDrinks") int minDrinks, @Param("maxDrinks") int maxDrinks, @Param("category") Integer category, Pageable pageable);
 
-    @Query("SELECT b FROM BoardModel b WHERE b.id IN " +
-            "(SELECT b.id FROM BoardModel b JOIN b.cocktails c GROUP BY b.id " +
-            "HAVING COUNT(c) >= :minDrinks AND COUNT(c) <= :maxDrinks)")
-    Page<BoardModel> findWithDrinkCountInRange(@Param("minDrinks") long minDrinks, @Param("maxDrinks") long maxDrinks, Pageable pageable);
+    @Query("SELECT b FROM BoardModel b JOIN b.cocktails c WHERE (:category IS NULL OR c.drink.category = :category) AND SIZE(b.cocktails) BETWEEN :minDrinks AND :maxDrinks")
+    Page<BoardModel> findByCategoryWithDrinkCountInRange(@Param("minDrinks") int minDrinks, @Param("maxDrinks") int maxDrinks, @Param("category") Integer category, Pageable pageable);
+
+    @Query("SELECT b FROM BoardModel b WHERE b.nickname = :nickname AND SIZE(b.cocktails) BETWEEN :minDrinks AND :maxDrinks")
+    Page<BoardModel> findByAdminWithDrinkCountInRange(@Param("nickname") String nickname, @Param("minDrinks") int minDrinks, @Param("maxDrinks") int maxDrinks, Pageable pageable);
+
+    @Query("SELECT b FROM BoardModel b WHERE b.nickname <> :nickname AND SIZE(b.cocktails) BETWEEN :minDrinks AND :maxDrinks")
+    Page<BoardModel> findByNonAdminWithDrinkCountInRange(@Param("nickname") String nickname, @Param("minDrinks") int minDrinks, @Param("maxDrinks") int maxDrinks, Pageable pageable);
+
+    @Query("SELECT b FROM BoardModel b WHERE SIZE(b.cocktails) BETWEEN :minDrinks AND :maxDrinks")
+    Page<BoardModel> findByDrinkCountInRange(@Param("minDrinks") int minDrinks, @Param("maxDrinks") int maxDrinks, Pageable pageable);
 
 }
