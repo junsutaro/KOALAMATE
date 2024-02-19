@@ -8,6 +8,8 @@ import E_URL from 'assets/E.glb';
 import S_URL from 'assets/S.glb';
 import T_URL from 'assets/T.glb';
 import J_URL from 'assets/J.glb';
+import Chicken_URL from 'assets/chicken.glb';
+import Watermelon_URL from 'assets/watermelon.glb';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -24,6 +26,8 @@ export default function MBTIModel ({ initialPosition, fridgeUuid, models, setMod
 	const { scene: S_scene } = useGLTF(S_URL);
 	const { scene: T_scene } = useGLTF(T_URL);
 	const { scene: J_scene } = useGLTF(J_URL);
+	const { scene: Chicken_scene } = useGLTF(Chicken_URL);
+	const { scene: Watermelon_scene } = useGLTF(Watermelon_URL);
 
 	const onModelClick = (modelScene, url) => {
 		if (!modelScene) {
@@ -158,6 +162,16 @@ export default function MBTIModel ({ initialPosition, fridgeUuid, models, setMod
 				/>
 				<primitive object={J_scene} position={[1, -3, 1.4]}
 				           onPointerDown={() => onModelClick(J_scene, 'assets/J.glb')}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
+				<primitive object={Chicken_scene} position={[2, 0, 1.4]}
+				           onPointerDown={() => onModelClick(Chicken_scene, 'assets/chicken.glb')}
+				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
+				           onPointerOut={() => (document.body.style.cursor = 'auto')}
+				/>
+				<primitive object={Watermelon_scene} position={[2, -1, 1.4]}
+				           onPointerDown={() => onModelClick(Watermelon_scene, 'assets/watermelon.glb')}
 				           onPointerOver={() => (document.body.style.cursor = 'pointer')}
 				           onPointerOut={() => (document.body.style.cursor = 'auto')}
 				/>
