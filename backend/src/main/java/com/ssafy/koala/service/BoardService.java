@@ -650,6 +650,11 @@ public class BoardService {
 				case 3 -> pageResult = boardRepository.findByNonAdminWithDrinkCountInRange("admin", minDrinks, maxDrinks, pageable);
 				default -> pageResult = boardRepository.findByDrinkCountInRange(minDrinks, maxDrinks, pageable);
 			}
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
 		} else {
 			// category가 null이 아닐 경우의 로직
 			switch (option) {
