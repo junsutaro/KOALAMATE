@@ -651,6 +651,7 @@ public class BoardService {
 				default -> pageResult = boardRepository.findByDrinkCountInRange(minDrinks, maxDrinks, pageable);
 			}
 
+
 			
 		} else {
 			// category가 null이 아닐 경우의 로직

@@ -377,6 +377,7 @@ public class BoardController {
 		}
 
 
+
 		List<ViewBoardResponseDto> content = pageEntities.getContent();
 		int totalPages = pageEntities.getTotalPages();
 		long totalElements = pageEntities.getTotalElements();

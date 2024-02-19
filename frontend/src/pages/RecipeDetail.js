@@ -29,6 +29,7 @@ import placeHolder from 'assets/no_img.png'
 const RecipeDetail = () => {
     const navigate = useNavigate();
 
+    
     // 로그인한 사용자 정보 가져오기
     const {user, isLoggedIn} = useSelector(state => state.auth);
     const currentUserNickname = user?.nickname;

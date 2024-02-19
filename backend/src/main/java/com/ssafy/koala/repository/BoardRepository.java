@@ -41,6 +41,7 @@ public interface BoardRepository extends JpaRepository<BoardModel, Long>, JpaSpe
     // category가 null일 때 모든 카테고리를 대상으로 검색해야하는데..
 
 
+
     @Query("SELECT b FROM BoardModel b JOIN b.cocktails c WHERE b.nickname = :nickname AND (:category IS NULL OR c.drink.category = :category) AND SIZE(b.cocktails) BETWEEN :minDrinks AND :maxDrinks")
     Page<BoardModel> findByAdminAndCategoryWithDrinkCountInRange(@Param("nickname") String nickname, @Param("minDrinks") int minDrinks, @Param("maxDrinks") int maxDrinks, @Param("category") Integer category, Pageable pageable);
 
