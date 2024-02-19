@@ -108,4 +108,20 @@ public class BoardSpecifications {
     public static Specification<BoardModel> searchByNickname(String nickname) {
         return searchByNickname(nickname, true); // Default to admin
     }
+
+
+    public static Specification<BoardModel> withCategory(Integer category) {
+        return (root, query, criteriaBuilder) -> {
+            if (category == null) {
+                return criteriaBuilder.conjunction(); // category가 null이면 모든 결과를 반환합니다.
+            }
+
+            // BoardModel과 CocktailModel, 그리고 DrinkModel을 조인합니다.
+            Join<BoardModel, CocktailModel> cocktailsJoin = root.join("cocktails", JoinType.INNER);
+            Join<CocktailModel, DrinkModel> drinksJoin = cocktailsJoin.join("drink", JoinType.INNER);
+
+            // category를 기준으로 필터링 조건을 설정합니다.
+            return criteriaBuilder.equal(drinksJoin.get("category"), category);
+        };
+    }
 }

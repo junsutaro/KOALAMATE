@@ -353,8 +353,8 @@ public class BoardController {
 			HttpServletRequest request,
 			@RequestParam int page,
 			@RequestParam int size,
-			@RequestParam(required = false) Integer minDrinks,
-			@RequestParam(required = false) Integer maxDrinks,
+			@RequestParam(required = false) int minDrinks,
+			@RequestParam(required = false) int maxDrinks,
 			@RequestParam(required = false) Integer category,
 			@RequestParam(required = false, defaultValue = "1") Integer option) { // 추가된 매개변수
 
@@ -362,15 +362,20 @@ public class BoardController {
 		Page<ViewBoardResponseDto> pageEntities = null;
 
 		Long userId = null;
+
 		if(request.getHeader("Authorization") != null) {
 			String accessToken = authService.getAccessToken(request);
 			UserDto user = authService.extractUserFromToken(accessToken);
 			userId = user.getId();
+			pageEntities = boardService.searchBoardsByDrinkCountAndCategoryWithOptions(
+					minDrinks, maxDrinks, category,
+					page - 1, size, option, userId);
+		} else {
+			pageEntities = boardService.searchBoardsByDrinkCountAndCategoryWithOptions(
+					minDrinks, maxDrinks, category,
+					page - 1, size, option, userId);
 		}
 
-		pageEntities = boardService.searchBoardsByDrinkCountAndCategoryWithOptions(
-				minDrinks, maxDrinks, category,
-				page-1, size, userId, option);
 
 
 		List<ViewBoardResponseDto> content = pageEntities.getContent();
