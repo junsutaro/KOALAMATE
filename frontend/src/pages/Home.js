@@ -94,7 +94,7 @@ const Home = () => {
 		return () => {
 			ScrollTrigger.getAll().forEach(trigger => trigger.kill());
 		};
-	}, []);
+	}, [isLoggedIn]);
 
 	// 이메일 입력값 변경 핸들러
 	const handleEmailChange = (event) => {
@@ -202,7 +202,7 @@ const Home = () => {
 					<ImageSlider/>
 				</Box>
 
-				<div id="pinContainer">
+				<Box id="pinContainer">
 					<Typography variant={'h1'} id="textOverlay" sx={{
 						position: 'fixed', top: '50%',
 						left: '50%',
@@ -221,9 +221,9 @@ const Home = () => {
 						'냉꾸'
 					</Typography>로 개성을 표현하세요</Typography>
 					<canvas id="canvas" ref={canvasRef}
-					        style={{ height: '100vh' }}></canvas>
-				</div>
-				<div style={{ height: '2000px' }}></div>
+					        style={{ height: '100vh' }} key={isLoggedIn ? 'Logged-in' : 'Logged-out'}></canvas>
+				</Box>
+				<Box sx={{ height: '2000px' }}></Box>
 
 				<Box mb={10}>
 					<Typography variant={'h4'} align={'center'}>
