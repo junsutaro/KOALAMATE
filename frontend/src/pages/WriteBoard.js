@@ -260,7 +260,7 @@ function BulletinBoard() {
                                         <Typography variant="body2" mb={1}>어두운 곳에서 핸드폰 플래시로 반짝거리게 찰칵!</Typography>
                                     </Box>
                                     <Box>
-                                        <Typography variant="body3" mb={1}>추천 사진 31</Typography>
+                                        <Typography variant="body3" mb={1}>추천 사진 3</Typography>
                                         <Typography variant="body2" mb={1}>칵테일 재료들을 배경으로 화려하게 찰칵!</Typography>
                                     </Box>
                                 </Box>
