@@ -91,6 +91,28 @@ const Home = () => {
 			},
 		);
 
+		gsap.to(canvasRef.current, {
+			x: () => -window.innerWidth * 0.12, // 화면의 절반 크기만큼 왼쪽으로 이동
+			ease: "power3",
+			scrollTrigger: {
+				trigger: "#pinContainer",
+				start: "top top",
+				end: "+=2000",
+				scrub: true,
+			},
+		});
+		// textOverlay를 오른쪽으로 움직이는 애니메이션
+		gsap.to("#textOverlay", {
+			x: () => window.innerWidth * 0.12, // 화면의 절반 크기만큼 오른쪽으로 이동
+			ease: "power3",
+			scrollTrigger: {
+				trigger: "#pinContainer",
+				start: "top top",
+				end: "+=2000",
+				scrub: true,
+			},
+		});
+
 		return () => {
 			ScrollTrigger.getAll().forEach(trigger => trigger.kill());
 		};
@@ -207,7 +229,7 @@ const Home = () => {
 						position: 'fixed', top: '50%',
 						left: '50%',
 						transform: 'translate(-50%, -50%)',
-						zIndex: 2
+						zIndex: 2,
 					}}><Typography
 						component="span"
 						variant="h1"
@@ -219,7 +241,7 @@ const Home = () => {
 						}}
 					>
 						'냉꾸'
-					</Typography>로 개성을 표현하세요</Typography>
+					</Typography>로 개성을<br/>표현하세요</Typography>
 					<canvas id="canvas" ref={canvasRef}
 					        style={{ height: '100vh' }} key={isLoggedIn ? 'Logged-in' : 'Logged-out'}></canvas>
 				</Box>
