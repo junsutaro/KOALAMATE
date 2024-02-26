@@ -24,14 +24,3 @@ services:
       - mongodb
     environment:
       - SPRING_DEVTOOLS_RESTART_ENABLED=true
-
-  mongodb:
-    image: mongo:latest # 버전 명시 필요
-    ports:
-      - "27017:27017"
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=ssafy
-      - MONGO_INITDB_ROOT_PASSWORD=ssafy
-      - MONGO_INITDB_DATABASE=koaladb
-    #volumes:
-    #  - mongodb_data:/data/db
