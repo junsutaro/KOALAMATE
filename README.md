@@ -1,121 +1,387 @@
-# 코알라 메이트
+<div align="center">
+  <br />
+  <img src="./assets/로고.png" alt="koala LOGO" width="300px" />
+  <br />
+  <h2>🥂부담없이 편하게, 취향이 비슷한 술 친구를 찾는 서비스🍸</h2>
+<h3>삼성 청년 소프트웨어 아카데미 공통 프로젝트 우수상 수상🥈</h3>
 
-"[코알라 메이트](https://i10d212.p.ssafy.io)"는 술을 사랑하는 사람들을 위한 소셜 네트워킹 플랫폼입니다. 이곳에서 사용자들은 자신의 취향과 선호하는 음료에 대해 서로 공유하고 토론할 수 있습니다.
-<br>
-주요 기능으로는 실시간 채팅, 칵테일 레시피 공유, 3D 냉장고 커스터마이징 등이 있어 사용자들이 온라인 상에서 자신만의 독특한 경험을 만들어 나갈 수 있습니다.
+<b>[ SSAFY 10기 공통 PJT ] </b>
 
-![메인로그인안한거](/uploads/960348a519281c772f16c85b9abc4fe9/메인로그인안한거.png)
-<로그인 전>
+<br />
 
-![메인로그인한거](/uploads/bc712ba65f0dc989d9f7308eae370b5c/메인로그인한거.png)
-<로그인 후>
+</div>
 
-## 주요 기능
+## 목차
 
-#### 메이트 찾기 
-위치 기반 서비스를 통해 주변에 있는 다른 사용자들과 연결할 수 있으며, 공통의 관심사를 가진 친구를 찾을 수 있습니다.
+1. [**웹 서비스 소개**](#1)
+1. [**기술 스택**](#2)
+1. [**주요 기능**](#3)
+1. [**프로젝트 구성도**](#4)
+1. [**서비스 화면**](#5)
+1. [**개발 팀 소개**](#6)
+1. [**개발 기간 및 일정**](#7)
+1. [**디렉터리 구조**](#8)
+1. [**산출물**](#9)
 
-![메이트찾기](/uploads/a75914ea77916e678e7b736b10effb55/메이트찾기.PNG)
-- 지도상에서 내 위치와 가까운 메이트부터 찾습니다.
-- 왼쪽의 리스트에서 팔로우 된 유저는 하트 표시, 나와 취향이 비슷한 유저는 냉장고가 흔들립니다.  
+<br />
 
-![메이트찾기-다른사람프로필](/uploads/6f0347232562e6ee5c7a0308c243a657/메이트찾기-다른사람프로필.png)
-- 리스트에서 선택한 유저의 프로필을 볼 수 있습니다.
-- 취향을 나타낸 냉장고와 유저가 좋아하거나 작성한 레시피, 팔로잉/팔로워 리스트를 볼 수 있습니다.  
+<div id="1"></div>
 
-![프로필-팔로워목록](/uploads/0c86075a95dd75c7491fad75e0c6d458/프로필-팔로워목록.png)
-![프로필-팔로잉목록](/uploads/337d48d34da69c37c2432c3f1d239b08/프로필-팔로잉목록.png)  
+## ✨ 웹 서비스 소개
 
-- 팔로잉/팔로워 리스트를 통해 다른 사람들의 프로필을 볼 수 있습니다.
-<br>
+너, 내 술 친구가 돼라!🐨 <br/>
+코알라 메이트에서는 자신의 냉장고를 꾸미고, 레시피를 공유하며 술 취향을 표현할 수 있습니다. <br/>
+지도에서 친구의 냉장고를 찾고, 실시간 음성채팅을 통해 편하게 술 친구를 만들 수 있습니다. <br/>
 
-#### 냉장고 꾸미기
-사용자는 자신의 냉장고를 개인 취향에 맞게 꾸밀 수 있으며, 이를 통해 자신의 음료 취향을 다른 사용자와 공유할 수 있습니다.  
+### [코알라 메이트 바로 가기](https://i10d212.p.ssafy.io/) (서비스 종료)
+### [홍보 UCC 보러가기](https://drive.google.com/file/d/1FQIJq7BOLxO1kvShqeOAnim6OIfaA4Pc/view?usp=sharing)
 
-![냉자고꾸미기-외부](/uploads/3a300809267bc07e55fb77d07b81ba65/냉자고꾸미기-외부.png)
-- 외부에는 MBTI를 이용하여 자신이 어떤 사람인지 쉽게 알려줄 수 있습니다.
+<br />
 
-![냉장고꾸미기-내부](/uploads/cb515b93869dedb06f15d40c281ee76f/냉장고꾸미기-내부.png)
-- 럼, 리큐르, 위스키, 보드카, 소주 등 술의 카테고리별로 냉장고에 사용자가 등록한 술을 볼 수 있습니다.
+<div id="2"></div>
 
-![냉장고꾸미기-내부2](/uploads/4be9c7804f6db16aec95aab5e0389074/냉장고꾸미기-내부2.png)
-- 내부는 4층으로 구성되어있고 아래, 위로 이동하며 술을 볼 수 있습니다.
+## 🛠️ 기술 스택
 
-![냉장고꾸미기-내부3](/uploads/51bde1cc67d6a16eb1be405f43ece144/냉장고꾸미기-내부3.png)
-- 술병을 누르면 해당 술의 상세정보를 볼 수 있습니다.  
-<br>
+### Frontend
+<img src="https://img.shields.io/badge/-HTML5-important?style=flat&logo=html5&logoColor=white&labelColor=E34F26&color=white"/> <img src="https://img.shields.io/badge/-CSS3-important?style=flat&logo=css3&logoColor=white&labelColor=1572B6&color=white"/> <img src="https://img.shields.io/badge/-JavaScript-important?style=flat&logo=javascript&logoColor=white&labelColor=F7DF1E&color=white"/> <img src="https://img.shields.io/badge/-React-important?style=flat&logo=React&logoColor=white&labelColor=61DAFB&color=white"/> <img src="https://img.shields.io/badge/-MaterialUI-important?style=flat&logo=materialdesign&logoColor=white&labelColor=757575&color=white"/> <img src="https://img.shields.io/badge/-Three.js-important?style=flat&logo=threedotjs&logoColor=white&labelColor=000000&color=white"/> <img src="https://img.shields.io/badge/-Redux-important?style=flat&logo=redux&logoColor=white&labelColor=764ABC&color=white"/> <img src="https://img.shields.io/badge/-ReactThreeFiber-important?style=flat&logo=React&logoColor=white&labelColor=61DAFB&color=white"/> <img src="https://img.shields.io/badge/-Stompjs-important?style=flat&logo=socketdotio&logoColor=black&labelColor=000000&color=white"/>
 
-#### 실시간 채팅
-![채팅](/uploads/f35be209463fa4fafe268cbc7ebe3218/채팅.png)
-- 왼쪽 리스트에는 채팅방과 대화목록을 볼 수 있습니다.
-- 화면 중앙에 현재 음성채팅에 참여하고 있는 사용자들을 볼 수 있습니다.
-<br>
+### Backend
+<img src="https://img.shields.io/badge/-java-important?style=flat&logo=OpenJDK&logoColor=white&labelColor=007396&color=white"/> <img src="https://img.shields.io/badge/-Spring Boot-important?style=flat&logo=springboot&logoColor=white&labelColor=6DB33F&color=white"/> <img src="https://img.shields.io/badge/-Hibernate-important?style=flat&logo=Hibernate&logoColor=white&labelColor=59666C&color=white"/> <img src="https://img.shields.io/badge/-Spring Security-important?style=flat&logo=Spring Security&logoColor=white&labelColor=6DB33F&color=white"/> <img src="https://img.shields.io/badge/-JWT-important?style=flat&logo=jsonwebtokens&logoColor=white&labelColor=000000&color=white"/> <img src="https://img.shields.io/badge/-MariaDB-important?style=flat&logo=mariadb&logoColor=white&labelColor=003545&color=white"/> <img src="https://img.shields.io/badge/-OAuth2-important?style=flat&logo=webauthn&logoColor=3423A6&labelColor=3423A6&color=white"/> <img src="https://img.shields.io/badge/-Stomp-important?style=flat&logo=socketdotio&logoColor=black&labelColor=000000&color=white"/>
 
-#### 칵테일 레시피
-다양한 칵테일 레시피를 탐색하고, 자신만의 레시피를 생성하여 커뮤니티와 공유할 수 있습니다.  
+### DevOps
+<img src="https://img.shields.io/badge/-AWS-important?style=flat&logo=amazonaws&logoColor=white&labelColor=232F3E&color=white"/> <img src="https://img.shields.io/badge/-Docker-important?style=flat&logo=docker&logoColor=white&labelColor=2496ED&color=white"/> <img src="https://img.shields.io/badge/-NGINX-important?style=flat&logo=nginx&logoColor=white&labelColor=009639&color=white"/> <img src="https://img.shields.io/badge/-Jenkins-important?style=flat&logo=jenkins&logoColor=white&labelColor=D24939&color=white"/>
 
-<br>
+### Tools
+<img src="https://img.shields.io/badge/-GitLab-important?style=flat&logo=gitlab&logoColor=white&labelColor=FC6D26&color=white"/> <img src="https://img.shields.io/badge/-Jira-important?style=flat&logo=jirasoftware&logoColor=white&labelColor=0052CC&color=white"/> <img src="https://img.shields.io/badge/-Notion-important?style=flat&logo=notion&logoColor=white&labelColor=000000&color=white"/> <img src="https://img.shields.io/badge/-Mattermost-important?style=flat&logo=mattermost&logoColor=white&labelColor=0058CC&color=white"/> <img src="https://img.shields.io/badge/-Figma-important?style=flat&logo=figma&logoColor=white&labelColor=F24E1E&color=white"/>
 
-**리스트**
-![칵테일_레시피](/uploads/d8e17e3f82fa6da12ed31a872a81e7f4/칵테일_레시피.PNG)  
+<br />
 
-- 모든 칵테일 레시피를 볼 수 있고, 필요한 재료 수를 조정하여 필터링 할 수 있습니다.
-- 운영자가 엄선한 레시피 백과와 유저들이 작성하는 유저 레시피를 볼 수 있습니다.  
+<div id="3"></div>
 
-<br>
+## 💡 주요 기능
 
-**상세 보기**
-![레시피_상세보기](/uploads/3052b0179f213cda68bbcd86330c20b1/레시피_상세보기.png)
-<br>
-- 레시피의 정보를 확인할 수 있습니다.  
+<table style="word-break: keep-all;">
+<tr ><th style="text-align:center;">기능</th><th>내용</th></tr>
+<tr>
+  <td style="text-align:center;">메이트 찾기</td>
+  <td>위치 기반 서비스를 통해 내 위치와 가까운 메이트의 냉장고부터 지도에서 볼 수 있습니다.</td>
+</tr>
 
-![레시피상세보기22](/uploads/b0644a7a08ed52f49ad681f99f523ee0/레시피상세보기22.png)  
+<tr>
+  <td style="text-align:center;">냉장고 꾸미기</td>
+  <td>냉장고의 외부는 MBTI 뱃지로, 내부는 카테고리 별로 술병을 배치하며 냉장고를 꾸밉니다. </td>
+</tr>
 
-- 유저들이 댓글을 달 수 있습니다.
+<tr>
+  <td style="text-align:center;">실시간 채팅</td>
+  <td>서비스의 어떤 페이지에서든 실시간 텍스트, 음성 채팅을 이용할 수 있습니다.</td>
+</tr>
 
-<br>
+<tr>
+  <td style="text-align:center;">칵테일 레시피 공유</td>
+  <td>엄선된 레시피를 즐기거나, 나만의 레시피를 다른 사용자들과 공유하고 좋아요/팔로우를 등록합니다.</td>
+</tr>
+</table>
 
-**레시피 작성**
-![화면_캡처](/uploads/9c0278e3e336c7523d49386479f715d2/화면_캡처.png) 
-- 제공되는 양식에 맞춰서 칵테일 레시피를 작성할 수 있습니다.
-- 칵테일 사진, 재료와 비율과 설명 및 제조법을 설명에 작성합니다.  
+<br/>
 
-<br>
+<div id="4"></div>
 
-**검색**
-![칵테일레시피-검색](/uploads/638d23e125ef296f9b1674b0fa953f1b/칵테일레시피-검색.png)
-- 레시피 제목을 기준으로 검색하거나 레시피에 필요한 재료 등의 원하는 조건으로 검색할 수 있습니다.
-<br>
+## 📂 프로젝트 구성도
+<img src="./assets/아키텍처.png" alt="아키텍처" width="1000px" />
 
-## 주요 사용 기술
-![코알라아키텍쳐](/uploads/519194a92a8bc88fde74b9d071324160/코알라아키텍쳐.png)
+<br/>
+<br/>
 
-### 프론트엔드
+<img src="./assets/ERD.png" alt="ERD" width="1000px" />
 
-- **React**: 모던한 사용자 인터페이스를 구축하기 위한 JavaScript 라이브러리로, 사용자 경험을 향상시키기 위해 사용됩니다.
-- **Material-UI**: 구글의 Material Design을 기반으로 한 React UI 프레임워크로, 일관된 디자인 시스템을 제공합니다.
-- **React Three Fiber**: 3D 냉장고 모델링과 같은 복잡한 3D 시각화를 위해 사용되는 React 렌더러입니다.
+<br/>
 
-### 백엔드
+<div id="5"></div>
 
-- **Spring Boot**: 강력한 RESTful API 개발을 위한 Java 기반 프레임워크입니다.
-- **OpenVidu**: 실시간 비디오 통신 기능을 구현하기 위해 사용되는 WebRTC 기술입니다.
-- **STOMP**: 메시지 기반 통신을 위한 심플 텍스트 지향 메시징 프로토콜입니다.
+## 🖥️ 서비스 화면
 
-### 데이터베이스
+### 메인화면
+<table style="border: 2px; text-align:center;">
+  <tr style="text-align:center;">
+    <td> 메인화면 </td>
+  </tr>
+  <tr>
+    <td>
+     <img src="./assets/메인화면.png" alt="" width="450px" />
+    </td>
+  </tr>
+</table>
 
-- **MariaDB**: 안정적이고 확장성 있는 데이터 관리를 위해 사용되는 오픈소스 관계형 데이터베이스 관리 시스템입니다.
+<br/>
 
-### 배포
+### 코알라 메이트 찾기
+<table style="border: 2px; text-align:center;">
+  <tr style="text-align:center;">
+    <td> 내 주변의 냉장고 </td>
+    <td> 메이트의 프로필 </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./assets/내주변의냉장고.png" alt="=" width="300px" />
+    </td>
+    <td>
+      <img src="./assets/메이트의프로필.png" alt="=" width="300px" />
+    </td>
+  </tr>
+</table>
+<table style="border: 2px; text-align:center;">
+  <tr style="text-align:center;">
+    <td> 메이트의 팔로워</td>
+    <td> 메이트의 팔로잉 </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./assets/메이트의팔로워.png" alt="=" width="300px" />
+    </td>
+    <td>
+      <img src="./assets/메이트의팔로잉.png" alt="=" width="300px" />
+    </td>
+  </tr>
+</table>
 
-- **Nginx**: 고성능 웹 서버 및 리버스 프록시 서버로, 클라이언트 요청의 로드 밸런싱과 정적 컨텐츠 제공을 담당합니다.
-- **Jenkins**: 지속적인 통합 및 배포를 자동화하기 위한 오픈소스 자동화 서버입니다. 코드 변경 사항이 발생할 때마다 자동으로 빌드 및 테스트를 수행하고, 성공적으로 완료되면 프로덕션 서버로 배포됩니다.
+<br/>
 
-## 개발자 및 기여자 정보
-![팀원정보](/uploads/688840c1bd70f6e442586b52ff15dc07/팀원정보.png)
-- **장민성(팀장, 백엔드)**
-- **황윤정(백엔드)**
-- **이준수(백엔드)**
-- **박단비(프론트엔드)**
-- **편수지(프론트엔드)**
-- **조현우(프론트엔드)**
+### 나만의 냉장고 꾸미기
+<table style="border: 2px; text-align:center;">
+  <tr style="text-align:center;">
+    <td> 냉장고 외부 </td>
+    <td> 냉장고 내부1 </td>
+    <td> 냉장고 내부2 </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./assets/냉장고외부.png" alt="=" width="300px" />
+    </td>
+    <td>
+      <img src="./assets/냉장고내부1.png" alt="=" width="300px" />
+    </td>
+    <td>
+      <img src="./assets/냉장고내부2.png" alt="=" width="300px" />
+    </td>
+  </tr>
+</table>
+
+<br/>
+
+### 실시간 채팅
+<table style="border: 2px; text-align:center;">
+  <tr style="text-align:center;">
+    <td> 채팅방, 대화목록 </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./assets/채팅방,대화목록.png" alt="=" width="450px" />
+    </td>
+  </tr>
+</table>
+
+<br/>
+
+### 칵테일 레시피
+<table style="border: 2px; text-align:center;">
+  <tr style="text-align:center;">
+    <td> 레시피 리스트 </td>
+    <td> 레시피 상세보기 </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./assets/레시피리스트.png" alt="=" width="450px" />
+    </td>
+    <td>
+      <img src="./assets/레시피상세보기.png" alt="=" width="450px" />
+    </td>
+  </tr>
+</table>
+<table style="border: 2px; text-align:center;">
+  <tr style="text-align:center;">
+    <td>레시피 작성</td>
+    <td>레시피 검색</td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./assets/레시피작성.png" alt="=" width="450px" />
+    </td>
+    <td>
+      <img src="./assets/레시피검색.png" alt="=" width="450px" />
+    </td>
+  </tr>
+</table>
+
+<br/>
+
+<div id="6"></div>
+
+## 👨🏻‍💻 개발 팀 소개
+
+<table>
+<tr>
+<td align="center">BE / 팀장</td>
+<td align="center">BE</td>
+<td align="center">BE</td>
+<td align="center">FE</td>
+<td align="center">FE</td>
+<td align="center">FE</td>
+
+</tr>
+  <tr>
+    <td align="center" width="120px">
+      <a href="https://github.com/JangMinSeong" target="_blank">
+        <img src="https://avatars.githubusercontent.com/u/26338183?v=4" alt="장민성 프로필" />
+      </a>
+    </td>
+    <td align="center" width="120px">
+      <a href="https://github.com/LEEJUNSU11" target="_blank">
+        <img src="https://avatars.githubusercontent.com/u/139520011?v=4" alt="이준수 프로필" />
+      </a>
+    </td>
+    <td align="center" width="120px">
+      <a href="https://github.com/yellowchili" target="_blank">
+        <img src="https://avatars.githubusercontent.com/u/79037963?s=96&v=4" alt="황윤정 프로필" />
+      </a>
+    </td>
+    <td align="center" width="120px">
+      <a href="https://github.com/danbeeS2" target="_blank">
+        <img src="https://avatars.githubusercontent.com/u/120550679?v=4" alt="박단비 프로필" />
+      </a>
+    </td>
+    <td align="center" width="120px">
+      <a href="https://github.com/Hyaanu" target="_blank">
+        <img src="https://avatars.githubusercontent.com/u/125225751?v=4" alt="조현우 프로필" />
+      </a>
+    </td>
+    <td align="center" width="120px">
+      <a href="https://github.com/pyunsusie" target="_blank">
+        <img src="https://avatars.githubusercontent.com/u/139519997?v=4" alt="편수지 프로필" />
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/JangMinSeong" target="_blank">
+       장민성
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/LEEJUNSU11" target="_blank">
+       이준수
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/yellowchili" target="_blank">
+       황윤정
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/danbeeS2" target="_blank">
+       박단비
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Hyaanu" target="_blank">
+       조현우
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/pyunsusie" target="_blank">
+       편수지
+      </a>
+    </td>
+  </tr>
+</table>
+
+<br />
+
+<div id="7"></div>
+
+## 🗓️ 개발 기간 및 일정
+
+24.01.03. ~ 24.02.16
+
+<br />
+
+<div id="8"></div>
+
+## 📂 디렉터리 구조
+
+### Front-end
+
+```
+frontend
+├───assets
+├───components
+│   ├───Comment
+│   ├───FindMate
+│   ├───Follow
+│   ├───Fridge
+│   ├───home
+│   ├───Profile
+│   │   └───Update
+│   ├───RecipeBoard
+│   ├───Search
+│   └───WriteBoard
+├───containers
+├───context
+├───fonts
+├───hooks
+├───Layout
+├───pages
+├───store
+└───utils
+```
+
+### Back-end
+
+```
+backend
+├───java
+│   └───com
+│       └───ssafy
+│           └───koala
+│               ├───config
+│               │   └───jwt
+│               ├───controller
+│               │   ├───chat
+│               │   ├───file
+│               │   └───user
+│               ├───dto
+│               │   ├───board
+│               │   ├───chat
+│               │   ├───cocktail
+│               │   ├───drink
+│               │   ├───file
+│               │   └───user
+│               ├───exception
+│               │   └───file
+│               ├───model
+│               │   ├───chat
+│               │   ├───file
+│               │   └───user
+│               ├───repository
+│               │   ├───chat
+│               │   └───file
+│               └───service
+│                   ├───chat
+│                   ├───file
+│                   └───user
+└───resources
+```
+
+<br />
+
+<div id="9"></div>
+
+## 📃 산출물
+
+### [1. 기능 명세서](https://docs.google.com/spreadsheets/d/1iuq9lEpHl0m_5JcZyqbfA4CfmCI5HSHXRERAaSudr48/edit#gid=0)
+
+### [2. 화면 설계서](https://www.figma.com/design/w5suP2750J6yYjBt5oPS0f/KOALA-MATE_FIGMA?t=PYu4popRF5TnRlvW-0)
+
+### [3. API 명세서](https://hyper-revolve-e44.notion.site/API-34b1e284cfe34b1b98a311728f4e091d?pvs=4)
+
+### [4. ERD](https://app.diagrams.net/#G1an0ozRpISSeLyQ-0E7t6eH971hvZyKIw#%7B%22pageId%22%3A%22R2lEEEUBdFMjLlhIrx00%22%7D)
