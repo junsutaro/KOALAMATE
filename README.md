@@ -123,10 +123,10 @@
   </tr>
   <tr>
     <td>
-      <img src="./assets/내주변의냉장고.png" alt="=" width="300px" />
+      <img src="./assets/내주변의냉장고.PNG" alt="=" width="450px" />
     </td>
     <td>
-      <img src="./assets/메이트의프로필.png" alt="=" width="300px" />
+      <img src="./assets/메이트의프로필.png" alt="=" width="450px" />
     </td>
   </tr>
 </table>
@@ -137,10 +137,10 @@
   </tr>
   <tr>
     <td>
-      <img src="./assets/메이트의팔로워.png" alt="=" width="300px" />
+      <img src="./assets/메이트의팔로워.png" alt="=" width="450px" />
     </td>
     <td>
-      <img src="./assets/메이트의팔로잉.png" alt="=" width="300px" />
+      <img src="./assets/메이트의팔로잉.png" alt="=" width="450px" />
     </td>
   </tr>
 </table>
@@ -191,7 +191,7 @@
   </tr>
   <tr>
     <td>
-      <img src="./assets/레시피리스트.png" alt="=" width="450px" />
+      <img src="./assets/레시피리스트.PNG" alt="=" width="450px" />
     </td>
     <td>
       <img src="./assets/레시피상세보기.png" alt="=" width="450px" />
@@ -200,18 +200,25 @@
 </table>
 <table style="border: 2px; text-align:center;">
   <tr style="text-align:center;">
-    <td>레시피 작성</td>
     <td>레시피 검색</td>
   </tr>
   <tr>
-    <td>
-      <img src="./assets/레시피작성.png" alt="=" width="450px" />
-    </td>
     <td>
       <img src="./assets/레시피검색.png" alt="=" width="450px" />
     </td>
   </tr>
 </table>
+<table style="border: 2px; text-align:center;">
+  <tr style="text-align:center;">
+    <td>레시피 작성</td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./assets/레시피작성.png" alt="=" width="450px" />
+    </td>
+  </tr>
+</table>
+
 
 <br/>
 
