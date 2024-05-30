@@ -49,7 +49,7 @@
 <img src="https://img.shields.io/badge/-Java-important?style=flat&logo=OpenJDK&logoColor=white&labelColor=007396&color=white"/> <img src="https://img.shields.io/badge/-Spring Boot-important?style=flat&logo=springboot&logoColor=white&labelColor=6DB33F&color=white"/> <img src="https://img.shields.io/badge/-Hibernate JPA-important?style=flat&logo=Hibernate&logoColor=white&labelColor=59666C&color=white"/> <img src="https://img.shields.io/badge/-Spring Security-important?style=flat&logo=Spring Security&logoColor=white&labelColor=6DB33F&color=white"/> <img src="https://img.shields.io/badge/-JWT-important?style=flat&logo=jsonwebtokens&logoColor=white&labelColor=000000&color=white"/> <img src="https://img.shields.io/badge/-MariaDB-important?style=flat&logo=mariadb&logoColor=white&labelColor=003545&color=white"/> <img src="https://img.shields.io/badge/-WebRTC-important?style=flat&logo=webrtc&logoColor=white&labelColor=333333&color=white"/> <img src="https://img.shields.io/badge/-WebSocket-important?style=flat&logo=socketdotio&logoColor=black&labelColor=000000&color=white"/> <img src="https://img.shields.io/badge/-JASYPT-important?style=flat&logo=webauthn&logoColor=379CC6&labelColor=379CC6&color=white"/>
 
 ### DevOps
-<img src="https://img.shields.io/badge/-AWS-important?style=flat&logo=amazonaws&logoColor=white&labelColor=232F3E&color=white"/> <img src="https://img.shields.io/badge/-Docker-important?style=flat&logo=docker&logoColor=white&labelColor=2496ED&color=white"/> <img src="https://img.shields.io/badge/-NGINX-important?style=flat&logo=nginx&logoColor=white&labelColor=009639&color=white"/> <img src="https://img.shields.io/badge/-Jenkins-important?style=flat&logo=jenkins&logoColor=white&labelColor=D24939&color=white"/>
+<img src="https://img.shields.io/badge/-AWS-important?style=flat&logo=amazonaws&logoColor=white&labelColor=232F3E&color=white"/> <img src="https://img.shields.io/badge/-Docker-important?style=flat&logo=docker&logoColor=white&labelColor=2496ED&color=white"/> <img src="https://img.shields.io/badge/-Nginx-important?style=flat&logo=nginx&logoColor=white&labelColor=009639&color=white"/> <img src="https://img.shields.io/badge/-Jenkins-important?style=flat&logo=jenkins&logoColor=white&labelColor=D24939&color=white"/>
 
 ### Tools
 <img src="https://img.shields.io/badge/-GitLab-important?style=flat&logo=gitlab&logoColor=white&labelColor=FC6D26&color=white"/> <img src="https://img.shields.io/badge/-Jira-important?style=flat&logo=jirasoftware&logoColor=white&labelColor=0052CC&color=white"/> <img src="https://img.shields.io/badge/-Notion-important?style=flat&logo=notion&logoColor=white&labelColor=000000&color=white"/> <img src="https://img.shields.io/badge/-Mattermost-important?style=flat&logo=mattermost&logoColor=white&labelColor=0058CC&color=white"/> <img src="https://img.shields.io/badge/-Figma-important?style=flat&logo=figma&logoColor=white&labelColor=F24E1E&color=white"/>
@@ -194,7 +194,7 @@
       <img src="./assets/레시피리스트.PNG" alt="=" width="450px" />
     </td>
     <td>
-      <img src="./assets/레시피상세보기.png" alt="=" width="450px" />
+      <img src="./assets/상세보기.png" alt="=" width="450px" />
     </td>
   </tr>
 </table>
@@ -312,7 +312,7 @@
 
 ## 🗓️ 개발 기간 및 일정
 
-24.01.03. ~ 24.02.16
+24.01.03 ~ 24.02.16
 
 <br />
 
