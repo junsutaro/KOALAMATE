@@ -43,10 +43,10 @@
 ## 🛠️ 기술 스택
 
 ### Frontend
-<img src="https://img.shields.io/badge/-HTML5-important?style=flat&logo=html5&logoColor=white&labelColor=E34F26&color=white"/> <img src="https://img.shields.io/badge/-CSS3-important?style=flat&logo=css3&logoColor=white&labelColor=1572B6&color=white"/> <img src="https://img.shields.io/badge/-JavaScript-important?style=flat&logo=javascript&logoColor=white&labelColor=F7DF1E&color=white"/> <img src="https://img.shields.io/badge/-React-important?style=flat&logo=React&logoColor=white&labelColor=61DAFB&color=white"/> <img src="https://img.shields.io/badge/-MaterialUI-important?style=flat&logo=materialdesign&logoColor=white&labelColor=757575&color=white"/> <img src="https://img.shields.io/badge/-Three.js-important?style=flat&logo=threedotjs&logoColor=white&labelColor=000000&color=white"/> <img src="https://img.shields.io/badge/-Redux-important?style=flat&logo=redux&logoColor=white&labelColor=764ABC&color=white"/> <img src="https://img.shields.io/badge/-ReactThreeFiber-important?style=flat&logo=React&logoColor=white&labelColor=61DAFB&color=white"/> <img src="https://img.shields.io/badge/-Stompjs-important?style=flat&logo=socketdotio&logoColor=black&labelColor=000000&color=white"/>
+<img src="https://img.shields.io/badge/-HTML5-important?style=flat&logo=html5&logoColor=white&labelColor=E34F26&color=white"/> <img src="https://img.shields.io/badge/-CSS3-important?style=flat&logo=css3&logoColor=white&labelColor=1572B6&color=white"/> <img src="https://img.shields.io/badge/-JavaScript-important?style=flat&logo=javascript&logoColor=white&labelColor=F7DF1E&color=white"/> <img src="https://img.shields.io/badge/-React-important?style=flat&logo=React&logoColor=white&labelColor=61DAFB&color=white"/> <img src="https://img.shields.io/badge/-MUI-important?style=flat&logo=mui&logoColor=white&labelColor=007FFF&color=white"/> <img src="https://img.shields.io/badge/-Three.js-important?style=flat&logo=threedotjs&logoColor=white&labelColor=000000&color=white"/> <img src="https://img.shields.io/badge/-Redux-important?style=flat&logo=redux&logoColor=white&labelColor=764ABC&color=white"/> <img src="https://img.shields.io/badge/-ReactThreeFiber-important?style=flat&logo=React&logoColor=white&labelColor=61DAFB&color=white"/> <img src="https://img.shields.io/badge/-WebRTC-important?style=flat&logo=webrtc&logoColor=white&labelColor=333333&color=white"/> <img src="https://img.shields.io/badge/-Stomp-important?style=flat&logo=socketdotio&logoColor=black&labelColor=000000&color=white"/>
 
 ### Backend
-<img src="https://img.shields.io/badge/-java-important?style=flat&logo=OpenJDK&logoColor=white&labelColor=007396&color=white"/> <img src="https://img.shields.io/badge/-Spring Boot-important?style=flat&logo=springboot&logoColor=white&labelColor=6DB33F&color=white"/> <img src="https://img.shields.io/badge/-Hibernate-important?style=flat&logo=Hibernate&logoColor=white&labelColor=59666C&color=white"/> <img src="https://img.shields.io/badge/-Spring Security-important?style=flat&logo=Spring Security&logoColor=white&labelColor=6DB33F&color=white"/> <img src="https://img.shields.io/badge/-JWT-important?style=flat&logo=jsonwebtokens&logoColor=white&labelColor=000000&color=white"/> <img src="https://img.shields.io/badge/-MariaDB-important?style=flat&logo=mariadb&logoColor=white&labelColor=003545&color=white"/> <img src="https://img.shields.io/badge/-OAuth2-important?style=flat&logo=webauthn&logoColor=3423A6&labelColor=3423A6&color=white"/> <img src="https://img.shields.io/badge/-Stomp-important?style=flat&logo=socketdotio&logoColor=black&labelColor=000000&color=white"/>
+<img src="https://img.shields.io/badge/-Java-important?style=flat&logo=OpenJDK&logoColor=white&labelColor=007396&color=white"/> <img src="https://img.shields.io/badge/-Spring Boot-important?style=flat&logo=springboot&logoColor=white&labelColor=6DB33F&color=white"/> <img src="https://img.shields.io/badge/-Hibernate JPA-important?style=flat&logo=Hibernate&logoColor=white&labelColor=59666C&color=white"/> <img src="https://img.shields.io/badge/-Spring Security-important?style=flat&logo=Spring Security&logoColor=white&labelColor=6DB33F&color=white"/> <img src="https://img.shields.io/badge/-JWT-important?style=flat&logo=jsonwebtokens&logoColor=white&labelColor=000000&color=white"/> <img src="https://img.shields.io/badge/-MariaDB-important?style=flat&logo=mariadb&logoColor=white&labelColor=003545&color=white"/> <img src="https://img.shields.io/badge/-WebRTC-important?style=flat&logo=webrtc&logoColor=white&labelColor=333333&color=white"/> <img src="https://img.shields.io/badge/-WebSocket-important?style=flat&logo=socketdotio&logoColor=black&labelColor=000000&color=white"/> <img src="https://img.shields.io/badge/-JASYPT-important?style=flat&logo=webauthn&logoColor=379CC6&labelColor=379CC6&color=white"/>
 
 ### DevOps
 <img src="https://img.shields.io/badge/-AWS-important?style=flat&logo=amazonaws&logoColor=white&labelColor=232F3E&color=white"/> <img src="https://img.shields.io/badge/-Docker-important?style=flat&logo=docker&logoColor=white&labelColor=2496ED&color=white"/> <img src="https://img.shields.io/badge/-NGINX-important?style=flat&logo=nginx&logoColor=white&labelColor=009639&color=white"/> <img src="https://img.shields.io/badge/-Jenkins-important?style=flat&logo=jenkins&logoColor=white&labelColor=D24939&color=white"/>
@@ -187,7 +187,7 @@
 <table style="border: 2px; text-align:center;">
   <tr style="text-align:center;">
     <td> 레시피 리스트 </td>
-    <td> 레시피 상세보기 </td>
+    <td> 레시피 상세 </td>
   </tr>
   <tr>
     <td>
@@ -200,9 +200,13 @@
 </table>
 <table style="border: 2px; text-align:center;">
   <tr style="text-align:center;">
+    <td> 레시피 댓글 </td>
     <td>레시피 검색</td>
   </tr>
   <tr>
+    <td>
+      <img src="./assets/레시피댓글.png" alt="=" width="450px" />
+    </td>
     <td>
       <img src="./assets/레시피검색.png" alt="=" width="450px" />
     </td>
