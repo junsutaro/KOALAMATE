@@ -88,7 +88,7 @@
 <div id="4"></div>
 
 ## 📂 프로젝트 구성도
-<img src="./assets/아키텍처.png" alt="아키텍처" width="1000px" />
+<img src="./assets/코알라아키텍처.png" alt="아키텍처" width="1000px" />
 
 <br/>
 <br/>
