@@ -247,7 +247,7 @@
       </a>
     </td>
     <td align="center" width="120px">
-      <a href="https://github.com/LEEJUNSU11" target="_blank">
+      <a href="https://github.com/junsutaro" target="_blank">
         <img src="https://avatars.githubusercontent.com/u/139520011?v=4" alt="이준수 프로필" />
       </a>
     </td>
@@ -279,7 +279,7 @@
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/LEEJUNSU11" target="_blank">
+      <a href="https://github.com/junsutaro" target="_blank">
        이준수
       </a>
     </td>
